@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>화물맨 차주앱 시뮬레이터</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--brand:#FFB800;--bg:#111;--phone-w:375px;}
+
+body{
+  background:var(--bg);
+  font-family:'Pretendard',-apple-system,sans-serif;
+  display:flex;height:100vh;overflow:hidden;color:#1a1a1a;
+}
+
+/* ── Phone area ── */
+.phone-area{
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;flex-shrink:0;
+}
+.phone-frame{
+  width:406px;
+  height:calc(100vh - 40px);max-height:860px;
+  background:#1c1c1e;border-radius:52px;
+  padding:14px;
+  box-shadow:inset 0 0 0 1.5px #3a3a3c,0 0 0 1px #000,0 30px 80px rgba(0,0,0,.85);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+/* side buttons */
+.phone-frame::before{
+  content:'';position:absolute;right:-3px;top:130px;
+  width:3px;height:64px;background:#2c2c2e;border-radius:0 3px 3px 0;
+}
+.phone-frame::after{
+  content:'';position:absolute;left:-3px;top:90px;
+  width:3px;height:36px;background:#2c2c2e;border-radius:3px 0 0 3px;
+  box-shadow:0 52px 0 #2c2c2e,0 96px 0 #2c2c2e;
+}
+.phone-inner{
+  flex:1;background:#fff;border-radius:40px;
+  overflow:hidden;display:flex;flex-direction:column;position:relative;
+}
+/* dynamic island */
+.phone-island{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:110px;height:30px;background:#1c1c1e;border-radius:20px;z-index:10;
+}
+/* status bar */
+.status-bar{
+  flex-shrink:0;height:50px;padding:16px 22px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:5;
+}
+.status-time{font-size:15px;font-weight:700;color:#000;}
+.status-icons{display:flex;gap:5px;align-items:center;}
+/* content */
+.content-area{flex:1;overflow:hidden;position:relative;}
+.content-area.scroll-mode{overflow-y:auto;}
+.content-area.scroll-mode::-webkit-scrollbar{display:none;}
+.image-wrapper{position:relative;width:100%;}
+.screen-image{width:100%;display:block;user-select:none;-webkit-user-drag:none;}
+/* hotspot layer */
+.hotspot-layer{position:absolute;inset:0;pointer-events:none;}
+.hotspot{position:absolute;cursor:pointer;pointer-events:auto;}
+.hotspot.normal-mode{background:transparent;border:none;}
+.hotspot.admin-mode{
+  background:rgba(30,100,255,.15);
+  border:2px dashed rgba(30,100,255,.75);
+  border-radius:4px;
+}
+.hotspot-label{
+  display:none;position:absolute;top:2px;left:4px;
+  font-size:10px;font-weight:700;color:rgba(20,80,220,.9);
+  white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.8);
+  padding:1px 4px;border-radius:3px;
+}
+.hotspot.admin-mode .hotspot-label{display:block;}
+/* draw overlay */
+.draw-overlay{
+  display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;
+}
+.draw-overlay.active{display:block;}
+.draw-rect{
+  display:none;position:absolute;
+  background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);
+  border-radius:4px;pointer-events:none;
+}
+/* popup */
+.popup-overlay{
+  display:none;position:absolute;inset:0;
+  background:rgba(0,0,0,.55);z-index:30;cursor:pointer;
+}
+.popup-overlay.active{display:flex;align-items:flex-end;}
+.popup-image-wrap{width:100%;cursor:auto;position:relative;}
+.popup-image-wrap img{width:100%;display:block;}
+/* navbar */
+.navbar-bar{flex-shrink:0;position:relative;cursor:pointer;}
+.navbar-bar img{width:100%;display:block;}
+.nav-zone{position:absolute;top:0;height:100%;cursor:pointer;}
+.nav-back{left:0;width:33%;}
+.nav-home{left:33%;width:34%;}
+
+/* ── Info panel ── */
+.info-panel{
+  flex:1;background:#f0f0f2;overflow-y:auto;
+  padding:18px;display:flex;flex-direction:column;gap:12px;
+  min-width:280px;
+}
+.panel-card{
+  background:#fff;border-radius:14px;padding:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,.07);
+}
+.card-title{
+  font-size:11px;font-weight:700;color:#999;
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;
+}
+/* breadcrumb */
+.breadcrumb{display:flex;flex-wrap:wrap;gap:3px;align-items:center;font-size:12px;}
+.bc-item{color:#555;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.bc-sep{color:#ccc;}
+.bc-cur{color:var(--brand);font-weight:700;}
+/* screen list */
+.search-box{
+  width:100%;border:1px solid #e5e5e5;border-radius:8px;
+  padding:7px 11px;font-size:13px;font-family:inherit;
+  outline:none;margin-bottom:8px;
+}
+.search-box:focus{border-color:var(--brand);}
+.screen-scroll{max-height:200px;overflow-y:auto;}
+.screen-scroll::-webkit-scrollbar{width:4px;}
+.screen-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px;}
+.screen-btn{
+  display:block;width:100%;text-align:left;
+  padding:6px 10px;border:none;background:none;
+  border-radius:8px;cursor:pointer;font-family:inherit;
+  font-size:13px;color:#333;transition:background .1s;
+}
+.screen-btn:hover{background:#f5f5f5;}
+.screen-btn.active{background:#FFF8E0;color:#7a5600;font-weight:700;}
+/* guide */
+.guide-points{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+.guide-points li{
+  font-size:13px;line-height:1.5;padding:8px 10px;
+  background:#FFFBEC;border-radius:8px;border-left:3px solid var(--brand);
+}
+.guide-points li::before{content:'💡 ';}
+.guide-caution{
+  font-size:13px;line-height:1.5;padding:8px 10px;
+  background:#FFF0F0;border-radius:8px;border-left:3px solid #FF5555;margin-bottom:8px;
+}
+.guide-caution::before{content:'⚠️ ';}
+.guide-kms{font-size:13px;}
+.guide-kms::before{content:'🔗 ';}
+.guide-kms a{color:#0066CC;text-decoration:none;}
+.guide-kms a:hover{text-decoration:underline;}
+.guide-empty{color:#bbb;font-size:13px;text-align:center;padding:14px 0;}
+/* admin */
+.admin-badge{
+  display:inline-block;background:#FF5000;color:#fff;
+  font-size:11px;font-weight:700;padding:2px 8px;
+  border-radius:99px;margin-bottom:12px;
+}
+.admin-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
+.admin-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.section-title{font-size:13px;font-weight:700;color:#444;margin-bottom:8px;}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap;}
+.btn{
+  padding:7px 13px;border-radius:8px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:600;transition:opacity .15s;
+}
+.btn:hover{opacity:.82;}
+.btn-primary{background:var(--brand);color:#000;}
+.btn-danger{background:#FF4444;color:#fff;}
+.btn-secondary{background:#eee;color:#333;}
+.btn-sm{padding:4px 9px;font-size:12px;}
+.form-row{display:flex;flex-direction:column;gap:5px;margin-bottom:9px;}
+.form-label{font-size:12px;font-weight:600;color:#666;}
+.form-input{
+  width:100%;border:1px solid #e0e0e0;border-radius:8px;
+  padding:7px 10px;font-size:13px;font-family:inherit;outline:none;
+}
+.form-input:focus{border-color:var(--brand);}
+select.form-input{background:#fff;}
+textarea.form-input{resize:vertical;}
+.hs-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 10px;background:#f7f7f7;border-radius:8px;margin-bottom:5px;font-size:13px;
+}
+/* unregistered */
+.unreg-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 10px;background:#FFF8E0;border-radius:8px;
+  margin-bottom:5px;font-size:13px;cursor:pointer;
+}
+.unreg-item:hover{background:#FFEDB0;}
+/* gear */
+.gear-btn{
+  position:fixed;bottom:22px;right:22px;
+  width:48px;height:48px;border-radius:50%;
+  background:#333;color:#fff;border:none;
+  font-size:22px;cursor:pointer;z-index:200;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:background .15s;
+}
+.gear-btn:hover{background:#444;}
+.gear-btn.on{background:#FF5000;}
+/* modal */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.55);z-index:500;
+  align-items:center;justify-content:center;
+}
+.modal-bg.active{display:flex;}
+.modal{
+  background:#fff;border-radius:16px;padding:24px;
+  min-width:300px;max-width:460px;width:92%;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ Phone ═══ -->
+<div class="phone-area">
+<div class="phone-frame">
+<div class="phone-inner">
+  <div class="phone-island"></div>
+
+  <div class="status-bar">
+    <span class="status-time" id="statusTime">09:41</span>
+    <div class="status-icons">
+      <!-- signal -->
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="#000">
+        <rect x="0" y="5" width="3" height="7" rx="1"/>
+        <rect x="4.5" y="3" width="3" height="9" rx="1"/>
+        <rect x="9" y="1" width="3" height="11" rx="1"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".25"/>
+      </svg>
+      <!-- wifi -->
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="#000">
+        <path d="M8 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+        <path d="M3.5 6.8A6.5 6.5 0 018 5a6.5 6.5 0 014.5 1.8" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M1 4.2A9.8 9.8 0 018 2a9.8 9.8 0 017 2.2" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <!-- battery -->
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x=".75" y=".75" width="21.5" height="10.5" rx="2.5" stroke="#000" stroke-width="1.5"/>
+        <rect x="23" y="3.5" width="2" height="5" rx="1" fill="#000"/>
+        <rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="#000"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="content-area" id="contentArea">
+    <div class="image-wrapper" id="imageWrapper">
+      <img class="screen-image" id="screenImg" alt="화면">
+      <div class="hotspot-layer" id="hotspotLayer"></div>
+      <div class="draw-overlay" id="drawOverlay">
+        <div class="draw-rect" id="drawRect"></div>
+      </div>
+    </div>
+    <div class="popup-overlay" id="popupOverlay">
+      <div class="popup-image-wrap" id="popupWrap">
+        <img id="popupImg" alt="팝업">
+        <div class="hotspot-layer" id="popupHsLayer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar-bar" id="navbarBar">
+    <img src="뒤로가기.png" id="navbarImg" alt="네비게이션">
+    <div class="nav-zone nav-back" id="navBack"></div>
+    <div class="nav-zone nav-home" id="navHome"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══ Info Panel ═══ -->
+<div class="info-panel">
+
+  <div class="panel-card">
+    <div class="card-title">현재 위치</div>
+    <div class="breadcrumb" id="breadcrumb"></div>
+  </div>
+
+  <div class="panel-card">
+    <div class="card-title">화면 목록</div>
+    <input type="text" class="search-box" id="searchBox" placeholder="화면 검색...">
+    <div class="screen-scroll" id="screenList"></div>
+  </div>
+
+  <div class="panel-card" id="guideCard">
+    <div class="card-title">상담 가이드</div>
+    <div id="guideContent"></div>
+  </div>
+
+  <div class="panel-card" id="adminPanel" style="display:none">
+    <div class="admin-badge">🔧 관리자 모드</div>
+
+    <div class="admin-section">
+      <div class="section-title">핫스팟 편집</div>
+      <div class="btn-row" style="margin-bottom:8px">
+        <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
+        <button class="btn btn-secondary" id="btnCancelDraw" style="display:none">취소</button>
+      </div>
+      <div id="hsList"></div>
+    </div>
+
+    <div class="admin-section">
+      <div class="section-title">가이드 편집</div>
+      <div id="guideEditor"></div>
+    </div>
+
+    <div class="admin-section">
+      <div class="section-title">화면 추가</div>
+      <div class="form-row">
+        <div class="form-label">화면 ID</div>
+        <input class="form-input" id="newId" placeholder="예: main_detail">
+      </div>
+      <div class="form-row">
+        <div class="form-label">라벨명</div>
+        <input class="form-input" id="newLabel" placeholder="예: 메인 상세">
+      </div>
+      <div class="form-row">
+        <div class="form-label">이미지 파일명</div>
+        <input class="form-input" id="newImage" placeholder="예: 메인화면.jpg">
+      </div>
+      <div class="form-row">
+        <div class="form-label">타입</div>
+        <select class="form-input" id="newType">
+          <option value="normal">normal</option>
+          <option value="scroll">scroll</option>
+          <option value="popup">popup</option>
+        </select>
+      </div>
+      <div class="form-row" style="flex-direction:row;align-items:center;gap:8px">
+        <input type="checkbox" id="newNavbar" checked>
+        <label for="newNavbar" style="font-size:13px">navbar 표시</label>
+      </div>
+      <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
+    </div>
+
+    <div class="admin-section">
+      <div class="section-title">내보내기</div>
+      <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
+    </div>
+  </div>
+
+  <div class="panel-card" id="unregCard" style="display:none">
+    <div class="card-title">⚠️ 미등록 이미지</div>
+    <div id="unregList"></div>
+  </div>
+
+</div>
+
+<!-- gear -->
+<button class="gear-btn" id="gearBtn">⚙️</button>
+
+<!-- 비밀번호 모달 -->
+<div class="modal-bg" id="pwModal">
+  <div class="modal">
+    <div class="modal-title">🔐 관리자 비밀번호</div>
+    <div class="form-row">
+      <input type="password" class="form-input" id="pwInput" placeholder="비밀번호">
+    </div>
+    <p id="pwErr" style="color:#f44;font-size:13px;display:none">비밀번호가 올바르지 않습니다.</p>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('pwModal')">취소</button>
+      <button class="btn btn-primary" onclick="submitPw()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 핫스팟 대상 모달 -->
+<div class="modal-bg" id="hsModal">
+  <div class="modal">
+    <div class="modal-title">핫스팟 설정</div>
+    <div class="form-row">
+      <div class="form-label">라벨</div>
+      <input class="form-input" id="hsLabelInput" placeholder="예: 로그인 버튼">
+    </div>
+    <div class="form-row">
+      <div class="form-label">이동할 화면</div>
+      <select class="form-input" id="hsGoto"></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="cancelDraw()">취소</button>
+      <button class="btn btn-primary" onclick="confirmHs()">추가</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// State
+// ══════════════════════════════════════════
+const S = {
+  flow: null,
+  cur: null,       // current screen id
+  hist: [],        // navigation history
+  admin: false,
+  drawing: false,
+  drawStart: null,
+  pendingHs: null,
+};
+
+// ══════════════════════════════════════════
+// Boot
+// ══════════════════════════════════════════
+async function boot() {
+  try {
+    const r = await fetch('flow.json?_=' + Date.now());
+    S.flow = await r.json();
+  } catch(e) {
+    S.flow = {
+      imageManifest: [],
+      screens: {
+        main: { label:'메인화면', image:'메인화면.jpg', type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} }
+      },
+      start: 'main'
+    };
+  }
+  tick();
+  setInterval(tick, 1000);
+  renderList();
+  detectUnreg();
+  goTo(S.flow.start || Object.keys(S.flow.screens)[0], true);
+
+  document.getElementById('navBack').onclick = goBack;
+  document.getElementById('navHome').onclick = goHome;
+  document.getElementById('gearBtn').onclick = gearClick;
+  document.getElementById('pwInput').onkeydown = e => { if(e.key==='Enter') submitPw(); };
+  document.getElementById('btnDraw').onclick = startDraw;
+  document.getElementById('btnCancelDraw').onclick = cancelDraw;
+  document.getElementById('btnAddScreen').onclick = addScreen;
+  document.getElementById('btnExport').onclick = exportFlow;
+  document.getElementById('searchBox').oninput = renderList;
+  document.getElementById('popupOverlay').onclick = function(e) {
+    if(e.target === this) closePopup();
+  };
+  setupDrawEvents();
+  // close modals on bg click
+  document.querySelectorAll('.modal-bg').forEach(el => {
+    el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
+  });
+}
+
+// ══════════════════════════════════════════
+// Clock
+// ══════════════════════════════════════════
+function tick() {
+  const d = new Date();
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
+  document.getElementById('statusTime').textContent = h+':'+m;
+}
+
+// ══════════════════════════════════════════
+// Navigation
+// ══════════════════════════════════════════
+function goTo(id, init=false) {
+  const scr = S.flow.screens[id];
+  if(!scr) return;
+
+  if(scr.type === 'popup' && !init) {
+    showPopup(id);
+    return;
+  }
+
+  if(!init && S.cur) S.hist.push(S.cur);
+  S.cur = id;
+
+  renderPhone(scr);
+  renderBreadcrumb();
+  renderGuide(scr.guide);
+  renderList();
+  if(S.admin) { renderHsList(); renderGuideEditor(); }
+}
+
+function goBack() {
+  if(document.getElementById('popupOverlay').classList.contains('active')) {
+    closePopup(); return;
+  }
+  if(S.hist.length > 0) {
+    S.cur = S.hist.pop();
+    const scr = S.flow.screens[S.cur];
+    renderPhone(scr);
+    renderBreadcrumb();
+    renderGuide(scr.guide);
+    renderList();
+    if(S.admin) { renderHsList(); renderGuideEditor(); }
+  }
+}
+
+function goHome() {
+  closePopup();
+  S.hist = [];
+  goTo(S.flow.start, true);
+}
+
+function jumpHist(idx) {
+  const path = [...S.hist, S.cur];
+  S.hist = path.slice(0, idx);
+  S.cur = path[idx];
+  const scr = S.flow.screens[S.cur];
+  renderPhone(scr);
+  renderBreadcrumb();
+  renderGuide(scr.guide);
+  renderList();
+}
+
+// ══════════════════════════════════════════
+// Phone rendering
+// ══════════════════════════════════════════
+function renderPhone(scr) {
+  const ca = document.getElementById('contentArea');
+  const img = document.getElementById('screenImg');
+  const nb = document.getElementById('navbarBar');
+
+  ca.classList.toggle('scroll-mode', scr.type === 'scroll');
+  ca.scrollTop = 0;
+
+  img.src = scr.image;
+  img.onload = () => renderHotspots(scr.hotspots || []);
+
+  nb.style.display = scr.show_navbar === false ? 'none' : 'block';
+
+  if(!S.drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function renderHotspots(hotspots) {
+  const layer = document.getElementById('hotspotLayer');
+  layer.innerHTML = '';
+  hotspots.forEach((hs, i) => {
+    const el = document.createElement('div');
+    el.className = 'hotspot ' + (S.admin ? 'admin-mode' : 'normal-mode');
+    el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
+
+    const lbl = document.createElement('span');
+    lbl.className = 'hotspot-label';
+    lbl.textContent = (hs.label||'') + ' → ' + hs.goto;
+    el.appendChild(lbl);
+
+    if(S.admin) {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        if(confirm(`핫스팟 "${hs.label||hs.goto}" 을(를) 삭제하시겠습니까?`)) {
+          S.flow.screens[S.cur].hotspots.splice(i,1);
+          renderHotspots(S.flow.screens[S.cur].hotspots);
+          renderHsList();
+        }
+      });
+    } else {
+      el.addEventListener('click', () => hs.goto && goTo(hs.goto));
+    }
+    layer.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════
+// Popup
+// ══════════════════════════════════════════
+function showPopup(id) {
+  const scr = S.flow.screens[id];
+  const overlay = document.getElementById('popupOverlay');
+  const img = document.getElementById('popupImg');
+  const layer = document.getElementById('popupHsLayer');
+
+  img.src = scr.image;
+  img.onload = () => {
+    layer.innerHTML = '';
+    (scr.hotspots||[]).forEach(hs => {
+      const el = document.createElement('div');
+      el.className = 'hotspot normal-mode';
+      el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
+      el.addEventListener('click', e => { e.stopPropagation(); goTo(hs.goto); });
+      layer.appendChild(el);
+    });
+  };
+  overlay.classList.add('active');
+}
+
+function closePopup() {
+  document.getElementById('popupOverlay').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
+// Breadcrumb
+// ══════════════════════════════════════════
+function renderBreadcrumb() {
+  const el = document.getElementById('breadcrumb');
+  const path = [...S.hist, S.cur];
+  el.innerHTML = path.map((id,i) => {
+    const scr = S.flow.screens[id];
+    const lbl = scr ? scr.label : id;
+    if(i === path.length-1) return `<span class="bc-cur">${esc(lbl)}</span>`;
+    return `<span class="bc-item" onclick="jumpHist(${i})">${esc(lbl)}</span><span class="bc-sep"> › </span>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// Screen list
+// ══════════════════════════════════════════
+function renderList() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const el = document.getElementById('screenList');
+  el.innerHTML = '';
+  Object.entries(S.flow.screens).forEach(([id, scr]) => {
+    if(q && !scr.label.toLowerCase().includes(q) && !id.includes(q)) return;
+    const btn = document.createElement('button');
+    btn.className = 'screen-btn' + (id===S.cur?' active':'');
+    btn.textContent = scr.label;
+    btn.title = id;
+    btn.onclick = () => { S.hist=[]; goTo(id,true); };
+    el.appendChild(btn);
+  });
+}
+
+// ══════════════════════════════════════════
+// Guide
+// ══════════════════════════════════════════
+function renderGuide(g) {
+  const el = document.getElementById('guideContent');
+  if(!g) { el.innerHTML = '<div class="guide-empty">가이드 없음</div>'; return; }
+  let html = '';
+  if(g.points && g.points.length) {
+    html += '<ul class="guide-points">' + g.points.map(p=>`<li>${esc(p)}</li>`).join('') + '</ul>';
+  }
+  if(g.caution) html += `<div class="guide-caution">${esc(g.caution)}</div>`;
+  if(g.kms_link) html += `<div class="guide-kms"><a href="${esc(g.kms_link)}" target="_blank">KMS 바로가기</a></div>`;
+  if(!html) html = '<div class="guide-empty">등록된 가이드가 없습니다.<br><small style="color:#ccc">관리자 모드에서 추가하세요.</small></div>';
+  el.innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+// Admin
+// ══════════════════════════════════════════
+function gearClick() {
+  if(S.admin) exitAdmin();
+  else { openModal('pwModal'); setTimeout(()=>document.getElementById('pwInput').focus(),60); }
+}
+
+function submitPw() {
+  if(document.getElementById('pwInput').value === 'admin1234') {
+    document.getElementById('pwInput').value = '';
+    closeModal('pwModal');
+    enterAdmin();
+  } else {
+    document.getElementById('pwErr').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function enterAdmin() {
+  S.admin = true;
+  document.getElementById('gearBtn').classList.add('on');
+  document.getElementById('adminPanel').style.display = 'block';
+  const scr = S.flow.screens[S.cur];
+  renderHotspots(scr.hotspots||[]);
+  renderHsList();
+  renderGuideEditor();
+}
+
+function exitAdmin() {
+  S.admin = false;
+  document.getElementById('gearBtn').classList.remove('on');
+  document.getElementById('adminPanel').style.display = 'none';
+  if(S.drawing) cancelDraw();
+  renderHotspots(S.flow.screens[S.cur].hotspots||[]);
+}
+
+function renderHsList() {
+  const el = document.getElementById('hsList');
+  const hs = S.flow.screens[S.cur]?.hotspots || [];
+  if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
+  el.innerHTML = hs.map((h,i) => `
+    <div class="hs-item">
+      <span>${esc(h.label||'(없음)')} → ${esc(h.goto)}</span>
+      <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
+    </div>`).join('');
+}
+
+function delHs(i) {
+  S.flow.screens[S.cur].hotspots.splice(i,1);
+  renderHotspots(S.flow.screens[S.cur].hotspots);
+  renderHsList();
+}
+
+function renderGuideEditor() {
+  const g = S.flow.screens[S.cur]?.guide || {points:[],caution:'',kms_link:''};
+  document.getElementById('guideEditor').innerHTML = `
+    <div class="form-row">
+      <div class="form-label">💡 상담 포인트 (한 줄에 하나)</div>
+      <textarea class="form-input" id="editPoints" rows="4">${esc((g.points||[]).join('\n'))}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-label">⚠️ 주의사항</div>
+      <input class="form-input" id="editCaution" value="${esc(g.caution||'')}">
+    </div>
+    <div class="form-row">
+      <div class="form-label">🔗 KMS 링크</div>
+      <input class="form-input" id="editKms" value="${esc(g.kms_link||'')}">
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="saveGuide()">저장</button>
+  `;
+}
+
+function saveGuide() {
+  const scr = S.flow.screens[S.cur];
+  scr.guide = {
+    points: document.getElementById('editPoints').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    caution: document.getElementById('editCaution').value.trim(),
+    kms_link: document.getElementById('editKms').value.trim(),
+  };
+  renderGuide(scr.guide);
+  const btn = document.querySelector('#guideEditor .btn');
+  const orig = btn.textContent;
+  btn.textContent = '✓ 저장됨!';
+  setTimeout(()=>btn.textContent=orig, 1500);
+}
+
+function addScreen() {
+  const id = document.getElementById('newId').value.trim();
+  const label = document.getElementById('newLabel').value.trim();
+  const image = document.getElementById('newImage').value.trim();
+  const type = document.getElementById('newType').value;
+  const showNav = document.getElementById('newNavbar').checked;
+  if(!id||!label||!image) { alert('ID, 라벨, 이미지 파일명을 모두 입력하세요.'); return; }
+  if(S.flow.screens[id]) { alert(`"${id}" ID가 이미 존재합니다.`); return; }
+  S.flow.screens[id] = { label, image, type, show_navbar:showNav, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
+  document.getElementById('newId').value = '';
+  document.getElementById('newLabel').value = '';
+  document.getElementById('newImage').value = '';
+  renderList();
+  detectUnreg();
+  alert(`"${label}" 화면이 추가되었습니다.`);
+}
+
+function exportFlow() {
+  const blob = new Blob([JSON.stringify(S.flow, null, 2)], {type:'application/json'});
+  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:'flow.json'});
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ══════════════════════════════════════════
+// Draw (hotspot creation)
+// ══════════════════════════════════════════
+function setupDrawEvents() {
+  const overlay = document.getElementById('drawOverlay');
+  const rect = document.getElementById('drawRect');
+  let isDown = false;
+
+  overlay.addEventListener('mousedown', e => {
+    if(!S.drawing) return;
+    isDown = true;
+    const b = overlay.getBoundingClientRect();
+    S.drawStart = { x: e.clientX - b.left, y: e.clientY - b.top };
+    rect.style.cssText = `display:block;left:${S.drawStart.x}px;top:${S.drawStart.y}px;width:0;height:0;`;
+  });
+
+  overlay.addEventListener('mousemove', e => {
+    if(!isDown || !S.drawStart) return;
+    const b = overlay.getBoundingClientRect();
+    const cx = e.clientX - b.left;
+    const cy = e.clientY - b.top;
+    const l = Math.min(cx, S.drawStart.x);
+    const t = Math.min(cy, S.drawStart.y);
+    const w = Math.abs(cx - S.drawStart.x);
+    const h = Math.abs(cy - S.drawStart.y);
+    rect.style.cssText = `display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px;`;
+  });
+
+  overlay.addEventListener('mouseup', e => {
+    if(!isDown || !S.drawStart) return;
+    isDown = false;
+    const b = overlay.getBoundingClientRect();
+    const cx = e.clientX - b.left;
+    const cy = e.clientY - b.top;
+    const l = Math.min(cx, S.drawStart.x);
+    const t = Math.min(cy, S.drawStart.y);
+    const w = Math.abs(cx - S.drawStart.x);
+    const h = Math.abs(cy - S.drawStart.y);
+    S.drawStart = null;
+    if(w < 10 || h < 6) return;
+    S.pendingHs = {
+      top: round1(t / b.height * 100),
+      left: round1(l / b.width * 100),
+      width: round1(w / b.width * 100),
+      height: round1(h / b.height * 100),
+    };
+    // populate goto select
+    const sel = document.getElementById('hsGoto');
+    sel.innerHTML = Object.entries(S.flow.screens)
+      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
+    document.getElementById('hsLabelInput').value = '';
+    openModal('hsModal');
+  });
+}
+
+function startDraw() {
+  S.drawing = true;
+  document.getElementById('drawOverlay').classList.add('active');
+  document.getElementById('btnDraw').style.display = 'none';
+  document.getElementById('btnCancelDraw').style.display = 'inline-block';
+}
+
+function cancelDraw() {
+  S.drawing = false;
+  S.drawStart = null;
+  S.pendingHs = null;
+  document.getElementById('drawOverlay').classList.remove('active');
+  document.getElementById('drawRect').style.display = 'none';
+  document.getElementById('btnDraw').style.display = 'inline-block';
+  document.getElementById('btnCancelDraw').style.display = 'none';
+  closeModal('hsModal');
+}
+
+function confirmHs() {
+  if(!S.pendingHs) return;
+  const goto = document.getElementById('hsGoto').value;
+  const label = document.getElementById('hsLabelInput').value.trim() || goto;
+  const scr = S.flow.screens[S.cur];
+  if(!scr.hotspots) scr.hotspots = [];
+  scr.hotspots.push({ label, ...S.pendingHs, goto });
+  S.pendingHs = null;
+  document.getElementById('drawRect').style.display = 'none';
+  closeModal('hsModal');
+  cancelDraw();
+  renderHotspots(scr.hotspots);
+  renderHsList();
+}
+
+// ══════════════════════════════════════════
+// Unregistered images
+// ══════════════════════════════════════════
+function detectUnreg() {
+  const manifest = S.flow.imageManifest || [];
+  const used = new Set(Object.values(S.flow.screens).map(s=>s.image));
+  const unreg = manifest.filter(f => !used.has(f));
+  const card = document.getElementById('unregCard');
+  const list = document.getElementById('unregList');
+  if(!unreg.length) { card.style.display='none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = unreg.map(f => `
+    <div class="unreg-item" onclick="quickReg('${esc(f)}')">
+      <span>${esc(f)}</span>
+      <small style="color:#888">클릭하여 등록</small>
+    </div>`).join('');
+}
+
+function quickReg(filename) {
+  if(!S.admin) { alert('관리자 모드에서 등록할 수 있습니다.'); return; }
+  const label = filename.replace(/\.(jpg|jpeg|png|webp)$/i,'').replace(/_/g,' ');
+  const id = label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'');
+  document.getElementById('newImage').value = filename;
+  document.getElementById('newLabel').value = label;
+  document.getElementById('newId').value = id;
+  document.getElementById('adminPanel').scrollIntoView({behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════
+// Modal helpers
+// ══════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  if(id==='pwModal') document.getElementById('pwErr').style.display='none';
+}
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ══════════════════════════════════════════
+// Utils
+// ══════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function round1(n) { return Math.round(n*10)/10; }
+
+// ══════════════════════════════════════════
+boot();
+</script>
+</body>
+</html>

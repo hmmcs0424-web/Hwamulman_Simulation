@@ -1,0 +1,628 @@
+{
+  "imageManifest": [
+    "메인화면.jpg",
+    "비밀번호입력.jpg",
+    "비밀번호입력시.jpg",
+    "마이페이지.png",
+    "마이페이지_내정보.png",
+    "내정보_계산서이메일변경.jpg",
+    "내정보_실운전자정보변경.png",
+    "내정보_이메일 변경.jpg",
+    "내정보_주민등록번호 변경.png",
+    "배차내역.png",
+    "배차내역_수금미확인.jpg",
+    "배차내역_수금확인.jpg",
+    "예치금.jpg",
+    "예치금_가상계좌만들기.jpg",
+    "예치금_기간설정.jpg",
+    "예치금_사용내역.jpg",
+    "예치금_실계좌출금.jpg",
+    "예치금_실계좌출금_메시지입력.jpg",
+    "예치금_실계좌출금_출금금액입력.jpg",
+    "예치금_입금내역.jpg",
+    "예치금_정기결제인경우.jpg",
+    "예치금_정보이용료_단기_일반결제_앱결제이동.png",
+    "예치금_정보이용료_단기_일반결제_약관.png",
+    "예치금_정보이용료_단기_일반결제_예치금.png",
+    "예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+    "예치금_정보이용료_단기_일반결제_정보확인.png",
+    "예치금_정보이용료_단기_일반결제_카드선택.png",
+    "예치금_정보이용료_단기_일반결제_할부선택.png",
+    "예치금_정보이용료관리.png",
+    "예치금_정보이용료관리_3자제공.jpg",
+    "예치금_정보이용료관리_개인정보수집.jpg",
+    "예치금_정보이용료관리_결제비밀번호변경.png",
+    "예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+    "예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+    "예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+    "예치금_정보이용료관리_결제비밀번호변경_약관.png",
+    "예치금_정보이용료관리_결제비밀번호변경_완료.png",
+    "예치금_정보이용료관리_결제비밀번호변경_입력.png",
+    "예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+    "예치금_정보이용료관리_결제수단관리.jpg",
+    "예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+    "예치금_정보이용료관리_금융거래.jpg",
+    "예치금_정보이용료관리_약관.jpg",
+    "예치금_정보이용료관리_정기결제동의.jpg",
+    "예치금_정보이용료납부_단기_일반결제.png",
+    "예치금_정보이용료납부_단기_페이.png",
+    "예치금_정보이용료납부_예치금_결제완료.jpg",
+    "예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+    "예치금_정보이용료납부_정기_예치금.png",
+    "예치금_정보이용료납부_정기_페이.png",
+    "예치금_회원간이체.jpg",
+    "예치금_회원간이체_금액입력.png",
+    "예치금_회원간이체_완료.jpg",
+    "예치금_회원간이체_이름조회.png",
+    "포인트.jpg",
+    "화물등록.jpg",
+    "화물등록_등록.png",
+    "화물등록_등록대수.jpg",
+    "화물등록_등록목록.jpg",
+    "화물등록_상차방법.jpg",
+    "화물등록_상차일시.jpg",
+    "화물등록_상차지입력.jpg",
+    "화물등록_지불방식선택.jpg",
+    "화물등록_차종선택.jpg",
+    "화물등록_톤수선택.jpg",
+    "화물등록_하차방법.jpg",
+    "화물등록_하차일시.jpg",
+    "화물등록_하차지입력.jpg",
+    "회차검색_불가.jpg"
+  ],
+  "screens": {
+    "main": {
+      "label": "메인화면",
+      "image": "메인화면.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "password_input": {
+      "label": "비밀번호 입력",
+      "image": "비밀번호입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "password_typing": {
+      "label": "비밀번호 입력중",
+      "image": "비밀번호입력시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "mypage": {
+      "label": "마이페이지",
+      "image": "마이페이지.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "mypage_info": {
+      "label": "마이페이지 > 내정보",
+      "image": "마이페이지_내정보.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "info_invoice_email": {
+      "label": "내정보 > 계산서이메일변경",
+      "image": "내정보_계산서이메일변경.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "info_driver_change": {
+      "label": "내정보 > 실운전자정보변경",
+      "image": "내정보_실운전자정보변경.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "info_email_change": {
+      "label": "내정보 > 이메일변경",
+      "image": "내정보_이메일 변경.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "info_id_change": {
+      "label": "내정보 > 주민번호변경",
+      "image": "내정보_주민등록번호 변경.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "dispatch": {
+      "label": "배차내역",
+      "image": "배차내역.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "dispatch_unpaid": {
+      "label": "배차내역 > 수금미확인",
+      "image": "배차내역_수금미확인.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "dispatch_paid": {
+      "label": "배차내역 > 수금확인",
+      "image": "배차내역_수금확인.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit": {
+      "label": "예치금",
+      "image": "예치금.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_virtual": {
+      "label": "예치금 > 가상계좌만들기",
+      "image": "예치금_가상계좌만들기.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_period": {
+      "label": "예치금 > 기간설정",
+      "image": "예치금_기간설정.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_usage": {
+      "label": "예치금 > 사용내역",
+      "image": "예치금_사용내역.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_withdraw": {
+      "label": "예치금 > 실계좌출금",
+      "image": "예치금_실계좌출금.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_withdraw_msg": {
+      "label": "예치금 > 실계좌출금 > 메시지입력",
+      "image": "예치금_실계좌출금_메시지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_withdraw_amount": {
+      "label": "예치금 > 실계좌출금 > 금액입력",
+      "image": "예치금_실계좌출금_출금금액입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_income": {
+      "label": "예치금 > 입금내역",
+      "image": "예치금_입금내역.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_regular": {
+      "label": "예치금 > 정기결제인경우",
+      "image": "예치금_정기결제인경우.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_app": {
+      "label": "정보이용료(단기) > 앱결제이동",
+      "image": "예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_terms": {
+      "label": "정보이용료(단기) > 약관",
+      "image": "예치금_정보이용료_단기_일반결제_약관.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_deposit": {
+      "label": "정보이용료(단기) > 예치금결제",
+      "image": "예치금_정보이용료_단기_일반결제_예치금.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_deposit_pw": {
+      "label": "정보이용료(단기) > 예치금비밀번호",
+      "image": "예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_info": {
+      "label": "정보이용료(단기) > 정보확인",
+      "image": "예치금_정보이용료_단기_일반결제_정보확인.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_card": {
+      "label": "정보이용료(단기) > 카드선택",
+      "image": "예치금_정보이용료_단기_일반결제_카드선택.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_short_install": {
+      "label": "정보이용료(단기) > 할부선택",
+      "image": "예치금_정보이용료_단기_일반결제_할부선택.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt": {
+      "label": "정보이용료관리",
+      "image": "예치금_정보이용료관리.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_3rd": {
+      "label": "정보이용료관리 > 3자제공",
+      "image": "예치금_정보이용료관리_3자제공.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_privacy": {
+      "label": "정보이용료관리 > 개인정보수집",
+      "image": "예치금_정보이용료관리_개인정보수집.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw": {
+      "label": "정보이용료관리 > 결제비밀번호변경",
+      "image": "예치금_정보이용료관리_결제비밀번호변경.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_auth": {
+      "label": "결제비밀번호변경 > 본인인증",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_auth_sms": {
+      "label": "결제비밀번호변경 > 인증문자",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_auth_ok": {
+      "label": "결제비밀번호변경 > 인증성공",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_terms": {
+      "label": "결제비밀번호변경 > 약관",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_done": {
+      "label": "결제비밀번호변경 > 완료",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_input": {
+      "label": "결제비밀번호변경 > 번호입력",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_pw_again": {
+      "label": "결제비밀번호변경 > 한번더",
+      "image": "예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_payment": {
+      "label": "정보이용료관리 > 결제수단관리",
+      "image": "예치금_정보이용료관리_결제수단관리.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_payment_cancel": {
+      "label": "결제수단관리 > 결제해지",
+      "image": "예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_finance": {
+      "label": "정보이용료관리 > 금융거래",
+      "image": "예치금_정보이용료관리_금융거래.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_terms": {
+      "label": "정보이용료관리 > 약관",
+      "image": "예치금_정보이용료관리_약관.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_mgmt_regular": {
+      "label": "정보이용료관리 > 정기결제동의",
+      "image": "예치금_정보이용료관리_정기결제동의.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_short": {
+      "label": "정보이용료납부(단기) > 일반결제",
+      "image": "예치금_정보이용료납부_단기_일반결제.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_short_pay": {
+      "label": "정보이용료납부(단기) > 페이",
+      "image": "예치금_정보이용료납부_단기_페이.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_deposit_done": {
+      "label": "정보이용료납부 > 예치금결제완료",
+      "image": "예치금_정보이용료납부_예치금_결제완료.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_deposit_pw": {
+      "label": "정보이용료납부 > 예치금비밀번호",
+      "image": "예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_regular_deposit": {
+      "label": "정보이용료납부(정기) > 예치금",
+      "image": "예치금_정보이용료납부_정기_예치금.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "fee_pay_regular_pay": {
+      "label": "정보이용료납부(정기) > 페이",
+      "image": "예치금_정보이용료납부_정기_페이.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_transfer": {
+      "label": "예치금 > 회원간이체",
+      "image": "예치금_회원간이체.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_transfer_amount": {
+      "label": "회원간이체 > 금액입력",
+      "image": "예치금_회원간이체_금액입력.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_transfer_done": {
+      "label": "회원간이체 > 완료",
+      "image": "예치금_회원간이체_완료.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "deposit_transfer_name": {
+      "label": "회원간이체 > 이름조회",
+      "image": "예치금_회원간이체_이름조회.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "point": {
+      "label": "포인트",
+      "image": "포인트.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight": {
+      "label": "화물등록",
+      "image": "화물등록.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_register": {
+      "label": "화물등록 > 등록",
+      "image": "화물등록_등록.png",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_count": {
+      "label": "화물등록 > 등록대수",
+      "image": "화물등록_등록대수.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_list": {
+      "label": "화물등록 > 등록목록",
+      "image": "화물등록_등록목록.jpg",
+      "type": "scroll",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_load_method": {
+      "label": "화물등록 > 상차방법",
+      "image": "화물등록_상차방법.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_load_time": {
+      "label": "화물등록 > 상차일시",
+      "image": "화물등록_상차일시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_load_loc": {
+      "label": "화물등록 > 상차지입력",
+      "image": "화물등록_상차지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_payment": {
+      "label": "화물등록 > 지불방식",
+      "image": "화물등록_지불방식선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_vehicle": {
+      "label": "화물등록 > 차종선택",
+      "image": "화물등록_차종선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_tonnage": {
+      "label": "화물등록 > 톤수선택",
+      "image": "화물등록_톤수선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_unload_method": {
+      "label": "화물등록 > 하차방법",
+      "image": "화물등록_하차방법.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_unload_time": {
+      "label": "화물등록 > 하차일시",
+      "image": "화물등록_하차일시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "freight_unload_loc": {
+      "label": "화물등록 > 하차지입력",
+      "image": "화물등록_하차지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "route_unavailable": {
+      "label": "회차검색 불가",
+      "image": "회차검색_불가.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    }
+  },
+  "start": "main"
+}
