@@ -76,8 +76,23 @@
       "image": "메인화면.jpg",
       "type": "normal",
       "show_navbar": true,
-      "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "hotspots": [
+        {
+          "label": "마이페이지",
+          "top": 2.6,
+          "left": 3.2,
+          "width": 30.4,
+          "height": 4.9,
+          "goto": "mypage"
+        }
+      ],
+      "guide": {
+        "points": [
+          "마이페이지로 전환됩니다."
+        ],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "password_input": {
       "label": "비밀번호 입력",
@@ -85,7 +100,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "password_typing": {
       "label": "비밀번호 입력중",
@@ -93,15 +112,32 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "mypage": {
       "label": "마이페이지",
       "image": "마이페이지.png",
       "type": "scroll",
       "show_navbar": true,
-      "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "hotspots": [
+        {
+          "label": "뒤로가기",
+          "top": 0.6,
+          "left": 0.3,
+          "width": 9.5,
+          "height": 3.6,
+          "goto": "main"
+        }
+      ],
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "mypage_info": {
       "label": "마이페이지 > 내정보",
@@ -109,7 +145,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "info_invoice_email": {
       "label": "내정보 > 계산서이메일변경",
@@ -117,7 +157,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "info_driver_change": {
       "label": "내정보 > 실운전자정보변경",
@@ -125,7 +169,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "info_email_change": {
       "label": "내정보 > 이메일변경",
@@ -133,7 +181,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "info_id_change": {
       "label": "내정보 > 주민번호변경",
@@ -141,7 +193,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "dispatch": {
       "label": "배차내역",
@@ -149,7 +205,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "dispatch_unpaid": {
       "label": "배차내역 > 수금미확인",
@@ -157,7 +217,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "dispatch_paid": {
       "label": "배차내역 > 수금확인",
@@ -165,7 +229,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit": {
       "label": "예치금",
@@ -173,7 +241,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_virtual": {
       "label": "예치금 > 가상계좌만들기",
@@ -181,7 +253,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_period": {
       "label": "예치금 > 기간설정",
@@ -189,7 +265,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_usage": {
       "label": "예치금 > 사용내역",
@@ -197,7 +277,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_withdraw": {
       "label": "예치금 > 실계좌출금",
@@ -205,7 +289,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_withdraw_msg": {
       "label": "예치금 > 실계좌출금 > 메시지입력",
@@ -213,7 +301,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_withdraw_amount": {
       "label": "예치금 > 실계좌출금 > 금액입력",
@@ -221,7 +313,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_income": {
       "label": "예치금 > 입금내역",
@@ -229,7 +325,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_regular": {
       "label": "예치금 > 정기결제인경우",
@@ -237,7 +337,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_app": {
       "label": "정보이용료(단기) > 앱결제이동",
@@ -245,7 +349,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_terms": {
       "label": "정보이용료(단기) > 약관",
@@ -253,7 +361,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_deposit": {
       "label": "정보이용료(단기) > 예치금결제",
@@ -261,7 +373,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_deposit_pw": {
       "label": "정보이용료(단기) > 예치금비밀번호",
@@ -269,7 +385,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_info": {
       "label": "정보이용료(단기) > 정보확인",
@@ -277,7 +397,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_card": {
       "label": "정보이용료(단기) > 카드선택",
@@ -285,7 +409,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_short_install": {
       "label": "정보이용료(단기) > 할부선택",
@@ -293,7 +421,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt": {
       "label": "정보이용료관리",
@@ -301,7 +433,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_3rd": {
       "label": "정보이용료관리 > 3자제공",
@@ -309,7 +445,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_privacy": {
       "label": "정보이용료관리 > 개인정보수집",
@@ -317,7 +457,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw": {
       "label": "정보이용료관리 > 결제비밀번호변경",
@@ -325,7 +469,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_auth": {
       "label": "결제비밀번호변경 > 본인인증",
@@ -333,7 +481,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_auth_sms": {
       "label": "결제비밀번호변경 > 인증문자",
@@ -341,7 +493,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_auth_ok": {
       "label": "결제비밀번호변경 > 인증성공",
@@ -349,7 +505,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_terms": {
       "label": "결제비밀번호변경 > 약관",
@@ -357,7 +517,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_done": {
       "label": "결제비밀번호변경 > 완료",
@@ -365,7 +529,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_input": {
       "label": "결제비밀번호변경 > 번호입력",
@@ -373,7 +541,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_pw_again": {
       "label": "결제비밀번호변경 > 한번더",
@@ -381,7 +553,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_payment": {
       "label": "정보이용료관리 > 결제수단관리",
@@ -389,7 +565,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_payment_cancel": {
       "label": "결제수단관리 > 결제해지",
@@ -397,7 +577,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_finance": {
       "label": "정보이용료관리 > 금융거래",
@@ -405,7 +589,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_terms": {
       "label": "정보이용료관리 > 약관",
@@ -413,7 +601,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_mgmt_regular": {
       "label": "정보이용료관리 > 정기결제동의",
@@ -421,7 +613,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_short": {
       "label": "정보이용료납부(단기) > 일반결제",
@@ -429,7 +625,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_short_pay": {
       "label": "정보이용료납부(단기) > 페이",
@@ -437,7 +637,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_deposit_done": {
       "label": "정보이용료납부 > 예치금결제완료",
@@ -445,7 +649,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_deposit_pw": {
       "label": "정보이용료납부 > 예치금비밀번호",
@@ -453,7 +661,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_regular_deposit": {
       "label": "정보이용료납부(정기) > 예치금",
@@ -461,7 +673,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "fee_pay_regular_pay": {
       "label": "정보이용료납부(정기) > 페이",
@@ -469,7 +685,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_transfer": {
       "label": "예치금 > 회원간이체",
@@ -477,7 +697,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_transfer_amount": {
       "label": "회원간이체 > 금액입력",
@@ -485,7 +709,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_transfer_done": {
       "label": "회원간이체 > 완료",
@@ -493,7 +721,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "deposit_transfer_name": {
       "label": "회원간이체 > 이름조회",
@@ -501,7 +733,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "point": {
       "label": "포인트",
@@ -509,7 +745,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight": {
       "label": "화물등록",
@@ -517,7 +757,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_register": {
       "label": "화물등록 > 등록",
@@ -525,7 +769,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_count": {
       "label": "화물등록 > 등록대수",
@@ -533,7 +781,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_list": {
       "label": "화물등록 > 등록목록",
@@ -541,7 +793,11 @@
       "type": "scroll",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_load_method": {
       "label": "화물등록 > 상차방법",
@@ -549,7 +805,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_load_time": {
       "label": "화물등록 > 상차일시",
@@ -557,7 +817,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_load_loc": {
       "label": "화물등록 > 상차지입력",
@@ -565,7 +829,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_payment": {
       "label": "화물등록 > 지불방식",
@@ -573,7 +841,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_vehicle": {
       "label": "화물등록 > 차종선택",
@@ -581,7 +853,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_tonnage": {
       "label": "화물등록 > 톤수선택",
@@ -589,7 +865,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_unload_method": {
       "label": "화물등록 > 하차방법",
@@ -597,7 +877,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_unload_time": {
       "label": "화물등록 > 하차일시",
@@ -605,7 +889,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "freight_unload_loc": {
       "label": "화물등록 > 하차지입력",
@@ -613,7 +901,11 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     },
     "route_unavailable": {
       "label": "회차검색 불가",
@@ -621,7 +913,23 @@
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": { "points": [], "caution": "", "kms_link": "" }
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
+    },
+    "m_1": {
+      "label": "메인페이지",
+      "image": "메인화면.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": {
+        "points": [],
+        "caution": "",
+        "kms_link": ""
+      }
     }
   },
   "start": "main"
