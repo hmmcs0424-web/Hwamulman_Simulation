@@ -3,7 +3,13 @@
     "allow": [
       "mcp__Claude_Preview__preview_start",
       "Bash(git config *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "PowerShell(gh auth status 2>&1)",
+      "Bash(git remote *)",
+      "mcp__401a3832-98c1-4918-8765-4cc6fdd6990f__deploy_to_vercel"
     ]
   }
 }
