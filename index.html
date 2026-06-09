@@ -2,36 +2,96 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>화물맨 차주앱 시뮬레이터</title>
+<title>화물맨 시뮬레이터</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{--brand:#FFB800;--bg:#111;--phone-w:33vw;}
+:root{
+  --brand:#FFB800;
+  --bg:#111;
+  --topnav-h:54px;
+  --phone-w:33vw;
+}
 
 body{
   background:var(--bg);
   font-family:'Pretendard',-apple-system,sans-serif;
-  display:flex;height:100vh;overflow:hidden;color:#1a1a1a;
+  color:#1a1a1a;
+  overflow:hidden;
+  height:100vh;
 }
 
-/* ── Phone area ── */
+/* ══════════════════════════════════════
+   TOP NAV
+══════════════════════════════════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--topnav-h);
+  background:#1a1a1a;
+  border-bottom:1px solid #2e2e2e;
+  display:flex;align-items:center;
+  padding:0 20px;
+  z-index:1000;
+  gap:0;
+}
+.topnav-logo{
+  font-size:15px;font-weight:800;color:#FFB800;
+  letter-spacing:-.3px;margin-right:28px;white-space:nowrap;
+  flex-shrink:0;
+}
+.topnav-logo span{color:#fff;font-weight:400;font-size:13px;margin-left:4px;}
+.topnav-menus{
+  display:flex;gap:2px;flex:1;
+}
+.nav-menu{
+  padding:7px 16px;border-radius:8px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:600;
+  color:#aaa;background:transparent;transition:all .15s;
+  white-space:nowrap;
+}
+.nav-menu:hover{color:#fff;background:#2a2a2a;}
+.nav-menu.active{color:#FFB800;background:#2a2000;}
+.topnav-right{
+  display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto;
+}
+.btn-admin-login{
+  padding:7px 16px;border-radius:8px;border:1.5px solid #444;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:600;
+  color:#ccc;background:transparent;transition:all .15s;
+  display:flex;align-items:center;gap:5px;
+}
+.btn-admin-login:hover{border-color:#FFB800;color:#FFB800;}
+.btn-admin-login.on{border-color:#FF5000;color:#FF5000;background:#1a0a00;}
+
+/* ══════════════════════════════════════
+   SIM SECTIONS
+══════════════════════════════════════ */
+.sim-section{
+  display:none;
+  height:calc(100vh - var(--topnav-h));
+  margin-top:var(--topnav-h);
+  overflow:hidden;
+}
+.sim-section.active{ display:flex; }
+
+/* ══════════════════════════════════════
+   APP MODE — Phone area (1/3)
+══════════════════════════════════════ */
 .phone-area{
   display:flex;align-items:center;justify-content:center;
   padding:20px;
-  width: 33.33vw; /* 전체 화면 가로의 1/3 고정 */
+  width:33.33vw;
   flex-shrink:0;
 }
 .phone-frame{
-  width: 100%; /* 부모 영역인 phone-area 내부에서 100% 채우기 */
-  max-width: 420px; /* 너무 과하게 커지는 현상 방지 */
-  height:calc(100vh - 40px);max-height:860px;
+  width:100%;max-width:420px;
+  height:calc(100vh - var(--topnav-h) - 40px);max-height:860px;
   background:#1c1c1e;border-radius:52px;
   padding:14px;
   box-shadow:inset 0 0 0 1.5px #3a3a3c,0 0 0 1px #000,0 30px 80px rgba(0,0,0,.85);
   display:flex;flex-direction:column;
   position:relative;
 }
-/* side buttons */
 .phone-frame::before{
   content:'';position:absolute;right:-3px;top:130px;
   width:3px;height:64px;background:#2c2c2e;border-radius:0 3px 3px 0;
@@ -45,12 +105,10 @@ body{
   flex:1;background:#fff;border-radius:40px;
   overflow:hidden;display:flex;flex-direction:column;position:relative;
 }
-/* dynamic island */
 .phone-island{
   position:absolute;top:11px;left:50%;transform:translateX(-50%);
   width:110px;height:30px;background:#1c1c1e;border-radius:20px;z-index:10;
 }
-/* status bar */
 .status-bar{
   flex-shrink:0;height:50px;padding:16px 22px 0;
   display:flex;justify-content:space-between;align-items:center;
@@ -58,13 +116,11 @@ body{
 }
 .status-time{font-size:15px;font-weight:700;color:#000;}
 .status-icons{display:flex;gap:5px;align-items:center;}
-/* content */
 .content-area{flex:1;overflow:hidden;position:relative;}
 .content-area.scroll-mode{overflow-y:auto;}
 .content-area.scroll-mode::-webkit-scrollbar{display:none;}
 .image-wrapper{position:relative;width:100%;}
 .screen-image{width:100%;display:block;user-select:none;-webkit-user-drag:none;}
-/* hotspot layer */
 .hotspot-layer{position:absolute;inset:0;pointer-events:none;}
 .hotspot{position:absolute;cursor:pointer;pointer-events:auto;}
 .hotspot.normal-mode{background:transparent;border:none;}
@@ -80,7 +136,6 @@ body{
   padding:1px 4px;border-radius:3px;
 }
 .hotspot.admin-mode .hotspot-label{display:block;}
-/* draw overlay */
 .draw-overlay{
   display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;
 }
@@ -90,7 +145,6 @@ body{
   background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);
   border-radius:4px;pointer-events:none;
 }
-/* popup */
 .popup-overlay{
   display:none;position:absolute;inset:0;
   background:rgba(0,0,0,.55);z-index:30;cursor:pointer;
@@ -98,14 +152,61 @@ body{
 .popup-overlay.active{display:flex;align-items:flex-end;}
 .popup-image-wrap{width:100%;cursor:auto;position:relative;}
 .popup-image-wrap img{width:100%;display:block;}
-/* navbar */
 .navbar-bar{flex-shrink:0;position:relative;cursor:pointer;}
 .navbar-bar img{width:100%;display:block;}
 .nav-zone{position:absolute;top:0;height:100%;cursor:pointer;}
 .nav-back{left:0;width:33%;}
 .nav-home{left:33%;width:34%;}
 
-/* ── Info panel ── */
+/* ══════════════════════════════════════
+   PC MODE — Wide area (3/5)
+══════════════════════════════════════ */
+.pc-area{
+  flex:0 0 60%;
+  display:flex;align-items:stretch;
+  padding:16px;
+  background:#0d0d0f;
+}
+.pc-frame{
+  flex:1;
+  background:#1c1c1e;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 0 0 1px #333,0 20px 60px rgba(0,0,0,.7);
+}
+.pc-titlebar{
+  flex-shrink:0;height:38px;background:#252528;
+  display:flex;align-items:center;padding:0 14px;gap:8px;
+  border-bottom:1px solid #3a3a3e;
+}
+.pc-tb-dots{display:flex;gap:6px;}
+.pc-tb-dot{width:12px;height:12px;border-radius:50%;}
+.pc-tb-dot.red{background:#ff5f57;}
+.pc-tb-dot.yellow{background:#ffbd2e;}
+.pc-tb-dot.green{background:#28c840;}
+.pc-tb-title{
+  flex:1;text-align:center;font-size:12px;color:#888;
+  font-weight:500;margin-right:36px;
+}
+.pc-content{
+  flex:1;overflow:hidden;position:relative;
+  background:#f0f0f2;
+}
+.pc-content img{
+  width:100%;height:100%;object-fit:contain;object-position:top;
+}
+.pc-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:12px;color:#888;
+}
+.pc-placeholder .icon{font-size:48px;}
+.pc-placeholder .title{font-size:18px;font-weight:700;color:#555;}
+.pc-placeholder .sub{font-size:13px;color:#aaa;text-align:center;line-height:1.6;}
+
+/* ══════════════════════════════════════
+   INFO PANEL (shared)
+══════════════════════════════════════ */
 .info-panel{
   flex:1;background:#f0f0f2;overflow-y:auto;
   padding:18px;display:flex;flex-direction:column;gap:12px;
@@ -119,12 +220,10 @@ body{
   font-size:11px;font-weight:700;color:#999;
   text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;
 }
-/* breadcrumb */
 .breadcrumb{display:flex;flex-wrap:wrap;gap:3px;align-items:center;font-size:12px;}
 .bc-item{color:#555;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
 .bc-sep{color:#ccc;}
 .bc-cur{color:var(--brand);font-weight:700;}
-/* screen list */
 .search-box{
   width:100%;border:1px solid #e5e5e5;border-radius:8px;
   padding:7px 11px;font-size:13px;font-family:inherit;
@@ -142,7 +241,6 @@ body{
 }
 .screen-btn:hover{background:#f5f5f5;}
 .screen-btn.active{background:#FFF8E0;color:#7a5600;font-weight:700;}
-/* guide */
 .guide-points{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
 .guide-points li{
   font-size:13px;line-height:1.5;padding:8px 10px;
@@ -159,7 +257,6 @@ body{
 .guide-kms a{color:#0066CC;text-decoration:none;}
 .guide-kms a:hover{text-decoration:underline;}
 .guide-empty{color:#bbb;font-size:13px;text-align:center;padding:14px 0;}
-/* admin */
 .admin-badge{
   display:inline-block;background:#FF5000;color:#fff;
   font-size:11px;font-weight:700;padding:2px 8px;
@@ -191,14 +288,12 @@ textarea.form-input{resize:vertical;}
   display:flex;justify-content:space-between;align-items:center;
   padding:6px 10px;background:#f7f7f7;border-radius:8px;margin-bottom:5px;font-size:13px;
 }
-/* unregistered */
 .unreg-item{
   display:flex;justify-content:space-between;align-items:center;
   padding:6px 10px;background:#FFF8E0;border-radius:8px;
   margin-bottom:5px;font-size:13px;cursor:pointer;
 }
 .unreg-item:hover{background:#FFEDB0;}
-/* gear */
 .gear-btn{
   position:fixed;bottom:22px;right:22px;
   width:48px;height:48px;border-radius:50%;
@@ -208,7 +303,7 @@ textarea.form-input{resize:vertical;}
 }
 .gear-btn:hover{background:#444;}
 .gear-btn.on{background:#FF5000;}
-/* modal */
+.gear-btn.hidden{display:none;}
 .modal-bg{
   display:none;position:fixed;inset:0;
   background:rgba(0,0,0,.55);z-index:500;
@@ -226,141 +321,253 @@ textarea.form-input{resize:vertical;}
 </head>
 <body>
 
-<!-- ═══ Phone ═══ -->
-<div class="phone-area">
-<div class="phone-frame">
-<div class="phone-inner">
-  <div class="phone-island"></div>
+<!-- ═══════════════════════════════════════
+     TOP NAVIGATION BAR
+════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="topnav-logo">화물맨<span>시뮬레이터</span></div>
+  <div class="topnav-menus">
+    <button class="nav-menu active" data-sim="차주앱" data-type="app">차주 APP</button>
+    <button class="nav-menu" data-sim="빽통앱" data-type="app">빽통 APP</button>
+    <button class="nav-menu" data-sim="빽통PC" data-type="pc">빽통 PC</button>
+    <button class="nav-menu" data-sim="채널톡" data-type="pc">채널톡</button>
+  </div>
+  <div class="topnav-right">
+    <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
+  </div>
+</nav>
 
-  <div class="status-bar">
-    <span class="status-time" id="statusTime">09:41</span>
-    <div class="status-icons">
-      <!-- signal -->
-      <svg width="17" height="12" viewBox="0 0 17 12" fill="#000">
-        <rect x="0" y="5" width="3" height="7" rx="1"/>
-        <rect x="4.5" y="3" width="3" height="9" rx="1"/>
-        <rect x="9" y="1" width="3" height="11" rx="1"/>
-        <rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".25"/>
-      </svg>
-      <!-- wifi -->
-      <svg width="16" height="12" viewBox="0 0 16 12" fill="#000">
-        <path d="M8 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-        <path d="M3.5 6.8A6.5 6.5 0 018 5a6.5 6.5 0 014.5 1.8" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-        <path d="M1 4.2A9.8 9.8 0 018 2a9.8 9.8 0 017 2.2" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      </svg>
-      <!-- battery -->
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-        <rect x=".75" y=".75" width="21.5" height="10.5" rx="2.5" stroke="#000" stroke-width="1.5"/>
-        <rect x="23" y="3.5" width="2" height="5" rx="1" fill="#000"/>
-        <rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="#000"/>
-      </svg>
+
+<!-- ═══════════════════════════════════════
+     SIM 1 — 차주 APP (활성)
+════════════════════════════════════════ -->
+<div class="sim-section sim-app active" id="sim-차주앱">
+
+  <div class="phone-area">
+  <div class="phone-frame">
+  <div class="phone-inner">
+    <div class="phone-island"></div>
+
+    <div class="status-bar">
+      <span class="status-time" id="statusTime">09:41</span>
+      <div class="status-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000">
+          <rect x="0" y="5" width="3" height="7" rx="1"/>
+          <rect x="4.5" y="3" width="3" height="9" rx="1"/>
+          <rect x="9" y="1" width="3" height="11" rx="1"/>
+          <rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".25"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="#000">
+          <path d="M8 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+          <path d="M3.5 6.8A6.5 6.5 0 018 5a6.5 6.5 0 014.5 1.8" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M1 4.2A9.8 9.8 0 018 2a9.8 9.8 0 017 2.2" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        </svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x=".75" y=".75" width="21.5" height="10.5" rx="2.5" stroke="#000" stroke-width="1.5"/>
+          <rect x="23" y="3.5" width="2" height="5" rx="1" fill="#000"/>
+          <rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="#000"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="content-area" id="contentArea">
+      <div class="image-wrapper" id="imageWrapper">
+        <img class="screen-image" id="screenImg" alt="화면">
+        <div class="hotspot-layer" id="hotspotLayer"></div>
+        <div class="draw-overlay" id="drawOverlay">
+          <div class="draw-rect" id="drawRect"></div>
+        </div>
+      </div>
+      <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-image-wrap" id="popupWrap">
+          <img id="popupImg" alt="팝업">
+          <div class="hotspot-layer" id="popupHsLayer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-bar" id="navbarBar">
+      <img src="차주앱/뒤로가기.png" id="navbarImg" alt="네비게이션">
+      <div class="nav-zone nav-back" id="navBack"></div>
+      <div class="nav-zone nav-home" id="navHome"></div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- Info Panel -->
+  <div class="info-panel">
+    <div class="panel-card">
+      <div class="card-title">현재 위치</div>
+      <div class="breadcrumb" id="breadcrumb"></div>
+    </div>
+
+    <div class="panel-card">
+      <div class="card-title">화면 목록</div>
+      <input type="text" class="search-box" id="searchBox" placeholder="화면 검색...">
+      <div class="screen-scroll" id="screenList"></div>
+    </div>
+
+    <div class="panel-card" id="guideCard">
+      <div class="card-title">상담 가이드</div>
+      <div id="guideContent"></div>
+    </div>
+
+    <div class="panel-card" id="adminPanel" style="display:none">
+      <div class="admin-badge">🔧 관리자 모드</div>
+      <div class="admin-section">
+        <div class="section-title">핫스팟 편집</div>
+        <div class="btn-row" style="margin-bottom:8px">
+          <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
+          <button class="btn btn-secondary" id="btnCancelDraw" style="display:none">취소</button>
+        </div>
+        <div id="hsList"></div>
+      </div>
+      <div class="admin-section">
+        <div class="section-title">가이드 편집</div>
+        <div id="guideEditor"></div>
+      </div>
+      <div class="admin-section">
+        <div class="section-title">화면 추가</div>
+        <div class="form-row">
+          <div class="form-label">화면 ID</div>
+          <input class="form-input" id="newId" placeholder="예: main_detail">
+        </div>
+        <div class="form-row">
+          <div class="form-label">라벨명</div>
+          <input class="form-input" id="newLabel" placeholder="예: 메인 상세">
+        </div>
+        <div class="form-row">
+          <div class="form-label">이미지 파일명</div>
+          <input class="form-input" id="newImage" placeholder="예: 차주앱/메인화면.jpg">
+        </div>
+        <div class="form-row">
+          <div class="form-label">타입</div>
+          <select class="form-input" id="newType">
+            <option value="normal">normal</option>
+            <option value="scroll">scroll</option>
+            <option value="popup">popup</option>
+          </select>
+        </div>
+        <div class="form-row" style="flex-direction:row;align-items:center;gap:8px">
+          <input type="checkbox" id="newNavbar" checked>
+          <label for="newNavbar" style="font-size:13px">navbar 표시</label>
+        </div>
+        <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
+      </div>
+      <div class="admin-section">
+        <div class="section-title">내보내기</div>
+        <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
+      </div>
+    </div>
+
+    <div class="panel-card" id="unregCard" style="display:none">
+      <div class="card-title">⚠️ 미등록 이미지</div>
+      <div id="unregList"></div>
     </div>
   </div>
 
-  <div class="content-area" id="contentArea">
-    <div class="image-wrapper" id="imageWrapper">
-      <img class="screen-image" id="screenImg" alt="화면">
-      <div class="hotspot-layer" id="hotspotLayer"></div>
-      <div class="draw-overlay" id="drawOverlay">
-        <div class="draw-rect" id="drawRect"></div>
+</div><!-- /sim-차주앱 -->
+
+
+<!-- ═══════════════════════════════════════
+     SIM 2 — 빽통 APP (준비 중)
+════════════════════════════════════════ -->
+<div class="sim-section sim-app" id="sim-빽통앱">
+  <div class="phone-area">
+    <div class="phone-frame">
+      <div class="phone-inner" style="display:flex;align-items:center;justify-content:center;background:#f8f8f8;">
+        <div style="text-align:center;padding:24px;">
+          <div style="font-size:48px;margin-bottom:16px;">📱</div>
+          <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:8px;">빽통 APP</div>
+          <div style="font-size:13px;color:#aaa;line-height:1.6;">시뮬레이션 준비 중입니다.<br>이미지를 빽통앱/ 폴더에<br>추가하면 시작할 수 있습니다.</div>
+        </div>
       </div>
     </div>
-    <div class="popup-overlay" id="popupOverlay">
-      <div class="popup-image-wrap" id="popupWrap">
-        <img id="popupImg" alt="팝업">
-        <div class="hotspot-layer" id="popupHsLayer"></div>
+  </div>
+  <div class="info-panel">
+    <div class="panel-card">
+      <div class="card-title">안내</div>
+      <div style="font-size:13px;color:#888;line-height:1.8;">
+        빽통 APP 시뮬레이션은 준비 중입니다.<br>
+        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">빽통앱/</code> 폴더에 이미지와 flow.json을 추가해주세요.
       </div>
     </div>
   </div>
+</div><!-- /sim-빽통앱 -->
 
-  <div class="navbar-bar" id="navbarBar">
-    <img src="뒤로가기.png" id="navbarImg" alt="네비게이션">
-    <div class="nav-zone nav-back" id="navBack"></div>
-    <div class="nav-zone nav-home" id="navHome"></div>
-  </div>
-</div>
-</div>
-</div>
 
-<!-- ═══ Info Panel ═══ -->
-<div class="info-panel">
-
-  <div class="panel-card">
-    <div class="card-title">현재 위치</div>
-    <div class="breadcrumb" id="breadcrumb"></div>
-  </div>
-
-  <div class="panel-card">
-    <div class="card-title">화면 목록</div>
-    <input type="text" class="search-box" id="searchBox" placeholder="화면 검색...">
-    <div class="screen-scroll" id="screenList"></div>
-  </div>
-
-  <div class="panel-card" id="guideCard">
-    <div class="card-title">상담 가이드</div>
-    <div id="guideContent"></div>
-  </div>
-
-  <div class="panel-card" id="adminPanel" style="display:none">
-    <div class="admin-badge">🔧 관리자 모드</div>
-
-    <div class="admin-section">
-      <div class="section-title">핫스팟 편집</div>
-      <div class="btn-row" style="margin-bottom:8px">
-        <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
-        <button class="btn btn-secondary" id="btnCancelDraw" style="display:none">취소</button>
+<!-- ═══════════════════════════════════════
+     SIM 3 — 빽통 PC (준비 중)
+════════════════════════════════════════ -->
+<div class="sim-section sim-pc" id="sim-빽통PC">
+  <div class="pc-area">
+    <div class="pc-frame">
+      <div class="pc-titlebar">
+        <div class="pc-tb-dots">
+          <div class="pc-tb-dot red"></div>
+          <div class="pc-tb-dot yellow"></div>
+          <div class="pc-tb-dot green"></div>
+        </div>
+        <div class="pc-tb-title">빽통 PC 시뮬레이터</div>
       </div>
-      <div id="hsList"></div>
-    </div>
-
-    <div class="admin-section">
-      <div class="section-title">가이드 편집</div>
-      <div id="guideEditor"></div>
-    </div>
-
-    <div class="admin-section">
-      <div class="section-title">화면 추가</div>
-      <div class="form-row">
-        <div class="form-label">화면 ID</div>
-        <input class="form-input" id="newId" placeholder="예: main_detail">
+      <div class="pc-content">
+        <div class="pc-placeholder">
+          <div class="icon">🖥️</div>
+          <div class="title">빽통 PC</div>
+          <div class="sub">시뮬레이션 준비 중입니다.<br><code style="background:#e8e8e8;padding:2px 6px;border-radius:4px;font-size:12px;">빽통PC/</code> 폴더에 이미지를 추가해주세요.</div>
+        </div>
       </div>
-      <div class="form-row">
-        <div class="form-label">라벨명</div>
-        <input class="form-input" id="newLabel" placeholder="예: 메인 상세">
-      </div>
-      <div class="form-row">
-        <div class="form-label">이미지 파일명</div>
-        <input class="form-input" id="newImage" placeholder="예: 메인화면.jpg">
-      </div>
-      <div class="form-row">
-        <div class="form-label">타입</div>
-        <select class="form-input" id="newType">
-          <option value="normal">normal</option>
-          <option value="scroll">scroll</option>
-          <option value="popup">popup</option>
-        </select>
-      </div>
-      <div class="form-row" style="flex-direction:row;align-items:center;gap:8px">
-        <input type="checkbox" id="newNavbar" checked>
-        <label for="newNavbar" style="font-size:13px">navbar 표시</label>
-      </div>
-      <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
-    </div>
-
-    <div class="admin-section">
-      <div class="section-title">내보내기</div>
-      <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
     </div>
   </div>
-
-  <div class="panel-card" id="unregCard" style="display:none">
-    <div class="card-title">⚠️ 미등록 이미지</div>
-    <div id="unregList"></div>
+  <div class="info-panel">
+    <div class="panel-card">
+      <div class="card-title">안내</div>
+      <div style="font-size:13px;color:#888;line-height:1.8;">
+        빽통 PC 시뮬레이션은 준비 중입니다.<br>
+        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">빽통PC/</code> 폴더에 이미지와 flow.json을 추가해주세요.
+      </div>
+    </div>
   </div>
+</div><!-- /sim-빽통PC -->
 
-</div>
 
-<!-- gear -->
+<!-- ═══════════════════════════════════════
+     SIM 4 — 채널톡 (준비 중)
+════════════════════════════════════════ -->
+<div class="sim-section sim-pc" id="sim-채널톡">
+  <div class="pc-area">
+    <div class="pc-frame">
+      <div class="pc-titlebar">
+        <div class="pc-tb-dots">
+          <div class="pc-tb-dot red"></div>
+          <div class="pc-tb-dot yellow"></div>
+          <div class="pc-tb-dot green"></div>
+        </div>
+        <div class="pc-tb-title">채널톡 시뮬레이터</div>
+      </div>
+      <div class="pc-content">
+        <div class="pc-placeholder">
+          <div class="icon">💬</div>
+          <div class="title">채널톡</div>
+          <div class="sub">시뮬레이션 준비 중입니다.<br><code style="background:#e8e8e8;padding:2px 6px;border-radius:4px;font-size:12px;">채널톡/</code> 폴더에 이미지를 추가해주세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="info-panel">
+    <div class="panel-card">
+      <div class="card-title">안내</div>
+      <div style="font-size:13px;color:#888;line-height:1.8;">
+        채널톡 시뮬레이션은 준비 중입니다.<br>
+        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">채널톡/</code> 폴더에 이미지와 flow.json을 추가해주세요.
+      </div>
+    </div>
+  </div>
+</div><!-- /sim-채널톡 -->
+
+
+<!-- gear (차주앱 전용) -->
 <button class="gear-btn" id="gearBtn">⚙️</button>
 
 <!-- 비밀번호 모달 -->
@@ -399,12 +606,48 @@ textarea.form-input{resize:vertical;}
 
 <script>
 // ══════════════════════════════════════════
+// NAV SWITCHING
+// ══════════════════════════════════════════
+const navMenus = document.querySelectorAll('.nav-menu');
+let currentSim = '차주앱';
+
+navMenus.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sim = btn.dataset.sim;
+    switchSim(sim);
+  });
+});
+
+function switchSim(sim) {
+  currentSim = sim;
+  // 메뉴 active
+  navMenus.forEach(b => b.classList.toggle('active', b.dataset.sim === sim));
+  // 섹션 active
+  document.querySelectorAll('.sim-section').forEach(s => s.classList.remove('active'));
+  const section = document.getElementById('sim-' + sim);
+  if(section) section.classList.add('active');
+  // gear 버튼: 차주앱 전용
+  document.getElementById('gearBtn').classList.toggle('hidden', sim !== '차주앱');
+}
+
+// 상단 관리자 버튼 → 차주앱 전환 후 관리자 팝업
+document.getElementById('topAdminBtn').addEventListener('click', () => {
+  if(S && S.admin) {
+    exitAdmin();
+  } else {
+    if(currentSim !== '차주앱') switchSim('차주앱');
+    openModal('pwModal');
+    setTimeout(() => document.getElementById('pwInput').focus(), 60);
+  }
+});
+
+// ══════════════════════════════════════════
 // State
 // ══════════════════════════════════════════
 const S = {
   flow: null,
-  cur: null,       // current screen id
-  hist: [],        // navigation history
+  cur: null,
+  hist: [],
   admin: false,
   drawing: false,
   drawStart: null,
@@ -416,13 +659,13 @@ const S = {
 // ══════════════════════════════════════════
 async function boot() {
   try {
-    const r = await fetch('flow.json?_=' + Date.now());
+    const r = await fetch('차주앱/flow.json?_=' + Date.now());
     S.flow = await r.json();
   } catch(e) {
     S.flow = {
       imageManifest: [],
       screens: {
-        main: { label:'메인화면', image:'메인화면.jpg', type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} }
+        main: { label:'메인화면', image:'차주앱/메인화면.jpg', type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} }
       },
       start: 'main'
     };
@@ -446,7 +689,6 @@ async function boot() {
     if(e.target === this) closePopup();
   };
   setupDrawEvents();
-  // close modals on bg click
   document.querySelectorAll('.modal-bg').forEach(el => {
     el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
   });
@@ -468,15 +710,9 @@ function tick() {
 function goTo(id, init=false) {
   const scr = S.flow.screens[id];
   if(!scr) return;
-
-  if(scr.type === 'popup' && !init) {
-    showPopup(id);
-    return;
-  }
-
+  if(scr.type === 'popup' && !init) { showPopup(id); return; }
   if(!init && S.cur) S.hist.push(S.cur);
   S.cur = id;
-
   renderPhone(scr);
   renderBreadcrumb();
   renderGuide(scr.guide);
@@ -523,15 +759,11 @@ function renderPhone(scr) {
   const ca = document.getElementById('contentArea');
   const img = document.getElementById('screenImg');
   const nb = document.getElementById('navbarBar');
-
   ca.classList.toggle('scroll-mode', scr.type === 'scroll');
   ca.scrollTop = 0;
-
   img.src = scr.image;
   img.onload = () => renderHotspots(scr.hotspots || []);
-
   nb.style.display = scr.show_navbar === false ? 'none' : 'block';
-
   if(!S.drawing) document.getElementById('drawOverlay').classList.remove('active');
 }
 
@@ -542,12 +774,10 @@ function renderHotspots(hotspots) {
     const el = document.createElement('div');
     el.className = 'hotspot ' + (S.admin ? 'admin-mode' : 'normal-mode');
     el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
-
     const lbl = document.createElement('span');
     lbl.className = 'hotspot-label';
     lbl.textContent = (hs.label||'') + ' → ' + hs.goto;
     el.appendChild(lbl);
-
     if(S.admin) {
       el.addEventListener('click', e => {
         e.stopPropagation();
@@ -572,7 +802,6 @@ function showPopup(id) {
   const overlay = document.getElementById('popupOverlay');
   const img = document.getElementById('popupImg');
   const layer = document.getElementById('popupHsLayer');
-
   img.src = scr.image;
   img.onload = () => {
     layer.innerHTML = '';
@@ -631,261 +860,4 @@ function renderGuide(g) {
   if(!g) { el.innerHTML = '<div class="guide-empty">가이드 없음</div>'; return; }
   let html = '';
   if(g.points && g.points.length) {
-    html += '<ul class="guide-points">' + g.points.map(p=>`<li>${esc(p)}</li>`).join('') + '</ul>';
-  }
-  if(g.caution) html += `<div class="guide-caution">${esc(g.caution)}</div>`;
-  if(g.kms_link) html += `<div class="guide-kms"><a href="${esc(g.kms_link)}" target="_blank">KMS 바로가기</a></div>`;
-  if(!html) html = '<div class="guide-empty">등록된 가이드가 없습니다.<br><small style="color:#ccc">관리자 모드에서 추가하세요.</small></div>';
-  el.innerHTML = html;
-}
-
-// ══════════════════════════════════════════
-// Admin
-// ══════════════════════════════════════════
-function gearClick() {
-  if(S.admin) exitAdmin();
-  else { openModal('pwModal'); setTimeout(()=>document.getElementById('pwInput').focus(),60); }
-}
-
-function submitPw() {
-  if(document.getElementById('pwInput').value === 'hmm0424!') {
-    document.getElementById('pwInput').value = '';
-    closeModal('pwModal');
-    enterAdmin();
-  } else {
-    document.getElementById('pwErr').style.display = 'block';
-    document.getElementById('pwInput').value = '';
-    document.getElementById('pwInput').focus();
-  }
-}
-
-function enterAdmin() {
-  S.admin = true;
-  document.getElementById('gearBtn').classList.add('on');
-  document.getElementById('adminPanel').style.display = 'block';
-  const scr = S.flow.screens[S.cur];
-  renderHotspots(scr.hotspots||[]);
-  renderHsList();
-  renderGuideEditor();
-}
-
-function exitAdmin() {
-  S.admin = false;
-  document.getElementById('gearBtn').classList.remove('on');
-  document.getElementById('adminPanel').style.display = 'none';
-  if(S.drawing) cancelDraw();
-  renderHotspots(S.flow.screens[S.cur].hotspots||[]);
-}
-
-function renderHsList() {
-  const el = document.getElementById('hsList');
-  const hs = S.flow.screens[S.cur]?.hotspots || [];
-  if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
-  el.innerHTML = hs.map((h,i) => `
-    <div class="hs-item">
-      <span>${esc(h.label||'(없음)')} → ${esc(h.goto)}</span>
-      <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
-    </div>`).join('');
-}
-
-function delHs(i) {
-  S.flow.screens[S.cur].hotspots.splice(i,1);
-  renderHotspots(S.flow.screens[S.cur].hotspots);
-  renderHsList();
-}
-
-function renderGuideEditor() {
-  const g = S.flow.screens[S.cur]?.guide || {points:[],caution:'',kms_link:''};
-  document.getElementById('guideEditor').innerHTML = `
-    <div class="form-row">
-      <div class="form-label">💡 상담 포인트 (한 줄에 하나)</div>
-      <textarea class="form-input" id="editPoints" rows="4">${esc((g.points||[]).join('\n'))}</textarea>
-    </div>
-    <div class="form-row">
-      <div class="form-label">⚠️ 주의사항</div>
-      <input class="form-input" id="editCaution" value="${esc(g.caution||'')}">
-    </div>
-    <div class="form-row">
-      <div class="form-label">🔗 KMS 링크</div>
-      <input class="form-input" id="editKms" value="${esc(g.kms_link||'')}">
-    </div>
-    <button class="btn btn-primary btn-sm" onclick="saveGuide()">저장</button>
-  `;
-}
-
-function saveGuide() {
-  const scr = S.flow.screens[S.cur];
-  scr.guide = {
-    points: document.getElementById('editPoints').value.split('\n').map(s=>s.trim()).filter(Boolean),
-    caution: document.getElementById('editCaution').value.trim(),
-    kms_link: document.getElementById('editKms').value.trim(),
-  };
-  renderGuide(scr.guide);
-  const btn = document.querySelector('#guideEditor .btn');
-  const orig = btn.textContent;
-  btn.textContent = '✓ 저장됨!';
-  setTimeout(()=>btn.textContent=orig, 1500);
-}
-
-function addScreen() {
-  const id = document.getElementById('newId').value.trim();
-  const label = document.getElementById('newLabel').value.trim();
-  const image = document.getElementById('newImage').value.trim();
-  const type = document.getElementById('newType').value;
-  const showNav = document.getElementById('newNavbar').checked;
-  if(!id||!label||!image) { alert('ID, 라벨, 이미지 파일명을 모두 입력하세요.'); return; }
-  if(S.flow.screens[id]) { alert(`"${id}" ID가 이미 존재합니다.`); return; }
-  S.flow.screens[id] = { label, image, type, show_navbar:showNav, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
-  document.getElementById('newId').value = '';
-  document.getElementById('newLabel').value = '';
-  document.getElementById('newImage').value = '';
-  renderList();
-  detectUnreg();
-  alert(`"${label}" 화면이 추가되었습니다.`);
-}
-
-function exportFlow() {
-  const blob = new Blob([JSON.stringify(S.flow, null, 2)], {type:'application/json'});
-  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:'flow.json'});
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-// ══════════════════════════════════════════
-// Draw (hotspot creation)
-// ══════════════════════════════════════════
-function setupDrawEvents() {
-  const overlay = document.getElementById('drawOverlay');
-  const rect = document.getElementById('drawRect');
-  let isDown = false;
-
-  overlay.addEventListener('mousedown', e => {
-    if(!S.drawing) return;
-    isDown = true;
-    const b = overlay.getBoundingClientRect();
-    S.drawStart = { x: e.clientX - b.left, y: e.clientY - b.top };
-    rect.style.cssText = `display:block;left:${S.drawStart.x}px;top:${S.drawStart.y}px;width:0;height:0;`;
-  });
-
-  overlay.addEventListener('mousemove', e => {
-    if(!isDown || !S.drawStart) return;
-    const b = overlay.getBoundingClientRect();
-    const cx = e.clientX - b.left;
-    const cy = e.clientY - b.top;
-    const l = Math.min(cx, S.drawStart.x);
-    const t = Math.min(cy, S.drawStart.y);
-    const w = Math.abs(cx - S.drawStart.x);
-    const h = Math.abs(cy - S.drawStart.y);
-    rect.style.cssText = `display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px;`;
-  });
-
-  overlay.addEventListener('mouseup', e => {
-    if(!isDown || !S.drawStart) return;
-    isDown = false;
-    const b = overlay.getBoundingClientRect();
-    const cx = e.clientX - b.left;
-    const cy = e.clientY - b.top;
-    const l = Math.min(cx, S.drawStart.x);
-    const t = Math.min(cy, S.drawStart.y);
-    const w = Math.abs(cx - S.drawStart.x);
-    const h = Math.abs(cy - S.drawStart.y);
-    S.drawStart = null;
-    if(w < 10 || h < 6) return;
-    S.pendingHs = {
-      top: round1(t / b.height * 100),
-      left: round1(l / b.width * 100),
-      width: round1(w / b.width * 100),
-      height: round1(h / b.height * 100),
-    };
-    // populate goto select
-    const sel = document.getElementById('hsGoto');
-    sel.innerHTML = Object.entries(S.flow.screens)
-      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
-    document.getElementById('hsLabelInput').value = '';
-    openModal('hsModal');
-  });
-}
-
-function startDraw() {
-  S.drawing = true;
-  document.getElementById('drawOverlay').classList.add('active');
-  document.getElementById('btnDraw').style.display = 'none';
-  document.getElementById('btnCancelDraw').style.display = 'inline-block';
-}
-
-function cancelDraw() {
-  S.drawing = false;
-  S.drawStart = null;
-  S.pendingHs = null;
-  document.getElementById('drawOverlay').classList.remove('active');
-  document.getElementById('drawRect').style.display = 'none';
-  document.getElementById('btnDraw').style.display = 'inline-block';
-  document.getElementById('btnCancelDraw').style.display = 'none';
-  closeModal('hsModal');
-}
-
-function confirmHs() {
-  if(!S.pendingHs) return;
-  const goto = document.getElementById('hsGoto').value;
-  const label = document.getElementById('hsLabelInput').value.trim() || goto;
-  const scr = S.flow.screens[S.cur];
-  if(!scr.hotspots) scr.hotspots = [];
-  scr.hotspots.push({ label, ...S.pendingHs, goto });
-  S.pendingHs = null;
-  document.getElementById('drawRect').style.display = 'none';
-  closeModal('hsModal');
-  cancelDraw();
-  renderHotspots(scr.hotspots);
-  renderHsList();
-}
-
-// ══════════════════════════════════════════
-// Unregistered images
-// ══════════════════════════════════════════
-function detectUnreg() {
-  const manifest = S.flow.imageManifest || [];
-  const used = new Set(Object.values(S.flow.screens).map(s=>s.image));
-  const unreg = manifest.filter(f => !used.has(f));
-  const card = document.getElementById('unregCard');
-  const list = document.getElementById('unregList');
-  if(!unreg.length) { card.style.display='none'; return; }
-  card.style.display = 'block';
-  list.innerHTML = unreg.map(f => `
-    <div class="unreg-item" onclick="quickReg('${esc(f)}')">
-      <span>${esc(f)}</span>
-      <small style="color:#888">클릭하여 등록</small>
-    </div>`).join('');
-}
-
-function quickReg(filename) {
-  if(!S.admin) { alert('관리자 모드에서 등록할 수 있습니다.'); return; }
-  const label = filename.replace(/\.(jpg|jpeg|png|webp)$/i,'').replace(/_/g,' ');
-  const id = label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'');
-  document.getElementById('newImage').value = filename;
-  document.getElementById('newLabel').value = label;
-  document.getElementById('newId').value = id;
-  document.getElementById('adminPanel').scrollIntoView({behavior:'smooth'});
-}
-
-// ══════════════════════════════════════════
-// Modal helpers
-// ══════════════════════════════════════════
-function openModal(id) {
-  document.getElementById(id).classList.add('active');
-  if(id==='pwModal') document.getElementById('pwErr').style.display='none';
-}
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-// ══════════════════════════════════════════
-// Utils
-// ══════════════════════════════════════════
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function round1(n) { return Math.round(n*10)/10; }
-
-// ══════════════════════════════════════════
-boot();
-</script>
-</body>
-</html>
+    html += '<ul class="guide-points">' + g.points.map(p=>`<li>$
