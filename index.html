@@ -664,22 +664,34 @@ function renderPhoneScreen(scr) {
 
   ca.classList.toggle('scroll-mode', scr.type==='scroll');
   ca.scrollTop = 0;
-  img.src = scr.image;
+  img.src = '';
   img.onload = () => renderHotspots('hotspotLayer', scr.hotspots||[], false);
+  img.onerror = () => console.warn('이미지 로드 실패:', scr.image);
+  img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
   if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
 }
 
 function renderPcScreen(scr) {
   const img = document.getElementById('pcScreenImg');
-  const placeholder = document.getElementById('pcPlaceholder');
   const wrapper = document.getElementById('pcImageWrapper');
 
+  // 이전 이미지 즉시 초기화 (섹션 전환 시 잔상 방지)
+  img.src = '';
+  img.style.display = 'none';
   showPcPlaceholder(false);
-  img.style.display = 'block';
-  img.src = scr.image;
   wrapper.scrollTop = 0;
-  img.onload = () => renderHotspots('pcHotspotLayer', scr.hotspots||[], false);
+
+  const targetSrc = scr.image;
+  img.onload = () => {
+    img.style.display = 'block';
+    renderHotspots('pcHotspotLayer', scr.hotspots||[], false);
+  };
+  img.onerror = () => {
+    img.style.display = 'none';
+    console.warn('이미지 로드 실패:', targetSrc);
+  };
+  img.src = targetSrc;
   if(!drawing) document.getElementById('pcDrawOverlay').classList.remove('active');
 }
 
