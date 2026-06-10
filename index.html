@@ -674,12 +674,13 @@ function renderPhoneScreen(scr) {
 
 function renderPcScreen(scr) {
   const img = document.getElementById('pcScreenImg');
+  const placeholder = document.getElementById('pcPlaceholder');
   const wrapper = document.getElementById('pcImageWrapper');
 
-  // 이전 이미지 즉시 초기화 (섹션 전환 시 잔상 방지)
-  img.src = '';
+  // placeholder 숨기고 img도 숨긴 채로 시작 (showPcPlaceholder 미사용)
+  placeholder.style.display = 'none';
   img.style.display = 'none';
-  showPcPlaceholder(false);
+  img.src = '';
   wrapper.scrollTop = 0;
 
   const targetSrc = scr.image;
