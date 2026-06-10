@@ -229,6 +229,22 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .guide-kms a{color:#0066CC;text-decoration:none;}
 .guide-kms a:hover{text-decoration:underline;}
 .guide-empty{color:#bbb;font-size:13px;text-align:center;padding:14px 0;}
+
+/* ── EXCEPTION PANEL ── */
+.exception-card-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.exception-empty{color:#bbb;font-size:13px;text-align:center;padding:10px 0;}
+.exception-list{display:flex;flex-direction:column;gap:5px;}
+.exception-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;border:none;background:#FFF3F3;
+  cursor:pointer;font-family:inherit;font-size:13px;color:#c0392b;
+  transition:background .1s;text-align:left;width:100%;
+}
+.exception-item:hover{background:#FFE0E0;}
+.exception-item-icon{font-size:14px;flex-shrink:0;}
+.exception-item-label{flex:1;font-weight:600;}
+.exception-item-sub{font-size:11px;color:#e07070;white-space:nowrap;}
+
 .admin-badge{display:inline-block;background:#FF5000;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:12px;}
 .admin-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
 .admin-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
@@ -380,6 +396,10 @@ textarea.form-input{resize:vertical;}
       <div class="card-title">상담 가이드</div>
       <div id="guideContent"></div>
     </div>
+    <div class="panel-card" id="exceptionCard" style="display:none">
+      <div class="card-title">⚠️ 예외 상황</div>
+      <div id="exceptionList"></div>
+    </div>
     <div class="panel-card" id="adminPanel" style="display:none">
       <div class="admin-badge">🔧 관리자 모드</div>
       <div class="admin-section">
@@ -421,6 +441,10 @@ textarea.form-input{resize:vertical;}
           <label for="newNavbar" style="font-size:13px">navbar 표시</label>
         </div>
         <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
+      </div>
+      <div class="admin-section">
+        <div class="section-title">예외 상황 연결</div>
+        <div id="exceptionEditor"></div>
       </div>
       <div class="admin-section">
         <div class="section-title">내보내기</div>
@@ -583,8 +607,9 @@ function applySec(name) {
   renderBreadcrumb();
   renderList();
   renderGuide(st.flow.screens?.[st.cur]?.guide);
+  renderExceptions(st.cur);
   detectUnreg();
-  if(adminMode) { renderHsList(); renderGuideEditor(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
 }
 
 // ═══════════════════════════════════════════
@@ -602,8 +627,9 @@ function goTo(id, init=false) {
   renderScreen(activeSec, id);
   renderBreadcrumb();
   renderGuide(scr.guide);
+  renderExceptions(id);
   renderList();
-  if(adminMode) { renderHsList(); renderGuideEditor(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
 }
 
 function goBack() {
@@ -614,8 +640,9 @@ function goBack() {
     renderScreen(activeSec, st.cur);
     renderBreadcrumb();
     renderGuide(st.flow.screens[st.cur]?.guide);
+    renderExceptions(st.cur);
     renderList();
-    if(adminMode) { renderHsList(); renderGuideEditor(); }
+    if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
   }
 }
 
@@ -627,6 +654,7 @@ function goHome() {
   renderScreen(activeSec, st.cur);
   renderBreadcrumb();
   renderGuide(st.flow.screens[st.cur]?.guide);
+  renderExceptions(st.cur);
   renderList();
 }
 
@@ -638,6 +666,7 @@ function jumpHist(idx) {
   renderScreen(activeSec, st.cur);
   renderBreadcrumb();
   renderGuide(st.flow.screens[st.cur]?.guide);
+  renderExceptions(st.cur);
   renderList();
 }
 
@@ -995,6 +1024,74 @@ function confirmHs() {
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
   renderHsList();
+}
+
+// ═══════════════════════════════════════════
+// EXCEPTIONS
+// ═══════════════════════════════════════════
+function renderExceptions(screenId) {
+  const st = cache[activeSec];
+  const scr = st.flow.screens?.[screenId];
+  const excs = scr?.exceptions || [];
+  const card = document.getElementById('exceptionCard');
+  const el = document.getElementById('exceptionList');
+
+  if(!excs.length) { card.style.display='none'; return; }
+  card.style.display = 'block';
+  el.innerHTML = '<div class="exception-list">' + excs.map((ex, i) => {
+    const target = st.flow.screens?.[ex.screenId];
+    const sub = target ? target.label : ex.screenId;
+    return `<button class="exception-item" onclick="goTo('${esc(ex.screenId)}',true)">
+      <span class="exception-item-icon">⚠️</span>
+      <span class="exception-item-label">${esc(ex.label)}</span>
+      <span class="exception-item-sub">→ ${esc(sub)}</span>
+    </button>`;
+  }).join('') + '</div>';
+}
+
+function renderExceptionEditor() {
+  const st = cache[activeSec];
+  const scr = st.flow.screens?.[st.cur];
+  if(!scr) return;
+  const excs = scr.exceptions || [];
+  const allScreens = Object.entries(st.flow.screens)
+    .filter(([id]) => id !== st.cur)
+    .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
+
+  document.getElementById('exceptionEditor').innerHTML = `
+    ${excs.length ? excs.map((ex,i) => `
+      <div class="hs-item">
+        <span>⚠️ ${esc(ex.label)} → ${esc(ex.screenId)}</span>
+        <button class="btn btn-danger btn-sm" onclick="delException(${i})">삭제</button>
+      </div>`).join('') : '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 예외 없음</div>'}
+    <div class="form-row" style="margin-top:8px">
+      <div class="form-label">예외 상황 이름</div>
+      <input class="form-input" id="excLabel" placeholder="예: 미납 상태">
+    </div>
+    <div class="form-row">
+      <div class="form-label">이동할 화면</div>
+      <select class="form-input" id="excGoto">${allScreens}</select>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="addException()">+ 예외 추가</button>
+  `;
+}
+
+function addException() {
+  const label = document.getElementById('excLabel').value.trim();
+  const screenId = document.getElementById('excGoto').value;
+  if(!label) { alert('예외 상황 이름을 입력하세요.'); return; }
+  const st = cache[activeSec];
+  if(!st.flow.screens[st.cur].exceptions) st.flow.screens[st.cur].exceptions = [];
+  st.flow.screens[st.cur].exceptions.push({ label, screenId });
+  renderExceptions(st.cur);
+  renderExceptionEditor();
+}
+
+function delException(i) {
+  const st = cache[activeSec];
+  st.flow.screens[st.cur].exceptions.splice(i, 1);
+  renderExceptions(st.cur);
+  renderExceptionEditor();
 }
 
 // ═══════════════════════════════════════════
