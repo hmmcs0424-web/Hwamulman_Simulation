@@ -204,7 +204,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .pc-placeholder .sub{font-size:13px;color:#aaa;text-align:center;line-height:1.6;}
 
 /* ── INFO PANEL ── */
-.info-panel{flex:1;background:#f0f0f2;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:260px;}
+.info-panel{flex:1;background:#f0f0f2;display:flex;flex-direction:row;gap:0;min-width:520px;overflow:hidden;}
+.info-col{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:240px;}
+.info-col-exception{flex:0 0 240px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;border-left:1px solid #e0e0e2;background:#fafafa;}
 .panel-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
 .card-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
 .breadcrumb{display:flex;flex-wrap:wrap;gap:3px;align-items:center;font-size:12px;}
@@ -244,6 +246,32 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .exception-item-icon{font-size:14px;flex-shrink:0;}
 .exception-item-label{flex:1;font-weight:600;}
 .exception-item-sub{font-size:11px;color:#e07070;white-space:nowrap;}
+
+/* ── CHAT OVERLAY ── */
+.chat-overlay-layer{position:absolute;inset:0;pointer-events:none;z-index:15;overflow:hidden;}
+.chat-bubble-wrap{position:absolute;display:flex;opacity:0;transition:opacity .35s ease;pointer-events:none;}
+.chat-bubble-wrap.visible{opacity:1;}
+.chat-bubble-wrap.left{justify-content:flex-start;}
+.chat-bubble-wrap.right{justify-content:flex-end;}
+.chat-bubble{
+  max-width:100%;padding:7px 11px;font-size:12px;line-height:1.45;
+  box-shadow:0 1px 5px rgba(0,0,0,.18);word-break:break-all;
+}
+.chat-bubble-wrap.left .chat-bubble{background:#fff;color:#111;border-radius:3px 14px 14px 14px;}
+.chat-bubble-wrap.right .chat-bubble{background:#FFB800;color:#000;border-radius:14px 3px 14px 14px;}
+.typing-dot{display:inline-flex;gap:4px;align-items:center;padding:9px 14px;background:#fff;border-radius:3px 14px 14px 14px;box-shadow:0 1px 5px rgba(0,0,0,.18);}
+.typing-dot span{width:6px;height:6px;border-radius:50%;background:#aaa;display:block;animation:typingBounce .75s infinite;}
+.typing-dot span:nth-child(2){animation-delay:.14s;}
+.typing-dot span:nth-child(3){animation-delay:.28s;}
+@keyframes typingBounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-4px);opacity:1}}
+.chat-replay-btn{
+  position:absolute;bottom:10px;right:10px;z-index:20;
+  background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:20px;
+  padding:5px 12px;font-size:12px;font-family:inherit;cursor:pointer;
+  display:none;transition:background .15s;
+}
+.chat-replay-btn:hover{background:rgba(0,0,0,.8);}
+.chat-replay-btn.visible{display:block;}
 
 .admin-badge{display:inline-block;background:#FF5000;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:12px;}
 .admin-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
@@ -369,8 +397,10 @@ textarea.form-input{resize:vertical;}
         <div class="pc-img-box" id="pcImgBox">
           <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
           <div class="pc-hotspot-layer" id="pcHotspotLayer"></div>
+          <div class="chat-overlay-layer" id="chatOverlayLayer"></div>
           <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
         </div>
+        <button class="chat-replay-btn" id="chatReplayBtn" onclick="replayOverlays()">▶ 다시 재생</button>
       </div>
       <div class="pc-placeholder" id="pcPlaceholder">
         <div class="icon">🖥️</div>
@@ -383,6 +413,9 @@ textarea.form-input{resize:vertical;}
 
   <!-- ── INFO PANEL ── -->
   <div class="info-panel">
+
+    <!-- 왼쪽 컬럼: 위치 / 화면 목록 / 가이드 / 관리자 -->
+    <div class="info-col">
     <div class="panel-card">
       <div class="card-title">현재 위치</div>
       <div class="breadcrumb" id="breadcrumb"></div>
@@ -395,10 +428,6 @@ textarea.form-input{resize:vertical;}
     <div class="panel-card">
       <div class="card-title">상담 가이드</div>
       <div id="guideContent"></div>
-    </div>
-    <div class="panel-card" id="exceptionCard" style="display:none">
-      <div class="card-title">⚠️ 예외 상황</div>
-      <div id="exceptionList"></div>
     </div>
     <div class="panel-card" id="adminPanel" style="display:none">
       <div class="admin-badge">🔧 관리자 모드</div>
@@ -442,9 +471,45 @@ textarea.form-input{resize:vertical;}
         </div>
         <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
       </div>
-      <div class="admin-section">
-        <div class="section-title">예외 상황 연결</div>
-        <div id="exceptionEditor"></div>
+      <div class="admin-section" id="overlayAdminSection" style="display:none">
+        <div class="section-title">💬 채팅 오버레이</div>
+        <div id="overlayList"></div>
+        <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">
+          <div class="form-row">
+            <div class="form-label">타입</div>
+            <select class="form-input" id="ovType">
+              <option value="typing">타이핑 중 (...)</option>
+              <option value="message">말풍선 메시지</option>
+            </select>
+          </div>
+          <div class="form-row" id="ovTextRow">
+            <div class="form-label">메시지 내용</div>
+            <input class="form-input" id="ovText" placeholder="예: 안녕하세요, 고객님!">
+          </div>
+          <div class="form-row">
+            <div class="form-label">방향</div>
+            <select class="form-input" id="ovSide">
+              <option value="left">왼쪽 (상담사)</option>
+              <option value="right">오른쪽 (고객)</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <div class="form-row" style="flex:1">
+              <div class="form-label">위치 top (%)</div>
+              <input class="form-input" id="ovTop" type="number" placeholder="예: 72" min="0" max="100">
+            </div>
+            <div class="form-row" style="flex:1">
+              <div class="form-label">너비 (%)</div>
+              <input class="form-input" id="ovWidth" type="number" placeholder="예: 55" min="10" max="90">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">딜레이 (ms) — 0부터 순서대로</div>
+            <input class="form-input" id="ovDelay" type="number" placeholder="예: 1500" min="0">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="addOverlay()">+ 오버레이 추가</button>
+          <button class="btn btn-secondary btn-sm" onclick="replayOverlays()">▶ 미리보기</button>
+        </div>
       </div>
       <div class="admin-section">
         <div class="section-title">내보내기</div>
@@ -455,7 +520,29 @@ textarea.form-input{resize:vertical;}
       <div class="card-title">⚠️ 미등록 이미지</div>
       <div id="unregList"></div>
     </div>
-  </div>
+    </div><!-- /info-col -->
+
+    <!-- 오른쪽 컬럼: 예외 상황 -->
+    <div class="info-col-exception">
+      <div class="panel-card" style="flex:1">
+        <div class="card-title">⚠️ 예외 상황</div>
+        <div id="exceptionList"><div class="exception-empty">선택된 화면에<br>예외 상황 없음</div></div>
+        <div id="exceptionAdminArea" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid #f0f0f0;">
+          <div class="form-row">
+            <div class="form-label">예외 상황 이름</div>
+            <input class="form-input" id="excLabel" placeholder="예: 미납 상태">
+          </div>
+          <div class="form-row">
+            <div class="form-label">이동할 화면</div>
+            <select class="form-input" id="excGoto"></select>
+          </div>
+          <button class="btn btn-primary btn-sm" style="width:100%" onclick="addException()">+ 예외 추가</button>
+          <div id="exceptionEditorList" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </div><!-- /info-col-exception -->
+
+  </div><!-- /info-panel -->
 
 </div><!-- /main-layout -->
 
@@ -608,8 +695,9 @@ function applySec(name) {
   renderList();
   renderGuide(st.flow.screens?.[st.cur]?.guide);
   renderExceptions(st.cur);
+  renderOverlayAdminSection();
   detectUnreg();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
 }
 
 // ═══════════════════════════════════════════
@@ -629,7 +717,7 @@ function goTo(id, init=false) {
   renderGuide(scr.guide);
   renderExceptions(id);
   renderList();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
 }
 
 function goBack() {
@@ -642,7 +730,7 @@ function goBack() {
     renderGuide(st.flow.screens[st.cur]?.guide);
     renderExceptions(st.cur);
     renderList();
-    if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); }
+    if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
   }
 }
 
@@ -724,6 +812,9 @@ function renderPcScreen(scr) {
   };
   img.src = targetSrc;
   if(!drawing) document.getElementById('pcDrawOverlay').classList.remove('active');
+  // 채널톡 오버레이 재생
+  if(activeSec === '채널톡') renderOverlays(scr);
+  else clearOverlays();
 }
 
 function showPcPlaceholder(show) {
@@ -860,6 +951,8 @@ function enterAdmin() {
   renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], true);
   renderHsList();
   renderGuideEditor();
+  renderExceptionEditor();
+  renderOverlayAdminSection();
 }
 
 function exitAdmin() {
@@ -871,6 +964,8 @@ function exitAdmin() {
   const st = cache[activeSec];
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], false);
+  renderExceptionEditor();
+  renderOverlayAdminSection();
 }
 
 function renderHsList() {
@@ -1027,18 +1122,140 @@ function confirmHs() {
 }
 
 // ═══════════════════════════════════════════
+// CHAT OVERLAYS (채널톡 전용)
+// ═══════════════════════════════════════════
+let overlayTimers = [];
+let currentOverlayScr = null;
+
+function clearOverlays() {
+  overlayTimers.forEach(clearTimeout);
+  overlayTimers = [];
+  const layer = document.getElementById('chatOverlayLayer');
+  if(layer) layer.innerHTML = '';
+}
+
+function renderOverlays(scr) {
+  clearOverlays();
+  currentOverlayScr = scr;
+  const layer = document.getElementById('chatOverlayLayer');
+  const replayBtn = document.getElementById('chatReplayBtn');
+  if(!layer) return;
+
+  const ovs = scr?.overlays || [];
+  replayBtn.classList.toggle('visible', ovs.length > 0);
+  if(!ovs.length) return;
+
+  ovs.forEach((ov, i) => {
+    const t = setTimeout(() => {
+      const wrap = document.createElement('div');
+      const isRight = ov.side === 'right';
+      const leftPct = isRight ? (100 - (ov.width||55) - 4) : 4;
+      wrap.className = 'chat-bubble-wrap ' + (isRight ? 'right' : 'left');
+      wrap.style.cssText = `top:${ov.top}%;left:${leftPct}%;width:${ov.width||55}%;`;
+
+      if(ov.type === 'typing') {
+        wrap.innerHTML = `<div class="typing-dot"><span></span><span></span><span></span></div>`;
+        // 다음 항목 딜레이 직전에 자동 제거
+        const next = ovs[i + 1];
+        if(next) {
+          const removeT = setTimeout(() => wrap.remove(), (next.delay || 0) - (ov.delay || 0) - 80);
+          overlayTimers.push(removeT);
+        }
+      } else {
+        wrap.innerHTML = `<div class="chat-bubble">${esc(ov.text || '')}</div>`;
+      }
+
+      layer.appendChild(wrap);
+      requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('visible')));
+    }, ov.delay || 0);
+    overlayTimers.push(t);
+  });
+}
+
+function replayOverlays() {
+  if(currentOverlayScr) renderOverlays(currentOverlayScr);
+}
+
+function renderOverlayAdminSection() {
+  const show = adminMode && activeSec === '채널톡';
+  document.getElementById('overlayAdminSection').style.display = show ? '' : 'none';
+  if(!show) return;
+
+  // 타입 선택 시 텍스트 행 토글
+  const ovType = document.getElementById('ovType');
+  ovType.onchange = () => {
+    document.getElementById('ovTextRow').style.display = ovType.value === 'typing' ? 'none' : '';
+  };
+  ovType.onchange(); // 초기 상태 반영
+
+  renderOverlayList();
+}
+
+function renderOverlayList() {
+  const st = cache[activeSec];
+  const ovs = st.flow.screens?.[st.cur]?.overlays || [];
+  const el = document.getElementById('overlayList');
+  if(!ovs.length) { el.innerHTML = '<div style="color:#aaa;font-size:12px;margin-bottom:6px">등록된 오버레이 없음</div>'; return; }
+  el.innerHTML = ovs.map((ov, i) => `
+    <div class="hs-item" style="align-items:flex-start;gap:6px">
+      <div style="flex:1;font-size:12px;line-height:1.5">
+        <span style="font-weight:700">${i + 1}.</span>
+        ${ov.type === 'typing' ? '⌨️ 타이핑 중' : `💬 "${esc(ov.text||'')}"`}
+        <span style="color:#aaa">(${ov.side==='right'?'오른':'왼'}, top:${ov.top}%, ${ov.delay||0}ms)</span>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="delOverlay(${i})">삭제</button>
+    </div>`).join('');
+}
+
+function addOverlay() {
+  const type = document.getElementById('ovType').value;
+  const text = document.getElementById('ovText').value.trim();
+  const side = document.getElementById('ovSide').value;
+  const top = parseFloat(document.getElementById('ovTop').value);
+  const width = parseFloat(document.getElementById('ovWidth').value) || 55;
+  const delay = parseInt(document.getElementById('ovDelay').value) || 0;
+
+  if(isNaN(top)) { alert('위치(top %)를 입력하세요.'); return; }
+  if(type === 'message' && !text) { alert('메시지 내용을 입력하세요.'); return; }
+
+  const st = cache[activeSec];
+  if(!st.flow.screens[st.cur].overlays) st.flow.screens[st.cur].overlays = [];
+  const ov = { type, side, top, width, delay };
+  if(type === 'message') ov.text = text;
+  st.flow.screens[st.cur].overlays.push(ov);
+
+  // 딜레이 순서 정렬
+  st.flow.screens[st.cur].overlays.sort((a, b) => (a.delay||0) - (b.delay||0));
+
+  document.getElementById('ovText').value = '';
+  document.getElementById('ovTop').value = '';
+  document.getElementById('ovDelay').value = '';
+
+  renderOverlayList();
+  renderOverlays(st.flow.screens[st.cur]);
+}
+
+function delOverlay(i) {
+  const st = cache[activeSec];
+  st.flow.screens[st.cur].overlays.splice(i, 1);
+  renderOverlayList();
+  renderOverlays(st.flow.screens[st.cur]);
+}
+
+// ═══════════════════════════════════════════
 // EXCEPTIONS
 // ═══════════════════════════════════════════
 function renderExceptions(screenId) {
   const st = cache[activeSec];
   const scr = st.flow.screens?.[screenId];
   const excs = scr?.exceptions || [];
-  const card = document.getElementById('exceptionCard');
   const el = document.getElementById('exceptionList');
 
-  if(!excs.length) { card.style.display='none'; return; }
-  card.style.display = 'block';
-  el.innerHTML = '<div class="exception-list">' + excs.map((ex, i) => {
+  if(!excs.length) {
+    el.innerHTML = '<div class="exception-empty">선택된 화면에<br>예외 상황 없음</div>';
+    return;
+  }
+  el.innerHTML = '<div class="exception-list">' + excs.map((ex) => {
     const target = st.flow.screens?.[ex.screenId];
     const sub = target ? target.label : ex.screenId;
     return `<button class="exception-item" onclick="goTo('${esc(ex.screenId)}',true)">
@@ -1052,37 +1269,38 @@ function renderExceptions(screenId) {
 function renderExceptionEditor() {
   const st = cache[activeSec];
   const scr = st.flow.screens?.[st.cur];
-  if(!scr) return;
-  const excs = scr.exceptions || [];
-  const allScreens = Object.entries(st.flow.screens)
-    .filter(([id]) => id !== st.cur)
-    .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
+  const adminArea = document.getElementById('exceptionAdminArea');
+  if(!adminArea) return;
+  if(!adminMode || !scr) { adminArea.style.display = 'none'; return; }
 
-  document.getElementById('exceptionEditor').innerHTML = `
-    ${excs.length ? excs.map((ex,i) => `
-      <div class="hs-item">
-        <span>⚠️ ${esc(ex.label)} → ${esc(ex.screenId)}</span>
-        <button class="btn btn-danger btn-sm" onclick="delException(${i})">삭제</button>
-      </div>`).join('') : '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 예외 없음</div>'}
-    <div class="form-row" style="margin-top:8px">
-      <div class="form-label">예외 상황 이름</div>
-      <input class="form-input" id="excLabel" placeholder="예: 미납 상태">
-    </div>
-    <div class="form-row">
-      <div class="form-label">이동할 화면</div>
-      <select class="form-input" id="excGoto">${allScreens}</select>
-    </div>
-    <button class="btn btn-primary btn-sm" onclick="addException()">+ 예외 추가</button>
-  `;
+  adminArea.style.display = 'block';
+
+  // 드롭다운 옵션 갱신
+  const sel = document.getElementById('excGoto');
+  sel.innerHTML = Object.entries(st.flow.screens)
+    .filter(([id]) => id !== st.cur)
+    .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)}</option>`).join('');
+
+  // 등록된 예외 목록
+  const excs = scr.exceptions || [];
+  document.getElementById('exceptionEditorList').innerHTML = excs.length
+    ? excs.map((ex,i) => `
+        <div class="hs-item">
+          <span style="font-size:12px">⚠️ ${esc(ex.label)}</span>
+          <button class="btn btn-danger btn-sm" onclick="delException(${i})">삭제</button>
+        </div>`).join('')
+    : '';
 }
 
 function addException() {
   const label = document.getElementById('excLabel').value.trim();
   const screenId = document.getElementById('excGoto').value;
   if(!label) { alert('예외 상황 이름을 입력하세요.'); return; }
+  if(!screenId) { alert('이동할 화면을 선택하세요.'); return; }
   const st = cache[activeSec];
   if(!st.flow.screens[st.cur].exceptions) st.flow.screens[st.cur].exceptions = [];
   st.flow.screens[st.cur].exceptions.push({ label, screenId });
+  document.getElementById('excLabel').value = '';
   renderExceptions(st.cur);
   renderExceptionEditor();
 }
