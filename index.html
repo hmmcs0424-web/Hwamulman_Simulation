@@ -93,22 +93,26 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 }
 .css-navbar button:hover{background:#2a2a2a;}
 
-/* ── PC FRAME ── */
+/* ── PC FRAME (공통) ── */
 .pc-area{
   display:none;flex:0 0 66.66vw;align-items:stretch;
   padding:16px;background:#0d0d0f;
 }
 .pc-area.visible{display:flex;}
 .pc-frame{
-  flex:1;background:#fff;border-radius:14px;overflow:hidden;
+  flex:1;background:#fff;overflow:hidden;
   display:flex;flex-direction:column;
   box-shadow:0 0 0 1px #333,0 20px 60px rgba(0,0,0,.7);
 }
+
+/* ── macOS 스타일 타이틀바 (빽통PC 등) ── */
+.pc-frame.mac-frame{border-radius:14px;}
 .pc-titlebar{
   flex-shrink:0;height:38px;background:#252528;
   display:flex;align-items:center;padding:0 14px;gap:8px;
   border-bottom:1px solid #3a3a3e;
 }
+.pc-frame.mac-frame .pc-titlebar{border-radius:14px 14px 0 0;}
 .pc-tb-dots{display:flex;gap:6px;}
 .pc-tb-dot{width:12px;height:12px;border-radius:50%;}
 .pc-tb-dot.red{background:#ff5f57;}
@@ -118,6 +122,69 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .pc-tb-nav button{background:#3a3a3e;border:none;color:#ccc;font-size:13px;padding:3px 10px;border-radius:5px;cursor:pointer;font-family:inherit;}
 .pc-tb-nav button:hover{background:#4a4a4e;color:#fff;}
 .pc-tb-title{flex:1;text-align:center;font-size:12px;color:#888;font-weight:500;}
+
+/* ── Chrome 스타일 타이틀바 (채널톡 등) ── */
+.pc-frame.chrome-frame{border-radius:8px;}
+.chrome-win-bar{
+  flex-shrink:0;height:30px;background:#202124;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 0 0 12px;border-radius:8px 8px 0 0;
+  user-select:none;
+}
+.chrome-win-title{font-size:12px;color:#9aa0a6;flex:1;}
+.chrome-win-controls{display:flex;height:100%;}
+.chrome-win-controls button{
+  width:46px;height:100%;background:none;border:none;cursor:pointer;
+  color:#9aa0a6;font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:background .1s;line-height:1;
+}
+.chrome-win-controls button:hover{background:#3c3f43;}
+.chrome-win-controls button.win-close:hover{background:#c42b1c;color:#fff;}
+.chrome-win-controls button.win-max{font-size:12px;}
+.chrome-tabbar{
+  flex-shrink:0;height:36px;background:#292a2d;
+  display:flex;align-items:flex-end;padding:0 8px;gap:0;
+}
+.chrome-tab{
+  display:flex;align-items:center;gap:7px;
+  height:30px;padding:0 12px;border-radius:8px 8px 0 0;
+  background:#3c4043;min-width:120px;max-width:240px;
+  font-size:12px;color:#e8eaed;cursor:default;flex:1;max-width:200px;
+}
+.chrome-tab-favicon{width:16px;height:16px;border-radius:3px;background:#0066ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.chrome-tab-favicon svg{width:10px;height:10px;}
+.chrome-tab-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chrome-tab-close{width:18px;height:18px;border:none;background:none;color:#9aa0a6;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.chrome-tab-close:hover{background:#5f6368;color:#e8eaed;}
+.chrome-toolbar{
+  flex-shrink:0;height:44px;background:#35363a;
+  display:flex;align-items:center;padding:0 10px;gap:4px;
+  border-bottom:1px solid #5f6368;
+}
+.chrome-nav-btn{
+  width:32px;height:32px;border:none;background:none;cursor:pointer;
+  color:#9aa0a6;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:17px;transition:background .1s;flex-shrink:0;
+}
+.chrome-nav-btn:hover{background:#5f6368;}
+.chrome-nav-btn:disabled{color:#5f6368;cursor:default;}
+.chrome-nav-btn:disabled:hover{background:none;}
+.chrome-address-bar{
+  flex:1;height:32px;background:#202124;border-radius:16px;
+  display:flex;align-items:center;padding:0 14px;gap:8px;
+  border:1px solid transparent;cursor:text;
+}
+.chrome-address-bar:hover{background:#3c4043;}
+.chrome-address-icon{font-size:13px;color:#8ab4f8;}
+.chrome-address-text{font-size:13px;color:#e8eaed;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chrome-menu-btn{
+  width:32px;height:32px;border:none;background:none;cursor:pointer;
+  color:#9aa0a6;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:18px;transition:background .1s;flex-shrink:0;
+}
+.chrome-menu-btn:hover{background:#5f6368;}
+
+/* ── PC 공통 콘텐츠 ── */
 .pc-content{flex:1;overflow:hidden;position:relative;background:#f0f0f2;}
 .pc-image-wrapper{position:relative;width:100%;height:100%;overflow-y:auto;}
 .pc-image-wrapper::-webkit-scrollbar{width:6px;}
@@ -239,8 +306,10 @@ textarea.form-input{resize:vertical;}
 
   <!-- ── PC FRAME (PC 모드) ── -->
   <div class="pc-area" id="pcArea">
-  <div class="pc-frame">
-    <div class="pc-titlebar">
+  <div class="pc-frame mac-frame" id="pcFrame">
+
+    <!-- macOS 타이틀바 (빽통PC 기본) -->
+    <div class="pc-titlebar" id="pcTitlebarMac">
       <div class="pc-tb-dots">
         <div class="pc-tb-dot red"></div>
         <div class="pc-tb-dot yellow"></div>
@@ -252,6 +321,41 @@ textarea.form-input{resize:vertical;}
       </div>
       <div class="pc-tb-title" id="pcTitle">빽통 PC 시뮬레이터</div>
     </div>
+
+    <!-- Chrome 타이틀바 (채널톡) -->
+    <div id="pcTitlebarChrome" style="display:none">
+      <div class="chrome-win-bar">
+        <div class="chrome-win-title" id="chromeWinTitle">채널톡 - Google Chrome</div>
+        <div class="chrome-win-controls">
+          <button title="최소화">─</button>
+          <button class="win-max" title="최대화">□</button>
+          <button class="win-close" title="닫기">✕</button>
+        </div>
+      </div>
+      <div class="chrome-tabbar">
+        <div class="chrome-tab">
+          <div class="chrome-tab-favicon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="#fff"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285f4"/>
+            </svg>
+          </div>
+          <span class="chrome-tab-title" id="chromeTabTitle">채널톡</span>
+          <button class="chrome-tab-close">✕</button>
+        </div>
+      </div>
+      <div class="chrome-toolbar">
+        <button class="chrome-nav-btn" onclick="goBack()" title="뒤로">&#8592;</button>
+        <button class="chrome-nav-btn" disabled title="앞으로">&#8594;</button>
+        <button class="chrome-nav-btn" onclick="goHome()" title="새로고침">&#8635;</button>
+        <div class="chrome-address-bar">
+          <span class="chrome-address-icon">🔒</span>
+          <span class="chrome-address-text" id="chromeAddressText">channeltalk.io</span>
+        </div>
+        <button class="chrome-menu-btn" title="Chrome 메뉴">⋮</button>
+      </div>
+    </div>
+
     <div class="pc-content" id="pcContent">
       <div class="pc-image-wrapper" id="pcImageWrapper">
         <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
@@ -376,8 +480,8 @@ textarea.form-input{resize:vertical;}
 const SECS = {
   '차주앱': { type:'app', flowUrl:'차주앱/flow.json' },
   '빽통앱': { type:'app', flowUrl:'빽통앱/flow.json' },
-  '빽통PC': { type:'pc',  flowUrl:'빽통PC/flow.json', title:'빽통 PC 시뮬레이터' },
-  '채널톡': { type:'pc',  flowUrl:'채널톡/flow.json', title:'채널톡 시뮬레이터' },
+  '빽통PC': { type:'pc',  frame:'mac',    flowUrl:'빽통PC/flow.json', title:'빽통 PC 시뮬레이터' },
+  '채널톡': { type:'pc',  frame:'chrome', flowUrl:'채널톡/flow.json', title:'채널톡', address:'channeltalk.io' },
 };
 
 // Per-section state cache
@@ -460,8 +564,19 @@ function applySec(name) {
   document.getElementById('pcArea').classList.toggle('visible', sec.type==='pc');
 
   if(sec.type === 'pc') {
-    document.getElementById('pcTitle').textContent = sec.title||name;
-    document.getElementById('pcPlaceholderTitle').textContent = name;
+    const isChrome = sec.frame === 'chrome';
+    const pcFrame = document.getElementById('pcFrame');
+    pcFrame.className = isChrome ? 'pc-frame chrome-frame' : 'pc-frame mac-frame';
+    document.getElementById('pcTitlebarMac').style.display = isChrome ? 'none' : '';
+    document.getElementById('pcTitlebarChrome').style.display = isChrome ? '' : 'none';
+    if(isChrome) {
+      document.getElementById('chromeWinTitle').textContent = (sec.title||name) + ' - Google Chrome';
+      document.getElementById('chromeTabTitle').textContent = sec.title||name;
+      document.getElementById('chromeAddressText').textContent = sec.address || 'channeltalk.io';
+    } else {
+      document.getElementById('pcTitle').textContent = sec.title||name;
+    }
+    document.getElementById('pcPlaceholderTitle').textContent = sec.title||name;
   }
 
   if(st.cur && st.flow.screens[st.cur]) {
