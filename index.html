@@ -194,10 +194,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 
 /* ── PC 공통 콘텐츠 ── */
 .pc-content{flex:1;overflow:hidden;position:relative;background:#f0f0f2;}
-.pc-image-wrapper{position:relative;width:100%;height:100%;overflow-y:auto;}
-.pc-image-wrapper::-webkit-scrollbar{width:6px;}
-.pc-image-wrapper::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px;}
-.pc-screen-img{width:100%;display:block;}
+.pc-image-wrapper{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;}
+.pc-img-box{position:relative;max-width:100%;max-height:100%;}
+.pc-screen-img{width:100%;height:100%;display:block;}
 .pc-hotspot-layer{position:absolute;inset:0;pointer-events:none;}
 .pc-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:#888;}
 .pc-placeholder .icon{font-size:48px;}
@@ -351,9 +350,11 @@ textarea.form-input{resize:vertical;}
 
     <div class="pc-content" id="pcContent">
       <div class="pc-image-wrapper" id="pcImageWrapper">
-        <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
-        <div class="pc-hotspot-layer" id="pcHotspotLayer"></div>
-        <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
+        <div class="pc-img-box" id="pcImgBox">
+          <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
+          <div class="pc-hotspot-layer" id="pcHotspotLayer"></div>
+          <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
+        </div>
       </div>
       <div class="pc-placeholder" id="pcPlaceholder">
         <div class="icon">🖥️</div>
@@ -683,6 +684,8 @@ function renderPcScreen(scr) {
 
   const targetSrc = scr.image;
   img.onload = () => {
+    // 캡처 이미지 비율대로 박스를 잡아 contain-fit (잘림/빈공간 방지, 핫스팟 좌표는 이미지 기준 유지)
+    document.getElementById('pcImgBox').style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
     img.style.display = 'block';
     renderHotspots('pcHotspotLayer', scr.hotspots||[], false);
   };
