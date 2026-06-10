@@ -563,8 +563,6 @@ function applySec(name) {
     document.getElementById('pcTitlebarMac').style.display = isChrome ? 'none' : '';
     document.getElementById('pcTitlebarChrome').style.display = isChrome ? '' : 'none';
     if(isChrome) {
-      document.getElementById('chromeWinTitle').textContent = (sec.title||name) + ' - Google Chrome';
-      document.getElementById('chromeTabTitle').textContent = sec.title||name;
       document.getElementById('chromeAddressText').textContent = sec.address || 'channeltalk.io';
     } else {
       document.getElementById('pcTitle').textContent = sec.title||name;
