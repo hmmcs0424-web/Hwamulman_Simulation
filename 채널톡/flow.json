@@ -1,0 +1,79 @@
+﻿{
+  "imageManifest": [
+    "채널톡/1000012640.jpg",
+    "채널톡/1000012642.jpg",
+    "채널톡/1000012644.jpg",
+    "채널톡/1000012646.jpg",
+    "채널톡/1000012648.jpg",
+    "채널톡/1000012650.jpg",
+    "채널톡/1000012652.jpg",
+    "채널톡/로그인.png"
+  ],
+  "screens": {
+    "채널톡_001": {
+      "label": "화면 001",
+      "image": "채널톡/1000012640.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_002": {
+      "label": "화면 002",
+      "image": "채널톡/1000012642.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_003": {
+      "label": "화면 003",
+      "image": "채널톡/1000012644.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_004": {
+      "label": "화면 004",
+      "image": "채널톡/1000012646.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_005": {
+      "label": "화면 005",
+      "image": "채널톡/1000012648.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_006": {
+      "label": "화면 006",
+      "image": "채널톡/1000012650.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_007": {
+      "label": "화면 007",
+      "image": "채널톡/1000012652.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "채널톡_008": {
+      "label": "화면 008",
+      "image": "채널톡/로그인.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    }
+  },
+  "start": "채널톡_001"
+}

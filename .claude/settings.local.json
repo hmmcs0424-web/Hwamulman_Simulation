@@ -9,7 +9,8 @@
       "Bash(gh auth *)",
       "PowerShell(gh auth status 2>&1)",
       "Bash(git remote *)",
-      "mcp__401a3832-98c1-4918-8765-4cc6fdd6990f__deploy_to_vercel"
+      "mcp__401a3832-98c1-4918-8765-4cc6fdd6990f__deploy_to_vercel",
+      "Bash(rm \"C:\\\\Users\\\\owner\\\\OneDrive\\\\Desktop\\\\시뮬 이미지\\\\차주앱시뮬\\\\.git\\\\index.lock\" && echo \"removed\")"
     ]
   }
 }

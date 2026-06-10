@@ -1,17 +1,151 @@
-{
+﻿{
   "imageManifest": [
-    "차주앱/메인화면.jpg",
-    "차주앱/비밀번호입력.jpg",
-    "차주앱/비밀번호입력시.jpg",
-    "차주앱/마이페이지.png",
-    "차주앱/마이페이지_내정보.png",
+    "차주앱/1000015220.jpg",
+    "차주앱/1000015276.jpg",
+    "차주앱/1000015282.jpg",
+    "차주앱/1000015294.jpg",
+    "차주앱/1000015296.jpg",
+    "차주앱/1000015406.jpg",
+    "차주앱/1000015410.jpg",
+    "차주앱/1000015412.jpg",
+    "차주앱/1000015416.jpg",
+    "차주앱/1000015448.jpg",
+    "차주앱/1000015450.jpg",
+    "차주앱/1000015452.jpg",
+    "차주앱/1000015454.jpg",
+    "차주앱/1000015456.jpg",
+    "차주앱/1000015458.jpg",
+    "차주앱/1000015460.jpg",
+    "차주앱/1000015462.jpg",
+    "차주앱/1000015464.jpg",
+    "차주앱/1000015466.jpg",
+    "차주앱/1000015468.jpg",
+    "차주앱/1000015470.jpg",
+    "차주앱/1000015471.jpg",
+    "차주앱/1000015473.jpg",
+    "차주앱/1000015474.jpg",
+    "차주앱/1000015476.jpg",
+    "차주앱/1000015478.jpg",
+    "차주앱/1000015480.jpg",
+    "차주앱/1000015482.jpg",
+    "차주앱/1000015484.jpg",
+    "차주앱/1000015486.jpg",
+    "차주앱/1000015488.jpg",
+    "차주앱/1000015490.jpg",
+    "차주앱/1000015492.jpg",
+    "차주앱/1000015501.jpg",
+    "차주앱/1000015504.jpg",
+    "차주앱/1000015506.jpg",
+    "차주앱/1000015508.jpg",
+    "차주앱/1000015510.jpg",
+    "차주앱/1000015526.jpg",
+    "차주앱/1000015528.jpg",
+    "차주앱/1000015530.jpg",
+    "차주앱/1000015532.jpg",
+    "차주앱/1000015534.jpg",
+    "차주앱/1000015536.jpg",
+    "차주앱/1000015538.jpg",
+    "차주앱/1000015540.jpg",
+    "차주앱/1000015542.jpg",
+    "차주앱/1000015544.jpg",
+    "차주앱/1000015546.jpg",
+    "차주앱/1000015548.jpg",
+    "차주앱/1000015550.jpg",
+    "차주앱/1000015552.jpg",
+    "차주앱/1000015554.jpg",
+    "차주앱/1000015556.jpg",
+    "차주앱/1000015558.jpg",
+    "차주앱/1000015560.jpg",
+    "차주앱/1000015562.jpg",
+    "차주앱/1000015564.jpg",
+    "차주앱/1000015566.jpg",
+    "차주앱/1000015568.jpg",
+    "차주앱/1000015570.jpg",
+    "차주앱/1000015572.jpg",
+    "차주앱/1000015578.jpg",
+    "차주앱/1000015584.jpg",
+    "차주앱/1000015586.jpg",
+    "차주앱/1000015595.jpg",
+    "차주앱/1000015597.jpg",
+    "차주앱/1000015599.jpg",
+    "차주앱/1000015601.jpg",
+    "차주앱/1000015603.jpg",
+    "차주앱/1000015605.jpg",
+    "차주앱/1000015607.jpg",
+    "차주앱/1000015610.jpg",
+    "차주앱/1000015612.jpg",
+    "차주앱/1000015614.jpg",
+    "차주앱/1000015616.jpg",
+    "차주앱/1000015618.jpg",
+    "차주앱/1000015620.jpg",
+    "차주앱/1000015629.jpg",
+    "차주앱/1000015631.jpg",
+    "차주앱/1000015633.jpg",
+    "차주앱/1000015635.jpg",
+    "차주앱/1000015637.jpg",
+    "차주앱/1000015639.jpg",
+    "차주앱/1000015641.jpg",
+    "차주앱/1000015643.jpg",
+    "차주앱/1000015645.jpg",
+    "차주앱/1000015647.jpg",
+    "차주앱/1000015649.jpg",
+    "차주앱/1000015651.jpg",
+    "차주앱/1000015653.jpg",
+    "차주앱/1000015655.jpg",
+    "차주앱/1000015657.jpg",
+    "차주앱/1000015659.jpg",
+    "차주앱/1000015661.jpg",
+    "차주앱/1000015663.jpg",
+    "차주앱/1000015665.jpg",
+    "차주앱/1000015667.jpg",
+    "차주앱/1000015669.jpg",
+    "차주앱/1000015671.jpg",
+    "차주앱/1000015673.jpg",
+    "차주앱/1000015675.jpg",
+    "차주앱/1000015677.jpg",
+    "차주앱/1000015679.jpg",
+    "차주앱/1000015681.jpg",
+    "차주앱/1000015683.jpg",
+    "차주앱/1000015685.jpg",
+    "차주앱/1000015687.jpg",
+    "차주앱/1000015689.jpg",
+    "차주앱/1000015691.jpg",
+    "차주앱/1000015693.jpg",
+    "차주앱/1000015695.jpg",
+    "차주앱/1000015697.jpg",
+    "차주앱/1000015699.jpg",
+    "차주앱/1000015701.jpg",
+    "차주앱/1000015703.jpg",
+    "차주앱/1000015705.jpg",
+    "차주앱/1000015725.jpg",
+    "차주앱/1000015727.jpg",
+    "차주앱/1000015729.jpg",
+    "차주앱/1000015731.jpg",
+    "차주앱/1000015733.jpg",
+    "차주앱/1000015735.jpg",
+    "차주앱/1000015737.jpg",
+    "차주앱/1000015739.jpg",
+    "차주앱/1000015741.jpg",
+    "차주앱/1000015743.jpg",
+    "차주앱/1000015745.jpg",
+    "차주앱/1000015747.jpg",
+    "차주앱/1000015749.jpg",
+    "차주앱/1000015751.jpg",
+    "차주앱/1000015753.jpg",
+    "차주앱/1000015755.jpg",
     "차주앱/내정보_계산서이메일변경.jpg",
     "차주앱/내정보_실운전자정보변경.png",
     "차주앱/내정보_이메일 변경.jpg",
     "차주앱/내정보_주민등록번호 변경.png",
+    "차주앱/뒤로가기.png",
+    "차주앱/마이페이지.png",
+    "차주앱/마이페이지_내정보.png",
+    "차주앱/메인화면.jpg",
     "차주앱/배차내역.png",
     "차주앱/배차내역_수금미확인.jpg",
     "차주앱/배차내역_수금확인.jpg",
+    "차주앱/비밀번호입력.jpg",
+    "차주앱/비밀번호입력시.jpg",
     "차주앱/예치금.jpg",
     "차주앱/예치금_가상계좌만들기.jpg",
     "차주앱/예치금_기간설정.jpg",
@@ -71,866 +205,1630 @@
     "차주앱/회차검색_불가.jpg"
   ],
   "screens": {
-    "main": {
-      "label": "메인화면",
-      "image": "차주앱/메인화면.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [
-        {
-          "label": "마이페이지",
-          "top": 2.6,
-          "left": 3.2,
-          "width": 30.4,
-          "height": 4.9,
-          "goto": "mypage"
-        }
-      ],
-      "guide": {
-        "points": [
-          "마이페이지로 전환됩니다."
-        ],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "password_input": {
-      "label": "비밀번호 입력",
-      "image": "차주앱/비밀번호입력.jpg",
+    "차주앱_001": {
+      "label": "화면 001",
+      "image": "차주앱/1000015220.jpg",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "password_typing": {
-      "label": "비밀번호 입력중",
-      "image": "차주앱/비밀번호입력시.jpg",
+    "차주앱_002": {
+      "label": "화면 002",
+      "image": "차주앱/1000015276.jpg",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "mypage": {
-      "label": "마이페이지",
-      "image": "차주앱/마이페이지.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [
-        {
-          "label": "뒤로가기",
-          "top": 0.6,
-          "left": 0.3,
-          "width": 9.5,
-          "height": 3.6,
-          "goto": "main"
-        }
-      ],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "mypage_info": {
-      "label": "마이페이지 > 내정보",
-      "image": "차주앱/마이페이지_내정보.png",
-      "type": "scroll",
+    "차주앱_003": {
+      "label": "화면 003",
+      "image": "차주앱/1000015282.jpg",
+      "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "info_invoice_email": {
-      "label": "내정보 > 계산서이메일변경",
+    "차주앱_004": {
+      "label": "화면 004",
+      "image": "차주앱/1000015294.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_005": {
+      "label": "화면 005",
+      "image": "차주앱/1000015296.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_006": {
+      "label": "화면 006",
+      "image": "차주앱/1000015406.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_007": {
+      "label": "화면 007",
+      "image": "차주앱/1000015410.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_008": {
+      "label": "화면 008",
+      "image": "차주앱/1000015412.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_009": {
+      "label": "화면 009",
+      "image": "차주앱/1000015416.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_010": {
+      "label": "화면 010",
+      "image": "차주앱/1000015448.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_011": {
+      "label": "화면 011",
+      "image": "차주앱/1000015450.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_012": {
+      "label": "화면 012",
+      "image": "차주앱/1000015452.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_013": {
+      "label": "화면 013",
+      "image": "차주앱/1000015454.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_014": {
+      "label": "화면 014",
+      "image": "차주앱/1000015456.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_015": {
+      "label": "화면 015",
+      "image": "차주앱/1000015458.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_016": {
+      "label": "화면 016",
+      "image": "차주앱/1000015460.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_017": {
+      "label": "화면 017",
+      "image": "차주앱/1000015462.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_018": {
+      "label": "화면 018",
+      "image": "차주앱/1000015464.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_019": {
+      "label": "화면 019",
+      "image": "차주앱/1000015466.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_020": {
+      "label": "화면 020",
+      "image": "차주앱/1000015468.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_021": {
+      "label": "화면 021",
+      "image": "차주앱/1000015470.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_022": {
+      "label": "화면 022",
+      "image": "차주앱/1000015471.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_023": {
+      "label": "화면 023",
+      "image": "차주앱/1000015473.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_024": {
+      "label": "화면 024",
+      "image": "차주앱/1000015474.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_025": {
+      "label": "화면 025",
+      "image": "차주앱/1000015476.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_026": {
+      "label": "화면 026",
+      "image": "차주앱/1000015478.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_027": {
+      "label": "화면 027",
+      "image": "차주앱/1000015480.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_028": {
+      "label": "화면 028",
+      "image": "차주앱/1000015482.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_029": {
+      "label": "화면 029",
+      "image": "차주앱/1000015484.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_030": {
+      "label": "화면 030",
+      "image": "차주앱/1000015486.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_031": {
+      "label": "화면 031",
+      "image": "차주앱/1000015488.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_032": {
+      "label": "화면 032",
+      "image": "차주앱/1000015490.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_033": {
+      "label": "화면 033",
+      "image": "차주앱/1000015492.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_034": {
+      "label": "화면 034",
+      "image": "차주앱/1000015501.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_035": {
+      "label": "화면 035",
+      "image": "차주앱/1000015504.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_036": {
+      "label": "화면 036",
+      "image": "차주앱/1000015506.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_037": {
+      "label": "화면 037",
+      "image": "차주앱/1000015508.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_038": {
+      "label": "화면 038",
+      "image": "차주앱/1000015510.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_039": {
+      "label": "화면 039",
+      "image": "차주앱/1000015526.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_040": {
+      "label": "화면 040",
+      "image": "차주앱/1000015528.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_041": {
+      "label": "화면 041",
+      "image": "차주앱/1000015530.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_042": {
+      "label": "화면 042",
+      "image": "차주앱/1000015532.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_043": {
+      "label": "화면 043",
+      "image": "차주앱/1000015534.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_044": {
+      "label": "화면 044",
+      "image": "차주앱/1000015536.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_045": {
+      "label": "화면 045",
+      "image": "차주앱/1000015538.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_046": {
+      "label": "화면 046",
+      "image": "차주앱/1000015540.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_047": {
+      "label": "화면 047",
+      "image": "차주앱/1000015542.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_048": {
+      "label": "화면 048",
+      "image": "차주앱/1000015544.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_049": {
+      "label": "화면 049",
+      "image": "차주앱/1000015546.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_050": {
+      "label": "화면 050",
+      "image": "차주앱/1000015548.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_051": {
+      "label": "화면 051",
+      "image": "차주앱/1000015550.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_052": {
+      "label": "화면 052",
+      "image": "차주앱/1000015552.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_053": {
+      "label": "화면 053",
+      "image": "차주앱/1000015554.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_054": {
+      "label": "화면 054",
+      "image": "차주앱/1000015556.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_055": {
+      "label": "화면 055",
+      "image": "차주앱/1000015558.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_056": {
+      "label": "화면 056",
+      "image": "차주앱/1000015560.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_057": {
+      "label": "화면 057",
+      "image": "차주앱/1000015562.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_058": {
+      "label": "화면 058",
+      "image": "차주앱/1000015564.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_059": {
+      "label": "화면 059",
+      "image": "차주앱/1000015566.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_060": {
+      "label": "화면 060",
+      "image": "차주앱/1000015568.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_061": {
+      "label": "화면 061",
+      "image": "차주앱/1000015570.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_062": {
+      "label": "화면 062",
+      "image": "차주앱/1000015572.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_063": {
+      "label": "화면 063",
+      "image": "차주앱/1000015578.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_064": {
+      "label": "화면 064",
+      "image": "차주앱/1000015584.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_065": {
+      "label": "화면 065",
+      "image": "차주앱/1000015586.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_066": {
+      "label": "화면 066",
+      "image": "차주앱/1000015595.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_067": {
+      "label": "화면 067",
+      "image": "차주앱/1000015597.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_068": {
+      "label": "화면 068",
+      "image": "차주앱/1000015599.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_069": {
+      "label": "화면 069",
+      "image": "차주앱/1000015601.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_070": {
+      "label": "화면 070",
+      "image": "차주앱/1000015603.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_071": {
+      "label": "화면 071",
+      "image": "차주앱/1000015605.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_072": {
+      "label": "화면 072",
+      "image": "차주앱/1000015607.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_073": {
+      "label": "화면 073",
+      "image": "차주앱/1000015610.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_074": {
+      "label": "화면 074",
+      "image": "차주앱/1000015612.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_075": {
+      "label": "화면 075",
+      "image": "차주앱/1000015614.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_076": {
+      "label": "화면 076",
+      "image": "차주앱/1000015616.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_077": {
+      "label": "화면 077",
+      "image": "차주앱/1000015618.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_078": {
+      "label": "화면 078",
+      "image": "차주앱/1000015620.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_079": {
+      "label": "화면 079",
+      "image": "차주앱/1000015629.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_080": {
+      "label": "화면 080",
+      "image": "차주앱/1000015631.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_081": {
+      "label": "화면 081",
+      "image": "차주앱/1000015633.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_082": {
+      "label": "화면 082",
+      "image": "차주앱/1000015635.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_083": {
+      "label": "화면 083",
+      "image": "차주앱/1000015637.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_084": {
+      "label": "화면 084",
+      "image": "차주앱/1000015639.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_085": {
+      "label": "화면 085",
+      "image": "차주앱/1000015641.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_086": {
+      "label": "화면 086",
+      "image": "차주앱/1000015643.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_087": {
+      "label": "화면 087",
+      "image": "차주앱/1000015645.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_088": {
+      "label": "화면 088",
+      "image": "차주앱/1000015647.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_089": {
+      "label": "화면 089",
+      "image": "차주앱/1000015649.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_090": {
+      "label": "화면 090",
+      "image": "차주앱/1000015651.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_091": {
+      "label": "화면 091",
+      "image": "차주앱/1000015653.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_092": {
+      "label": "화면 092",
+      "image": "차주앱/1000015655.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_093": {
+      "label": "화면 093",
+      "image": "차주앱/1000015657.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_094": {
+      "label": "화면 094",
+      "image": "차주앱/1000015659.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_095": {
+      "label": "화면 095",
+      "image": "차주앱/1000015661.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_096": {
+      "label": "화면 096",
+      "image": "차주앱/1000015663.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_097": {
+      "label": "화면 097",
+      "image": "차주앱/1000015665.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_098": {
+      "label": "화면 098",
+      "image": "차주앱/1000015667.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_099": {
+      "label": "화면 099",
+      "image": "차주앱/1000015669.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_100": {
+      "label": "화면 100",
+      "image": "차주앱/1000015671.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_101": {
+      "label": "화면 101",
+      "image": "차주앱/1000015673.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_102": {
+      "label": "화면 102",
+      "image": "차주앱/1000015675.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_103": {
+      "label": "화면 103",
+      "image": "차주앱/1000015677.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_104": {
+      "label": "화면 104",
+      "image": "차주앱/1000015679.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_105": {
+      "label": "화면 105",
+      "image": "차주앱/1000015681.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_106": {
+      "label": "화면 106",
+      "image": "차주앱/1000015683.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_107": {
+      "label": "화면 107",
+      "image": "차주앱/1000015685.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_108": {
+      "label": "화면 108",
+      "image": "차주앱/1000015687.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_109": {
+      "label": "화면 109",
+      "image": "차주앱/1000015689.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_110": {
+      "label": "화면 110",
+      "image": "차주앱/1000015691.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_111": {
+      "label": "화면 111",
+      "image": "차주앱/1000015693.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_112": {
+      "label": "화면 112",
+      "image": "차주앱/1000015695.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_113": {
+      "label": "화면 113",
+      "image": "차주앱/1000015697.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_114": {
+      "label": "화면 114",
+      "image": "차주앱/1000015699.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_115": {
+      "label": "화면 115",
+      "image": "차주앱/1000015701.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_116": {
+      "label": "화면 116",
+      "image": "차주앱/1000015703.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_117": {
+      "label": "화면 117",
+      "image": "차주앱/1000015705.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_118": {
+      "label": "화면 118",
+      "image": "차주앱/1000015725.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_119": {
+      "label": "화면 119",
+      "image": "차주앱/1000015727.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_120": {
+      "label": "화면 120",
+      "image": "차주앱/1000015729.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_121": {
+      "label": "화면 121",
+      "image": "차주앱/1000015731.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_122": {
+      "label": "화면 122",
+      "image": "차주앱/1000015733.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_123": {
+      "label": "화면 123",
+      "image": "차주앱/1000015735.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_124": {
+      "label": "화면 124",
+      "image": "차주앱/1000015737.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_125": {
+      "label": "화면 125",
+      "image": "차주앱/1000015739.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_126": {
+      "label": "화면 126",
+      "image": "차주앱/1000015741.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_127": {
+      "label": "화면 127",
+      "image": "차주앱/1000015743.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_128": {
+      "label": "화면 128",
+      "image": "차주앱/1000015745.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_129": {
+      "label": "화면 129",
+      "image": "차주앱/1000015747.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_130": {
+      "label": "화면 130",
+      "image": "차주앱/1000015749.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_131": {
+      "label": "화면 131",
+      "image": "차주앱/1000015751.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_132": {
+      "label": "화면 132",
+      "image": "차주앱/1000015753.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_133": {
+      "label": "화면 133",
+      "image": "차주앱/1000015755.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_134": {
+      "label": "화면 134",
       "image": "차주앱/내정보_계산서이메일변경.jpg",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "info_driver_change": {
-      "label": "내정보 > 실운전자정보변경",
+    "차주앱_135": {
+      "label": "화면 135",
       "image": "차주앱/내정보_실운전자정보변경.png",
-      "type": "scroll",
+      "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "info_email_change": {
-      "label": "내정보 > 이메일변경",
+    "차주앱_136": {
+      "label": "화면 136",
       "image": "차주앱/내정보_이메일 변경.jpg",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "info_id_change": {
-      "label": "내정보 > 주민번호변경",
+    "차주앱_137": {
+      "label": "화면 137",
       "image": "차주앱/내정보_주민등록번호 변경.png",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "dispatch": {
-      "label": "배차내역",
-      "image": "차주앱/배차내역.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "dispatch_unpaid": {
-      "label": "배차내역 > 수금미확인",
-      "image": "차주앱/배차내역_수금미확인.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "dispatch_paid": {
-      "label": "배차내역 > 수금확인",
-      "image": "차주앱/배차내역_수금확인.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit": {
-      "label": "예치금",
-      "image": "차주앱/예치금.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_virtual": {
-      "label": "예치금 > 가상계좌만들기",
-      "image": "차주앱/예치금_가상계좌만들기.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_period": {
-      "label": "예치금 > 기간설정",
-      "image": "차주앱/예치금_기간설정.jpg",
+    "차주앱_138": {
+      "label": "화면 138",
+      "image": "차주앱/뒤로가기.png",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "deposit_usage": {
-      "label": "예치금 > 사용내역",
-      "image": "차주앱/예치금_사용내역.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_withdraw": {
-      "label": "예치금 > 실계좌출금",
-      "image": "차주앱/예치금_실계좌출금.jpg",
+    "차주앱_139": {
+      "label": "화면 139",
+      "image": "차주앱/마이페이지.png",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "deposit_withdraw_msg": {
-      "label": "예치금 > 실계좌출금 > 메시지입력",
-      "image": "차주앱/예치금_실계좌출금_메시지입력.jpg",
+    "차주앱_140": {
+      "label": "화면 140",
+      "image": "차주앱/마이페이지_내정보.png",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     },
-    "deposit_withdraw_amount": {
-      "label": "예치금 > 실계좌출금 > 금액입력",
-      "image": "차주앱/예치금_실계좌출금_출금금액입력.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_income": {
-      "label": "예치금 > 입금내역",
-      "image": "차주앱/예치금_입금내역.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_regular": {
-      "label": "예치금 > 정기결제인경우",
-      "image": "차주앱/예치금_정기결제인경우.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_app": {
-      "label": "정보이용료(단기) > 앱결제이동",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_앱결제이동.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_terms": {
-      "label": "정보이용료(단기) > 약관",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_약관.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_deposit": {
-      "label": "정보이용료(단기) > 예치금결제",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_예치금.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_deposit_pw": {
-      "label": "정보이용료(단기) > 예치금비밀번호",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_info": {
-      "label": "정보이용료(단기) > 정보확인",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_정보확인.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_card": {
-      "label": "정보이용료(단기) > 카드선택",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_카드선택.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_short_install": {
-      "label": "정보이용료(단기) > 할부선택",
-      "image": "차주앱/예치금_정보이용료_단기_일반결제_할부선택.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt": {
-      "label": "정보이용료관리",
-      "image": "차주앱/예치금_정보이용료관리.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_3rd": {
-      "label": "정보이용료관리 > 3자제공",
-      "image": "차주앱/예치금_정보이용료관리_3자제공.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_privacy": {
-      "label": "정보이용료관리 > 개인정보수집",
-      "image": "차주앱/예치금_정보이용료관리_개인정보수집.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw": {
-      "label": "정보이용료관리 > 결제비밀번호변경",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_auth": {
-      "label": "결제비밀번호변경 > 본인인증",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_auth_sms": {
-      "label": "결제비밀번호변경 > 인증문자",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_auth_ok": {
-      "label": "결제비밀번호변경 > 인증성공",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_terms": {
-      "label": "결제비밀번호변경 > 약관",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_약관.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_done": {
-      "label": "결제비밀번호변경 > 완료",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_완료.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_input": {
-      "label": "결제비밀번호변경 > 번호입력",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_입력.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_pw_again": {
-      "label": "결제비밀번호변경 > 한번더",
-      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_payment": {
-      "label": "정보이용료관리 > 결제수단관리",
-      "image": "차주앱/예치금_정보이용료관리_결제수단관리.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_payment_cancel": {
-      "label": "결제수단관리 > 결제해지",
-      "image": "차주앱/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_finance": {
-      "label": "정보이용료관리 > 금융거래",
-      "image": "차주앱/예치금_정보이용료관리_금융거래.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_terms": {
-      "label": "정보이용료관리 > 약관",
-      "image": "차주앱/예치금_정보이용료관리_약관.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_mgmt_regular": {
-      "label": "정보이용료관리 > 정기결제동의",
-      "image": "차주앱/예치금_정보이용료관리_정기결제동의.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_short": {
-      "label": "정보이용료납부(단기) > 일반결제",
-      "image": "차주앱/예치금_정보이용료납부_단기_일반결제.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_short_pay": {
-      "label": "정보이용료납부(단기) > 페이",
-      "image": "차주앱/예치금_정보이용료납부_단기_페이.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_deposit_done": {
-      "label": "정보이용료납부 > 예치금결제완료",
-      "image": "차주앱/예치금_정보이용료납부_예치금_결제완료.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_deposit_pw": {
-      "label": "정보이용료납부 > 예치금비밀번호",
-      "image": "차주앱/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_regular_deposit": {
-      "label": "정보이용료납부(정기) > 예치금",
-      "image": "차주앱/예치금_정보이용료납부_정기_예치금.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "fee_pay_regular_pay": {
-      "label": "정보이용료납부(정기) > 페이",
-      "image": "차주앱/예치금_정보이용료납부_정기_페이.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_transfer": {
-      "label": "예치금 > 회원간이체",
-      "image": "차주앱/예치금_회원간이체.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_transfer_amount": {
-      "label": "회원간이체 > 금액입력",
-      "image": "차주앱/예치금_회원간이체_금액입력.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_transfer_done": {
-      "label": "회원간이체 > 완료",
-      "image": "차주앱/예치금_회원간이체_완료.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "deposit_transfer_name": {
-      "label": "회원간이체 > 이름조회",
-      "image": "차주앱/예치금_회원간이체_이름조회.png",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "point": {
-      "label": "포인트",
-      "image": "차주앱/포인트.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight": {
-      "label": "화물등록",
-      "image": "차주앱/화물등록.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_register": {
-      "label": "화물등록 > 등록",
-      "image": "차주앱/화물등록_등록.png",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_count": {
-      "label": "화물등록 > 등록대수",
-      "image": "차주앱/화물등록_등록대수.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_list": {
-      "label": "화물등록 > 등록목록",
-      "image": "차주앱/화물등록_등록목록.jpg",
-      "type": "scroll",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_load_method": {
-      "label": "화물등록 > 상차방법",
-      "image": "차주앱/화물등록_상차방법.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_load_time": {
-      "label": "화물등록 > 상차일시",
-      "image": "차주앱/화물등록_상차일시.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_load_loc": {
-      "label": "화물등록 > 상차지입력",
-      "image": "차주앱/화물등록_상차지입력.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_payment": {
-      "label": "화물등록 > 지불방식",
-      "image": "차주앱/화물등록_지불방식선택.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_vehicle": {
-      "label": "화물등록 > 차종선택",
-      "image": "차주앱/화물등록_차종선택.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_tonnage": {
-      "label": "화물등록 > 톤수선택",
-      "image": "차주앱/화물등록_톤수선택.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_unload_method": {
-      "label": "화물등록 > 하차방법",
-      "image": "차주앱/화물등록_하차방법.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_unload_time": {
-      "label": "화물등록 > 하차일시",
-      "image": "차주앱/화물등록_하차일시.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "freight_unload_loc": {
-      "label": "화물등록 > 하차지입력",
-      "image": "차주앱/화물등록_하차지입력.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "route_unavailable": {
-      "label": "회차검색 불가",
-      "image": "차주앱/회차검색_불가.jpg",
-      "type": "normal",
-      "show_navbar": true,
-      "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
-    },
-    "m_1": {
-      "label": "메인페이지",
+    "차주앱_141": {
+      "label": "화면 141",
       "image": "차주앱/메인화면.jpg",
       "type": "normal",
       "show_navbar": true,
       "hotspots": [],
-      "guide": {
-        "points": [],
-        "caution": "",
-        "kms_link": ""
-      }
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_142": {
+      "label": "화면 142",
+      "image": "차주앱/배차내역.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_143": {
+      "label": "화면 143",
+      "image": "차주앱/배차내역_수금미확인.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_144": {
+      "label": "화면 144",
+      "image": "차주앱/배차내역_수금확인.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_145": {
+      "label": "화면 145",
+      "image": "차주앱/비밀번호입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_146": {
+      "label": "화면 146",
+      "image": "차주앱/비밀번호입력시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_147": {
+      "label": "화면 147",
+      "image": "차주앱/예치금.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_148": {
+      "label": "화면 148",
+      "image": "차주앱/예치금_가상계좌만들기.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_149": {
+      "label": "화면 149",
+      "image": "차주앱/예치금_기간설정.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_150": {
+      "label": "화면 150",
+      "image": "차주앱/예치금_사용내역.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_151": {
+      "label": "화면 151",
+      "image": "차주앱/예치금_실계좌출금.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_152": {
+      "label": "화면 152",
+      "image": "차주앱/예치금_실계좌출금_메시지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_153": {
+      "label": "화면 153",
+      "image": "차주앱/예치금_실계좌출금_출금금액입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_154": {
+      "label": "화면 154",
+      "image": "차주앱/예치금_입금내역.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_155": {
+      "label": "화면 155",
+      "image": "차주앱/예치금_정기결제인경우.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_156": {
+      "label": "화면 156",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_157": {
+      "label": "화면 157",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_약관.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_158": {
+      "label": "화면 158",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_예치금.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_159": {
+      "label": "화면 159",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_160": {
+      "label": "화면 160",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_정보확인.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_161": {
+      "label": "화면 161",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_카드선택.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_162": {
+      "label": "화면 162",
+      "image": "차주앱/예치금_정보이용료_단기_일반결제_할부선택.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_163": {
+      "label": "화면 163",
+      "image": "차주앱/예치금_정보이용료관리.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_164": {
+      "label": "화면 164",
+      "image": "차주앱/예치금_정보이용료관리_3자제공.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_165": {
+      "label": "화면 165",
+      "image": "차주앱/예치금_정보이용료관리_개인정보수집.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_166": {
+      "label": "화면 166",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_167": {
+      "label": "화면 167",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_168": {
+      "label": "화면 168",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_169": {
+      "label": "화면 169",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_170": {
+      "label": "화면 170",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_171": {
+      "label": "화면 171",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_172": {
+      "label": "화면 172",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_173": {
+      "label": "화면 173",
+      "image": "차주앱/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_174": {
+      "label": "화면 174",
+      "image": "차주앱/예치금_정보이용료관리_결제수단관리.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_175": {
+      "label": "화면 175",
+      "image": "차주앱/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_176": {
+      "label": "화면 176",
+      "image": "차주앱/예치금_정보이용료관리_금융거래.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_177": {
+      "label": "화면 177",
+      "image": "차주앱/예치금_정보이용료관리_약관.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_178": {
+      "label": "화면 178",
+      "image": "차주앱/예치금_정보이용료관리_정기결제동의.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_179": {
+      "label": "화면 179",
+      "image": "차주앱/예치금_정보이용료납부_단기_일반결제.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_180": {
+      "label": "화면 180",
+      "image": "차주앱/예치금_정보이용료납부_단기_페이.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_181": {
+      "label": "화면 181",
+      "image": "차주앱/예치금_정보이용료납부_예치금_결제완료.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_182": {
+      "label": "화면 182",
+      "image": "차주앱/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_183": {
+      "label": "화면 183",
+      "image": "차주앱/예치금_정보이용료납부_정기_예치금.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_184": {
+      "label": "화면 184",
+      "image": "차주앱/예치금_정보이용료납부_정기_페이.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_185": {
+      "label": "화면 185",
+      "image": "차주앱/예치금_회원간이체.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_186": {
+      "label": "화면 186",
+      "image": "차주앱/예치금_회원간이체_금액입력.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_187": {
+      "label": "화면 187",
+      "image": "차주앱/예치금_회원간이체_완료.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_188": {
+      "label": "화면 188",
+      "image": "차주앱/예치금_회원간이체_이름조회.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_189": {
+      "label": "화면 189",
+      "image": "차주앱/포인트.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_190": {
+      "label": "화면 190",
+      "image": "차주앱/화물등록.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_191": {
+      "label": "화면 191",
+      "image": "차주앱/화물등록_등록.png",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_192": {
+      "label": "화면 192",
+      "image": "차주앱/화물등록_등록대수.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_193": {
+      "label": "화면 193",
+      "image": "차주앱/화물등록_등록목록.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_194": {
+      "label": "화면 194",
+      "image": "차주앱/화물등록_상차방법.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_195": {
+      "label": "화면 195",
+      "image": "차주앱/화물등록_상차일시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_196": {
+      "label": "화면 196",
+      "image": "차주앱/화물등록_상차지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_197": {
+      "label": "화면 197",
+      "image": "차주앱/화물등록_지불방식선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_198": {
+      "label": "화면 198",
+      "image": "차주앱/화물등록_차종선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_199": {
+      "label": "화면 199",
+      "image": "차주앱/화물등록_톤수선택.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_200": {
+      "label": "화면 200",
+      "image": "차주앱/화물등록_하차방법.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_201": {
+      "label": "화면 201",
+      "image": "차주앱/화물등록_하차일시.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_202": {
+      "label": "화면 202",
+      "image": "차주앱/화물등록_하차지입력.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    },
+    "차주앱_203": {
+      "label": "화면 203",
+      "image": "차주앱/회차검색_불가.jpg",
+      "type": "normal",
+      "show_navbar": true,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
     }
   },
-  "start": "main"
+  "start": "차주앱_001"
 }

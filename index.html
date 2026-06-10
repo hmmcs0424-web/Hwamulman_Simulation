@@ -6,114 +6,58 @@
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --brand:#FFB800;
-  --bg:#111;
-  --topnav-h:54px;
-  --phone-w:33vw;
-}
+:root{--brand:#FFB800;--bg:#111;--topnav-h:54px;}
 
-body{
-  background:var(--bg);
-  font-family:'Pretendard',-apple-system,sans-serif;
-  color:#1a1a1a;
-  overflow:hidden;
-  height:100vh;
-}
+body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;color:#1a1a1a;overflow:hidden;height:100vh;}
 
-/* ══════════════════════════════════════
-   TOP NAV
-══════════════════════════════════════ */
+/* ── TOP NAV ── */
 .topnav{
-  position:fixed;top:0;left:0;right:0;
-  height:var(--topnav-h);
-  background:#1a1a1a;
-  border-bottom:1px solid #2e2e2e;
-  display:flex;align-items:center;
-  padding:0 20px;
-  z-index:1000;
-  gap:0;
+  position:fixed;top:0;left:0;right:0;height:var(--topnav-h);
+  background:#1a1a1a;border-bottom:1px solid #2e2e2e;
+  display:flex;align-items:center;padding:0 20px;z-index:1000;gap:0;
 }
-.topnav-logo{
-  font-size:15px;font-weight:800;color:#FFB800;
-  letter-spacing:-.3px;margin-right:28px;white-space:nowrap;
-  flex-shrink:0;
-}
+.topnav-logo{font-size:15px;font-weight:800;color:#FFB800;letter-spacing:-.3px;margin-right:28px;white-space:nowrap;flex-shrink:0;}
 .topnav-logo span{color:#fff;font-weight:400;font-size:13px;margin-left:4px;}
-.topnav-menus{
-  display:flex;gap:2px;flex:1;
-}
+.topnav-menus{display:flex;gap:2px;flex:1;}
 .nav-menu{
   padding:7px 16px;border-radius:8px;border:none;cursor:pointer;
   font-family:inherit;font-size:13px;font-weight:600;
-  color:#aaa;background:transparent;transition:all .15s;
-  white-space:nowrap;
+  color:#aaa;background:transparent;transition:all .15s;white-space:nowrap;
 }
 .nav-menu:hover{color:#fff;background:#2a2a2a;}
 .nav-menu.active{color:#FFB800;background:#2a2000;}
-.topnav-right{
-  display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto;
-}
+.topnav-right{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto;}
 .btn-admin-login{
   padding:7px 16px;border-radius:8px;border:1.5px solid #444;cursor:pointer;
   font-family:inherit;font-size:13px;font-weight:600;
-  color:#ccc;background:transparent;transition:all .15s;
-  display:flex;align-items:center;gap:5px;
+  color:#ccc;background:transparent;transition:all .15s;display:flex;align-items:center;gap:5px;
 }
 .btn-admin-login:hover{border-color:#FFB800;color:#FFB800;}
 .btn-admin-login.on{border-color:#FF5000;color:#FF5000;background:#1a0a00;}
 
-/* ══════════════════════════════════════
-   SIM SECTIONS
-══════════════════════════════════════ */
-.sim-section{
-  display:none;
-  height:calc(100vh - var(--topnav-h));
-  margin-top:var(--topnav-h);
-  overflow:hidden;
+/* ── MAIN LAYOUT ── */
+.main-layout{
+  display:flex;height:calc(100vh - var(--topnav-h));
+  margin-top:var(--topnav-h);overflow:hidden;
 }
-.sim-section.active{ display:flex; }
 
-/* ══════════════════════════════════════
-   APP MODE — Phone area (1/3)
-══════════════════════════════════════ */
+/* ── PHONE FRAME ── */
 .phone-area{
   display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  width:33.33vw;
-  flex-shrink:0;
+  padding:20px;width:33.33vw;flex-shrink:0;
 }
 .phone-frame{
-  width:100%;max-width:420px;
+  width:100%;max-width:380px;
   height:calc(100vh - var(--topnav-h) - 40px);max-height:860px;
-  background:#1c1c1e;border-radius:52px;
-  padding:14px;
+  background:#1c1c1e;border-radius:52px;padding:14px;
   box-shadow:inset 0 0 0 1.5px #3a3a3c,0 0 0 1px #000,0 30px 80px rgba(0,0,0,.85);
-  display:flex;flex-direction:column;
-  position:relative;
+  display:flex;flex-direction:column;position:relative;
 }
-.phone-frame::before{
-  content:'';position:absolute;right:-3px;top:130px;
-  width:3px;height:64px;background:#2c2c2e;border-radius:0 3px 3px 0;
-}
-.phone-frame::after{
-  content:'';position:absolute;left:-3px;top:90px;
-  width:3px;height:36px;background:#2c2c2e;border-radius:3px 0 0 3px;
-  box-shadow:0 52px 0 #2c2c2e,0 96px 0 #2c2c2e;
-}
-.phone-inner{
-  flex:1;background:#fff;border-radius:40px;
-  overflow:hidden;display:flex;flex-direction:column;position:relative;
-}
-.phone-island{
-  position:absolute;top:11px;left:50%;transform:translateX(-50%);
-  width:110px;height:30px;background:#1c1c1e;border-radius:20px;z-index:10;
-}
-.status-bar{
-  flex-shrink:0;height:50px;padding:16px 22px 0;
-  display:flex;justify-content:space-between;align-items:center;
-  position:relative;z-index:5;
-}
+.phone-frame::before{content:'';position:absolute;right:-3px;top:130px;width:3px;height:64px;background:#2c2c2e;border-radius:0 3px 3px 0;}
+.phone-frame::after{content:'';position:absolute;left:-3px;top:90px;width:3px;height:36px;background:#2c2c2e;border-radius:3px 0 0 3px;box-shadow:0 52px 0 #2c2c2e,0 96px 0 #2c2c2e;}
+.phone-inner{flex:1;background:#fff;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.phone-island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:30px;background:#1c1c1e;border-radius:20px;z-index:10;}
+.status-bar{flex-shrink:0;height:50px;padding:16px 22px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:5;}
 .status-time{font-size:15px;font-weight:700;color:#000;}
 .status-icons{display:flex;gap:5px;align-items:center;}
 .content-area{flex:1;overflow:hidden;position:relative;}
@@ -124,54 +68,39 @@ body{
 .hotspot-layer{position:absolute;inset:0;pointer-events:none;}
 .hotspot{position:absolute;cursor:pointer;pointer-events:auto;}
 .hotspot.normal-mode{background:transparent;border:none;}
-.hotspot.admin-mode{
-  background:rgba(30,100,255,.15);
-  border:2px dashed rgba(30,100,255,.75);
-  border-radius:4px;
-}
-.hotspot-label{
-  display:none;position:absolute;top:2px;left:4px;
-  font-size:10px;font-weight:700;color:rgba(20,80,220,.9);
-  white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.8);
-  padding:1px 4px;border-radius:3px;
-}
+.hotspot.admin-mode{background:rgba(30,100,255,.15);border:2px dashed rgba(30,100,255,.75);border-radius:4px;}
+.hotspot-label{display:none;position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.8);padding:1px 4px;border-radius:3px;}
 .hotspot.admin-mode .hotspot-label{display:block;}
-.draw-overlay{
-  display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;
-}
+.draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;}
 .draw-overlay.active{display:block;}
-.draw-rect{
-  display:none;position:absolute;
-  background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);
-  border-radius:4px;pointer-events:none;
-}
-.popup-overlay{
-  display:none;position:absolute;inset:0;
-  background:rgba(0,0,0,.55);z-index:30;cursor:pointer;
-}
+.draw-rect{display:none;position:absolute;background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);border-radius:4px;pointer-events:none;}
+.popup-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:30;cursor:pointer;}
 .popup-overlay.active{display:flex;align-items:flex-end;}
 .popup-image-wrap{width:100%;cursor:auto;position:relative;}
 .popup-image-wrap img{width:100%;display:block;}
-.navbar-bar{flex-shrink:0;position:relative;cursor:pointer;}
-.navbar-bar img{width:100%;display:block;}
-.nav-zone{position:absolute;top:0;height:100%;cursor:pointer;}
-.nav-back{left:0;width:33%;}
-.nav-home{left:33%;width:34%;}
 
-/* ══════════════════════════════════════
-   PC MODE — Wide area (3/5)
-══════════════════════════════════════ */
-.pc-area{
-  flex:0 0 60%;
-  display:flex;align-items:stretch;
-  padding:16px;
-  background:#0d0d0f;
+/* CSS 네비게이션 바 (이미지 대체) */
+.css-navbar{
+  flex-shrink:0;height:52px;background:#111;
+  display:flex;align-items:center;justify-content:space-around;
+  border-top:1px solid #222;
 }
+.css-navbar button{
+  background:none;border:none;cursor:pointer;
+  color:#ccc;font-size:20px;padding:8px 20px;
+  border-radius:8px;transition:background .12s;
+  line-height:1;
+}
+.css-navbar button:hover{background:#2a2a2a;}
+
+/* ── PC FRAME ── */
+.pc-area{
+  display:none;flex:0 0 66.66vw;align-items:stretch;
+  padding:16px;background:#0d0d0f;
+}
+.pc-area.visible{display:flex;}
 .pc-frame{
-  flex:1;
-  background:#1c1c1e;
-  border-radius:14px;
-  overflow:hidden;
+  flex:1;background:#fff;border-radius:14px;overflow:hidden;
   display:flex;flex-direction:column;
   box-shadow:0 0 0 1px #333,0 20px 60px rgba(0,0,0,.7);
 }
@@ -185,91 +114,53 @@ body{
 .pc-tb-dot.red{background:#ff5f57;}
 .pc-tb-dot.yellow{background:#ffbd2e;}
 .pc-tb-dot.green{background:#28c840;}
-.pc-tb-title{
-  flex:1;text-align:center;font-size:12px;color:#888;
-  font-weight:500;margin-right:36px;
-}
-.pc-content{
-  flex:1;overflow:hidden;position:relative;
-  background:#f0f0f2;
-}
-.pc-content img{
-  width:100%;height:100%;object-fit:contain;object-position:top;
-}
-.pc-placeholder{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:100%;gap:12px;color:#888;
-}
+.pc-tb-nav{display:flex;gap:6px;margin-left:16px;}
+.pc-tb-nav button{background:#3a3a3e;border:none;color:#ccc;font-size:13px;padding:3px 10px;border-radius:5px;cursor:pointer;font-family:inherit;}
+.pc-tb-nav button:hover{background:#4a4a4e;color:#fff;}
+.pc-tb-title{flex:1;text-align:center;font-size:12px;color:#888;font-weight:500;}
+.pc-content{flex:1;overflow:hidden;position:relative;background:#f0f0f2;}
+.pc-image-wrapper{position:relative;width:100%;height:100%;overflow-y:auto;}
+.pc-image-wrapper::-webkit-scrollbar{width:6px;}
+.pc-image-wrapper::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px;}
+.pc-screen-img{width:100%;display:block;}
+.pc-hotspot-layer{position:absolute;inset:0;pointer-events:none;}
+.pc-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:#888;}
 .pc-placeholder .icon{font-size:48px;}
 .pc-placeholder .title{font-size:18px;font-weight:700;color:#555;}
 .pc-placeholder .sub{font-size:13px;color:#aaa;text-align:center;line-height:1.6;}
 
-/* ══════════════════════════════════════
-   INFO PANEL (shared)
-══════════════════════════════════════ */
-.info-panel{
-  flex:1;background:#f0f0f2;overflow-y:auto;
-  padding:18px;display:flex;flex-direction:column;gap:12px;
-  min-width:280px;
-}
-.panel-card{
-  background:#fff;border-radius:14px;padding:16px;
-  box-shadow:0 1px 4px rgba(0,0,0,.07);
-}
-.card-title{
-  font-size:11px;font-weight:700;color:#999;
-  text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;
-}
+/* ── INFO PANEL ── */
+.info-panel{flex:1;background:#f0f0f2;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:260px;max-width:360px;}
+.panel-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.card-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
 .breadcrumb{display:flex;flex-wrap:wrap;gap:3px;align-items:center;font-size:12px;}
 .bc-item{color:#555;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
 .bc-sep{color:#ccc;}
 .bc-cur{color:var(--brand);font-weight:700;}
-.search-box{
-  width:100%;border:1px solid #e5e5e5;border-radius:8px;
-  padding:7px 11px;font-size:13px;font-family:inherit;
-  outline:none;margin-bottom:8px;
-}
+.search-box{width:100%;border:1px solid #e5e5e5;border-radius:8px;padding:7px 11px;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px;}
 .search-box:focus{border-color:var(--brand);}
 .screen-scroll{max-height:200px;overflow-y:auto;}
 .screen-scroll::-webkit-scrollbar{width:4px;}
 .screen-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px;}
-.screen-btn{
-  display:block;width:100%;text-align:left;
-  padding:6px 10px;border:none;background:none;
-  border-radius:8px;cursor:pointer;font-family:inherit;
-  font-size:13px;color:#333;transition:background .1s;
-}
+.screen-btn{display:block;width:100%;text-align:left;padding:6px 10px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;color:#333;transition:background .1s;}
 .screen-btn:hover{background:#f5f5f5;}
 .screen-btn.active{background:#FFF8E0;color:#7a5600;font-weight:700;}
 .guide-points{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
-.guide-points li{
-  font-size:13px;line-height:1.5;padding:8px 10px;
-  background:#FFFBEC;border-radius:8px;border-left:3px solid var(--brand);
-}
+.guide-points li{font-size:13px;line-height:1.5;padding:8px 10px;background:#FFFBEC;border-radius:8px;border-left:3px solid var(--brand);}
 .guide-points li::before{content:'💡 ';}
-.guide-caution{
-  font-size:13px;line-height:1.5;padding:8px 10px;
-  background:#FFF0F0;border-radius:8px;border-left:3px solid #FF5555;margin-bottom:8px;
-}
+.guide-caution{font-size:13px;line-height:1.5;padding:8px 10px;background:#FFF0F0;border-radius:8px;border-left:3px solid #FF5555;margin-bottom:8px;}
 .guide-caution::before{content:'⚠️ ';}
 .guide-kms{font-size:13px;}
 .guide-kms::before{content:'🔗 ';}
 .guide-kms a{color:#0066CC;text-decoration:none;}
 .guide-kms a:hover{text-decoration:underline;}
 .guide-empty{color:#bbb;font-size:13px;text-align:center;padding:14px 0;}
-.admin-badge{
-  display:inline-block;background:#FF5000;color:#fff;
-  font-size:11px;font-weight:700;padding:2px 8px;
-  border-radius:99px;margin-bottom:12px;
-}
+.admin-badge{display:inline-block;background:#FF5000;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:12px;}
 .admin-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
 .admin-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
 .section-title{font-size:13px;font-weight:700;color:#444;margin-bottom:8px;}
 .btn-row{display:flex;gap:7px;flex-wrap:wrap;}
-.btn{
-  padding:7px 13px;border-radius:8px;border:none;cursor:pointer;
-  font-family:inherit;font-size:13px;font-weight:600;transition:opacity .15s;
-}
+.btn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:opacity .15s;}
 .btn:hover{opacity:.82;}
 .btn-primary{background:var(--brand);color:#000;}
 .btn-danger{background:#FF4444;color:#fff;}
@@ -277,53 +168,23 @@ body{
 .btn-sm{padding:4px 9px;font-size:12px;}
 .form-row{display:flex;flex-direction:column;gap:5px;margin-bottom:9px;}
 .form-label{font-size:12px;font-weight:600;color:#666;}
-.form-input{
-  width:100%;border:1px solid #e0e0e0;border-radius:8px;
-  padding:7px 10px;font-size:13px;font-family:inherit;outline:none;
-}
+.form-input{width:100%;border:1px solid #e0e0e0;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;outline:none;}
 .form-input:focus{border-color:var(--brand);}
 select.form-input{background:#fff;}
 textarea.form-input{resize:vertical;}
-.hs-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:6px 10px;background:#f7f7f7;border-radius:8px;margin-bottom:5px;font-size:13px;
-}
-.unreg-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:6px 10px;background:#FFF8E0;border-radius:8px;
-  margin-bottom:5px;font-size:13px;cursor:pointer;
-}
+.hs-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f7f7f7;border-radius:8px;margin-bottom:5px;font-size:13px;}
+.unreg-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#FFF8E0;border-radius:8px;margin-bottom:5px;font-size:13px;cursor:pointer;}
 .unreg-item:hover{background:#FFEDB0;}
-.gear-btn{
-  position:fixed;bottom:22px;right:22px;
-  width:48px;height:48px;border-radius:50%;
-  background:#333;color:#fff;border:none;
-  font-size:22px;cursor:pointer;z-index:200;
-  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:background .15s;
-}
-.gear-btn:hover{background:#444;}
-.gear-btn.on{background:#FF5000;}
-.gear-btn.hidden{display:none;}
-.modal-bg{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.55);z-index:500;
-  align-items:center;justify-content:center;
-}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;}
 .modal-bg.active{display:flex;}
-.modal{
-  background:#fff;border-radius:16px;padding:24px;
-  min-width:300px;max-width:460px;width:92%;
-  box-shadow:0 10px 40px rgba(0,0,0,.3);
-}
+.modal{background:#fff;border-radius:16px;padding:24px;min-width:300px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.3);}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     TOP NAVIGATION BAR
-════════════════════════════════════════ -->
+<!-- TOP NAV -->
 <nav class="topnav">
   <div class="topnav-logo">화물맨<span>시뮬레이터</span></div>
   <div class="topnav-menus">
@@ -337,46 +198,27 @@ textarea.form-input{resize:vertical;}
   </div>
 </nav>
 
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
 
-<!-- ═══════════════════════════════════════
-     SIM 1 — 차주 APP (활성)
-════════════════════════════════════════ -->
-<div class="sim-section sim-app active" id="sim-차주앱">
-
-  <div class="phone-area">
+  <!-- ── PHONE FRAME (APP 모드) ── -->
+  <div class="phone-area" id="phoneArea">
   <div class="phone-frame">
   <div class="phone-inner">
     <div class="phone-island"></div>
-
     <div class="status-bar">
       <span class="status-time" id="statusTime">09:41</span>
       <div class="status-icons">
-        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000">
-          <rect x="0" y="5" width="3" height="7" rx="1"/>
-          <rect x="4.5" y="3" width="3" height="9" rx="1"/>
-          <rect x="9" y="1" width="3" height="11" rx="1"/>
-          <rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".25"/>
-        </svg>
-        <svg width="16" height="12" viewBox="0 0 16 12" fill="#000">
-          <path d="M8 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-          <path d="M3.5 6.8A6.5 6.5 0 018 5a6.5 6.5 0 014.5 1.8" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-          <path d="M1 4.2A9.8 9.8 0 018 2a9.8 9.8 0 017 2.2" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-        </svg>
-        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-          <rect x=".75" y=".75" width="21.5" height="10.5" rx="2.5" stroke="#000" stroke-width="1.5"/>
-          <rect x="23" y="3.5" width="2" height="5" rx="1" fill="#000"/>
-          <rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="#000"/>
-        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="5" width="3" height="7" rx="1"/><rect x="4.5" y="3" width="3" height="9" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".25"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="#000"><path d="M8 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/><path d="M3.5 6.8A6.5 6.5 0 018 5a6.5 6.5 0 014.5 1.8" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M1 4.2A9.8 9.8 0 018 2a9.8 9.8 0 017 2.2" stroke="#000" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".75" y=".75" width="21.5" height="10.5" rx="2.5" stroke="#000" stroke-width="1.5"/><rect x="23" y="3.5" width="2" height="5" rx="1" fill="#000"/><rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="#000"/></svg>
       </div>
     </div>
-
     <div class="content-area" id="contentArea">
       <div class="image-wrapper" id="imageWrapper">
         <img class="screen-image" id="screenImg" alt="화면">
         <div class="hotspot-layer" id="hotspotLayer"></div>
-        <div class="draw-overlay" id="drawOverlay">
-          <div class="draw-rect" id="drawRect"></div>
-        </div>
+        <div class="draw-overlay" id="drawOverlay"><div class="draw-rect" id="drawRect"></div></div>
       </div>
       <div class="popup-overlay" id="popupOverlay">
         <div class="popup-image-wrap" id="popupWrap">
@@ -385,34 +227,61 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
     </div>
-
-    <div class="navbar-bar" id="navbarBar">
-      <img src="차주앱/뒤로가기.png" id="navbarImg" alt="네비게이션">
-      <div class="nav-zone nav-back" id="navBack"></div>
-      <div class="nav-zone nav-home" id="navHome"></div>
+    <!-- CSS 네비게이션 바 -->
+    <div class="css-navbar" id="cssNavbar">
+      <button onclick="goBack()" title="뒤로가기">‹</button>
+      <button onclick="goHome()" title="홈">○</button>
+      <button title="최근앱">▣</button>
     </div>
   </div>
   </div>
   </div>
 
-  <!-- Info Panel -->
+  <!-- ── PC FRAME (PC 모드) ── -->
+  <div class="pc-area" id="pcArea">
+  <div class="pc-frame">
+    <div class="pc-titlebar">
+      <div class="pc-tb-dots">
+        <div class="pc-tb-dot red"></div>
+        <div class="pc-tb-dot yellow"></div>
+        <div class="pc-tb-dot green"></div>
+      </div>
+      <div class="pc-tb-nav">
+        <button onclick="goBack()">← 뒤로</button>
+        <button onclick="goHome()">⌂ 홈</button>
+      </div>
+      <div class="pc-tb-title" id="pcTitle">빽통 PC 시뮬레이터</div>
+    </div>
+    <div class="pc-content" id="pcContent">
+      <div class="pc-image-wrapper" id="pcImageWrapper">
+        <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
+        <div class="pc-hotspot-layer" id="pcHotspotLayer"></div>
+        <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
+      </div>
+      <div class="pc-placeholder" id="pcPlaceholder">
+        <div class="icon">🖥️</div>
+        <div class="title" id="pcPlaceholderTitle">빽통 PC</div>
+        <div class="sub">flow.json을 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ── INFO PANEL ── -->
   <div class="info-panel">
     <div class="panel-card">
       <div class="card-title">현재 위치</div>
       <div class="breadcrumb" id="breadcrumb"></div>
     </div>
-
     <div class="panel-card">
       <div class="card-title">화면 목록</div>
       <input type="text" class="search-box" id="searchBox" placeholder="화면 검색...">
       <div class="screen-scroll" id="screenList"></div>
     </div>
-
-    <div class="panel-card" id="guideCard">
+    <div class="panel-card">
       <div class="card-title">상담 가이드</div>
       <div id="guideContent"></div>
     </div>
-
     <div class="panel-card" id="adminPanel" style="display:none">
       <div class="admin-badge">🔧 관리자 모드</div>
       <div class="admin-section">
@@ -431,7 +300,7 @@ textarea.form-input{resize:vertical;}
         <div class="section-title">화면 추가</div>
         <div class="form-row">
           <div class="form-label">화면 ID</div>
-          <input class="form-input" id="newId" placeholder="예: main_detail">
+          <input class="form-input" id="newId" placeholder="예: s001_detail">
         </div>
         <div class="form-row">
           <div class="form-label">라벨명</div>
@@ -439,7 +308,7 @@ textarea.form-input{resize:vertical;}
         </div>
         <div class="form-row">
           <div class="form-label">이미지 파일명</div>
-          <input class="form-input" id="newImage" placeholder="예: 차주앱/메인화면.jpg">
+          <input class="form-input" id="newImage" placeholder="예: 차주앱/파일명.jpg">
         </div>
         <div class="form-row">
           <div class="form-label">타입</div>
@@ -460,123 +329,19 @@ textarea.form-input{resize:vertical;}
         <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
       </div>
     </div>
-
     <div class="panel-card" id="unregCard" style="display:none">
       <div class="card-title">⚠️ 미등록 이미지</div>
       <div id="unregList"></div>
     </div>
   </div>
 
-</div><!-- /sim-차주앱 -->
-
-
-<!-- ═══════════════════════════════════════
-     SIM 2 — 빽통 APP (준비 중)
-════════════════════════════════════════ -->
-<div class="sim-section sim-app" id="sim-빽통앱">
-  <div class="phone-area">
-    <div class="phone-frame">
-      <div class="phone-inner" style="display:flex;align-items:center;justify-content:center;background:#f8f8f8;">
-        <div style="text-align:center;padding:24px;">
-          <div style="font-size:48px;margin-bottom:16px;">📱</div>
-          <div style="font-size:16px;font-weight:700;color:#333;margin-bottom:8px;">빽통 APP</div>
-          <div style="font-size:13px;color:#aaa;line-height:1.6;">시뮬레이션 준비 중입니다.<br>이미지를 빽통앱/ 폴더에<br>추가하면 시작할 수 있습니다.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="info-panel">
-    <div class="panel-card">
-      <div class="card-title">안내</div>
-      <div style="font-size:13px;color:#888;line-height:1.8;">
-        빽통 APP 시뮬레이션은 준비 중입니다.<br>
-        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">빽통앱/</code> 폴더에 이미지와 flow.json을 추가해주세요.
-      </div>
-    </div>
-  </div>
-</div><!-- /sim-빽통앱 -->
-
-
-<!-- ═══════════════════════════════════════
-     SIM 3 — 빽통 PC (준비 중)
-════════════════════════════════════════ -->
-<div class="sim-section sim-pc" id="sim-빽통PC">
-  <div class="pc-area">
-    <div class="pc-frame">
-      <div class="pc-titlebar">
-        <div class="pc-tb-dots">
-          <div class="pc-tb-dot red"></div>
-          <div class="pc-tb-dot yellow"></div>
-          <div class="pc-tb-dot green"></div>
-        </div>
-        <div class="pc-tb-title">빽통 PC 시뮬레이터</div>
-      </div>
-      <div class="pc-content">
-        <div class="pc-placeholder">
-          <div class="icon">🖥️</div>
-          <div class="title">빽통 PC</div>
-          <div class="sub">시뮬레이션 준비 중입니다.<br><code style="background:#e8e8e8;padding:2px 6px;border-radius:4px;font-size:12px;">빽통PC/</code> 폴더에 이미지를 추가해주세요.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="info-panel">
-    <div class="panel-card">
-      <div class="card-title">안내</div>
-      <div style="font-size:13px;color:#888;line-height:1.8;">
-        빽통 PC 시뮬레이션은 준비 중입니다.<br>
-        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">빽통PC/</code> 폴더에 이미지와 flow.json을 추가해주세요.
-      </div>
-    </div>
-  </div>
-</div><!-- /sim-빽통PC -->
-
-
-<!-- ═══════════════════════════════════════
-     SIM 4 — 채널톡 (준비 중)
-════════════════════════════════════════ -->
-<div class="sim-section sim-pc" id="sim-채널톡">
-  <div class="pc-area">
-    <div class="pc-frame">
-      <div class="pc-titlebar">
-        <div class="pc-tb-dots">
-          <div class="pc-tb-dot red"></div>
-          <div class="pc-tb-dot yellow"></div>
-          <div class="pc-tb-dot green"></div>
-        </div>
-        <div class="pc-tb-title">채널톡 시뮬레이터</div>
-      </div>
-      <div class="pc-content">
-        <div class="pc-placeholder">
-          <div class="icon">💬</div>
-          <div class="title">채널톡</div>
-          <div class="sub">시뮬레이션 준비 중입니다.<br><code style="background:#e8e8e8;padding:2px 6px;border-radius:4px;font-size:12px;">채널톡/</code> 폴더에 이미지를 추가해주세요.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="info-panel">
-    <div class="panel-card">
-      <div class="card-title">안내</div>
-      <div style="font-size:13px;color:#888;line-height:1.8;">
-        채널톡 시뮬레이션은 준비 중입니다.<br>
-        <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">채널톡/</code> 폴더에 이미지와 flow.json을 추가해주세요.
-      </div>
-    </div>
-  </div>
-</div><!-- /sim-채널톡 -->
-
-
-<!-- gear (차주앱 전용) -->
-<button class="gear-btn" id="gearBtn">⚙️</button>
+</div><!-- /main-layout -->
 
 <!-- 비밀번호 모달 -->
 <div class="modal-bg" id="pwModal">
   <div class="modal">
     <div class="modal-title">🔐 관리자 비밀번호</div>
-    <div class="form-row">
-      <input type="password" class="form-input" id="pwInput" placeholder="비밀번호">
-    </div>
+    <div class="form-row"><input type="password" class="form-input" id="pwInput" placeholder="비밀번호"></div>
     <p id="pwErr" style="color:#f44;font-size:13px;display:none">비밀번호가 올바르지 않습니다.</p>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('pwModal')">취소</button>
@@ -585,7 +350,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<!-- 핫스팟 대상 모달 -->
+<!-- 핫스팟 모달 -->
 <div class="modal-bg" id="hsModal">
   <div class="modal">
     <div class="modal-title">핫스팟 설정</div>
@@ -605,185 +370,238 @@ textarea.form-input{resize:vertical;}
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// NAV SWITCHING
-// ══════════════════════════════════════════
-const navMenus = document.querySelectorAll('.nav-menu');
-let currentSim = '차주앱';
-
-navMenus.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const sim = btn.dataset.sim;
-    switchSim(sim);
-  });
-});
-
-function switchSim(sim) {
-  currentSim = sim;
-  // 메뉴 active
-  navMenus.forEach(b => b.classList.toggle('active', b.dataset.sim === sim));
-  // 섹션 active
-  document.querySelectorAll('.sim-section').forEach(s => s.classList.remove('active'));
-  const section = document.getElementById('sim-' + sim);
-  if(section) section.classList.add('active');
-  // gear 버튼: 차주앱 전용
-  document.getElementById('gearBtn').classList.toggle('hidden', sim !== '차주앱');
-}
-
-// 상단 관리자 버튼 → 차주앱 전환 후 관리자 팝업
-document.getElementById('topAdminBtn').addEventListener('click', () => {
-  if(S && S.admin) {
-    exitAdmin();
-  } else {
-    if(currentSim !== '차주앱') switchSim('차주앱');
-    openModal('pwModal');
-    setTimeout(() => document.getElementById('pwInput').focus(), 60);
-  }
-});
-
-// ══════════════════════════════════════════
-// State
-// ══════════════════════════════════════════
-const S = {
-  flow: null,
-  cur: null,
-  hist: [],
-  admin: false,
-  drawing: false,
-  drawStart: null,
-  pendingHs: null,
+// ═══════════════════════════════════════════
+// SECTION CONFIG
+// ═══════════════════════════════════════════
+const SECS = {
+  '차주앱': { type:'app', flowUrl:'차주앱/flow.json' },
+  '빽통앱': { type:'app', flowUrl:'빽통앱/flow.json' },
+  '빽통PC': { type:'pc',  flowUrl:'빽통PC/flow.json', title:'빽통 PC 시뮬레이터' },
+  '채널톡': { type:'pc',  flowUrl:'채널톡/flow.json', title:'채널톡 시뮬레이터' },
 };
 
-// ══════════════════════════════════════════
-// Boot
-// ══════════════════════════════════════════
-async function boot() {
-  try {
-    const r = await fetch('차주앱/flow.json?_=' + Date.now());
-    S.flow = await r.json();
-  } catch(e) {
-    S.flow = {
-      imageManifest: [],
-      screens: {
-        main: { label:'메인화면', image:'차주앱/메인화면.jpg', type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} }
-      },
-      start: 'main'
-    };
-  }
-  tick();
-  setInterval(tick, 1000);
-  renderList();
-  detectUnreg();
-  goTo(S.flow.start || Object.keys(S.flow.screens)[0], true);
+// Per-section state cache
+const cache = {};
+Object.keys(SECS).forEach(k => { cache[k] = { flow:null, cur:null, hist:[] }; });
 
-  document.getElementById('navBack').onclick = goBack;
-  document.getElementById('navHome').onclick = goHome;
-  document.getElementById('gearBtn').onclick = gearClick;
+let activeSec = '차주앱';
+let adminMode = false;
+let drawing = false, drawStart = null, pendingHs = null;
+let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+async function boot() {
+  tick(); setInterval(tick, 1000);
+
+  // Nav switching
+  document.querySelectorAll('.nav-menu').forEach(btn => {
+    btn.addEventListener('click', () => switchSec(btn.dataset.sim));
+  });
+
+  // Admin button
+  document.getElementById('topAdminBtn').addEventListener('click', () => {
+    if(adminMode) exitAdmin();
+    else { openModal('pwModal'); setTimeout(()=>document.getElementById('pwInput').focus(), 60); }
+  });
+
   document.getElementById('pwInput').onkeydown = e => { if(e.key==='Enter') submitPw(); };
   document.getElementById('btnDraw').onclick = startDraw;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
   document.getElementById('btnExport').onclick = exportFlow;
   document.getElementById('searchBox').oninput = renderList;
-  document.getElementById('popupOverlay').onclick = function(e) {
-    if(e.target === this) closePopup();
-  };
-  setupDrawEvents();
+  document.getElementById('popupOverlay').onclick = function(e) { if(e.target===this) closePopup(); };
   document.querySelectorAll('.modal-bg').forEach(el => {
     el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
   });
+
+  setupDrawEvents('drawOverlay', 'drawRect');
+  setupDrawEvents('pcDrawOverlay', 'pcDrawRect');
+
+  // Load first section
+  await loadSec('차주앱');
+  applySec('차주앱');
 }
 
-// ══════════════════════════════════════════
-// Clock
-// ══════════════════════════════════════════
-function tick() {
-  const d = new Date();
-  const h = String(d.getHours()).padStart(2,'0');
-  const m = String(d.getMinutes()).padStart(2,'0');
-  document.getElementById('statusTime').textContent = h+':'+m;
+// ═══════════════════════════════════════════
+// SECTION SWITCHING
+// ═══════════════════════════════════════════
+async function switchSec(name) {
+  if(name === activeSec) return;
+  if(drawing) cancelDraw();
+
+  activeSec = name;
+  document.querySelectorAll('.nav-menu').forEach(b => b.classList.toggle('active', b.dataset.sim===name));
+
+  await loadSec(name);
+  applySec(name);
 }
 
-// ══════════════════════════════════════════
-// Navigation
-// ══════════════════════════════════════════
+async function loadSec(name) {
+  if(cache[name].flow) return; // already loaded
+  try {
+    const r = await fetch(SECS[name].flowUrl + '?_=' + Date.now());
+    cache[name].flow = await r.json();
+    if(!cache[name].cur) cache[name].cur = cache[name].flow.start;
+  } catch(e) {
+    cache[name].flow = { imageManifest:[], screens:{}, start:null };
+    console.warn('flow.json 로드 실패:', name, e);
+  }
+}
+
+function applySec(name) {
+  const sec = SECS[name];
+  const st = cache[name];
+
+  // Phone vs PC 표시
+  document.getElementById('phoneArea').style.display = sec.type==='app' ? '' : 'none';
+  document.getElementById('pcArea').classList.toggle('visible', sec.type==='pc');
+
+  if(sec.type === 'pc') {
+    document.getElementById('pcTitle').textContent = sec.title||name;
+    document.getElementById('pcPlaceholderTitle').textContent = name;
+  }
+
+  if(st.cur && st.flow.screens[st.cur]) {
+    renderScreen(name, st.cur);
+  } else if(st.flow.start && st.flow.screens[st.flow.start]) {
+    st.cur = st.flow.start;
+    renderScreen(name, st.cur);
+  } else {
+    showPcPlaceholder(true);
+  }
+
+  renderBreadcrumb();
+  renderList();
+  renderGuide(st.flow.screens?.[st.cur]?.guide);
+  detectUnreg();
+  if(adminMode) { renderHsList(); renderGuideEditor(); }
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
 function goTo(id, init=false) {
-  const scr = S.flow.screens[id];
+  const st = cache[activeSec];
+  const scr = st.flow.screens[id];
   if(!scr) return;
-  if(scr.type === 'popup' && !init) { showPopup(id); return; }
-  if(!init && S.cur) S.hist.push(S.cur);
-  S.cur = id;
-  renderPhone(scr);
+
+  if(scr.type==='popup' && !init) { showPopup(id); return; }
+  if(!init && st.cur) st.hist.push(st.cur);
+  st.cur = id;
+
+  renderScreen(activeSec, id);
   renderBreadcrumb();
   renderGuide(scr.guide);
   renderList();
-  if(S.admin) { renderHsList(); renderGuideEditor(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); }
 }
 
 function goBack() {
-  if(document.getElementById('popupOverlay').classList.contains('active')) {
-    closePopup(); return;
-  }
-  if(S.hist.length > 0) {
-    S.cur = S.hist.pop();
-    const scr = S.flow.screens[S.cur];
-    renderPhone(scr);
+  if(document.getElementById('popupOverlay').classList.contains('active')) { closePopup(); return; }
+  const st = cache[activeSec];
+  if(st.hist.length > 0) {
+    st.cur = st.hist.pop();
+    renderScreen(activeSec, st.cur);
     renderBreadcrumb();
-    renderGuide(scr.guide);
+    renderGuide(st.flow.screens[st.cur]?.guide);
     renderList();
-    if(S.admin) { renderHsList(); renderGuideEditor(); }
+    if(adminMode) { renderHsList(); renderGuideEditor(); }
   }
 }
 
 function goHome() {
   closePopup();
-  S.hist = [];
-  goTo(S.flow.start, true);
-}
-
-function jumpHist(idx) {
-  const path = [...S.hist, S.cur];
-  S.hist = path.slice(0, idx);
-  S.cur = path[idx];
-  const scr = S.flow.screens[S.cur];
-  renderPhone(scr);
+  const st = cache[activeSec];
+  st.hist = [];
+  st.cur = st.flow.start;
+  renderScreen(activeSec, st.cur);
   renderBreadcrumb();
-  renderGuide(scr.guide);
+  renderGuide(st.flow.screens[st.cur]?.guide);
   renderList();
 }
 
-// ══════════════════════════════════════════
-// Phone rendering
-// ══════════════════════════════════════════
-function renderPhone(scr) {
-  const ca = document.getElementById('contentArea');
-  const img = document.getElementById('screenImg');
-  const nb = document.getElementById('navbarBar');
-  ca.classList.toggle('scroll-mode', scr.type === 'scroll');
-  ca.scrollTop = 0;
-  img.src = scr.image;
-  img.onload = () => renderHotspots(scr.hotspots || []);
-  nb.style.display = scr.show_navbar === false ? 'none' : 'block';
-  if(!S.drawing) document.getElementById('drawOverlay').classList.remove('active');
+function jumpHist(idx) {
+  const st = cache[activeSec];
+  const path = [...st.hist, st.cur];
+  st.hist = path.slice(0, idx);
+  st.cur = path[idx];
+  renderScreen(activeSec, st.cur);
+  renderBreadcrumb();
+  renderGuide(st.flow.screens[st.cur]?.guide);
+  renderList();
 }
 
-function renderHotspots(hotspots) {
-  const layer = document.getElementById('hotspotLayer');
+// ═══════════════════════════════════════════
+// RENDER SCREEN
+// ═══════════════════════════════════════════
+function renderScreen(secName, id) {
+  const sec = SECS[secName];
+  const scr = cache[secName].flow.screens[id];
+  if(!scr) return;
+
+  if(sec.type === 'app') {
+    renderPhoneScreen(scr);
+  } else {
+    renderPcScreen(scr);
+  }
+}
+
+function renderPhoneScreen(scr) {
+  const ca = document.getElementById('contentArea');
+  const img = document.getElementById('screenImg');
+  const nb = document.getElementById('cssNavbar');
+
+  ca.classList.toggle('scroll-mode', scr.type==='scroll');
+  ca.scrollTop = 0;
+  img.src = scr.image;
+  img.onload = () => renderHotspots('hotspotLayer', scr.hotspots||[], false);
+  nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
+  if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function renderPcScreen(scr) {
+  const img = document.getElementById('pcScreenImg');
+  const placeholder = document.getElementById('pcPlaceholder');
+  const wrapper = document.getElementById('pcImageWrapper');
+
+  showPcPlaceholder(false);
+  img.style.display = 'block';
+  img.src = scr.image;
+  wrapper.scrollTop = 0;
+  img.onload = () => renderHotspots('pcHotspotLayer', scr.hotspots||[], false);
+  if(!drawing) document.getElementById('pcDrawOverlay').classList.remove('active');
+}
+
+function showPcPlaceholder(show) {
+  document.getElementById('pcPlaceholder').style.display = show ? 'flex' : 'none';
+  document.getElementById('pcScreenImg').style.display = show ? 'none' : 'block';
+}
+
+// ═══════════════════════════════════════════
+// HOTSPOTS
+// ═══════════════════════════════════════════
+function renderHotspots(layerId, hotspots, forceAdmin) {
+  const layer = document.getElementById(layerId);
   layer.innerHTML = '';
+  const isAdmin = forceAdmin || adminMode;
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
-    el.className = 'hotspot ' + (S.admin ? 'admin-mode' : 'normal-mode');
+    el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : 'normal-mode');
     el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
     const lbl = document.createElement('span');
     lbl.className = 'hotspot-label';
     lbl.textContent = (hs.label||'') + ' → ' + hs.goto;
     el.appendChild(lbl);
-    if(S.admin) {
+    if(isAdmin) {
       el.addEventListener('click', e => {
         e.stopPropagation();
         if(confirm(`핫스팟 "${hs.label||hs.goto}" 을(를) 삭제하시겠습니까?`)) {
-          S.flow.screens[S.cur].hotspots.splice(i,1);
-          renderHotspots(S.flow.screens[S.cur].hotspots);
+          const st = cache[activeSec];
+          st.flow.screens[st.cur].hotspots.splice(i,1);
+          renderHotspots(layerId, st.flow.screens[st.cur].hotspots, false);
           renderHsList();
         }
       });
@@ -794,70 +612,314 @@ function renderHotspots(hotspots) {
   });
 }
 
-// ══════════════════════════════════════════
-// Popup
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// POPUP
+// ═══════════════════════════════════════════
 function showPopup(id) {
-  const scr = S.flow.screens[id];
-  const overlay = document.getElementById('popupOverlay');
+  const scr = cache[activeSec].flow.screens[id];
   const img = document.getElementById('popupImg');
-  const layer = document.getElementById('popupHsLayer');
   img.src = scr.image;
-  img.onload = () => {
-    layer.innerHTML = '';
-    (scr.hotspots||[]).forEach(hs => {
-      const el = document.createElement('div');
-      el.className = 'hotspot normal-mode';
-      el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
-      el.addEventListener('click', e => { e.stopPropagation(); goTo(hs.goto); });
-      layer.appendChild(el);
-    });
-  };
-  overlay.classList.add('active');
+  img.onload = () => renderHotspots('popupHsLayer', scr.hotspots||[], false);
+  document.getElementById('popupOverlay').classList.add('active');
 }
-
 function closePopup() {
   document.getElementById('popupOverlay').classList.remove('active');
 }
 
-// ══════════════════════════════════════════
-// Breadcrumb
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// BREADCRUMB
+// ═══════════════════════════════════════════
 function renderBreadcrumb() {
+  const st = cache[activeSec];
   const el = document.getElementById('breadcrumb');
-  const path = [...S.hist, S.cur];
+  const path = [...st.hist, st.cur].filter(Boolean);
   el.innerHTML = path.map((id,i) => {
-    const scr = S.flow.screens[id];
+    const scr = st.flow.screens?.[id];
     const lbl = scr ? scr.label : id;
-    if(i === path.length-1) return `<span class="bc-cur">${esc(lbl)}</span>`;
+    if(i===path.length-1) return `<span class="bc-cur">${esc(lbl)}</span>`;
     return `<span class="bc-item" onclick="jumpHist(${i})">${esc(lbl)}</span><span class="bc-sep"> › </span>`;
   }).join('');
 }
 
-// ══════════════════════════════════════════
-// Screen list
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// SCREEN LIST
+// ═══════════════════════════════════════════
 function renderList() {
   const q = document.getElementById('searchBox').value.toLowerCase();
   const el = document.getElementById('screenList');
+  const st = cache[activeSec];
   el.innerHTML = '';
-  Object.entries(S.flow.screens).forEach(([id, scr]) => {
+  if(!st.flow.screens) return;
+  Object.entries(st.flow.screens).forEach(([id, scr]) => {
     if(q && !scr.label.toLowerCase().includes(q) && !id.includes(q)) return;
     const btn = document.createElement('button');
-    btn.className = 'screen-btn' + (id===S.cur?' active':'');
+    btn.className = 'screen-btn' + (id===st.cur?' active':'');
     btn.textContent = scr.label;
     btn.title = id;
-    btn.onclick = () => { S.hist=[]; goTo(id,true); };
+    btn.onclick = () => { cache[activeSec].hist=[]; goTo(id,true); };
     el.appendChild(btn);
   });
 }
 
-// ══════════════════════════════════════════
-// Guide
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// GUIDE
+// ═══════════════════════════════════════════
 function renderGuide(g) {
   const el = document.getElementById('guideContent');
   if(!g) { el.innerHTML = '<div class="guide-empty">가이드 없음</div>'; return; }
   let html = '';
-  if(g.points && g.points.length) {
-    html += '<ul class="guide-points">' + g.points.map(p=>`<li>$
+  if(g.points?.length) html += '<ul class="guide-points">' + g.points.map(p=>`<li>${esc(p)}</li>`).join('') + '</ul>';
+  if(g.caution) html += `<div class="guide-caution">${esc(g.caution)}</div>`;
+  if(g.kms_link) html += `<div class="guide-kms"><a href="${esc(g.kms_link)}" target="_blank">KMS 바로가기</a></div>`;
+  if(!html) html = '<div class="guide-empty">등록된 가이드가 없습니다.<br><small style="color:#ccc">관리자 모드에서 추가하세요.</small></div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════
+function tick() {
+  const d = new Date();
+  document.getElementById('statusTime').textContent =
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+// ═══════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════
+function submitPw() {
+  if(document.getElementById('pwInput').value === 'hmm0424!') {
+    document.getElementById('pwInput').value = '';
+    closeModal('pwModal');
+    enterAdmin();
+  } else {
+    document.getElementById('pwErr').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function enterAdmin() {
+  adminMode = true;
+  document.getElementById('adminPanel').style.display = 'block';
+  document.getElementById('topAdminBtn').classList.add('on');
+  document.getElementById('topAdminBtn').textContent = '🔓 관리자 모드 ON';
+  const st = cache[activeSec];
+  const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
+  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], true);
+  renderHsList();
+  renderGuideEditor();
+}
+
+function exitAdmin() {
+  adminMode = false;
+  if(drawing) cancelDraw();
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('topAdminBtn').classList.remove('on');
+  document.getElementById('topAdminBtn').textContent = '🔐 관리자 로그인';
+  const st = cache[activeSec];
+  const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
+  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], false);
+}
+
+function renderHsList() {
+  const st = cache[activeSec];
+  const hs = st.flow.screens?.[st.cur]?.hotspots || [];
+  const el = document.getElementById('hsList');
+  if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
+  el.innerHTML = hs.map((h,i) => `
+    <div class="hs-item">
+      <span>${esc(h.label||'(없음)')} → ${esc(h.goto)}</span>
+      <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
+    </div>`).join('');
+}
+
+function delHs(i) {
+  const st = cache[activeSec];
+  st.flow.screens[st.cur].hotspots.splice(i,1);
+  const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
+  renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
+  renderHsList();
+}
+
+function renderGuideEditor() {
+  const st = cache[activeSec];
+  const g = st.flow.screens?.[st.cur]?.guide || {points:[],caution:'',kms_link:''};
+  document.getElementById('guideEditor').innerHTML = `
+    <div class="form-row">
+      <div class="form-label">💡 상담 포인트 (한 줄에 하나)</div>
+      <textarea class="form-input" id="editPoints" rows="4">${esc((g.points||[]).join('\n'))}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-label">⚠️ 주의사항</div>
+      <input class="form-input" id="editCaution" value="${esc(g.caution||'')}">
+    </div>
+    <div class="form-row">
+      <div class="form-label">🔗 KMS 링크</div>
+      <input class="form-input" id="editKms" value="${esc(g.kms_link||'')}">
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="saveGuide()">저장</button>
+  `;
+}
+
+function saveGuide() {
+  const st = cache[activeSec];
+  st.flow.screens[st.cur].guide = {
+    points: document.getElementById('editPoints').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    caution: document.getElementById('editCaution').value.trim(),
+    kms_link: document.getElementById('editKms').value.trim(),
+  };
+  renderGuide(st.flow.screens[st.cur].guide);
+  const btn = document.querySelector('#guideEditor .btn');
+  btn.textContent = '✓ 저장됨!';
+  setTimeout(()=>btn.textContent='저장', 1500);
+}
+
+function addScreen() {
+  const id = document.getElementById('newId').value.trim();
+  const label = document.getElementById('newLabel').value.trim();
+  const image = document.getElementById('newImage').value.trim();
+  const type = document.getElementById('newType').value;
+  const showNav = document.getElementById('newNavbar').checked;
+  if(!id||!label||!image) { alert('ID, 라벨, 이미지 파일명을 모두 입력하세요.'); return; }
+  const st = cache[activeSec];
+  if(st.flow.screens[id]) { alert(`"${id}" ID가 이미 존재합니다.`); return; }
+  st.flow.screens[id] = { label, image, type, show_navbar:showNav, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
+  ['newId','newLabel','newImage'].forEach(i=>document.getElementById(i).value='');
+  renderList(); detectUnreg();
+  alert(`"${label}" 화면이 추가되었습니다.`);
+}
+
+function exportFlow() {
+  const st = cache[activeSec];
+  const blob = new Blob([JSON.stringify(st.flow, null, 2)], {type:'application/json'});
+  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:`${activeSec}-flow.json`});
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ═══════════════════════════════════════════
+// DRAW (hotspot creation)
+// ═══════════════════════════════════════════
+function setupDrawEvents(overlayId, rectId) {
+  const overlay = document.getElementById(overlayId);
+  const rect = document.getElementById(rectId);
+  let isDown = false;
+
+  overlay.addEventListener('mousedown', e => {
+    if(!drawing || activeDrawOverlayId !== overlayId) return;
+    isDown = true;
+    const b = overlay.getBoundingClientRect();
+    drawStart = { x: e.clientX - b.left, y: e.clientY - b.top };
+    rect.style.cssText = `display:block;left:${drawStart.x}px;top:${drawStart.y}px;width:0;height:0;`;
+  });
+
+  overlay.addEventListener('mousemove', e => {
+    if(!isDown || !drawStart) return;
+    const b = overlay.getBoundingClientRect();
+    const cx=e.clientX-b.left, cy=e.clientY-b.top;
+    const l=Math.min(cx,drawStart.x), t=Math.min(cy,drawStart.y);
+    const w=Math.abs(cx-drawStart.x), h=Math.abs(cy-drawStart.y);
+    rect.style.cssText = `display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px;`;
+  });
+
+  overlay.addEventListener('mouseup', e => {
+    if(!isDown || !drawStart) return;
+    isDown = false;
+    const b = overlay.getBoundingClientRect();
+    const cx=e.clientX-b.left, cy=e.clientY-b.top;
+    const l=Math.min(cx,drawStart.x), t=Math.min(cy,drawStart.y);
+    const w=Math.abs(cx-drawStart.x), h=Math.abs(cy-drawStart.y);
+    drawStart = null;
+    if(w<10||h<6) return;
+    pendingHs = {
+      top: round1(t/b.height*100), left: round1(l/b.width*100),
+      width: round1(w/b.width*100), height: round1(h/b.height*100),
+    };
+    const sel = document.getElementById('hsGoto');
+    const st = cache[activeSec];
+    sel.innerHTML = Object.entries(st.flow.screens)
+      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
+    document.getElementById('hsLabelInput').value = '';
+    openModal('hsModal');
+  });
+}
+
+function startDraw() {
+  drawing = true;
+  activeDrawOverlayId = SECS[activeSec].type==='pc' ? 'pcDrawOverlay' : 'drawOverlay';
+  document.getElementById(activeDrawOverlayId).classList.add('active');
+  document.getElementById('btnDraw').style.display = 'none';
+  document.getElementById('btnCancelDraw').style.display = 'inline-block';
+}
+
+function cancelDraw() {
+  drawing = false; drawStart = null; pendingHs = null;
+  ['drawOverlay','pcDrawOverlay'].forEach(id => document.getElementById(id).classList.remove('active'));
+  ['drawRect','pcDrawRect'].forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('btnDraw').style.display = 'inline-block';
+  document.getElementById('btnCancelDraw').style.display = 'none';
+  closeModal('hsModal');
+}
+
+function confirmHs() {
+  if(!pendingHs) return;
+  const goto = document.getElementById('hsGoto').value;
+  const label = document.getElementById('hsLabelInput').value.trim() || goto;
+  const st = cache[activeSec];
+  if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
+  st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto });
+  pendingHs = null;
+  cancelDraw();
+  const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
+  renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
+  renderHsList();
+}
+
+// ═══════════════════════════════════════════
+// UNREGISTERED IMAGES
+// ═══════════════════════════════════════════
+function detectUnreg() {
+  const st = cache[activeSec];
+  const manifest = st.flow.imageManifest || [];
+  const used = new Set(Object.values(st.flow.screens||{}).map(s=>s.image));
+  const unreg = manifest.filter(f => !used.has(f));
+  const card = document.getElementById('unregCard');
+  if(!unreg.length) { card.style.display='none'; return; }
+  card.style.display = 'block';
+  document.getElementById('unregList').innerHTML = unreg.map(f => `
+    <div class="unreg-item" onclick="quickReg('${esc(f)}')">
+      <span>${esc(f)}</span><small style="color:#888">클릭하여 등록</small>
+    </div>`).join('');
+}
+
+function quickReg(filename) {
+  if(!adminMode) { alert('관리자 모드에서 등록할 수 있습니다.'); return; }
+  const label = filename.replace(/^[^/]+\//,'').replace(/\.(jpg|jpeg|png|webp)$/i,'').replace(/_/g,' ');
+  const id = activeSec.replace(' ','') + '_' + label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'').slice(0,20);
+  document.getElementById('newImage').value = filename;
+  document.getElementById('newLabel').value = label;
+  document.getElementById('newId').value = id;
+  document.getElementById('adminPanel').scrollIntoView({behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  if(id==='pwModal') document.getElementById('pwErr').style.display='none';
+}
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function round1(n) { return Math.round(n*10)/10; }
+
+boot();
+</script>
+</body>
+</html>
