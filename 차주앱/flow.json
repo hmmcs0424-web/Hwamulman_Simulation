@@ -75,7 +75,7 @@
                                   "label":  "로그인",
                                   "image":  "차주앱/차주앱_로그인.jpg",
                                   "type":  "normal",
-                                  "show_navbar":  false,
+                                  "show_navbar":  true,
                                   "hotspots":  [
 
                                                ],
