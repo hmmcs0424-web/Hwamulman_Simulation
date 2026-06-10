@@ -79,19 +79,27 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .popup-image-wrap{width:100%;cursor:auto;position:relative;}
 .popup-image-wrap img{width:100%;display:block;}
 
-/* CSS 네비게이션 바 (이미지 대체) */
+/* CSS 네비게이션 바 - 안드로이드 스타일 */
 .css-navbar{
-  flex-shrink:0;height:52px;background:#111;
+  flex-shrink:0;height:48px;background:#000;
   display:flex;align-items:center;justify-content:space-around;
-  border-top:1px solid #222;
+  padding:0 24px;
 }
 .css-navbar button{
   background:none;border:none;cursor:pointer;
-  color:#ccc;font-size:20px;padding:8px 20px;
-  border-radius:8px;transition:background .12s;
-  line-height:1;
+  color:#bbb;padding:8px 24px;
+  border-radius:6px;transition:background .12s;
+  line-height:1;display:flex;align-items:center;justify-content:center;
 }
-.css-navbar button:hover{background:#2a2a2a;}
+.css-navbar button:hover{background:rgba(255,255,255,.1);}
+.css-navbar button:active{background:rgba(255,255,255,.18);}
+/* 최근앱 아이콘 (||| 세 줄) */
+.nav-recent{display:flex;gap:3px;align-items:center;}
+.nav-recent span{display:block;width:2.5px;height:14px;background:#bbb;border-radius:2px;}
+/* 홈 아이콘 (○ 원) */
+.nav-home{width:20px;height:20px;border:2px solid #bbb;border-radius:50%;}
+/* 뒤로 아이콘 (‹ 꺾쇠) */
+.nav-back{font-size:22px;font-weight:300;color:#bbb;line-height:1;}
 
 /* ── PC FRAME (공통) ── */
 .pc-area{
@@ -294,11 +302,17 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
     </div>
-    <!-- CSS 네비게이션 바 -->
+    <!-- Android 네비게이션 바: 최근앱 | 홈 | 뒤로 -->
     <div class="css-navbar" id="cssNavbar">
-      <button onclick="goBack()" title="뒤로가기">‹</button>
-      <button onclick="goHome()" title="홈">○</button>
-      <button title="최근앱">▣</button>
+      <button title="최근앱">
+        <div class="nav-recent"><span></span><span></span><span></span></div>
+      </button>
+      <button onclick="goHome()" title="홈">
+        <div class="nav-home"></div>
+      </button>
+      <button onclick="goBack()" title="뒤로가기">
+        <span class="nav-back">‹</span>
+      </button>
     </div>
   </div>
   </div>
