@@ -945,6 +945,31 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<!-- 채널톡 핫스팟: 이동할 화면(이미지) 선택 모달 -->
+<div class="modal-bg" id="cteHotModal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-title">🔗 클릭 시 이동할 화면 선택</div>
+    <div class="form-row">
+      <div class="form-label">이동할 화면(스텝)</div>
+      <select class="form-input" id="cteHotGotoSel" onchange="cteHotPickerPreview()"></select>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:4px;">
+      <div style="flex:1;text-align:center;">
+        <div style="font-size:11px;color:#888;margin-bottom:5px;">📱 고객 (차주앱)</div>
+        <img id="cteHotPrevCust" alt="" style="width:100%;height:150px;object-fit:cover;object-position:top;border-radius:8px;border:1px solid #e2e2e2;background:#f5f5f5;">
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div style="font-size:11px;color:#888;margin-bottom:5px;">🖥 상담사 (채널톡)</div>
+        <img id="cteHotPrevAgent" alt="" style="width:100%;height:150px;object-fit:contain;object-position:top;border-radius:8px;border:1px solid #e2e2e2;background:#f5f5f5;">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="cteHotCancel()">취소</button>
+      <button class="btn btn-primary" onclick="cteHotConfirm()">이 화면으로 설정</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -2473,8 +2498,11 @@ function cteItBindSvg() {
           st.temp=null; cteItRedraw(panel, anns); cteRenderRegionsFor(panel); cteRenderAdmPanel(); return;
         }
         if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
-          const goto = cteAskGoto();
-          if(goto!=null) anns.push({type:'hotspot',x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),goto});
+          // 차주앱과 동일: 이동할 화면을 썸네일 드롭다운으로 선택
+          st.temp=null;
+          cteOpenHotPicker(panel, cfg.field, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)});
+          cteItRedraw(panel, anns);
+          return;
         }
         else if(r.x1!=null&&(Math.abs(r.x2-r.x1)>1||Math.abs(r.y2-r.y1)>1)) anns.push({type:'arrow',x1:round1(r.x1),y1:round1(r.y1),x2:round1(r.x2),y2:round1(r.y2),color:st.color});
         else if(r.w!=null&&r.w>1&&r.h>1) anns.push({type:'box',x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),color:st.color});
@@ -2504,15 +2532,42 @@ function cteItSelect(panel, i) {
   const field = panel==='phone'?'customerAnnotations':'agentAnnotations';
   cteItRedraw(panel, cteStep()[field]||[]);
 }
-function cteAskGoto() {
+// ─── 핫스팟 이동 화면 선택 모달 (차주앱과 동일한 화면 선택 방식) ───
+let cteHotPending = null; // {panel, field, rect}
+function cteOpenHotPicker(panel, field, rect) {
+  cteHotPending = { panel, field, rect };
   const steps = cteConfig.tabs[cteCurTab].steps;
-  const list = steps.map((s,i)=>`${i+1}. ${s.label}`).join('\n');
-  const def = String(Math.min(cteCurStep+2, steps.length));
-  const ans = prompt('이 영역을 클릭하면 이동할 스텝 번호를 입력하세요:\n\n'+list, def);
-  if(ans==null) return null;
-  const n = parseInt(ans,10)-1;
-  if(isNaN(n)||n<0||n>=steps.length){ alert('올바른 스텝 번호가 아닙니다.'); return null; }
-  return n;
+  const def = Math.min(cteCurStep+1, steps.length-1);
+  const sel = document.getElementById('cteHotGotoSel');
+  sel.innerHTML = steps.map((s,i)=>`<option value="${i}" ${i===def?'selected':''}>${i+1}. ${esc(s.label)}</option>`).join('');
+  cteHotPickerPreview();
+  openModal('cteHotModal');
+}
+function cteHotPickerPreview() {
+  const i = +document.getElementById('cteHotGotoSel').value;
+  const s = cteConfig.tabs[cteCurTab].steps[i];
+  const cust = document.getElementById('cteHotPrevCust');
+  const ag = document.getElementById('cteHotPrevAgent');
+  cust.src = s.customerImage || '';
+  cust.style.visibility = s.customerImage ? 'visible' : 'hidden';
+  if(s.agentMode==='chat'){ ag.src=''; ag.style.visibility='hidden'; }
+  else { ag.src = s.agentImage || ''; ag.style.visibility = s.agentImage ? 'visible' : 'hidden'; }
+}
+function cteHotConfirm() {
+  if(!cteHotPending) { closeModal('cteHotModal'); return; }
+  const { panel, field, rect } = cteHotPending;
+  const goto = +document.getElementById('cteHotGotoSel').value;
+  const step = cteStep();
+  const anns = step[field] || (step[field]=[]);
+  anns.push({ type:'hotspot', x:rect.x, y:rect.y, w:rect.w, h:rect.h, goto });
+  cteHotPending = null;
+  closeModal('cteHotModal');
+  cteItRedraw(panel, anns);
+  cteRenderAdmPanel();
+}
+function cteHotCancel() {
+  cteHotPending = null;
+  closeModal('cteHotModal');
 }
 
 // 편집 모드 SVG 렌더 (선택/임시 드래그 포함)
