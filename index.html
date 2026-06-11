@@ -386,6 +386,22 @@ textarea.form-input{resize:vertical;}
 .cte-img-wrap.cte-scroll .cte-img-scroll img{height:auto;object-fit:fill;}
 .cte-img-wrap::-webkit-scrollbar{width:9px;}
 .cte-img-wrap::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:5px;}
+/* ── 부분 스크롤 영역 (특정 영역에 긴 이미지) ── */
+.cte-region-layer{position:absolute;inset:0;pointer-events:none;z-index:2;}
+.cte-region{position:absolute;overflow-y:auto;overflow-x:hidden;pointer-events:auto;background:#fff;box-shadow:inset 0 0 0 1px #e5e7eb;}
+.cte-region img{width:100%;height:auto;display:block;}
+.cte-region::-webkit-scrollbar{width:8px;}
+.cte-region::-webkit-scrollbar-thumb{background:#9ca3af;border-radius:4px;}
+.cte-region::-webkit-scrollbar-track{background:#f1f5f9;}
+.cte-region.cte-region-edit{outline:2px dashed #22d3ee;outline-offset:-2px;}
+/* 편집 중: 영역 레이어를 SVG 위로 올리되, 영역 본체는 클릭 통과(드로잉 가능), 삭제 태그만 클릭 */
+.cte-region-layer.adm{z-index:6;}
+.cte-region-layer.adm .cte-region{pointer-events:none;}
+.cte-region-layer.adm .cte-region-tag{pointer-events:auto;}
+.cte-region-empty{display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;background:repeating-linear-gradient(45deg,#f8fafc,#f8fafc 6px,#eef2f6 6px,#eef2f6 12px);height:100%;text-align:center;padding:4px;}
+.cte-region-tag{position:absolute;top:0;right:0;background:#0891b2;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-bottom-left-radius:5px;z-index:5;pointer-events:auto;cursor:pointer;}
+.cte-region-tag:hover{background:#dc2626;}
+.cte-view-svg{z-index:4;}
 /* 핫스팟 (클릭 영역) */
 .cte-hot{cursor:pointer;transition:all .15s;}
 .cte-hot-view{fill:rgba(99,102,241,0);stroke:rgba(99,102,241,0);stroke-width:2;}
@@ -821,6 +837,7 @@ textarea.form-input{resize:vertical;}
           <!-- 인라인 어노테이션 툴바 (관리자 모드 전용) -->
           <div class="cte-it-bar" id="ctePhoneTB" style="display:none;">
             <button class="cte-it-btn cte-it-hot on" id="ctePhoneTool_hotspot" onclick="cteItTool('phone','hotspot')" title="클릭 영역 지정 (드래그→이동할 스텝)">🔗 영역</button>
+            <button class="cte-it-btn" id="ctePhoneTool_scroll" onclick="cteItTool('phone','scroll')" title="드래그한 영역에 긴 이미지를 넣어 스크롤">📜 스크롤</button>
             <div class="cte-it-sep"></div>
             <button class="cte-it-btn" id="ctePhoneTool_box" onclick="cteItTool('phone','box')">□</button>
             <button class="cte-it-btn" id="ctePhoneTool_text" onclick="cteItTool('phone','text')">T</button>
@@ -850,6 +867,7 @@ textarea.form-input{resize:vertical;}
               </div>
               <div class="content-area" id="ctePhoneContent" style="position:relative;">
                 <img id="cteCustomerImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+                <div class="cte-region-layer" id="ctePhoneRegions"></div>
                 <svg class="cte-view-svg" id="cteCustomerSvg"></svg>
                 <div class="cte-click-hint" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(99,102,241,.9);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:12px;opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;">탭하여 다음 →</div>
               </div>
@@ -874,6 +892,7 @@ textarea.form-input{resize:vertical;}
           <span class="cte-badge cte-badge-a">상담사</span> 채널톡 (PC)
           <div class="cte-it-bar" id="cteAgentTB" style="display:none;">
             <button class="cte-it-btn cte-it-hot on" id="cteAgentTool_hotspot" onclick="cteItTool('agent','hotspot')" title="클릭 영역 지정 (드래그→이동할 스텝)">🔗 영역</button>
+            <button class="cte-it-btn" id="cteAgentTool_scroll" onclick="cteItTool('agent','scroll')" title="드래그한 영역에 긴 이미지를 넣어 스크롤">📜 스크롤</button>
             <div class="cte-it-sep"></div>
             <button class="cte-it-btn" id="cteAgentTool_box" onclick="cteItTool('agent','box')">□</button>
             <button class="cte-it-btn" id="cteAgentTool_text" onclick="cteItTool('agent','text')">T</button>
@@ -898,6 +917,7 @@ textarea.form-input{resize:vertical;}
             <div class="cte-img-wrap" id="cteImgWrap" style="position:relative;">
               <div class="cte-img-scroll" id="cteImgScroll">
                 <img id="cteAgentImg" src="" alt="">
+                <div class="cte-region-layer" id="cteAgentRegions"></div>
                 <svg class="cte-view-svg" id="cteAgentSvg"></svg>
               </div>
             </div>
@@ -2062,11 +2082,12 @@ function cteRender() {
   // 스텝 카운터
   document.getElementById('cteStepCounter').textContent = `STEP ${cteCurStep+1} / ${steps.length}  —  ${step.label}`;
 
-  // 고객 이미지 + 어노테이션
+  // 고객 이미지 + 어노테이션 + 스크롤 영역
   const custImg = document.getElementById('cteCustomerImg');
-  custImg.src = step.customerImage || '';
   custImg.onload = () => { if(adminMode&&activeSec==='채널톡') cteItRedraw('phone', step.customerAnnotations||[]); else cteDrawViewAnns(document.getElementById('cteCustomerSvg'), step.customerAnnotations); };
+  custImg.src = step.customerImage || '';
   cteDrawViewAnns(document.getElementById('cteCustomerSvg'), step.customerAnnotations);
+  cteRenderRegions(document.getElementById('ctePhoneRegions'), step.customerScrollRegions, 'phone');
 
   // 폰 클릭 (전체 클릭 또는 핫스팟 존재 시 hover 힌트)
   const ps = document.getElementById('ctePhoneScreen');
@@ -2086,22 +2107,17 @@ function cteRender() {
     imgWrap.classList.remove('on');
     chatUI.classList.add('on');
     document.getElementById('cteAgentSvg').innerHTML='';
+    document.getElementById('cteAgentRegions').innerHTML='';
     cteRenderChat();
   } else {
     imgWrap.classList.add('on');
     chatUI.classList.remove('on');
-    imgWrap.classList.toggle('cte-scroll', !!step.agentScroll);
     const agImg = document.getElementById('cteAgentImg');
     const agSvg = document.getElementById('cteAgentSvg');
-    const syncAg = () => {
-      if(step.agentScroll){ agSvg.style.height = agImg.offsetHeight+'px'; agSvg.style.width = agImg.offsetWidth+'px'; }
-      else { agSvg.style.height=''; agSvg.style.width=''; }
-      if(adminMode&&activeSec==='채널톡') cteItRedraw('agent', step.agentAnnotations||[]);
-      else cteDrawViewAnns(agSvg, step.agentAnnotations);
-    };
-    agImg.onload = syncAg;
+    agImg.onload = () => { if(adminMode&&activeSec==='채널톡') cteItRedraw('agent', step.agentAnnotations||[]); else cteDrawViewAnns(agSvg, step.agentAnnotations); };
     agImg.src = step.agentImage || '';
-    if(agImg.complete) syncAg();
+    cteDrawViewAnns(agSvg, step.agentAnnotations);
+    cteRenderRegions(document.getElementById('cteAgentRegions'), step.agentScrollRegions, 'agent');
   }
 
   // 설명
@@ -2271,20 +2287,20 @@ function cteRenderAdmPanel() {
           ${cteImgOpts(CTE_CUSTOMER_IMGS, s.customerImage||'')}
         </select>
         ${cteHotListHtml('phone', cAnn, steps)}
+        ${cteRegionListHtml('phone', s.customerScrollRegions, CTE_CUSTOMER_IMGS)}
       </div>
       <div class="cte-adm-hcol grow">
-        <div class="cte-adm-flbl">🖥 상담사 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(aAnn)}</span>
-          ${s.agentMode==='image' ? `<label style="margin-left:8px;font-size:10px;color:#94a3b8;cursor:pointer;"><input type="checkbox" data-tab="${t}" data-step="${i}" data-field="agentScroll" ${s.agentScroll?'checked':''} onchange="cteHandleAdmChange({target:this});cteRender();"> 긴 이미지(스크롤)</label>`:''}
-        </div>
+        <div class="cte-adm-flbl">🖥 상담사 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(aAnn)}</span></div>
         <select class="cte-adm-sel" data-tab="${t}" data-step="${i}" data-field="agentImage" onchange="cteHandleAdmChange({target:this});cteRender();" ${s.agentMode==='chat'?'disabled style="opacity:.4"':''}>
           ${cteImgOpts(CTE_AGENT_IMGS, s.agentImage||'')}
         </select>
         ${s.agentMode==='image' ? cteHotListHtml('agent', aAnn, steps) : ''}
+        ${s.agentMode==='image' ? cteRegionListHtml('agent', s.agentScrollRegions, CTE_AGENT_IMGS) : ''}
       </div>
       <div class="cte-adm-hcol grow">
         <div class="cte-adm-flbl">설명 텍스트 (&lt;b&gt;강조&lt;/b&gt;)</div>
         <textarea class="cte-adm-ta" style="height:44px;" data-tab="${t}" data-step="${i}" data-field="desc">${esc(s.desc||'')}</textarea>
-        <div style="font-size:10px;color:#475569;margin-top:4px;line-height:1.5;">💡 위 이미지에서 <b style="color:#f59e0b;">🔗영역</b> 도구로 드래그하면 클릭 영역(이동) 설정, <b style="color:#a5b4fc;">□/T/↗</b>로 박스·텍스트·화살표 삽입.</div>
+        <div style="font-size:10px;color:#475569;margin-top:4px;line-height:1.45;">💡 <b style="color:#f59e0b;">🔗영역</b>=클릭 시 이동 / <b style="color:#22d3ee;">📜스크롤</b>=영역에 긴 이미지 / <b style="color:#a5b4fc;">□T↗</b>=박스·텍스트·화살표. 이미지 위에서 드래그하세요.</div>
       </div>
     </div>`;
 
@@ -2295,7 +2311,7 @@ function cteRenderAdmPanel() {
 }
 
 function cteAdmAddStep() {
-  cteConfig.tabs[cteCurTab].steps.push({label:'새 스텝',customerImage:'',agentMode:'image',agentImage:'',clickable:true,desc:'',customerAnnotations:[],agentAnnotations:[]});
+  cteConfig.tabs[cteCurTab].steps.push({label:'새 스텝',customerImage:'',agentMode:'image',agentImage:'',clickable:true,desc:'',customerAnnotations:[],agentAnnotations:[],customerScrollRegions:[],agentScrollRegions:[]});
   cteCurStep = cteConfig.tabs[cteCurTab].steps.length - 1;
   cteDynMsgs=[];
   cteRender();
@@ -2346,6 +2362,22 @@ function cteHotDel(panel, idx) {
   cteRenderAdmPanel();
 }
 
+// 스크롤 영역 목록 편집 HTML (영역에 넣을 긴 이미지 선택 / 삭제)
+function cteRegionListHtml(panel, regions, imgList) {
+  if(!regions||!regions.length) return '';
+  let h = '<div style="margin-top:5px;display:flex;flex-direction:column;gap:3px;">';
+  regions.forEach((r,idx)=>{
+    const opts = imgList.map(p=>`<option value="${esc(p)}" ${p===r.image?'selected':''}>${p||'-- 긴 이미지 선택 --'}</option>`).join('');
+    h+=`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#22d3ee;">
+      📜 영역${idx+1}
+      <select style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#e2e8f0;font-size:10px;padding:2px 4px;" onchange="cteRegionImg('${panel}',${idx},this.value)">${opts}</select>
+      <button class="cte-it-del" style="font-size:11px;padding:1px 5px;" onclick="cteRegionDel('${panel}',${idx})">✕</button>
+    </div>`;
+  });
+  h+='</div>';
+  return h;
+}
+
 // ─── 드래그 리사이저 ───
 function cteInitResizer() {
   const handle = document.getElementById('cteAdmResizer');
@@ -2371,7 +2403,7 @@ const cteItSt = {
 
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
-  ['hotspot','box','text','arrow'].forEach(t => {
+  ['hotspot','scroll','box','text','arrow'].forEach(t => {
     const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
     if(el) el.classList.toggle('on', t===tool);
   });
@@ -2455,6 +2487,12 @@ function cteItBindSvg() {
       const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]||(cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]=[]);
       if(st.temp){
         const r=st.temp;
+        if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
+          const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
+          const step2 = cteConfig.tabs[cteCurTab].steps[cteCurStep];
+          (step2[rf]||(step2[rf]=[])).push({x:r.x,y:r.y,w:r.w,h:r.h,image:''});
+          st.temp=null; cteItRedraw(panel, anns); cteRenderRegionsFor(panel); cteRenderAdmPanel(); return;
+        }
         if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
           const goto = cteAskGoto();
           if(goto!=null) anns.push({type:'hotspot',x:r.x,y:r.y,w:r.w,h:r.h,goto});
@@ -2510,11 +2548,56 @@ function cteItRedraw(panel, anns) {
   });
   // 임시 드래그 미리보기
   if(st.temp){
-    const r=st.temp, c=(st.tool==='hotspot'?'#f59e0b':st.color);
+    const r=st.temp, c=(st.tool==='hotspot'?'#f59e0b':st.tool==='scroll'?'#22d3ee':st.color);
     if(r.x1!=null) h+=`<line x1="${r.x1}%" y1="${r.y1}%" x2="${r.x2}%" y2="${r.y2}%" stroke="${c}" stroke-width="1.8" pointer-events="none" stroke-dasharray="4 2"/>`;
-    else if(r.w!=null) h+=`<rect x="${r.x}%" y="${r.y}%" width="${r.w}%" height="${r.h}%" fill="${cteAnnRgba(c,.12)}" stroke="${c}" stroke-width="1.8" rx="1" pointer-events="none" stroke-dasharray="${st.tool==='hotspot'?'4 2':'0'}"/>`;
+    else if(r.w!=null) h+=`<rect x="${r.x}%" y="${r.y}%" width="${r.w}%" height="${r.h}%" fill="${cteAnnRgba(c,.12)}" stroke="${c}" stroke-width="1.8" rx="1" pointer-events="none" stroke-dasharray="${(st.tool==='hotspot'||st.tool==='scroll')?'4 2':'0'}"/>`;
   }
   svg.innerHTML = h;
+}
+
+// ─── 부분 스크롤 영역 렌더 ───
+function cteRenderRegionsFor(panel) {
+  const step = cteConfig.tabs[cteCurTab].steps[cteCurStep];
+  if(panel==='phone') cteRenderRegions(document.getElementById('ctePhoneRegions'), step.customerScrollRegions, 'phone');
+  else cteRenderRegions(document.getElementById('cteAgentRegions'), step.agentScrollRegions, 'agent');
+}
+function cteRenderRegions(layerEl, regions, panel) {
+  if(!layerEl) return;
+  layerEl.innerHTML='';
+  const editing = adminMode && activeSec==='채널톡';
+  layerEl.classList.toggle('adm', editing);
+  (regions||[]).forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className='cte-region'+(editing?' cte-region-edit':'');
+    d.style.left=r.x+'%'; d.style.top=r.y+'%'; d.style.width=r.w+'%'; d.style.height=r.h+'%';
+    if(r.image){
+      const im=document.createElement('img'); im.src=r.image; im.alt=''; im.draggable=false;
+      d.appendChild(im);
+    } else {
+      const e=document.createElement('div'); e.className='cte-region-empty';
+      e.textContent=editing?'📜 이미지 선택 필요\n(아래 패널)':''; d.appendChild(e);
+    }
+    if(editing){
+      const tag=document.createElement('div'); tag.className='cte-region-tag'; tag.textContent='✕';
+      tag.title='이 스크롤 영역 삭제';
+      tag.onclick=(e)=>{ e.stopPropagation(); cteRegionDel(panel,i); };
+      d.appendChild(tag);
+    }
+    layerEl.appendChild(d);
+  });
+}
+function cteRegionDel(panel, i) {
+  const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
+  const arr = cteConfig.tabs[cteCurTab].steps[cteCurStep][rf]||[];
+  arr.splice(i,1);
+  cteRenderRegionsFor(panel);
+  cteRenderAdmPanel();
+}
+function cteRegionImg(panel, i, val) {
+  const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
+  const arr = cteConfig.tabs[cteCurTab].steps[cteCurStep][rf]||[];
+  if(arr[i]) arr[i].image = val;
+  cteRenderRegionsFor(panel);
 }
 
 function cteAskGoto() {
