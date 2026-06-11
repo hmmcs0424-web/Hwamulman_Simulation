@@ -66,11 +66,15 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .image-wrapper{position:relative;width:100%;}
 .screen-image{width:100%;display:block;user-select:none;-webkit-user-drag:none;}
 .hotspot-layer{position:absolute;inset:0;pointer-events:none;}
-.hotspot{position:absolute;cursor:pointer;pointer-events:auto;}
+.hotspot{position:absolute;cursor:pointer;pointer-events:auto;transition:background .12s,outline .12s;}
 .hotspot.normal-mode{background:transparent;border:none;}
+.hotspot.normal-mode:hover{background:rgba(30,100,255,.12);outline:2px solid rgba(30,100,255,.5);outline-offset:-1px;border-radius:4px;}
+.hotspot.show-mode{background:rgba(30,100,255,.08);outline:2px solid rgba(30,100,255,.55);outline-offset:-1px;border-radius:4px;}
+.hotspot.show-mode:hover{background:rgba(30,100,255,.2);outline-color:rgba(30,100,255,.9);}
 .hotspot.admin-mode{background:rgba(30,100,255,.15);border:2px dashed rgba(30,100,255,.75);border-radius:4px;}
-.hotspot-label{display:none;position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.8);padding:1px 4px;border-radius:3px;}
+.hotspot-label{display:none;position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.88);padding:1px 5px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .hotspot.admin-mode .hotspot-label{display:block;}
+.hotspot.show-mode .hotspot-label{display:block;}
 .draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;}
 .draw-overlay.active{display:block;}
 .draw-rect{display:none;position:absolute;background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);border-radius:4px;pointer-events:none;}
@@ -273,6 +277,37 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .chat-replay-btn:hover{background:rgba(0,0,0,.8);}
 .chat-replay-btn.visible{display:block;}
 
+/* ── CHAT SCROLL LAYER ── */
+.chat-scroll-layer{
+  position:absolute;overflow:hidden;
+  cursor:grab;user-select:none;
+  /* 관리자: 테두리 표시 */
+}
+.chat-scroll-layer.grabbing{cursor:grabbing;}
+.chat-scroll-layer img{
+  position:absolute;top:0;left:0;width:100%;
+  display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;
+  will-change:transform;
+}
+/* 관리자 모드: 영역 하이라이트 */
+.chat-scroll-layer.admin-highlight{
+  outline:2px dashed rgba(30,100,255,.75);
+  outline-offset:-2px;
+}
+.chat-scroll-admin-badge{
+  position:absolute;top:4px;left:50%;transform:translateX(-50%);
+  background:rgba(30,100,255,.8);color:#fff;font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:8px;white-space:nowrap;pointer-events:none;z-index:5;
+}
+/* 스크롤 힌트 아이콘 */
+.chat-scroll-hint{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.45);color:#fff;font-size:11px;
+  padding:3px 10px;border-radius:10px;pointer-events:none;
+  opacity:1;transition:opacity .4s;white-space:nowrap;
+}
+.chat-scroll-hint.hide{opacity:0;}
+
 .admin-badge{display:inline-block;background:#FF5000;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:12px;}
 .admin-section{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0;}
 .admin-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
@@ -312,6 +347,7 @@ textarea.form-input{resize:vertical;}
     <button class="nav-menu" data-sim="채널톡" data-type="pc">채널톡</button>
   </div>
   <div class="topnav-right">
+    <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
   </div>
 </nav>
@@ -397,6 +433,7 @@ textarea.form-input{resize:vertical;}
         <div class="pc-img-box" id="pcImgBox">
           <img class="pc-screen-img" id="pcScreenImg" alt="PC 화면" style="display:none">
           <div class="pc-hotspot-layer" id="pcHotspotLayer"></div>
+          <div class="chat-scroll-layer" id="chatScrollLayer" style="display:none"></div>
           <div class="chat-overlay-layer" id="chatOverlayLayer"></div>
           <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
         </div>
@@ -470,6 +507,36 @@ textarea.form-input{resize:vertical;}
           <label for="newNavbar" style="font-size:13px">navbar 표시</label>
         </div>
         <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
+      </div>
+      <div class="admin-section" id="chatScrollAdminSection" style="display:none">
+        <div class="section-title">↕ 채팅 스크롤 영역</div>
+        <div id="chatScrollStatus" style="font-size:12px;color:#888;margin-bottom:8px">미설정</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div class="form-row" style="flex:1;min-width:60px">
+            <div class="form-label">top (%)</div>
+            <input class="form-input" id="csTop" type="number" min="0" max="100" placeholder="예: 4">
+          </div>
+          <div class="form-row" style="flex:1;min-width:60px">
+            <div class="form-label">left (%)</div>
+            <input class="form-input" id="csLeft" type="number" min="0" max="100" placeholder="예: 19">
+          </div>
+          <div class="form-row" style="flex:1;min-width:60px">
+            <div class="form-label">width (%)</div>
+            <input class="form-input" id="csWidth" type="number" min="1" max="100" placeholder="예: 53">
+          </div>
+          <div class="form-row" style="flex:1;min-width:60px">
+            <div class="form-label">height (%)</div>
+            <input class="form-input" id="csHeight" type="number" min="1" max="100" placeholder="예: 90">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label">스크롤 이미지 경로</div>
+          <input class="form-input" id="csImage" placeholder="예: 채널톡/채팅내용_긴이미지.png">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-sm" onclick="saveChatScroll()">저장</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteChatScroll()">삭제</button>
+        </div>
       </div>
       <div class="admin-section" id="overlayAdminSection" style="display:none">
         <div class="section-title">💬 채팅 오버레이</div>
@@ -595,6 +662,7 @@ Object.keys(SECS).forEach(k => { cache[k] = { flow:null, cur:null, hist:[] }; })
 
 let activeSec = '차주앱';
 let adminMode = false;
+let showHotspots = false;
 let drawing = false, drawStart = null, pendingHs = null;
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
 
@@ -620,7 +688,14 @@ async function boot() {
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
   document.getElementById('btnExport').onclick = exportFlow;
+  document.getElementById('btnShowHotspots').onclick = toggleShowHotspots;
   document.getElementById('searchBox').oninput = renderList;
+
+  // 단축키 H: 핫스팟 보기 토글
+  document.addEventListener('keydown', e => {
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    if(e.key === 'h' || e.key === 'H') toggleShowHotspots();
+  });
   document.getElementById('popupOverlay').onclick = function(e) { if(e.target===this) closePopup(); };
   document.querySelectorAll('.modal-bg').forEach(el => {
     el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
@@ -696,8 +771,9 @@ function applySec(name) {
   renderGuide(st.flow.screens?.[st.cur]?.guide);
   renderExceptions(st.cur);
   renderOverlayAdminSection();
+  renderChatScrollAdmin();
   detectUnreg();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
 }
 
 // ═══════════════════════════════════════════
@@ -717,7 +793,7 @@ function goTo(id, init=false) {
   renderGuide(scr.guide);
   renderExceptions(id);
   renderList();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
+  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
 }
 
 function goBack() {
@@ -730,7 +806,7 @@ function goBack() {
     renderGuide(st.flow.screens[st.cur]?.guide);
     renderExceptions(st.cur);
     renderList();
-    if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); }
+    if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
   }
 }
 
@@ -812,9 +888,14 @@ function renderPcScreen(scr) {
   };
   img.src = targetSrc;
   if(!drawing) document.getElementById('pcDrawOverlay').classList.remove('active');
-  // 채널톡 오버레이 재생
-  if(activeSec === '채널톡') renderOverlays(scr);
-  else clearOverlays();
+  // 채널톡 전용 레이어
+  if(activeSec === '채널톡') {
+    renderChatScroll(scr);
+    renderOverlays(scr);
+  } else {
+    clearChatScroll();
+    clearOverlays();
+  }
 }
 
 function showPcPlaceholder(show) {
@@ -829,13 +910,14 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
   const layer = document.getElementById(layerId);
   layer.innerHTML = '';
   const isAdmin = forceAdmin || adminMode;
+  const isShow  = !isAdmin && showHotspots;
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
-    el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : 'normal-mode');
+    el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : isShow ? 'show-mode' : 'normal-mode');
     el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
     const lbl = document.createElement('span');
     lbl.className = 'hotspot-label';
-    lbl.textContent = (hs.label||'') + ' → ' + hs.goto;
+    lbl.textContent = hs.label || hs.goto;
     el.appendChild(lbl);
     if(isAdmin) {
       el.addEventListener('click', e => {
@@ -852,6 +934,27 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     }
     layer.appendChild(el);
   });
+}
+
+function toggleShowHotspots() {
+  showHotspots = !showHotspots;
+  const btn = document.getElementById('btnShowHotspots');
+  btn.classList.toggle('on', showHotspots);
+  btn.textContent = showHotspots ? '👆 영역 숨기기' : '👆 영역 보기';
+  refreshHotspotLayer();
+}
+
+function refreshHotspotLayer() {
+  const st = cache[activeSec];
+  if(!st.cur || !st.flow.screens?.[st.cur]) return;
+  const scr = st.flow.screens[st.cur];
+  const layerId = SECS[activeSec].type === 'pc' ? 'pcHotspotLayer' : 'hotspotLayer';
+  renderHotspots(layerId, scr.hotspots || [], false);
+  // 팝업 레이어도 갱신
+  if(document.getElementById('popupOverlay').classList.contains('active')) {
+    const popScr = Object.values(st.flow.screens).find(s => s.type === 'popup');
+    if(popScr) renderHotspots('popupHsLayer', popScr.hotspots || [], false);
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -953,6 +1056,10 @@ function enterAdmin() {
   renderGuideEditor();
   renderExceptionEditor();
   renderOverlayAdminSection();
+  renderChatScrollAdmin();
+  // 관리자 모드 진입 시 스크롤 영역 하이라이트 재렌더
+  const st = cache[activeSec];
+  if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
 }
 
 function exitAdmin() {
@@ -966,6 +1073,9 @@ function exitAdmin() {
   renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], false);
   renderExceptionEditor();
   renderOverlayAdminSection();
+  renderChatScrollAdmin();
+  // 관리자 종료 시 하이라이트 제거
+  if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
 }
 
 function renderHsList() {
@@ -1119,6 +1229,155 @@ function confirmHs() {
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
   renderHsList();
+}
+
+// ═══════════════════════════════════════════
+// CHAT SCROLL (채널톡 전용)
+// ═══════════════════════════════════════════
+let chatScrollDrag = { active:false, startY:0, startTranslate:0, currentTranslate:0, max:0 };
+
+function clearChatScroll() {
+  const layer = document.getElementById('chatScrollLayer');
+  if(!layer) return;
+  layer.style.display = 'none';
+  layer.innerHTML = '';
+  chatScrollDrag = { active:false, startY:0, startTranslate:0, currentTranslate:0, max:0 };
+}
+
+function renderChatScroll(scr) {
+  clearChatScroll();
+  const cs = scr?.chatScroll;
+  const layer = document.getElementById('chatScrollLayer');
+  if(!layer || !cs?.image) return;
+
+  // 위치·크기 적용 (% 기준, pcImgBox 기준)
+  layer.style.cssText = `
+    display:block;
+    top:${cs.top||0}%; left:${cs.left||0}%;
+    width:${cs.width||50}%; height:${cs.height||92}%;
+    position:absolute;
+  `;
+  layer.classList.toggle('admin-highlight', adminMode);
+
+  // 관리자 뱃지
+  if(adminMode) {
+    const badge = document.createElement('div');
+    badge.className = 'chat-scroll-admin-badge';
+    badge.textContent = '↕ 채팅 스크롤 영역';
+    layer.appendChild(badge);
+  }
+
+  // 스크롤 이미지
+  const img = document.createElement('img');
+  img.src = cs.image;
+  img.draggable = false;
+  img.style.transform = 'translateY(0px)';
+  layer.appendChild(img);
+
+  // 힌트
+  const hint = document.createElement('div');
+  hint.className = 'chat-scroll-hint';
+  hint.textContent = '↕ 드래그하여 스크롤';
+  layer.appendChild(hint);
+  setTimeout(() => hint.classList.add('hide'), 2200);
+
+  // 이미지 로드 후 최대 스크롤 계산
+  img.onload = () => {
+    const layerH = layer.getBoundingClientRect().height;
+    chatScrollDrag.max = Math.max(0, img.naturalHeight * (layer.getBoundingClientRect().width / img.naturalWidth) - layerH);
+    chatScrollDrag.currentTranslate = 0;
+  };
+
+  // 드래그 이벤트
+  layer.addEventListener('mousedown', onChatScrollMouseDown);
+  layer.addEventListener('wheel', onChatScrollWheel, { passive:false });
+}
+
+function getScrollImg() {
+  return document.querySelector('#chatScrollLayer img');
+}
+
+function applyTranslate(y) {
+  const clamped = Math.max(-chatScrollDrag.max, Math.min(0, y));
+  chatScrollDrag.currentTranslate = clamped;
+  const img = getScrollImg();
+  if(img) img.style.transform = `translateY(${clamped}px)`;
+}
+
+function onChatScrollMouseDown(e) {
+  if(e.button !== 0) return;
+  e.preventDefault();
+  chatScrollDrag.active = true;
+  chatScrollDrag.startY = e.clientY;
+  chatScrollDrag.startTranslate = chatScrollDrag.currentTranslate;
+  document.getElementById('chatScrollLayer').classList.add('grabbing');
+
+  const onMove = (ev) => {
+    if(!chatScrollDrag.active) return;
+    const dy = ev.clientY - chatScrollDrag.startY;
+    applyTranslate(chatScrollDrag.startTranslate + dy);
+  };
+  const onUp = () => {
+    chatScrollDrag.active = false;
+    document.getElementById('chatScrollLayer')?.classList.remove('grabbing');
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+
+function onChatScrollWheel(e) {
+  e.preventDefault();
+  applyTranslate(chatScrollDrag.currentTranslate - e.deltaY);
+}
+
+function renderChatScrollAdmin() {
+  const show = adminMode && activeSec === '채널톡';
+  const sec = document.getElementById('chatScrollAdminSection');
+  if(!sec) return;
+  sec.style.display = show ? '' : 'none';
+  if(!show) return;
+
+  const st = cache[activeSec];
+  const cs = st.flow.screens?.[st.cur]?.chatScroll;
+  const statusEl = document.getElementById('chatScrollStatus');
+
+  if(cs?.image) {
+    statusEl.innerHTML = `<span style="color:#2a9d2a;font-weight:700">✓ 설정됨</span> — ${esc(cs.image)}`;
+    document.getElementById('csTop').value    = cs.top    ?? '';
+    document.getElementById('csLeft').value   = cs.left   ?? '';
+    document.getElementById('csWidth').value  = cs.width  ?? '';
+    document.getElementById('csHeight').value = cs.height ?? '';
+    document.getElementById('csImage').value  = cs.image  ?? '';
+  } else {
+    statusEl.innerHTML = '<span style="color:#aaa">미설정</span>';
+    ['csTop','csLeft','csWidth','csHeight','csImage'].forEach(id => document.getElementById(id).value = '');
+  }
+}
+
+function saveChatScroll() {
+  const image  = document.getElementById('csImage').value.trim();
+  const top    = parseFloat(document.getElementById('csTop').value);
+  const left   = parseFloat(document.getElementById('csLeft').value);
+  const width  = parseFloat(document.getElementById('csWidth').value);
+  const height = parseFloat(document.getElementById('csHeight').value);
+
+  if(!image)          { alert('스크롤 이미지 경로를 입력하세요.'); return; }
+  if(isNaN(top)  || isNaN(left) ||
+     isNaN(width)|| isNaN(height)) { alert('top / left / width / height를 모두 입력하세요.'); return; }
+
+  const st = cache[activeSec];
+  st.flow.screens[st.cur].chatScroll = { image, top, left, width, height };
+  renderChatScroll(st.flow.screens[st.cur]);
+  renderChatScrollAdmin();
+}
+
+function deleteChatScroll() {
+  const st = cache[activeSec];
+  delete st.flow.screens[st.cur].chatScroll;
+  clearChatScroll();
+  renderChatScrollAdmin();
 }
 
 // ═══════════════════════════════════════════
