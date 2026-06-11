@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채널톡 교육자료</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --header-h: 44px;
+  --stepbar-h: 38px;
+  --bottom-h: 52px;
+  --content-h: calc(100vh - var(--header-h) - var(--stepbar-h) - var(--bottom-h));
+}
+
+body {
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  background: #111827;
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 헤더 ── */
+.header {
+  height: var(--header-h);
+  background: #0f172a;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1e293b;
+  flex-shrink: 0;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo { font-size: 15px; font-weight: 800; color: #e2e8f0; letter-spacing: -0.3px; }
+.logo span { color: #6366f1; }
+.tabs { display: flex; gap: 6px; }
+.tab {
+  padding: 5px 14px; border-radius: 16px;
+  border: 1.5px solid #334155; background: transparent;
+  color: #94a3b8; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+}
+.tab.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+.header-right { display: flex; gap: 8px; align-items: center; }
+.btn-admin {
+  padding: 5px 14px; border-radius: 16px;
+  border: 1.5px solid #334155; background: transparent;
+  color: #94a3b8; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+}
+.btn-admin:hover { border-color: #f59e0b; color: #f59e0b; }
+.btn-admin.on { background: #f59e0b; border-color: #f59e0b; color: #fff; }
+
+/* ── 스텝바 ── */
+.step-bar {
+  height: var(--stepbar-h);
+  background: #0f172a;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+  flex-shrink: 0;
+  overflow-x: auto;
+  gap: 0;
+}
+.step-item { display: flex; align-items: center; cursor: pointer; flex-shrink: 0; }
+.step-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #1e293b; color: #64748b;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #334155; transition: all 0.18s;
+}
+.step-item.active .step-dot { background: #6366f1; border-color: #6366f1; color: #fff; }
+.step-item.done .step-dot { background: #059669; border-color: #059669; color: #fff; font-size: 9px; }
+.step-label { margin-left: 6px; font-size: 11px; color: #475569; white-space: nowrap; }
+.step-item.active .step-label { color: #a5b4fc; font-weight: 600; }
+.step-item.done .step-label { color: #34d399; }
+.step-line { width: 24px; height: 2px; background: #1e293b; margin: 0 4px; flex-shrink: 0; }
+.step-line.done { background: #059669; }
+
+/* ── 메인 영역 ── */
+.main {
+  height: var(--content-h);
+  display: flex;
+  overflow: hidden;
+}
+
+/* ── 왼쪽: 폰 패널 ── */
+.panel-phone {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 6px;
+  border-right: 1px solid #1e293b;
+  background: #0f172a;
+}
+.panel-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  color: #475569; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 5px;
+}
+.badge { padding: 1px 6px; border-radius: 8px; font-size: 9px; }
+.badge-c { background: #1e3a5f; color: #60a5fa; }
+.badge-a { background: #14532d; color: #4ade80; }
+
+/* 폰 프레임 */
+.phone-outer {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0 10px;
+}
+.phone-frame {
+  background: #1e293b;
+  border-radius: 28px;
+  border: 3px solid #334155;
+  box-shadow: 0 0 0 1px #0f172a, 0 16px 40px rgba(0,0,0,0.6);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.phone-notch { width: 50px; height: 4px; background: #334155; border-radius: 2px; margin-bottom: 6px; flex-shrink: 0; }
+.phone-screen {
+  flex: 1;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  min-height: 0;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+.phone-screen.clickable { cursor: pointer; }
+.phone-screen.clickable:hover { box-shadow: 0 0 0 2px #6366f1; }
+.phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.click-hint {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  background: rgba(99,102,241,0.9); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 12px;
+  opacity: 0; transition: opacity 0.2s; white-space: nowrap; pointer-events: none;
+}
+.phone-screen.clickable:hover .click-hint { opacity: 1; }
+
+/* 타이핑 영역 */
+.typing-area {
+  width: 100%; padding: 6px 10px 0;
+  display: none; flex-direction: column; gap: 4px;
+  flex-shrink: 0;
+}
+.typing-area.on { display: flex; }
+.typing-lbl { font-size: 9px; color: #6366f1; font-weight: 700; letter-spacing: 0.5px; }
+.typing-row { display: flex; gap: 4px; }
+.typing-input {
+  flex: 1; background: #1e293b; border: 1px solid #334155;
+  border-radius: 6px; color: #e2e8f0; font-size: 12px;
+  padding: 6px 8px; font-family: inherit; outline: none;
+}
+.typing-input:focus { border-color: #6366f1; }
+.typing-send {
+  background: #6366f1; color: #fff; border: none;
+  border-radius: 6px; padding: 6px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
+}
+
+/* ── 오른쪽: 에이전트 패널 ── */
+.panel-agent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px 6px;
+  min-width: 0;
+}
+.agent-outer {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.pc-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  border-radius: 10px;
+  border: 2px solid #1e293b;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+.pc-bar {
+  background: #1e293b;
+  padding: 6px 10px;
+  display: flex; align-items: center; gap: 5px;
+  flex-shrink: 0;
+}
+.pc-btn { width: 8px; height: 8px; border-radius: 50%; }
+.pc-btn.r { background: #ef4444; }
+.pc-btn.y { background: #f59e0b; }
+.pc-btn.g { background: #10b981; }
+.pc-url { flex: 1; background: #334155; border-radius: 3px; padding: 2px 8px; font-size: 9px; color: #94a3b8; margin-left: 6px; }
+
+/* 이미지 모드 */
+.pc-img-wrap { flex: 1; min-height: 0; background: #fff; display: none; overflow: hidden; }
+.pc-img-wrap.on { display: block; }
+.pc-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+
+/* 채팅 시뮬 */
+.ct-ui { flex: 1; min-height: 0; display: none; flex-direction: column; background: #fff; }
+.ct-ui.on { display: flex; }
+.ct-head {
+  background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.ct-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #6366f1; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.ct-head-name { font-size: 12px; font-weight: 700; color: #111827; }
+.ct-head-sub { font-size: 10px; color: #6b7280; }
+.ct-online { font-size: 10px; color: #10b981; font-weight: 600; margin-left: auto; }
+.ct-msgs {
+  flex: 1; overflow-y: auto; padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+  background: #f1f5f9; min-height: 0;
+}
+.ct-msg { display: flex; gap: 6px; align-items: flex-end; }
+.ct-msg.me { flex-direction: row-reverse; }
+.ct-bub {
+  max-width: 72%; padding: 7px 11px;
+  border-radius: 12px; font-size: 12px; line-height: 1.5; color: #111827;
+  background: #fff; border: 1px solid #e2e8f0;
+  white-space: pre-wrap; word-break: break-word;
+}
+.ct-msg.me .ct-bub { background: #6366f1; color: #fff; border-color: #6366f1; }
+.ct-av-sm {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #e2e8f0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; flex-shrink: 0; color: #6b7280;
+}
+.ct-sys { text-align: center; font-size: 10px; color: #94a3b8; padding: 2px 0; }
+.ct-col { display: flex; flex-direction: column; gap: 1px; }
+.ct-msg.me .ct-col { align-items: flex-end; }
+.ct-t { font-size: 9px; color: #94a3b8; }
+.ct-foot {
+  border-top: 1px solid #e2e8f0; padding: 8px 12px;
+  display: flex; gap: 6px; background: #fff; flex-shrink: 0;
+}
+.ct-finput {
+  flex: 1; border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 6px 10px; font-size: 12px; color: #6b7280;
+  background: #f8fafc; outline: none; font-family: inherit;
+}
+.ct-fsend { background: #6366f1; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 11px; font-weight: 600; cursor: default; }
+
+@keyframes bpop { from { opacity:0; transform:translateY(6px) scale(.96); } to { opacity:1; transform:none; } }
+.ct-msg.new { animation: bpop .2s ease-out; }
+
+/* ── 하단 바 ── */
+.bottom {
+  height: var(--bottom-h);
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
+  padding: 0 20px;
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0;
+}
+.desc-box { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.desc-step { font-size: 9px; color: #6366f1; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; }
+.desc-text { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+.desc-text b { color: #a5b4fc; font-weight: 600; }
+.nav { display: flex; gap: 6px; flex-shrink: 0; }
+.nbtn {
+  padding: 7px 18px; border-radius: 7px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s;
+}
+.nbtn-p { background: #1e293b; color: #cbd5e1; }
+.nbtn-p:hover { background: #334155; }
+.nbtn-n { background: #6366f1; color: #fff; }
+.nbtn-n:hover { background: #4f46e5; }
+.nbtn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ══ 관리자 모드 오버레이 ══ */
+.admin-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.7);
+  align-items: center; justify-content: center;
+}
+.admin-overlay.on { display: flex; }
+.admin-panel {
+  background: #1e293b;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  width: 760px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+.admin-header {
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #334155; flex-shrink: 0;
+}
+.admin-title { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+.admin-header-btns { display: flex; gap: 8px; }
+.admin-tab {
+  padding: 4px 12px; border-radius: 12px; border: 1px solid #334155;
+  background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;
+}
+.admin-tab.active { background: #334155; color: #f1f5f9; }
+.admin-body { flex: 1; overflow-y: auto; padding: 14px 20px; }
+.admin-step {
+  background: #0f172a; border-radius: 8px; border: 1px solid #334155;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.admin-step-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.admin-step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #6366f1; color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.admin-step-lbl-input {
+  flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  color: #e2e8f0; font-size: 12px; font-weight: 600; padding: 4px 10px;
+  outline: none; font-family: inherit;
+}
+.admin-step-lbl-input:focus { border-color: #6366f1; }
+.admin-row { display: flex; gap: 10px; margin-bottom: 8px; }
+.admin-col { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.admin-lbl { font-size: 10px; color: #64748b; font-weight: 600; letter-spacing: 0.5px; }
+.admin-input {
+  background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  color: #e2e8f0; font-size: 11px; padding: 5px 8px;
+  outline: none; font-family: inherit; width: 100%;
+}
+.admin-input:focus { border-color: #6366f1; }
+.admin-textarea {
+  background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  color: #e2e8f0; font-size: 11px; padding: 5px 8px;
+  outline: none; font-family: inherit; width: 100%; resize: none; height: 52px;
+}
+.admin-textarea:focus { border-color: #6366f1; }
+.admin-check-row { display: flex; gap: 14px; margin-bottom: 4px; }
+.admin-check { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #94a3b8; cursor: pointer; }
+.admin-check input { accent-color: #6366f1; }
+.admin-select {
+  background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  color: #e2e8f0; font-size: 11px; padding: 5px 8px; outline: none; width: 100%;
+}
+.admin-footer {
+  padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid #334155; flex-shrink: 0;
+}
+.admin-hint { font-size: 10px; color: #64748b; }
+.admin-footer-btns { display: flex; gap: 8px; }
+.abtn {
+  padding: 7px 16px; border-radius: 7px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.abtn-cancel { background: #334155; color: #cbd5e1; }
+.abtn-cancel:hover { background: #475569; }
+.abtn-save { background: #10b981; color: #fff; }
+.abtn-save:hover { background: #059669; }
+.abtn-add { background: #1e293b; border: 1px dashed #6366f1; color: #6366f1; padding: 7px 16px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; }
+.abtn-add:hover { background: #1e1b4b; }
+.abtn-del { background: transparent; border: none; color: #ef4444; font-size: 11px; cursor: pointer; padding: 0 4px; }
+.abtn-del:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">채널톡 <span>교육자료</span></div>
+    <div class="tabs" id="tabBtns"></div>
+  </div>
+  <div class="header-right">
+    <button class="btn-admin" id="btnAdmin" onclick="toggleAdmin()">⚙ 관리자 편집</button>
+  </div>
+</div>
+
+<!-- 스텝바 -->
+<div class="step-bar" id="stepBar"></div>
+
+<!-- 메인 -->
+<div class="main">
+  <!-- 왼쪽: 고객 폰 -->
+  <div class="panel-phone">
+    <div class="panel-tag"><span class="badge badge-c">고객</span> 차주앱 (휴대폰)</div>
+    <div class="phone-outer">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="phoneScreen" onclick="handlePhoneClick()">
+          <img id="customerImg" src="" alt="">
+          <div class="click-hint" id="clickHint">탭하여 다음 →</div>
+        </div>
+      </div>
+    </div>
+    <div class="typing-area" id="typingArea">
+      <div class="typing-lbl">✏ 고객 입력 시뮬레이션</div>
+      <div class="typing-row">
+        <input class="typing-input" id="typingInput" placeholder="메시지 입력..."
+          onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="typing-send" onclick="sendMsg()">전송</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 채널톡 -->
+  <div class="panel-agent">
+    <div class="panel-tag"><span class="badge badge-a">상담사</span> 채널톡 (PC)</div>
+    <div class="agent-outer">
+      <div class="pc-frame">
+        <div class="pc-bar">
+          <div class="pc-btn r"></div>
+          <div class="pc-btn y"></div>
+          <div class="pc-btn g"></div>
+          <div class="pc-url">app.channel.io</div>
+        </div>
+        <!-- 이미지 모드 -->
+        <div class="pc-img-wrap" id="pcImgWrap">
+          <img id="agentImg" src="" alt="">
+        </div>
+        <!-- 채팅 시뮬 모드 -->
+        <div class="ct-ui" id="ctUI">
+          <div class="ct-head">
+            <div class="ct-av">정</div>
+            <div>
+              <div class="ct-head-name">정지영 <span style="font-size:9px;color:#9ca3af;font-weight:400;">회원</span></div>
+              <div class="ct-head-sub">010-4007-1417</div>
+            </div>
+            <div class="ct-online">● 온라인</div>
+          </div>
+          <div class="ct-msgs" id="ctMsgs"></div>
+          <div class="ct-foot">
+            <input class="ct-finput" type="text" placeholder="답변을 입력하세요..." readonly>
+            <button class="ct-fsend">전송</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 하단 -->
+<div class="bottom">
+  <div class="desc-box">
+    <div class="desc-step" id="descStep"></div>
+    <div class="desc-text" id="descText"></div>
+  </div>
+  <div class="nav">
+    <button class="nbtn nbtn-p" id="btnP" onclick="prevStep()">← 이전</button>
+    <button class="nbtn nbtn-n" id="btnN" onclick="nextStep()">다음 →</button>
+  </div>
+</div>
+
+<!-- 관리자 오버레이 -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div class="admin-title">⚙ 관리자 편집</div>
+      <div class="admin-header-btns" id="adminTabBtns"></div>
+    </div>
+    <div class="admin-body" id="adminBody"></div>
+    <div class="admin-footer">
+      <div class="admin-hint">💡 저장 시 JSON 파일이 다운로드됩니다. GitHub에 올려주세요.</div>
+      <div class="admin-footer-btns">
+        <button class="abtn abtn-cancel" onclick="toggleAdmin()">닫기</button>
+        <button class="abtn abtn-save" onclick="saveConfig()">💾 저장 (JSON 다운로드)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 상태 ────────────────────────────────────────────
+let config = null;
+let curTab = 0;
+let curStep = 0;
+let dynMsgs = [];
+let adminTab = 0;
+
+// 기본 채팅 스크립트 (Step: agentMode==='chat')
+const BOT_MSGS = [
+  { from:'bot', text:'방문해주셔서 감사합니다 :)\n무엇을 도와드릴까요?', time:'오전 8:03' },
+];
+
+// ── 설정 로드 ────────────────────────────────────────
+async function loadConfig() {
+  try {
+    const r = await fetch('채널톡/교육_flow.json?t=' + Date.now());
+    config = await r.json();
+  } catch(e) {
+    // fallback
+    config = { tabs: [
+      { id:'text', label:'💬 텍스트 문의', steps:[
+        { label:'스텝1', customerImage:'', agentMode:'image', agentImage:'', clickable:true, desc:'' }
+      ]},
+    ]};
+  }
+  buildTabBtns();
+  render();
+}
+
+// ── 탭 버튼 생성 ─────────────────────────────────────
+function buildTabBtns() {
+  const wrap = document.getElementById('tabBtns');
+  wrap.innerHTML = '';
+  config.tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === curTab ? ' active' : '');
+    btn.textContent = t.label;
+    btn.onclick = () => { curTab = i; curStep = 0; dynMsgs = []; buildTabBtns(); render(); };
+    wrap.appendChild(btn);
+  });
+}
+
+// ── 렌더 ────────────────────────────────────────────
+function render() {
+  const tabs = config.tabs;
+  const steps = tabs[curTab].steps;
+  const step = steps[curStep];
+
+  // 스텝바
+  const bar = document.getElementById('stepBar');
+  bar.innerHTML = '';
+  steps.forEach((s, i) => {
+    const item = document.createElement('div');
+    item.className = 'step-item' + (i === curStep ? ' active' : i < curStep ? ' done' : '');
+    item.onclick = () => { curStep = i; dynMsgs = []; render(); };
+    item.innerHTML = `<div class="step-dot">${i < curStep ? '✓' : i+1}</div><div class="step-label">${s.label}</div>`;
+    bar.appendChild(item);
+    if (i < steps.length - 1) {
+      const line = document.createElement('div');
+      line.className = 'step-line' + (i < curStep ? ' done' : '');
+      bar.appendChild(line);
+    }
+  });
+
+  // 고객 이미지
+  const cImg = document.getElementById('customerImg');
+  cImg.src = step.customerImage || '';
+
+  // 폰 클릭
+  const ps = document.getElementById('phoneScreen');
+  const ch = document.getElementById('clickHint');
+  if (step.clickable) { ps.classList.add('clickable'); ch.style.display = ''; }
+  else { ps.classList.remove('clickable'); ch.style.display = 'none'; }
+
+  // 타이핑
+  const ta = document.getElementById('typingArea');
+  if (step.typing) { ta.classList.add('on'); document.getElementById('typingInput').value = ''; }
+  else ta.classList.remove('on');
+
+  // 에이전트 화면
+  const imgWrap = document.getElementById('pcImgWrap');
+  const ctUI = document.getElementById('ctUI');
+  if (step.agentMode === 'chat') {
+    imgWrap.classList.remove('on');
+    ctUI.classList.add('on');
+    renderChat(step);
+  } else {
+    imgWrap.classList.add('on');
+    ctUI.classList.remove('on');
+    document.getElementById('agentImg').src = step.agentImage || '';
+  }
+
+  // 설명
+  document.getElementById('descStep').textContent = `STEP ${curStep+1} / ${steps.length}  —  ${step.label}`;
+  document.getElementById('descText').innerHTML = step.desc || '';
+
+  // 버튼
+  document.getElementById('btnP').disabled = curStep === 0;
+  document.getElementById('btnN').disabled = curStep === steps.length - 1;
+  document.getElementById('btnN').textContent = curStep === steps.length - 1 ? '완료 ✓' : '다음 →';
+}
+
+function renderChat(step) {
+  const container = document.getElementById('ctMsgs');
+  const msgs = [...BOT_MSGS, ...dynMsgs];
+  container.innerHTML = '';
+  msgs.forEach(m => {
+    if (m.from === 'sys') {
+      const el = document.createElement('div');
+      el.className = 'ct-sys'; el.textContent = m.text;
+      container.appendChild(el); return;
+    }
+    const isMe = m.from === 'me';
+    const wrap = document.createElement('div');
+    wrap.className = 'ct-msg' + (isMe ? ' me' : '') + (m.isNew ? ' new' : '');
+    const av = document.createElement('div');
+    av.className = 'ct-av-sm'; av.textContent = isMe ? '정' : '화';
+    if (!isMe) { av.style.background = '#6366f1'; av.style.color = '#fff'; }
+    const col = document.createElement('div'); col.className = 'ct-col';
+    const bub = document.createElement('div'); bub.className = 'ct-bub'; bub.textContent = m.text;
+    col.appendChild(bub);
+    if (m.time) { const t = document.createElement('div'); t.className = 'ct-t'; t.textContent = m.time; col.appendChild(t); }
+    if (isMe) { wrap.appendChild(col); wrap.appendChild(av); }
+    else { wrap.appendChild(av); wrap.appendChild(col); }
+    container.appendChild(wrap);
+  });
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendMsg() {
+  const inp = document.getElementById('typingInput');
+  const txt = inp.value.trim(); if (!txt) return;
+  const h = new Date().getHours(), m = String(new Date().getMinutes()).padStart(2,'0');
+  const time = (h<12?'오전 ':'오후 ')+(h<=12?h:h-12)+':'+m;
+  dynMsgs.push({ from:'me', text:txt, time, isNew:true });
+  inp.value = '';
+  // 봇 자동 응답
+  const step = config.tabs[curTab].steps[curStep];
+  renderChat(step);
+  // 고객 화면 다음 이미지로
+  const nextStep2 = config.tabs[curTab].steps[curStep + 1];
+  if (nextStep2) document.getElementById('customerImg').src = nextStep2.customerImage || '';
+}
+
+function handlePhoneClick() {
+  const step = config.tabs[curTab].steps[curStep];
+  if (step.clickable) nextStep();
+}
+function prevStep() { if (curStep > 0) { curStep--; dynMsgs = []; render(); } }
+function nextStep() {
+  const steps = config.tabs[curTab].steps;
+  if (curStep < steps.length - 1) { curStep++; dynMsgs = []; render(); }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (document.getElementById('adminOverlay').classList.contains('on')) return;
+  if (e.key === 'ArrowRight') nextStep();
+  if (e.key === 'ArrowLeft') prevStep();
+});
+
+// ── 관리자 모드 ──────────────────────────────────────
+function toggleAdmin() {
+  const ov = document.getElementById('adminOverlay');
+  ov.classList.toggle('on');
+  if (ov.classList.contains('on')) { adminTab = curTab; renderAdminPanel(); }
+}
+
+function renderAdminPanel() {
+  // 탭 버튼
+  const tabWrap = document.getElementById('adminTabBtns');
+  tabWrap.innerHTML = '';
+  config.tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'admin-tab' + (i === adminTab ? ' active' : '');
+    btn.textContent = t.label;
+    btn.onclick = () => { adminTab = i; renderAdminPanel(); };
+    tabWrap.appendChild(btn);
+  });
+
+  // 스텝 목록
+  const body = document.getElementById('adminBody');
+  body.innerHTML = '';
+  const steps = config.tabs[adminTab].steps;
+
+  steps.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'admin-step';
+    div.innerHTML = `
+      <div class="admin-step-header">
+        <div class="admin-step-num">${i+1}</div>
+        <input class="admin-step-lbl-input" data-tab="${adminTab}" data-step="${i}" data-field="label"
+          value="${esc(s.label)}" placeholder="스텝 이름">
+        <button class="abtn-del" onclick="deleteStep(${adminTab},${i})">✕ 삭제</button>
+      </div>
+      <div class="admin-row">
+        <div class="admin-col">
+          <div class="admin-lbl">고객 이미지 경로</div>
+          <input class="admin-input" data-tab="${adminTab}" data-step="${i}" data-field="customerImage"
+            value="${esc(s.customerImage||'')}" placeholder="예: 채널톡/1-1.차주앱_채널톡진입.jpg">
+        </div>
+        <div class="admin-col">
+          <div class="admin-lbl">상담사 화면 모드</div>
+          <select class="admin-select" data-tab="${adminTab}" data-step="${i}" data-field="agentMode">
+            <option value="image" ${s.agentMode==='image'?'selected':''}>이미지</option>
+            <option value="chat" ${s.agentMode==='chat'?'selected':''}>채팅 시뮬</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin-row">
+        <div class="admin-col">
+          <div class="admin-lbl">상담사 이미지 경로</div>
+          <input class="admin-input" data-tab="${adminTab}" data-step="${i}" data-field="agentImage"
+            value="${esc(s.agentImage||'')}" placeholder="예: 채널톡/채팅화면.png">
+        </div>
+      </div>
+      <div class="admin-row">
+        <div class="admin-col">
+          <div class="admin-lbl">설명 텍스트 (HTML 가능: &lt;b&gt;강조&lt;/b&gt;)</div>
+          <textarea class="admin-textarea" data-tab="${adminTab}" data-step="${i}" data-field="desc"
+            >${esc(s.desc||'')}</textarea>
+        </div>
+      </div>
+      <div class="admin-check-row">
+        <label class="admin-check">
+          <input type="checkbox" data-tab="${adminTab}" data-step="${i}" data-field="clickable"
+            ${s.clickable?'checked':''}>
+          폰 클릭 시 다음 스텝으로 이동
+        </label>
+        <label class="admin-check">
+          <input type="checkbox" data-tab="${adminTab}" data-step="${i}" data-field="typing"
+            ${s.typing?'checked':''}>
+          고객 입력 시뮬레이션 표시
+        </label>
+      </div>
+    `;
+    body.appendChild(div);
+  });
+
+  // 스텝 추가 버튼
+  const addBtn = document.createElement('button');
+  addBtn.className = 'abtn-add';
+  addBtn.textContent = '+ 스텝 추가';
+  addBtn.onclick = () => addStep(adminTab);
+  body.appendChild(addBtn);
+
+  // 인풋 이벤트
+  body.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('change', handleAdminChange);
+    el.addEventListener('input', handleAdminChange);
+  });
+}
+
+function handleAdminChange(e) {
+  const el = e.target;
+  const t = +el.dataset.tab, s = +el.dataset.step, f = el.dataset.field;
+  const step = config.tabs[t].steps[s];
+  if (el.type === 'checkbox') step[f] = el.checked;
+  else step[f] = el.value;
+}
+
+function deleteStep(t, s) {
+  if (config.tabs[t].steps.length <= 1) { alert('스텝이 1개 이상이어야 합니다.'); return; }
+  if (!confirm(`STEP ${s+1} "${config.tabs[t].steps[s].label}"을 삭제할까요?`)) return;
+  config.tabs[t].steps.splice(s, 1);
+  renderAdminPanel();
+}
+
+function addStep(t) {
+  config.tabs[t].steps.push({
+    label: '새 스텝', customerImage: '', agentMode: 'image',
+    agentImage: '', clickable: true, desc: ''
+  });
+  renderAdminPanel();
+  document.getElementById('adminBody').scrollTop = 99999;
+}
+
+function saveConfig() {
+  const json = JSON.stringify(config, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '교육_flow.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  // 화면도 갱신
+  buildTabBtns();
+  curStep = 0; dynMsgs = [];
+  render();
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── 시작 ─────────────────────────────────────────────
+loadConfig();
+</script>
+</body>
+</html>
