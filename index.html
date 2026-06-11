@@ -1058,7 +1058,6 @@ function enterAdmin() {
   renderOverlayAdminSection();
   renderChatScrollAdmin();
   // 관리자 모드 진입 시 스크롤 영역 하이라이트 재렌더
-  const st = cache[activeSec];
   if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
 }
 
