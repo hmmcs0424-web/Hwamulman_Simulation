@@ -743,6 +743,9 @@ function applySec(name) {
   document.getElementById('phoneArea').style.display = sec.type==='app' ? '' : 'none';
   document.getElementById('pcArea').classList.toggle('visible', sec.type==='pc');
 
+  // 예외 상황 컬럼: APP 타입(차주앱, 빽통앱)만 표시
+  document.querySelector('.info-col-exception').style.display = sec.type==='app' ? '' : 'none';
+
   if(sec.type === 'pc') {
     const isChrome = sec.frame === 'chrome';
     const pcFrame = document.getElementById('pcFrame');
