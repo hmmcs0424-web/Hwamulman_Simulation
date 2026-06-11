@@ -335,58 +335,63 @@ textarea.form-input{resize:vertical;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
 
 /* ═══════════════════ 채널톡 교육 (cte-) ═══════════════════ */
-#ctEduArea{flex:1;flex-direction:column;overflow:hidden;background:#111827;color:#fff;font-family:'Pretendard',-apple-system,sans-serif;}
 :root{--cte:#6366f1;}
-.cte-stepbar{background:#0f172a;padding:0 20px;height:36px;display:flex;align-items:center;border-bottom:1px solid #1e293b;overflow-x:auto;flex-shrink:0;}
-.cte-step-item{display:flex;align-items:center;cursor:pointer;flex-shrink:0;}
-.cte-dot{width:22px;height:22px;border-radius:50%;background:#1e293b;color:#64748b;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #334155;transition:all .18s;}
-.cte-step-item.active .cte-dot{background:var(--cte);border-color:var(--cte);color:#fff;}
-.cte-step-item.done .cte-dot{background:#059669;border-color:#059669;color:#fff;}
-.cte-slbl{margin-left:6px;font-size:11px;color:#475569;white-space:nowrap;}
-.cte-step-item.active .cte-slbl{color:#a5b4fc;font-weight:600;}
-.cte-step-item.done .cte-slbl{color:#34d399;}
-.cte-sline{width:22px;height:2px;background:#1e293b;margin:0 4px;flex-shrink:0;}
-.cte-sline.done{background:#059669;}
+#ctEduArea{flex:1;flex-direction:column;overflow:hidden;background:#0b1020;color:#fff;font-family:'Pretendard',-apple-system,sans-serif;}
+
+/* ── 상단 탭/네비 바 ── */
+.cte-topbar{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.cte-tab-btns{display:flex;gap:5px;}
+.cte-tabbtn{padding:6px 16px;border-radius:8px;border:1px solid #1e293b;background:#0b1020;color:#94a3b8;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+.cte-tabbtn:hover{background:#1e293b;color:#e2e8f0;}
+.cte-tabbtn.active{background:var(--cte);border-color:var(--cte);color:#fff;}
+.cte-home-btn{padding:6px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:all .15s;}
+.cte-home-btn:hover{background:#334155;color:#fff;}
+.cte-step-nav{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.cte-step-counter{font-size:11px;color:#64748b;font-weight:600;white-space:nowrap;}
+.cte-nbtn{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;}
+.cte-nbtn-p{background:#1e293b;color:#cbd5e1;}.cte-nbtn-p:hover{background:#334155;}
+.cte-nbtn-n{background:var(--cte);color:#fff;}.cte-nbtn-n:hover{background:#4f46e5;}
+.cte-nbtn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ── 메인 스플릿 ── */
 .cte-main{display:flex;flex:1;overflow:hidden;}
-.cte-panel-phone{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;border-right:1px solid #1e293b;background:#0f172a;}
-.cte-panel-agent{flex:2;min-width:0;display:flex;flex-direction:column;align-items:center;padding:8px 12px 6px;}
-.cte-panel-tag{font-size:9px;font-weight:700;letter-spacing:1px;color:#475569;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.cte-divider{width:2px;background:#1e293b;flex-shrink:0;align-self:stretch;}
+.cte-panel-phone{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;background:#0f172a;}
+.cte-panel-agent{flex:1.9;min-width:0;display:flex;flex-direction:column;align-items:center;padding:8px 12px 6px;}
+.cte-panel-tag{font-size:9px;font-weight:700;letter-spacing:1px;color:#475569;margin-bottom:4px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0;min-height:26px;}
 .cte-badge{padding:1px 6px;border-radius:8px;font-size:9px;}
 .cte-badge-c{background:#1e3a5f;color:#60a5fa;}
 .cte-badge-a{background:#14532d;color:#4ade80;}
+
+/* ── 폰 패널 ── */
 .cte-phone-outer{flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0;padding:0 8px;}
-.cte-phone-frame{background:#1e293b;border-radius:28px;border:3px solid #334155;box-shadow:0 0 0 1px #0f172a,0 16px 40px rgba(0,0,0,.6);padding:8px;display:flex;flex-direction:column;align-items:center;width:100%;height:100%;position:relative;}
-.cte-phone-notch{width:48px;height:4px;background:#334155;border-radius:2px;margin-bottom:6px;flex-shrink:0;}
-.cte-phone-screen{flex:1;width:100%;border-radius:18px;overflow:hidden;background:#000;min-height:0;position:relative;transition:box-shadow .2s;}
 .phone-frame.cte-clickable{cursor:pointer;}
 .phone-frame.cte-clickable:hover{box-shadow:inset 0 0 0 1.5px #3a3a3c,0 0 0 3px var(--cte),0 30px 80px rgba(0,0,0,.85);}
-.cte-phone-screen img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;}
-.cte-click-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(99,102,241,.9);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:12px;opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;}
 .phone-frame.cte-clickable:hover .cte-click-hint{opacity:1;}
-.cte-typing-area{width:100%;padding:6px 8px 0;display:none;flex-direction:column;gap:4px;flex-shrink:0;}
+.cte-click-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(99,102,241,.92);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:12px;opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;z-index:8;}
+
+/* ── 고객 입력 시뮬 ── */
+.cte-typing-area{width:100%;max-width:340px;padding:6px 8px 0;display:none;flex-direction:column;gap:4px;flex-shrink:0;}
 .cte-typing-area.on{display:flex;}
 .cte-tlbl{font-size:9px;color:var(--cte);font-weight:700;letter-spacing:.5px;}
 .cte-trow{display:flex;gap:4px;}
 .cte-tinput{flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:12px;padding:6px 8px;font-family:inherit;outline:none;}
 .cte-tinput:focus{border-color:var(--cte);}
 .cte-tsend{background:var(--cte);color:#fff;border:none;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;}
+
+/* ── 상담사(채널톡 PC) 패널 ── */
 .cte-agent-outer{flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0;}
 .cte-pc-frame{width:100%;height:100%;display:flex;flex-direction:column;background:#0f172a;border-radius:10px;border:2px solid #1e293b;box-shadow:0 16px 40px rgba(0,0,0,.5);overflow:hidden;}
 .cte-pc-bar{background:#1e293b;padding:6px 10px;display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .cte-pc-btn{width:8px;height:8px;border-radius:50%;}
 .cte-pc-btn.r{background:#ef4444;}.cte-pc-btn.y{background:#f59e0b;}.cte-pc-btn.g{background:#10b981;}
 .cte-pc-url{flex:1;background:#334155;border-radius:3px;padding:2px 8px;font-size:9px;color:#94a3b8;margin-left:6px;}
-.cte-img-wrap{flex:1;min-height:0;background:#fff;display:none;overflow:hidden;}
+.cte-img-wrap{flex:1;min-height:0;background:#fff;display:none;overflow:hidden;position:relative;}
 .cte-img-wrap.on{display:block;}
 .cte-img-scroll{position:relative;width:100%;height:100%;}
-.cte-img-scroll img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;}
-/* 스크롤(긴 이미지) 모드 */
-.cte-img-wrap.cte-scroll{overflow-y:auto;}
-.cte-img-wrap.cte-scroll .cte-img-scroll{height:auto;}
-.cte-img-wrap.cte-scroll .cte-img-scroll img{height:auto;object-fit:fill;}
-.cte-img-wrap::-webkit-scrollbar{width:9px;}
-.cte-img-wrap::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:5px;}
-/* ── 부분 스크롤 영역 (특정 영역에 긴 이미지) ── */
+.cte-img-scroll img{width:100%;height:100%;object-fit:contain;object-position:top;display:block;background:#fff;}
+
+/* ── 부분 스크롤 영역 (특정 영역에 다른/긴 이미지) ── */
 .cte-region-layer{position:absolute;inset:0;pointer-events:none;z-index:2;}
 .cte-region{position:absolute;overflow-y:auto;overflow-x:hidden;pointer-events:auto;background:#fff;box-shadow:inset 0 0 0 1px #e5e7eb;}
 .cte-region img{width:100%;height:auto;display:block;}
@@ -394,20 +399,21 @@ textarea.form-input{resize:vertical;}
 .cte-region::-webkit-scrollbar-thumb{background:#9ca3af;border-radius:4px;}
 .cte-region::-webkit-scrollbar-track{background:#f1f5f9;}
 .cte-region.cte-region-edit{outline:2px dashed #22d3ee;outline-offset:-2px;}
-/* 편집 중: 영역 레이어를 SVG 위로 올리되, 영역 본체는 클릭 통과(드로잉 가능), 삭제 태그만 클릭 */
 .cte-region-layer.adm{z-index:6;}
 .cte-region-layer.adm .cte-region{pointer-events:none;}
 .cte-region-layer.adm .cte-region-tag{pointer-events:auto;}
-.cte-region-empty{display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;background:repeating-linear-gradient(45deg,#f8fafc,#f8fafc 6px,#eef2f6 6px,#eef2f6 12px);height:100%;text-align:center;padding:4px;}
+.cte-region-empty{display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;background:repeating-linear-gradient(45deg,#f8fafc,#f8fafc 6px,#eef2f6 6px,#eef2f6 12px);height:100%;text-align:center;padding:4px;white-space:pre-line;}
 .cte-region-tag{position:absolute;top:0;right:0;background:#0891b2;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-bottom-left-radius:5px;z-index:5;pointer-events:auto;cursor:pointer;}
 .cte-region-tag:hover{background:#dc2626;}
-.cte-view-svg{z-index:4;}
-/* 핫스팟 (클릭 영역) */
-.cte-hot{cursor:pointer;transition:all .15s;}
-.cte-hot-view{fill:rgba(99,102,241,0);stroke:rgba(99,102,241,0);stroke-width:2;}
+
+/* ── SVG 오버레이 (어노테이션 + 핫스팟) ── */
+.cte-view-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;}
+.cte-hot-view{fill:rgba(99,102,241,0);stroke:rgba(99,102,241,0);stroke-width:2;transition:all .15s;}
 .cte-hot-view:hover{fill:rgba(99,102,241,.18);stroke:rgba(99,102,241,.95);}
 .cte-hot-edit{fill:rgba(245,158,11,.12);stroke:#f59e0b;stroke-width:1.8;stroke-dasharray:4 2;}
 .cte-hot-edit.sel{stroke:#fff;stroke-width:2.6;}
+
+/* ── 채팅 시뮬레이션 UI ── */
 .cte-chat-ui{flex:1;min-height:0;display:none;flex-direction:column;background:#fff;}
 .cte-chat-ui.on{display:flex;}
 .cte-chat-head{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:8px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
@@ -430,60 +436,15 @@ textarea.form-input{resize:vertical;}
 .cte-fsend{background:var(--cte);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:11px;font-weight:600;}
 @keyframes cteBubPop{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
 .cte-msg.new{animation:cteBubPop .2s ease-out;}
-.cte-divider{width:2px;background:#1e293b;flex-shrink:0;border-radius:1px;align-self:stretch;}
-.cte-bottom{height:52px;background:#0f172a;border-top:1px solid #1e293b;padding:0 20px;display:flex;align-items:center;gap:16px;flex-shrink:0;}
-.cte-desc{flex:1;display:flex;flex-direction:column;justify-content:center;}
-.cte-desc-step{font-size:9px;color:var(--cte);font-weight:700;letter-spacing:.5px;margin-bottom:2px;}
-.cte-desc-text{font-size:12px;color:#cbd5e1;line-height:1.5;}
-.cte-desc-text b{color:#a5b4fc;font-weight:600;}
-.cte-nav{display:flex;gap:6px;flex-shrink:0;}
-.cte-nbtn{padding:7px 18px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
-.cte-nbtn-p{background:#1e293b;color:#cbd5e1;}.cte-nbtn-p:hover{background:#334155;}
-.cte-nbtn-n{background:var(--cte);color:#fff;}.cte-nbtn-n:hover{background:#4f46e5;}
-.cte-nbtn:disabled{opacity:.3;cursor:not-allowed;}
-.cte-admin-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);align-items:center;justify-content:center;}
-.cte-admin-overlay.on{display:flex;}
-.cte-admin-panel{background:#1e293b;border-radius:12px;border:1px solid #334155;width:760px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6);}
-.cte-adm-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155;flex-shrink:0;}
-.cte-adm-title{font-size:14px;font-weight:700;color:#f1f5f9;}
-.cte-adm-tabs{display:flex;gap:6px;}
-.cte-adm-tab{padding:4px 12px;border-radius:12px;border:1px solid #334155;background:transparent;color:#94a3b8;font-size:11px;cursor:pointer;}
-.cte-adm-tab.active{background:#334155;color:#f1f5f9;}
-.cte-adm-body{flex:1;overflow-y:auto;padding:14px 20px;}
-.cte-adm-step{background:#0f172a;border-radius:8px;border:1px solid #334155;padding:12px 14px;margin-bottom:10px;}
-.cte-adm-step-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.cte-adm-step-num{width:22px;height:22px;border-radius:50%;background:var(--cte);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.cte-adm-lbl-inp{flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:12px;font-weight:600;padding:4px 10px;outline:none;font-family:inherit;}
-.cte-adm-lbl-inp:focus{border-color:var(--cte);}
-.cte-adm-row{display:flex;gap:10px;margin-bottom:8px;}
-.cte-adm-col{flex:1;display:flex;flex-direction:column;gap:4px;}
-.cte-adm-flbl{font-size:10px;color:#64748b;font-weight:600;letter-spacing:.5px;}
-.cte-adm-inp{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;font-family:inherit;width:100%;}
-.cte-adm-inp:focus{border-color:var(--cte);}
-.cte-adm-ta{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;font-family:inherit;width:100%;resize:none;height:52px;}
-.cte-adm-ta:focus{border-color:var(--cte);}
-.cte-adm-sel{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;width:100%;}
-.cte-adm-ck{display:flex;gap:14px;margin-bottom:4px;}
-.cte-adm-ck label{display:flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8;cursor:pointer;}
-.cte-adm-ck input{accent-color:var(--cte);}
-.cte-adm-ftr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #334155;flex-shrink:0;}
-.cte-adm-hint{font-size:10px;color:#64748b;}
-.cte-adm-ftr-btns{display:flex;gap:8px;}
-.cte-abtn{padding:7px 16px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;}
-.cte-abtn-cancel{background:#334155;color:#cbd5e1;}.cte-abtn-cancel:hover{background:#475569;}
-.cte-abtn-save{background:#10b981;color:#fff;}.cte-abtn-save:hover{background:#059669;}
-.cte-abtn-add{background:#1e293b;border:1px dashed var(--cte);color:var(--cte);padding:7px 16px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;width:100%;margin-top:4px;}
-.cte-abtn-add:hover{background:#1e1b4b;}
-.cte-abtn-del{background:transparent;border:none;color:#ef4444;font-size:11px;cursor:pointer;padding:0 4px;}
-.cte-abtn-del:hover{text-decoration:underline;}
-/* ── 상단 탭/네비 바 ── */
-.cte-topbar{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 14px;height:38px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.cte-tab-btns{display:flex;gap:5px;}
-.cte-step-nav{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.cte-step-counter{font-size:11px;color:#64748b;font-weight:600;white-space:nowrap;}
-/* 패널 태그 + 인라인 툴바 같이 배치 */
-.cte-panel-tag{font-size:9px;font-weight:700;letter-spacing:1px;color:#475569;margin-bottom:4px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0;min-height:26px;}
-/* ── 인라인 어노테이션 툴바 ── */
+
+/* ── 하단 설명 바 ── */
+.cte-bottom{min-height:52px;background:#0f172a;border-top:1px solid #1e293b;padding:8px 20px;display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.cte-desc{flex:1;}
+.cte-desc-text{font-size:12.5px;color:#cbd5e1;line-height:1.55;}
+.cte-desc-text b{color:#a5b4fc;font-weight:700;}
+.cte-desc-empty{color:#475569;font-size:12px;}
+
+/* ── 인라인 어노테이션 툴바 (관리자) ── */
 .cte-it-bar{display:flex;align-items:center;gap:3px;margin-left:6px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:2px 6px;}
 .cte-it-btn{padding:2px 7px;border-radius:5px;border:1px solid transparent;background:transparent;color:#64748b;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s;}
 .cte-it-btn.on{background:var(--cte);color:#fff;border-color:var(--cte);}
@@ -493,48 +454,31 @@ textarea.form-input{resize:vertical;}
 .cte-it-color.on{border-color:#fff;}
 .cte-it-del{padding:2px 6px;border-radius:5px;border:none;background:transparent;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
 .cte-it-del:hover{background:#450a0a;}
-/* ── 하단 관리자 편집 패널 ── */
-.cte-adm-panel{display:flex;flex-direction:column;background:#0f172a;border-top:2px solid #334155;flex-shrink:0;min-height:44px;max-height:60vh;transition:none;}
-.cte-adm-resizer{height:28px;display:flex;align-items:center;justify-content:center;cursor:ns-resize;background:#0f172a;border-bottom:1px solid #1e293b;user-select:none;flex-shrink:0;}
-.cte-adm-drag-lbl{font-size:10px;color:#475569;font-weight:600;letter-spacing:.3px;}
-.cte-adm-panel-body{flex:1;overflow-y:auto;padding:8px 14px;}
-.cte-adm-panel-foot{border-top:1px solid #1e293b;padding:6px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+
+/* ── 하단 관리자 편집 패널 (드래그로 크기 조절) ── */
+.cte-adm-panel{display:none;flex-direction:column;background:#0b1020;border-top:2px solid #6366f1;flex-shrink:0;min-height:44px;max-height:66vh;}
+.cte-adm-resizer{height:26px;display:flex;align-items:center;justify-content:center;cursor:ns-resize;background:#111a33;border-bottom:1px solid #1e293b;user-select:none;flex-shrink:0;}
+.cte-adm-drag-lbl{font-size:10px;color:#64748b;font-weight:600;letter-spacing:.3px;}
+.cte-adm-panel-body{flex:1;overflow-y:auto;padding:10px 14px;}
+.cte-adm-panel-foot{border-top:1px solid #1e293b;padding:6px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
 .cte-adm-hint{font-size:10px;color:#64748b;}
-/* 편집 패널 내부 폼 가로 레이아웃 */
 .cte-adm-hrow{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;}
 .cte-adm-hcol{display:flex;flex-direction:column;gap:3px;}
-.cte-adm-hcol.grow{flex:1;min-width:120px;}
-/* ── 이미지 선택 드롭다운 + 미리보기 ── */
-.cte-img-pick{display:flex;gap:8px;align-items:flex-start;}
-.cte-img-pick-sel{flex:1;}
-.cte-img-preview{width:88px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.cte-img-preview img{width:88px;height:66px;object-fit:cover;object-position:top;border-radius:5px;border:1px solid #334155;background:#0f172a;display:none;}
-.cte-img-preview img.on{display:block;}
-.cte-img-preview-lbl{font-size:9px;color:#64748b;}
-.cte-ann-open-btn{width:100%;margin-top:4px;padding:4px 0;background:#1e293b;border:1px dashed #6366f1;color:#a5b4fc;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.3px;}
-.cte-ann-open-btn:hover{background:#1e1b4b;}
-/* ── 메인 뷰 SVG 오버레이 ── */
-.cte-view-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
-/* ── 어노테이션 에디터 ── */
-.cte-ann-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);flex-direction:column;}
-.cte-ann-overlay.on{display:flex;}
-.cte-ann-header{background:#1e293b;border-bottom:1px solid #334155;padding:8px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;min-height:52px;}
-.cte-ann-title{font-size:13px;font-weight:700;color:#f1f5f9;}
-.cte-ann-toolgroup{display:flex;gap:4px;}
-.cte-ann-tool{padding:5px 11px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#94a3b8;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
-.cte-ann-tool.on{background:var(--cte);border-color:var(--cte);color:#fff;}
-.cte-ann-colors{display:flex;gap:5px;align-items:center;}
-.cte-ann-color{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .12s;flex-shrink:0;}
-.cte-ann-color.on{border-color:#fff;box-shadow:0 0 0 1px #fff4;}
-.cte-ann-del-btn{padding:5px 10px;background:#7f1d1d;color:#fca5a5;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;}
-.cte-ann-del-btn:hover{background:#991b1b;}
-.cte-ann-close-btn{padding:5px 14px;background:#334155;color:#cbd5e1;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
-.cte-ann-done-btn{padding:5px 14px;background:#10b981;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
-.cte-ann-body{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:12px;}
-.cte-ann-stage{position:relative;display:inline-flex;max-width:100%;max-height:100%;}
-.cte-ann-stage img{display:block;max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;user-select:none;-webkit-user-drag:none;}
-.cte-ann-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
-.cte-ann-footer{background:#0f172a;border-top:1px solid #1e293b;padding:6px 14px;text-align:center;flex-shrink:0;}
+.cte-adm-hcol.grow{flex:1;min-width:160px;}
+.cte-adm-flbl{font-size:10px;color:#64748b;font-weight:600;letter-spacing:.5px;}
+.cte-adm-inp{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;font-family:inherit;width:100%;}
+.cte-adm-inp:focus{border-color:var(--cte);}
+.cte-adm-sel{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;width:100%;}
+.cte-adm-ta{background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:11px;padding:5px 8px;outline:none;font-family:inherit;width:100%;resize:vertical;min-height:44px;}
+.cte-adm-ta:focus{border-color:var(--cte);}
+.cte-abtn{padding:7px 16px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.cte-abtn-save{background:#10b981;color:#fff;}.cte-abtn-save:hover{background:#059669;}
+.cte-abtn-cancel{background:#334155;color:#cbd5e1;}.cte-abtn-cancel:hover{background:#475569;}
+.cte-abtn-del{background:transparent;border:none;color:#ef4444;font-size:11px;cursor:pointer;padding:4px 8px;font-family:inherit;}
+.cte-abtn-del:hover{text-decoration:underline;}
+.cte-adm-mainbtn{padding:4px 10px;border-radius:6px;border:1px solid #f59e0b;background:transparent;color:#f59e0b;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;}
+.cte-adm-mainbtn:hover{background:#451a03;}
+.cte-adm-mainbtn.is-main{background:#f59e0b;color:#1a1a1a;}
 </style>
 </head>
 <body>
@@ -670,6 +614,11 @@ textarea.form-input{resize:vertical;}
     </div>
     <div class="panel-card" id="adminPanel" style="display:none">
       <div class="admin-badge">🔧 관리자 모드</div>
+      <div class="admin-section">
+        <div class="section-title">🏠 메인 화면 (홈)</div>
+        <div id="mainScreenStatus" style="font-size:12px;color:#888;margin-bottom:8px">현재 메인: -</div>
+        <button class="btn btn-primary btn-sm" onclick="setMainScreen()">이 화면을 메인으로 설정</button>
+      </div>
       <div class="admin-section">
         <div class="section-title">핫스팟 편집</div>
         <div class="btn-row" style="margin-bottom:8px">
@@ -817,31 +766,31 @@ textarea.form-input{resize:vertical;}
   <!-- ── 채널톡 교육 전용 영역 ── -->
   <div id="ctEduArea" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
 
-    <!-- 상단: 탭 버튼 + 스텝 네비 -->
+    <!-- 상단: 탭(상담/이미지전송) + 홈 + 스텝 네비 -->
     <div class="cte-topbar">
       <div class="cte-tab-btns" id="cteTabBtns"></div>
       <div class="cte-step-nav">
+        <button class="cte-home-btn" onclick="cteGoHome()" title="이 모드의 메인 화면으로">🏠 홈</button>
         <span class="cte-step-counter" id="cteStepCounter">STEP 1 / 1</span>
         <button class="cte-nbtn cte-nbtn-p" id="cteBtnP" onclick="ctePrev()">← 이전</button>
         <button class="cte-nbtn cte-nbtn-n" id="cteBtnN" onclick="cteNext()">다음 →</button>
       </div>
     </div>
 
-    <!-- 메인 스플릿 뷰 -->
+    <!-- 메인 스플릿 뷰: 왼쪽 = 차주앱(모바일), 오른쪽 = 채널톡(PC) -->
     <div class="cte-main">
 
-      <!-- 폰 패널 -->
+      <!-- 폰 패널 (고객 / 차주앱) -->
       <div class="cte-panel-phone">
         <div class="cte-panel-tag">
           <span class="cte-badge cte-badge-c">고객</span> 차주앱 (휴대폰)
-          <!-- 인라인 어노테이션 툴바 (관리자 모드 전용) -->
           <div class="cte-it-bar" id="ctePhoneTB" style="display:none;">
             <button class="cte-it-btn cte-it-hot on" id="ctePhoneTool_hotspot" onclick="cteItTool('phone','hotspot')" title="클릭 영역 지정 (드래그→이동할 스텝)">🔗 영역</button>
-            <button class="cte-it-btn" id="ctePhoneTool_scroll" onclick="cteItTool('phone','scroll')" title="드래그한 영역에 긴 이미지를 넣어 스크롤">📜 스크롤</button>
+            <button class="cte-it-btn" id="ctePhoneTool_scroll" onclick="cteItTool('phone','scroll')" title="드래그한 영역에 다른/긴 이미지를 넣어 스크롤">📜 스크롤</button>
             <div class="cte-it-sep"></div>
-            <button class="cte-it-btn" id="ctePhoneTool_box" onclick="cteItTool('phone','box')">□</button>
-            <button class="cte-it-btn" id="ctePhoneTool_text" onclick="cteItTool('phone','text')">T</button>
-            <button class="cte-it-btn" id="ctePhoneTool_arrow" onclick="cteItTool('phone','arrow')">↗</button>
+            <button class="cte-it-btn" id="ctePhoneTool_box" onclick="cteItTool('phone','box')" title="강조 박스">□</button>
+            <button class="cte-it-btn" id="ctePhoneTool_text" onclick="cteItTool('phone','text')" title="텍스트">T</button>
+            <button class="cte-it-btn" id="ctePhoneTool_arrow" onclick="cteItTool('phone','arrow')" title="화살표">↗</button>
             <div class="cte-it-sep"></div>
             <div class="cte-it-color on" style="background:#ef4444" data-panel="phone" data-color="#ef4444" onclick="cteItColor(this)"></div>
             <div class="cte-it-color" style="background:#f59e0b" data-panel="phone" data-color="#f59e0b" onclick="cteItColor(this)"></div>
@@ -849,12 +798,12 @@ textarea.form-input{resize:vertical;}
             <div class="cte-it-color" style="background:#3b82f6" data-panel="phone" data-color="#3b82f6" onclick="cteItColor(this)"></div>
             <div class="cte-it-color" style="background:#fff" data-panel="phone" data-color="#fff" onclick="cteItColor(this)"></div>
             <div class="cte-it-sep"></div>
-            <button class="cte-it-del" onclick="cteItDelete('phone')">✕</button>
+            <button class="cte-it-del" onclick="cteItDelete('phone')" title="선택 삭제">✕</button>
             <button class="cte-it-del" onclick="cteItClear('phone')" title="전체 삭제">⌫</button>
           </div>
         </div>
         <div class="cte-phone-outer">
-          <div class="phone-frame cte-phone-clickable" id="ctePhoneScreen" onclick="cteHandlePhoneClick()" style="cursor:default;width:auto;max-width:none;height:calc(100% - 4px);aspect-ratio:9/19.5;">
+          <div class="phone-frame" id="ctePhoneScreen" onclick="cteHandlePhoneClick()" style="cursor:default;width:auto;max-width:none;height:calc(100% - 4px);aspect-ratio:9/19.5;">
             <div class="phone-inner">
               <div class="phone-island"></div>
               <div class="status-bar">
@@ -869,7 +818,7 @@ textarea.form-input{resize:vertical;}
                 <img id="cteCustomerImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
                 <div class="cte-region-layer" id="ctePhoneRegions"></div>
                 <svg class="cte-view-svg" id="cteCustomerSvg"></svg>
-                <div class="cte-click-hint" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(99,102,241,.9);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:12px;opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;">탭하여 다음 →</div>
+                <div class="cte-click-hint">탭하여 다음 →</div>
               </div>
             </div>
           </div>
@@ -886,17 +835,17 @@ textarea.form-input{resize:vertical;}
 
       <div class="cte-divider"></div>
 
-      <!-- 에이전트 패널 -->
+      <!-- 에이전트 패널 (상담사 / 채널톡 PC) -->
       <div class="cte-panel-agent">
         <div class="cte-panel-tag">
           <span class="cte-badge cte-badge-a">상담사</span> 채널톡 (PC)
           <div class="cte-it-bar" id="cteAgentTB" style="display:none;">
             <button class="cte-it-btn cte-it-hot on" id="cteAgentTool_hotspot" onclick="cteItTool('agent','hotspot')" title="클릭 영역 지정 (드래그→이동할 스텝)">🔗 영역</button>
-            <button class="cte-it-btn" id="cteAgentTool_scroll" onclick="cteItTool('agent','scroll')" title="드래그한 영역에 긴 이미지를 넣어 스크롤">📜 스크롤</button>
+            <button class="cte-it-btn" id="cteAgentTool_scroll" onclick="cteItTool('agent','scroll')" title="드래그한 영역에 다른/긴 이미지를 넣어 스크롤">📜 스크롤</button>
             <div class="cte-it-sep"></div>
-            <button class="cte-it-btn" id="cteAgentTool_box" onclick="cteItTool('agent','box')">□</button>
-            <button class="cte-it-btn" id="cteAgentTool_text" onclick="cteItTool('agent','text')">T</button>
-            <button class="cte-it-btn" id="cteAgentTool_arrow" onclick="cteItTool('agent','arrow')">↗</button>
+            <button class="cte-it-btn" id="cteAgentTool_box" onclick="cteItTool('agent','box')" title="강조 박스">□</button>
+            <button class="cte-it-btn" id="cteAgentTool_text" onclick="cteItTool('agent','text')" title="텍스트">T</button>
+            <button class="cte-it-btn" id="cteAgentTool_arrow" onclick="cteItTool('agent','arrow')" title="화살표">↗</button>
             <div class="cte-it-sep"></div>
             <div class="cte-it-color on" style="background:#ef4444" data-panel="agent" data-color="#ef4444" onclick="cteItColor(this)"></div>
             <div class="cte-it-color" style="background:#f59e0b" data-panel="agent" data-color="#f59e0b" onclick="cteItColor(this)"></div>
@@ -904,7 +853,7 @@ textarea.form-input{resize:vertical;}
             <div class="cte-it-color" style="background:#3b82f6" data-panel="agent" data-color="#3b82f6" onclick="cteItColor(this)"></div>
             <div class="cte-it-color" style="background:#fff" data-panel="agent" data-color="#fff" onclick="cteItColor(this)"></div>
             <div class="cte-it-sep"></div>
-            <button class="cte-it-del" onclick="cteItDelete('agent')">✕</button>
+            <button class="cte-it-del" onclick="cteItDelete('agent')" title="선택 삭제">✕</button>
             <button class="cte-it-del" onclick="cteItClear('agent')" title="전체 삭제">⌫</button>
           </div>
         </div>
@@ -914,7 +863,7 @@ textarea.form-input{resize:vertical;}
               <div class="cte-pc-btn r"></div><div class="cte-pc-btn y"></div><div class="cte-pc-btn g"></div>
               <div class="cte-pc-url">app.channel.io</div>
             </div>
-            <div class="cte-img-wrap" id="cteImgWrap" style="position:relative;">
+            <div class="cte-img-wrap" id="cteImgWrap">
               <div class="cte-img-scroll" id="cteImgScroll">
                 <img id="cteAgentImg" src="" alt="">
                 <div class="cte-region-layer" id="cteAgentRegions"></div>
@@ -941,22 +890,21 @@ textarea.form-input{resize:vertical;}
       </div>
     </div>
 
-    <!-- 설명 바 -->
+    <!-- 하단 설명 바 -->
     <div class="cte-bottom">
       <div class="cte-desc">
-        <div class="cte-desc-step" id="cteDescStep"></div>
         <div class="cte-desc-text" id="cteDescText"></div>
       </div>
     </div>
 
-    <!-- 하단 편집 패널 (관리자 모드 전용, 드래그로 크기 조절) -->
-    <div class="cte-adm-panel" id="cteAdmPanel" style="display:none;">
+    <!-- 하단 관리자 편집 패널 (관리자 모드 전용, 위로 드래그하여 확대) -->
+    <div class="cte-adm-panel" id="cteAdmPanel">
       <div class="cte-adm-resizer" id="cteAdmResizer">
         <div class="cte-adm-drag-lbl">⠿ 편집 패널 &nbsp;—&nbsp; 위로 드래그해서 크게 보기</div>
       </div>
       <div class="cte-adm-panel-body" id="cteAdmPanelBody"></div>
       <div class="cte-adm-panel-foot">
-        <span class="cte-adm-hint">💡 저장 후 채널톡/교육_flow.json을 GitHub에 올려주세요.</span>
+        <span class="cte-adm-hint">💡 저장 후 <b style="color:#94a3b8;">채널톡/교육_flow.json</b>을 GitHub에 올려주세요.</span>
         <button class="cte-abtn cte-abtn-save" onclick="cteSaveConfig()">💾 저장 (JSON 다운로드)</button>
       </div>
     </div>
@@ -964,58 +912,6 @@ textarea.form-input{resize:vertical;}
   </div>
 
 </div><!-- /main-layout -->
-
-<!-- (구 어노테이션 오버레이 자리 — 인라인 방식으로 교체됨) -->
-<div id="cteAnnOverlay" style="display:none;">
-  <div class="cte-ann-header">
-    <div class="cte-ann-title" id="cteAnnTitle"></div>
-    <div class="cte-ann-toolgroup">
-      <button class="cte-ann-tool on" id="cteToolBox"></button>
-      <button class="cte-ann-tool" id="cteToolText"></button>
-      <button class="cte-ann-tool" id="cteToolArrow"></button>
-    </div>
-    <div class="cte-ann-colors">
-      <div class="cte-ann-color on" style="background:#ef4444" data-color="#ef4444" onclick="cteSetAnnColor(this)"></div>
-      <div class="cte-ann-color" style="background:#f59e0b" data-color="#f59e0b" onclick="cteSetAnnColor(this)"></div>
-      <div class="cte-ann-color" style="background:#10b981" data-color="#10b981" onclick="cteSetAnnColor(this)"></div>
-      <div class="cte-ann-color" style="background:#3b82f6" data-color="#3b82f6" onclick="cteSetAnnColor(this)"></div>
-      <div class="cte-ann-color" style="background:#a855f7" data-color="#a855f7" onclick="cteSetAnnColor(this)"></div>
-      <div class="cte-ann-color" style="background:#fff" data-color="#fff" onclick="cteSetAnnColor(this)"></div>
-    </div>
-    <button class="cte-ann-del-btn" onclick="cteAnnDeleteSelected()">✕ 선택 삭제</button>
-    <button class="cte-ann-del-btn" onclick="cteAnnClearAll()" style="background:#7f1d1d;">전체 삭제</button>
-    <div style="flex:1"></div>
-    <button class="cte-ann-close-btn" onclick="cteCloseAnnEditor()">취소</button>
-    <button class="cte-ann-done-btn" onclick="cteConfirmAnn()">✓ 적용</button>
-  </div>
-  <div class="cte-ann-body">
-    <div class="cte-ann-stage" id="cteAnnStage">
-      <img id="cteAnnImg" src="" alt="" draggable="false">
-      <svg class="cte-ann-svg" id="cteAnnSvg" xmlns="http://www.w3.org/2000/svg"></svg>
-    </div>
-  </div>
-  <div class="cte-ann-footer">
-    <span style="font-size:11px;color:#64748b;">💡 박스: 드래그로 그리기 &nbsp;|&nbsp; 텍스트: 클릭 후 입력 &nbsp;|&nbsp; 어노테이션 클릭 시 선택 → 삭제 가능</span>
-  </div>
-</div>
-
-<!-- 채널톡 교육 관리자 오버레이 -->
-<div class="cte-admin-overlay" id="cteAdminOverlay">
-  <div class="cte-admin-panel">
-    <div class="cte-adm-hdr">
-      <div class="cte-adm-title">⚙ 채널톡 교육자료 편집</div>
-      <div class="cte-adm-tabs" id="cteAdmTabs"></div>
-    </div>
-    <div class="cte-adm-body" id="cteAdmBody"></div>
-    <div class="cte-adm-ftr">
-      <div class="cte-adm-hint">💡 저장 후 채널톡/교육_flow.json을 GitHub에 올려주세요.</div>
-      <div class="cte-adm-ftr-btns">
-        <button class="cte-abtn cte-abtn-cancel" onclick="cteCloseAdmin()">닫기</button>
-        <button class="cte-abtn cte-abtn-save" onclick="cteSaveConfig()">💾 저장 (JSON 다운로드)</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- 비밀번호 모달 -->
 <div class="modal-bg" id="pwModal">
@@ -1238,6 +1134,23 @@ function goHome() {
   renderList();
 }
 
+// 관리자: 현재 화면을 메인(홈)으로 지정 → goHome / 부팅 시작 화면
+function setMainScreen() {
+  const st = cache[activeSec];
+  if(!st.cur || !st.flow.screens?.[st.cur]) return;
+  st.flow.start = st.cur;
+  renderMainScreenStatus();
+  const btn = document.querySelector('#mainScreenStatus + button');
+  if(btn){ const o=btn.textContent; btn.textContent='✓ 설정됨!'; setTimeout(()=>btn.textContent=o,1500); }
+}
+function renderMainScreenStatus() {
+  const el = document.getElementById('mainScreenStatus');
+  if(!el) return;
+  const st = cache[activeSec];
+  const startScr = st.flow?.screens?.[st.flow.start];
+  el.innerHTML = '현재 메인: <b>' + esc(startScr ? startScr.label : (st.flow?.start||'-')) + '</b>';
+}
+
 function jumpHist(idx) {
   const st = cache[activeSec];
   const path = [...st.hist, st.cur];
@@ -1441,8 +1354,10 @@ function renderGuide(g) {
 // ═══════════════════════════════════════════
 function tick() {
   const d = new Date();
-  document.getElementById('statusTime').textContent =
-    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  const hhmm = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  document.getElementById('statusTime').textContent = hhmm;
+  const cteClock = document.getElementById('cteStatusTime');
+  if(cteClock) cteClock.textContent = hhmm;
 }
 
 // ═══════════════════════════════════════════
@@ -1496,6 +1411,7 @@ function exitAdmin() {
 }
 
 function renderHsList() {
+  renderMainScreenStatus();
   const st = cache[activeSec];
   const hs = st.flow.screens?.[st.cur]?.hotspots || [];
   const el = document.getElementById('hsList');
@@ -2033,77 +1949,135 @@ function esc(s) {
 function round1(n) { return Math.round(n*10)/10; }
 
 // ═══════════════════════════════════════════
-// 채널톡 교육 (CTE)
+// 채널톡 교육 (CTE) — 백지화 후 재작성
+// 좌: 차주앱(모바일/고객)  ·  우: 채널톡(PC/상담사)
+// 탭: 채널톡 상담 / 이미지 전송  ·  홈 버튼 + 모드별 메인 스텝
+// 영역 드래그(핫스팟)·강조(박스/텍스트/화살표)·부분 스크롤 영역
+// 관리자 편집: 하단 드래그-리사이즈 패널 + 이미지 위 인라인 툴바
 // ═══════════════════════════════════════════
 let cteConfig = null;
 let cteCurTab = 0;
 let cteCurStep = 0;
 let cteDynMsgs = [];
-let cteAdmTab = 0;
+
+// ─── 이미지 목록 (채널톡 폴더 실제 파일) ───
+const CTE_CUSTOMER_IMGS = [
+  '채널톡/1.차주앱_메인화면.jpg',
+  '채널톡/1-1.차주앱_채널톡진입.jpg',
+  '채널톡/1-2.차주앱_채널톡 상담 시작.jpg',
+  '채널톡/1-3.차주앱_입장.jpg',
+  '채널톡/1-4.차주앱_첨부파일넣기.jpg',
+  '채널톡/1-5.차주앱_고객 이미지전송.png',
+  '채널톡/2.차주앱_텍스트문의_입장.jpg',
+  '채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg',
+  '채널톡/2-2.차주앱_텍스트문의_고객 문의.png',
+];
+const CTE_AGENT_IMGS = [
+  '채널톡/채널톡_로그인.png',
+  '채널톡/로그인_채널목록.png',
+  '채널톡/로그인_메인화면.png',
+  '채널톡/세로운 메시지 확인.png',
+  '채널톡/수신함 확인.png',
+  '채널톡/채널톡_이미지_나에게 배정.png',
+  '채널톡/채널톡_이미지_배정완료.png',
+  '채널톡/고객 문의.png',
+  '채널톡/채팅화면.png',
+  '채널톡/채널톡_내부_이미지답변.png',
+  '채널톡/채널톡_확인안내.png',
+  '채널톡/채널톡_끝인사.png',
+  '채널톡/채널톡_내부_끝인사.png',
+  '채널톡/채널톡_텍스트문의_끝인사.png',
+  '채널톡/채널톡_텍스트문의_다른문의.png',
+  '채널톡/채널톡_상담종료.png',
+  '채널톡/채널톡_상담종료_태그선택.png',
+  '채널톡/채널톡_상담종료_태그찾기.png',
+  '채널톡/채널톡_상담종료_태그적용.png',
+  '채널톡/채널톡_상담종료_종료.png',
+  '채널톡/채널톡_상담종료_종료됨.png',
+  '채널톡/채널톡_종료됨패널.png',
+  '채널톡/문자로 발송되는 메시지.jpg',
+];
 
 const CTE_BOT_MSGS = [
   { from:'bot', text:'방문해주셔서 감사합니다 :)\n무엇을 도와드릴까요?', time:'오전 8:03' },
 ];
 
+function cteImgOpts(cur) {
+  const opt = p => `<option value="${esc(p)}" ${p===cur?'selected':''}>${esc(p.split('/').pop())}</option>`;
+  return `<option value="" ${!cur?'selected':''}>-- 선택 안 함 --</option>`
+    + `<optgroup label="고객 · 차주앱">` + CTE_CUSTOMER_IMGS.map(opt).join('') + `</optgroup>`
+    + `<optgroup label="상담사 · 채널톡">` + CTE_AGENT_IMGS.map(opt).join('') + `</optgroup>`;
+}
+
+// ─── 로드 / 초기화 ───
 async function cteLoadConfig() {
   if(cteConfig) return;
   try {
     const r = await fetch('채널톡/교육_flow.json?_=' + Date.now());
     cteConfig = await r.json();
   } catch(e) {
-    cteConfig = { tabs:[{ id:'text', label:'💬 텍스트 문의', steps:[
+    cteConfig = { tabs:[{ id:'consult', label:'💬 채널톡 상담', homeStep:0, steps:[
       { label:'스텝1', customerImage:'', agentMode:'image', agentImage:'', clickable:true, desc:'' }
     ]}]};
   }
+  // 구버전 호환: homeStep 기본값 보정
+  cteConfig.tabs.forEach(t => { if(typeof t.homeStep!=='number') t.homeStep = 0; });
 }
-
 async function cteInit() {
   await cteLoadConfig();
+  cteCurTab = 0;
+  cteCurStep = cteConfig.tabs[0].homeStep || 0;
+  cteDynMsgs = [];
   cteRender();
 }
 
+function cteStep() { return cteConfig.tabs[cteCurTab].steps[cteCurStep]; }
+
+// ─── 렌더 ───
 function cteRender() {
   if(!cteConfig) return;
+  const editing = adminMode && activeSec==='채널톡';
   const tabs = cteConfig.tabs;
   const steps = tabs[cteCurTab].steps;
   const step = steps[cteCurStep];
 
-  // 상단 탭 버튼
+  // 상단 탭 버튼 (모드 전환)
   const tabBtns = document.getElementById('cteTabBtns');
   tabBtns.innerHTML = '';
   tabs.forEach((t, ti) => {
     const btn = document.createElement('button');
-    btn.className = 'cte-nbtn' + (ti===cteCurTab ? ' cte-nbtn-n' : ' cte-nbtn-p');
-    btn.style.cssText = 'padding:4px 14px;font-size:11px;';
+    btn.className = 'cte-tabbtn' + (ti===cteCurTab ? ' active' : '');
     btn.textContent = t.label;
-    btn.onclick = () => { cteCurTab=ti; cteCurStep=0; cteDynMsgs=[]; cteRender(); };
+    btn.onclick = () => { cteCurTab=ti; cteCurStep=tabs[ti].homeStep||0; cteDynMsgs=[]; cteRender(); };
     tabBtns.appendChild(btn);
   });
-  // 스텝 카운터
-  document.getElementById('cteStepCounter').textContent = `STEP ${cteCurStep+1} / ${steps.length}  —  ${step.label}`;
 
-  // 고객 이미지 + 어노테이션 + 스크롤 영역
+  // 스텝 카운터
+  const homeMark = (cteCurStep===(tabs[cteCurTab].homeStep||0)) ? ' 🏠' : '';
+  document.getElementById('cteStepCounter').textContent = `STEP ${cteCurStep+1} / ${steps.length} — ${step.label}${homeMark}`;
+
+  // 고객(폰) 이미지 + 어노테이션 + 스크롤 영역
   const custImg = document.getElementById('cteCustomerImg');
-  custImg.onload = () => { if(adminMode&&activeSec==='채널톡') cteItRedraw('phone', step.customerAnnotations||[]); else cteDrawViewAnns(document.getElementById('cteCustomerSvg'), step.customerAnnotations); };
+  custImg.onload = () => { if(editing) cteItRedraw('phone', step.customerAnnotations||[]); else cteDrawViewAnns(document.getElementById('cteCustomerSvg'), step.customerAnnotations); };
   custImg.src = step.customerImage || '';
   cteDrawViewAnns(document.getElementById('cteCustomerSvg'), step.customerAnnotations);
   cteRenderRegions(document.getElementById('ctePhoneRegions'), step.customerScrollRegions, 'phone');
 
-  // 폰 클릭 (전체 클릭 또는 핫스팟 존재 시 hover 힌트)
+  // 폰 클릭(전체 클릭 시 다음). 핫스팟이 있으면 전체 클릭 비활성.
   const ps = document.getElementById('ctePhoneScreen');
   const hasPhoneHot = (step.customerAnnotations||[]).some(a=>a.type==='hotspot');
-  if(step.clickable && !hasPhoneHot) ps.classList.add('cte-clickable');
+  if(step.clickable && !hasPhoneHot && !editing) ps.classList.add('cte-clickable');
   else ps.classList.remove('cte-clickable');
 
-  // 타이핑
+  // 고객 입력 시뮬
   const ta = document.getElementById('cteTypingArea');
-  if(step.typing) { ta.classList.add('on'); document.getElementById('cteTypingInput').value=''; }
+  if(step.typing && !editing){ ta.classList.add('on'); document.getElementById('cteTypingInput').value=''; }
   else ta.classList.remove('on');
 
-  // 에이전트 화면 + 어노테이션
+  // 상담사(PC) — 이미지 모드 / 채팅 시뮬 모드
   const imgWrap = document.getElementById('cteImgWrap');
   const chatUI = document.getElementById('cteChatUI');
-  if(step.agentMode==='chat') {
+  if(step.agentMode==='chat'){
     imgWrap.classList.remove('on');
     chatUI.classList.add('on');
     document.getElementById('cteAgentSvg').innerHTML='';
@@ -2114,54 +2088,46 @@ function cteRender() {
     chatUI.classList.remove('on');
     const agImg = document.getElementById('cteAgentImg');
     const agSvg = document.getElementById('cteAgentSvg');
-    agImg.onload = () => { if(adminMode&&activeSec==='채널톡') cteItRedraw('agent', step.agentAnnotations||[]); else cteDrawViewAnns(agSvg, step.agentAnnotations); };
+    agImg.onload = () => { if(editing) cteItRedraw('agent', step.agentAnnotations||[]); else cteDrawViewAnns(agSvg, step.agentAnnotations); };
     agImg.src = step.agentImage || '';
     cteDrawViewAnns(agSvg, step.agentAnnotations);
     cteRenderRegions(document.getElementById('cteAgentRegions'), step.agentScrollRegions, 'agent');
   }
 
   // 설명
-  document.getElementById('cteDescStep').textContent = '';
-  document.getElementById('cteDescText').innerHTML = step.desc || '';
+  const dt = document.getElementById('cteDescText');
+  dt.innerHTML = step.desc ? step.desc : '<span class="cte-desc-empty">설명이 없습니다.</span>';
 
-  // 이전/다음 버튼
+  // 이전/다음
   document.getElementById('cteBtnP').disabled = cteCurStep===0;
   document.getElementById('cteBtnN').disabled = cteCurStep===steps.length-1;
   document.getElementById('cteBtnN').textContent = cteCurStep===steps.length-1 ? '완료 ✓' : '다음 →';
 
-  // 관리자 모드면 하단 편집 패널도 갱신
-  if(adminMode && activeSec==='채널톡') cteRenderAdmPanel();
-
-  // 인라인 어노테이션 SVG 이벤트 재등록
-  if(adminMode) cteItBindSvg();
+  // 관리자: 하단 편집 패널 + SVG 이벤트
+  if(editing){ cteRenderAdmPanel(); cteItBindSvg(); }
 }
 
+// ─── 채팅 시뮬레이션 ───
 function cteRenderChat() {
   const container = document.getElementById('cteMsgs');
   const msgs = [...CTE_BOT_MSGS, ...cteDynMsgs];
   container.innerHTML = '';
   msgs.forEach(m => {
-    if(m.from==='sys') {
-      const el=document.createElement('div'); el.className='cte-sys'; el.textContent=m.text;
-      container.appendChild(el); return;
-    }
+    if(m.from==='sys'){ const el=document.createElement('div'); el.className='cte-sys'; el.textContent=m.text; container.appendChild(el); return; }
     const isMe = m.from==='me';
     const wrap = document.createElement('div');
     wrap.className = 'cte-msg'+(isMe?' me':'')+(m.isNew?' new':'');
-    const av = document.createElement('div');
-    av.className='cte-av-sm'; av.textContent=isMe?'정':'화';
+    const av = document.createElement('div'); av.className='cte-av-sm'; av.textContent=isMe?'정':'화';
     if(!isMe){ av.style.background='#6366f1'; av.style.color='#fff'; }
     const col = document.createElement('div'); col.className='cte-col';
     const bub = document.createElement('div'); bub.className='cte-bub'; bub.textContent=m.text;
     col.appendChild(bub);
     if(m.time){ const t=document.createElement('div'); t.className='cte-t'; t.textContent=m.time; col.appendChild(t); }
-    if(isMe){ wrap.appendChild(col); wrap.appendChild(av); }
-    else{ wrap.appendChild(av); wrap.appendChild(col); }
+    if(isMe){ wrap.appendChild(col); wrap.appendChild(av); } else { wrap.appendChild(av); wrap.appendChild(col); }
     container.appendChild(wrap);
   });
   container.scrollTop = container.scrollHeight;
 }
-
 function cteSendMsg() {
   const inp = document.getElementById('cteTypingInput');
   const txt = inp.value.trim(); if(!txt) return;
@@ -2169,37 +2135,32 @@ function cteSendMsg() {
   cteDynMsgs.push({from:'me',text:txt,time:(h<12?'오전 ':'오후 ')+(h<=12?h:h-12)+':'+m,isNew:true});
   inp.value='';
   cteRenderChat();
-  const next = cteConfig.tabs[cteCurTab].steps[cteCurStep+1];
-  if(next) document.getElementById('cteCustomerImg').src = next.customerImage||'';
 }
 
+// ─── 네비게이션 ───
 function cteHandlePhoneClick() {
-  if(adminMode) return; // 편집 중에는 화면 이동 금지
-  const step = cteConfig.tabs[cteCurTab].steps[cteCurStep];
+  if(adminMode && activeSec==='채널톡') return; // 편집 중에는 이동 금지
+  const step = cteStep();
   const hasHot = (step.customerAnnotations||[]).some(a=>a.type==='hotspot');
   if(step.clickable && !hasHot) cteNext();
 }
-function ctePrev() { if(cteCurStep>0){ cteCurStep--; cteDynMsgs=[]; cteRender(); } }
-function cteNext() {
-  const steps = cteConfig.tabs[cteCurTab].steps;
-  if(cteCurStep<steps.length-1){ cteCurStep++; cteDynMsgs=[]; cteRender(); }
-}
+function ctePrev(){ if(cteCurStep>0){ cteCurStep--; cteDynMsgs=[]; cteRender(); } }
+function cteNext(){ const steps=cteConfig.tabs[cteCurTab].steps; if(cteCurStep<steps.length-1){ cteCurStep++; cteDynMsgs=[]; cteRender(); } }
+function cteGoStep(n){ const steps=cteConfig.tabs[cteCurTab].steps; if(n>=0&&n<steps.length){ cteCurStep=n; cteDynMsgs=[]; cteRender(); } }
+function cteGoHome(){ cteCurStep = cteConfig.tabs[cteCurTab].homeStep||0; cteDynMsgs=[]; cteRender(); }
 
-// CTE 관리자
+// ═══════════════════════════════════════════
+// 관리자 모드
+// ═══════════════════════════════════════════
 function cteOpenAdmin() {
   document.getElementById('topAdminBtn').classList.add('on');
   document.getElementById('topAdminBtn').textContent = '🔓 관리자 모드 ON';
-  // 하단 편집 패널 표시
   const panel = document.getElementById('cteAdmPanel');
   panel.style.display = 'flex';
-  panel.style.height = '220px';
-  cteRenderAdmPanel();
-  // 인라인 툴바 표시
+  panel.style.height = '240px';
   document.getElementById('ctePhoneTB').style.display = 'flex';
   document.getElementById('cteAgentTB').style.display = 'flex';
-  // 드래그 리사이저 초기화
   cteInitResizer();
-  // 편집 모드 스타일로 다시 그리기 + 이벤트 바인딩
   cteRender();
   cteItBindSvg();
 }
@@ -2210,64 +2171,40 @@ function cteCloseAdmin() {
   adminMode = false;
   document.getElementById('topAdminBtn').classList.remove('on');
   document.getElementById('topAdminBtn').textContent = '🔐 관리자 로그인';
-  // SVG 이벤트 해제
   ['cteCustomerSvg','cteAgentSvg'].forEach(id=>{
-    const s=document.getElementById(id); if(s){s.onmousedown=null;s.onmousemove=null;s.onmouseup=null;s.onclick=null;s.style.pointerEvents='none';s.style.cursor='';}
+    const s=document.getElementById(id);
+    if(s){ s.onmousedown=null; s.onmousemove=null; s.onmouseup=null; s.onclick=null; s.style.pointerEvents='none'; s.style.cursor=''; }
   });
-  // 뷰 모드로 다시 그리기
   if(cteConfig) cteRender();
 }
 
-// ─── 이미지 목록 (채널톡 폴더) ───
-const CTE_CUSTOMER_IMGS = [
-  '','채널톡/1.차주앱_메인화면.jpg','채널톡/1-1.차주앱_채널톡진입.jpg',
-  '채널톡/1-2.차주앱_채널톡 상담 시작.jpg','채널톡/1-3.차주앱_입장.jpg',
-  '채널톡/1-4.차주앱_첨부파일넣기.jpg','채널톡/1-5.차주앱_고객 이미지전송.png',
-  '채널톡/2.차주앱_텍스트문의_입장.jpg','채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg',
-  '채널톡/2-2.차주앱_텍스트문의_고객 문의.png'
-];
-const CTE_AGENT_IMGS = [
-  '','채널톡/채널톡_로그인.png','채널톡/로그인_채널목록.png','채널톡/로그인_메인화면.png',
-  '채널톡/세로운 메시지 확인.png','채널톡/수신함 확인.png','채널톡/나에게 배정.png',
-  '채널톡/고객 문의.png','채널톡/채팅화면.png','채널톡/이미지를 올리는 경우.png',
-  '채널톡/채널톡_끝인사.png','채널톡/채널톡_확인안내.png','채널톡/채널톡_상담종료.png',
-  '채널톡/채널톡_상담종료_태그선택.png','채널톡/채널톡_상담종료_태그찾기.png',
-  '채널톡/채널톡_상담종료_태그적용.png','채널톡/채널톡_상담종료_종료.png',
-  '채널톡/채널톡_상담종료_종료됨.png','채널톡/채널톡_종료됨패널.png'
-];
-
-function cteImgOpts(list, cur) {
-  return list.map(p => `<option value="${esc(p)}" ${p===cur?'selected':''}>${p||'-- 선택 안 함 --'}</option>`).join('');
-}
-
-// 기존 오버레이용 cteRenderAdmin → 하단 패널용 cteRenderAdmPanel으로 대체
-function cteRenderAdmin() { cteRenderAdmPanel(); }
-
+// ─── 하단 편집 패널 ───
 function cteRenderAdmPanel() {
   if(!cteConfig) return;
   const t = cteCurTab, i = cteCurStep;
-  const steps = cteConfig.tabs[t].steps;
+  const tab = cteConfig.tabs[t];
+  const steps = tab.steps;
   const s = steps[i];
   const body = document.getElementById('cteAdmPanelBody');
   if(!body) return;
-
   const cAnn = s.customerAnnotations||[];
   const aAnn = s.agentAnnotations||[];
+  const isHome = (tab.homeStep||0)===i;
 
   body.innerHTML = `
-    <div class="cte-adm-hrow" style="margin-bottom:6px;align-items:center;">
+    <div class="cte-adm-hrow" style="margin-bottom:8px;align-items:center;">
       <div class="cte-adm-hcol">
         <div class="cte-adm-flbl">스텝 이름</div>
-        <input class="cte-adm-inp" style="width:180px;" data-tab="${t}" data-step="${i}" data-field="label" value="${esc(s.label)}" placeholder="스텝 이름">
+        <input class="cte-adm-inp" style="width:180px;" data-tab="${t}" data-step="${i}" data-field="label" value="${esc(s.label||'')}" placeholder="스텝 이름">
       </div>
       <div class="cte-adm-hcol">
-        <div class="cte-adm-flbl">상담사 모드</div>
-        <select class="cte-adm-sel" data-tab="${t}" data-step="${i}" data-field="agentMode" onchange="cteHandleAdmChange({target:this});cteRender();">
+        <div class="cte-adm-flbl">상담사 화면 모드</div>
+        <select class="cte-adm-sel" style="width:130px;" data-tab="${t}" data-step="${i}" data-field="agentMode" onchange="cteHandleAdmChange({target:this});cteRender();">
           <option value="image" ${s.agentMode==='image'?'selected':''}>이미지</option>
           <option value="chat" ${s.agentMode==='chat'?'selected':''}>채팅 시뮬</option>
         </select>
       </div>
-      <div class="cte-adm-hcol" style="flex-direction:row;gap:10px;margin-top:12px;">
+      <div class="cte-adm-hcol" style="flex-direction:row;gap:12px;margin-top:14px;">
         <label style="font-size:11px;color:#94a3b8;display:flex;gap:4px;align-items:center;cursor:pointer;">
           <input type="checkbox" data-tab="${t}" data-step="${i}" data-field="clickable" ${s.clickable?'checked':''}> 폰 클릭→다음
         </label>
@@ -2275,32 +2212,35 @@ function cteRenderAdmPanel() {
           <input type="checkbox" data-tab="${t}" data-step="${i}" data-field="typing" ${s.typing?'checked':''}> 고객 입력
         </label>
       </div>
-      <div class="cte-adm-hcol" style="margin-left:auto;flex-direction:row;gap:6px;margin-top:12px;">
+      <div class="cte-adm-hcol" style="margin-top:14px;">
+        <button class="cte-adm-mainbtn${isHome?' is-main':''}" onclick="cteSetHomeStep()" title="이 모드(${esc(tab.label)})의 홈/메인 화면으로 지정">${isHome?'🏠 메인 화면':'🏠 메인으로 지정'}</button>
+      </div>
+      <div class="cte-adm-hcol" style="margin-left:auto;flex-direction:row;gap:6px;margin-top:14px;">
         <button class="cte-abtn cte-abtn-cancel" style="padding:4px 10px;font-size:11px;" onclick="cteAdmAddStep()">+ 스텝 추가</button>
         <button class="cte-abtn-del" onclick="cteDelStep(${t},${i})">✕ 스텝 삭제</button>
       </div>
     </div>
     <div class="cte-adm-hrow">
       <div class="cte-adm-hcol grow">
-        <div class="cte-adm-flbl">📱 고객 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(cAnn)}</span></div>
+        <div class="cte-adm-flbl">📱 고객(차주앱) 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(cAnn)}</span></div>
         <select class="cte-adm-sel" data-tab="${t}" data-step="${i}" data-field="customerImage" onchange="cteHandleAdmChange({target:this});cteRender();">
-          ${cteImgOpts(CTE_CUSTOMER_IMGS, s.customerImage||'')}
+          ${cteImgOpts(s.customerImage||'')}
         </select>
         ${cteHotListHtml('phone', cAnn, steps)}
-        ${cteRegionListHtml('phone', s.customerScrollRegions, CTE_CUSTOMER_IMGS)}
+        ${cteRegionListHtml('phone', s.customerScrollRegions)}
       </div>
       <div class="cte-adm-hcol grow">
-        <div class="cte-adm-flbl">🖥 상담사 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(aAnn)}</span></div>
+        <div class="cte-adm-flbl">🖥 상담사(채널톡) 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(aAnn)}</span></div>
         <select class="cte-adm-sel" data-tab="${t}" data-step="${i}" data-field="agentImage" onchange="cteHandleAdmChange({target:this});cteRender();" ${s.agentMode==='chat'?'disabled style="opacity:.4"':''}>
-          ${cteImgOpts(CTE_AGENT_IMGS, s.agentImage||'')}
+          ${cteImgOpts(s.agentImage||'')}
         </select>
         ${s.agentMode==='image' ? cteHotListHtml('agent', aAnn, steps) : ''}
-        ${s.agentMode==='image' ? cteRegionListHtml('agent', s.agentScrollRegions, CTE_AGENT_IMGS) : ''}
+        ${s.agentMode==='image' ? cteRegionListHtml('agent', s.agentScrollRegions) : ''}
       </div>
       <div class="cte-adm-hcol grow">
         <div class="cte-adm-flbl">설명 텍스트 (&lt;b&gt;강조&lt;/b&gt;)</div>
-        <textarea class="cte-adm-ta" style="height:44px;" data-tab="${t}" data-step="${i}" data-field="desc">${esc(s.desc||'')}</textarea>
-        <div style="font-size:10px;color:#475569;margin-top:4px;line-height:1.45;">💡 <b style="color:#f59e0b;">🔗영역</b>=클릭 시 이동 / <b style="color:#22d3ee;">📜스크롤</b>=영역에 긴 이미지 / <b style="color:#a5b4fc;">□T↗</b>=박스·텍스트·화살표. 이미지 위에서 드래그하세요.</div>
+        <textarea class="cte-adm-ta" style="height:60px;" data-tab="${t}" data-step="${i}" data-field="desc">${esc(s.desc||'')}</textarea>
+        <div style="font-size:10px;color:#475569;margin-top:4px;line-height:1.5;">💡 이미지 위에서 드래그: <b style="color:#f59e0b;">🔗영역</b>=클릭 시 스텝 이동 · <b style="color:#22d3ee;">📜스크롤</b>=영역에 다른/긴 이미지 · <b style="color:#a5b4fc;">□ T ↗</b>=박스·텍스트·화살표</div>
       </div>
     </div>`;
 
@@ -2310,27 +2250,32 @@ function cteRenderAdmPanel() {
   });
 }
 
+function cteSetHomeStep() {
+  cteConfig.tabs[cteCurTab].homeStep = cteCurStep;
+  cteRender();
+}
 function cteAdmAddStep() {
   cteConfig.tabs[cteCurTab].steps.push({label:'새 스텝',customerImage:'',agentMode:'image',agentImage:'',clickable:true,desc:'',customerAnnotations:[],agentAnnotations:[],customerScrollRegions:[],agentScrollRegions:[]});
   cteCurStep = cteConfig.tabs[cteCurTab].steps.length - 1;
   cteDynMsgs=[];
   cteRender();
 }
-
-// 어노테이션 종류별 요약 텍스트
-function cteAnnSummary(anns) {
-  if(!anns||!anns.length) return '';
-  const c = {hotspot:0,box:0,text:0,arrow:0};
-  anns.forEach(a=>{ if(c[a.type]!=null) c[a.type]++; });
-  const parts=[];
-  if(c.hotspot) parts.push('🔗'+c.hotspot);
-  if(c.box) parts.push('□'+c.box);
-  if(c.text) parts.push('T'+c.text);
-  if(c.arrow) parts.push('↗'+c.arrow);
-  return '('+parts.join(' ')+')';
+function cteDelStep(t,s) {
+  if(cteConfig.tabs[t].steps.length<=1){ alert('스텝이 1개 이상이어야 합니다.'); return; }
+  if(!confirm(`STEP ${s+1} "${cteConfig.tabs[t].steps[s].label}"을 삭제할까요?`)) return;
+  cteConfig.tabs[t].steps.splice(s,1);
+  if(cteConfig.tabs[t].homeStep>=cteConfig.tabs[t].steps.length) cteConfig.tabs[t].homeStep=0;
+  if(cteCurStep>=cteConfig.tabs[t].steps.length) cteCurStep=cteConfig.tabs[t].steps.length-1;
+  cteDynMsgs=[];
+  cteRender();
+}
+function cteHandleAdmChange(e) {
+  const el=e.target,t=+el.dataset.tab,s=+el.dataset.step,f=el.dataset.field;
+  const step=cteConfig.tabs[t].steps[s];
+  if(el.type==='checkbox') step[f]=el.checked; else step[f]=el.value;
 }
 
-// 핫스팟 목록 편집 HTML (이동 스텝 변경 / 삭제)
+// ─── 핫스팟 목록 편집 (이동 스텝 변경 / 삭제) ───
 function cteHotListHtml(panel, anns, steps) {
   const hots = [];
   (anns||[]).forEach((a,idx)=>{ if(a.type==='hotspot') hots.push({a,idx}); });
@@ -2344,220 +2289,38 @@ function cteHotListHtml(panel, anns, steps) {
       <button class="cte-it-del" style="font-size:11px;padding:1px 5px;" onclick="cteHotDel('${panel}',${idx})">✕</button>
     </div>`;
   });
-  h+='</div>';
-  return h;
+  return h+'</div>';
 }
 function cteHotGoto(panel, idx, val) {
   const field = panel==='phone'?'customerAnnotations':'agentAnnotations';
-  const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][field]||[];
+  const anns = cteStep()[field]||[];
   if(anns[idx]) anns[idx].goto = parseInt(val,10);
   cteItRedraw(panel, anns);
 }
 function cteHotDel(panel, idx) {
   const field = panel==='phone'?'customerAnnotations':'agentAnnotations';
-  const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][field]||[];
+  const anns = cteStep()[field]||[];
   anns.splice(idx,1);
   cteItSt[panel].selected=-1;
   cteItRedraw(panel, anns);
   cteRenderAdmPanel();
 }
 
-// 스크롤 영역 목록 편집 HTML (영역에 넣을 긴 이미지 선택 / 삭제)
-function cteRegionListHtml(panel, regions, imgList) {
+// ─── 스크롤 영역 목록 편집 ───
+function cteRegionListHtml(panel, regions) {
   if(!regions||!regions.length) return '';
   let h = '<div style="margin-top:5px;display:flex;flex-direction:column;gap:3px;">';
   regions.forEach((r,idx)=>{
-    const opts = imgList.map(p=>`<option value="${esc(p)}" ${p===r.image?'selected':''}>${p||'-- 긴 이미지 선택 --'}</option>`).join('');
     h+=`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#22d3ee;">
       📜 영역${idx+1}
-      <select style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#e2e8f0;font-size:10px;padding:2px 4px;" onchange="cteRegionImg('${panel}',${idx},this.value)">${opts}</select>
+      <select style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#e2e8f0;font-size:10px;padding:2px 4px;" onchange="cteRegionImg('${panel}',${idx},this.value)">${cteImgOpts(r.image||'')}</select>
       <button class="cte-it-del" style="font-size:11px;padding:1px 5px;" onclick="cteRegionDel('${panel}',${idx})">✕</button>
     </div>`;
   });
-  h+='</div>';
-  return h;
+  return h+'</div>';
 }
-
-// ─── 드래그 리사이저 ───
-function cteInitResizer() {
-  const handle = document.getElementById('cteAdmResizer');
-  const panel  = document.getElementById('cteAdmPanel');
-  if(!handle || !panel) return;
-  let startY, startH;
-  handle.onmousedown = e => {
-    startY = e.clientY; startH = panel.offsetHeight;
-    document.onmousemove = ev => {
-      const h = Math.max(80, Math.min(window.innerHeight*0.65, startH - (ev.clientY - startY)));
-      panel.style.height = h + 'px';
-    };
-    document.onmouseup = () => { document.onmousemove=null; document.onmouseup=null; };
-    e.preventDefault();
-  };
-}
-
-// ─── 인라인 어노테이션 도구 ───
-const cteItSt = {
-  phone: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null },
-  agent: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null }
-};
-
-function cteItTool(panel, tool) {
-  cteItSt[panel].tool = tool;
-  ['hotspot','scroll','box','text','arrow'].forEach(t => {
-    const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
-    if(el) el.classList.toggle('on', t===tool);
-  });
-}
-
-function cteItColor(el) {
-  const panel = el.dataset.panel, color = el.dataset.color;
-  cteItSt[panel].color = color;
-  document.querySelectorAll(`.cte-it-color[data-panel="${panel}"]`).forEach(e=>e.classList.remove('on'));
-  el.classList.add('on');
-}
-
-function cteItDelete(panel) {
-  const st = cteItSt[panel];
-  if(st.selected < 0) return;
-  const field = panel==='phone' ? 'customerAnnotations' : 'agentAnnotations';
-  const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][field] || [];
-  anns.splice(st.selected, 1);
-  st.selected = -1;
-  cteDrawViewAnns(document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg'), anns);
-  cteRenderAdmPanel();
-}
-
-function cteItClear(panel) {
-  if(!confirm('이 이미지의 어노테이션을 모두 삭제할까요?')) return;
-  const field = panel==='phone' ? 'customerAnnotations' : 'agentAnnotations';
-  cteConfig.tabs[cteCurTab].steps[cteCurStep][field] = [];
-  cteItSt[panel].selected = -1;
-  cteDrawViewAnns(document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg'), []);
-  cteRenderAdmPanel();
-}
-
-function cteItPct(svgEl, e) {
-  const r = svgEl.getBoundingClientRect();
-  return { x: (e.clientX-r.left)/r.width*100, y: (e.clientY-r.top)/r.height*100 };
-}
-
-function cteItHit(anns, p) {
-  for(let i=anns.length-1;i>=0;i--){
-    const a=anns[i];
-    if((a.type==='box'||a.type==='hotspot') && p.x>=a.x&&p.x<=a.x+a.w&&p.y>=a.y&&p.y<=a.y+a.h) return i;
-    if(a.type==='text'&&Math.abs(p.x-a.x)<8&&Math.abs(p.y-a.y)<4) return i;
-    if(a.type==='arrow'){const dx=a.x2-a.x1,dy=a.y2-a.y1,len=Math.sqrt(dx*dx+dy*dy);if(len<1)continue;const t=Math.max(0,Math.min(1,((p.x-a.x1)*dx+(p.y-a.y1)*dy)/(len*len)));if(Math.sqrt(Math.pow(p.x-a.x1-t*dx,2)+Math.pow(p.y-a.y1-t*dy,2))<4)return i;}
-  }
-  return -1;
-}
-
-function cteItBindSvg() {
-  const map = {phone:{svgId:'cteCustomerSvg',field:'customerAnnotations'},agent:{svgId:'cteAgentSvg',field:'agentAnnotations'}};
-  Object.entries(map).forEach(([panel,cfg])=>{
-    const svg = document.getElementById(cfg.svgId);
-    if(!svg) return;
-    svg.style.pointerEvents = 'all';
-    svg.style.cursor = 'crosshair';
-
-    svg.onmousedown = e => {
-      if(e.button!==0) return;
-      const st = cteItSt[panel];
-      const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field] || (cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]=[]);
-      const p = cteItPct(svg, e);
-      if(st.tool==='text') return; // handled by onclick
-      const hit = cteItHit(anns, p);
-      if(hit>=0){ st.selected=hit; cteItRedraw(panel,anns); return; }
-      st.drawing=true; st.start=p; st.temp=null;
-      e.preventDefault();
-    };
-    svg.onmousemove = e => {
-      const st = cteItSt[panel];
-      if(!st.drawing) return;
-      const p = cteItPct(svg, e);
-      st.temp = st.tool==='arrow'
-        ? {x1:st.start.x,y1:st.start.y,x2:p.x,y2:p.y}
-        : {x:Math.min(st.start.x,p.x),y:Math.min(st.start.y,p.y),w:Math.abs(p.x-st.start.x),h:Math.abs(p.y-st.start.y)};
-      const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]||[];
-      cteItRedraw(panel, anns);
-    };
-    svg.onmouseup = e => {
-      const st = cteItSt[panel];
-      if(!st.drawing) return;
-      st.drawing=false;
-      const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]||(cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]=[]);
-      if(st.temp){
-        const r=st.temp;
-        if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
-          const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
-          const step2 = cteConfig.tabs[cteCurTab].steps[cteCurStep];
-          (step2[rf]||(step2[rf]=[])).push({x:r.x,y:r.y,w:r.w,h:r.h,image:''});
-          st.temp=null; cteItRedraw(panel, anns); cteRenderRegionsFor(panel); cteRenderAdmPanel(); return;
-        }
-        if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
-          const goto = cteAskGoto();
-          if(goto!=null) anns.push({type:'hotspot',x:r.x,y:r.y,w:r.w,h:r.h,goto});
-        }
-        else if(r.x1!=null&&(Math.abs(r.x2-r.x1)>1||Math.abs(r.y2-r.y1)>1)) anns.push({type:'arrow',x1:r.x1,y1:r.y1,x2:r.x2,y2:r.y2,color:st.color});
-        else if(r.w!=null&&r.w>1&&r.h>1) anns.push({type:'box',x:r.x,y:r.y,w:r.w,h:r.h,color:st.color});
-      }
-      st.temp=null;
-      cteItRedraw(panel, anns);
-      cteRenderAdmPanel();
-    };
-    svg.onclick = e => {
-      const st = cteItSt[panel];
-      if(st.tool!=='text') return;
-      const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]||(cteConfig.tabs[cteCurTab].steps[cteCurStep][cfg.field]=[]);
-      const p = cteItPct(svg, e);
-      const hit = cteItHit(anns, p);
-      if(hit>=0){ st.selected=hit; cteItRedraw(panel,anns); return; }
-      const text = prompt('텍스트를 입력하세요:');
-      if(!text) return;
-      anns.push({type:'text',x:p.x,y:p.y,text,color:st.color});
-      cteItRedraw(panel, anns);
-      cteRenderAdmPanel();
-    };
-  });
-}
-
-function cteItRedraw(panel, anns) {
-  const svgId = panel==='phone' ? 'cteCustomerSvg' : 'cteAgentSvg';
-  const svg = document.getElementById(svgId);
-  if(!svg) return;
-  const st = cteItSt[panel];
-  const H = svg.clientHeight || 400;
-  const fs = Math.max(11, Math.round(H*0.035));
-  let h = '';
-  anns.forEach((a,i)=>{
-    const sel = i===st.selected;
-    const sw = sel?2.5:1.8;
-    if(a.type==='hotspot'){
-      h+=`<rect class="cte-hot-edit${sel?' sel':''}" x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" rx="2" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
-      h+=`<text x="${a.x+a.w/2}%" y="${a.y+a.h/2}%" fill="#f59e0b" font-size="${fs}" font-weight="800" font-family="sans-serif" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#000" stroke-width="2.5" stroke-linejoin="round" pointer-events="none">→${(a.goto??0)+1}</text>`;
-    } else if(a.type==='box'){
-      h+=`<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
-      if(sel) h+=`<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="none" stroke="#fff" stroke-width="0.7" rx="1" pointer-events="none"/>`;
-    } else if(a.type==='text'){
-      h+=`<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${fs}" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="${(fs*0.18).toFixed(1)}" stroke-linejoin="round" dominant-baseline="hanging" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
-      if(sel) h+=`<circle cx="${a.x}%" cy="${a.y}%" r="${fs*0.5}" fill="#ffffff44" pointer-events="none"/>`;
-    } else if(a.type==='arrow'){
-      const id=`ivarr${panel}${i}`;
-      h+=`<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
-      h+=`<line x1="${a.x1}%" y1="${a.y1}%" x2="${a.x2}%" y2="${a.y2}%" stroke="${a.color}" stroke-width="${sw}" marker-end="url(#${id})" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
-    }
-  });
-  // 임시 드래그 미리보기
-  if(st.temp){
-    const r=st.temp, c=(st.tool==='hotspot'?'#f59e0b':st.tool==='scroll'?'#22d3ee':st.color);
-    if(r.x1!=null) h+=`<line x1="${r.x1}%" y1="${r.y1}%" x2="${r.x2}%" y2="${r.y2}%" stroke="${c}" stroke-width="1.8" pointer-events="none" stroke-dasharray="4 2"/>`;
-    else if(r.w!=null) h+=`<rect x="${r.x}%" y="${r.y}%" width="${r.w}%" height="${r.h}%" fill="${cteAnnRgba(c,.12)}" stroke="${c}" stroke-width="1.8" rx="1" pointer-events="none" stroke-dasharray="${(st.tool==='hotspot'||st.tool==='scroll')?'4 2':'0'}"/>`;
-  }
-  svg.innerHTML = h;
-}
-
-// ─── 부분 스크롤 영역 렌더 ───
 function cteRenderRegionsFor(panel) {
-  const step = cteConfig.tabs[cteCurTab].steps[cteCurStep];
+  const step = cteStep();
   if(panel==='phone') cteRenderRegions(document.getElementById('ctePhoneRegions'), step.customerScrollRegions, 'phone');
   else cteRenderRegions(document.getElementById('cteAgentRegions'), step.agentScrollRegions, 'agent');
 }
@@ -2588,18 +2351,159 @@ function cteRenderRegions(layerEl, regions, panel) {
 }
 function cteRegionDel(panel, i) {
   const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
-  const arr = cteConfig.tabs[cteCurTab].steps[cteCurStep][rf]||[];
+  const arr = cteStep()[rf]||[];
   arr.splice(i,1);
   cteRenderRegionsFor(panel);
   cteRenderAdmPanel();
 }
 function cteRegionImg(panel, i, val) {
   const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
-  const arr = cteConfig.tabs[cteCurTab].steps[cteCurStep][rf]||[];
+  const arr = cteStep()[rf]||[];
   if(arr[i]) arr[i].image = val;
   cteRenderRegionsFor(panel);
 }
 
+// ─── 하단 패널 드래그 리사이저 ───
+function cteInitResizer() {
+  const handle = document.getElementById('cteAdmResizer');
+  const panel  = document.getElementById('cteAdmPanel');
+  if(!handle || !panel) return;
+  let startY, startH;
+  handle.onmousedown = e => {
+    startY = e.clientY; startH = panel.offsetHeight;
+    document.onmousemove = ev => {
+      const h = Math.max(80, Math.min(window.innerHeight*0.66, startH - (ev.clientY - startY)));
+      panel.style.height = h + 'px';
+    };
+    document.onmouseup = () => { document.onmousemove=null; document.onmouseup=null; };
+    e.preventDefault();
+  };
+}
+
+// ═══════════════════════════════════════════
+// 인라인 어노테이션 도구 (이미지 위 드래그)
+// ═══════════════════════════════════════════
+const cteItSt = {
+  phone: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null },
+  agent: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null }
+};
+function cteItTool(panel, tool) {
+  cteItSt[panel].tool = tool;
+  ['hotspot','scroll','box','text','arrow'].forEach(t => {
+    const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
+    if(el) el.classList.toggle('on', t===tool);
+  });
+}
+function cteItColor(el) {
+  const panel = el.dataset.panel, color = el.dataset.color;
+  cteItSt[panel].color = color;
+  document.querySelectorAll(`.cte-it-color[data-panel="${panel}"]`).forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+}
+function cteItDelete(panel) {
+  const st = cteItSt[panel];
+  if(st.selected < 0) return;
+  const field = panel==='phone' ? 'customerAnnotations' : 'agentAnnotations';
+  const anns = cteStep()[field] || [];
+  anns.splice(st.selected, 1);
+  st.selected = -1;
+  cteItRedraw(panel, anns);
+  cteRenderAdmPanel();
+}
+function cteItClear(panel) {
+  if(!confirm('이 이미지의 어노테이션을 모두 삭제할까요?')) return;
+  const field = panel==='phone' ? 'customerAnnotations' : 'agentAnnotations';
+  cteStep()[field] = [];
+  cteItSt[panel].selected = -1;
+  cteItRedraw(panel, []);
+  cteRenderAdmPanel();
+}
+function cteItPct(svgEl, e) {
+  const r = svgEl.getBoundingClientRect();
+  return { x: (e.clientX-r.left)/r.width*100, y: (e.clientY-r.top)/r.height*100 };
+}
+function cteItHit(anns, p) {
+  for(let i=anns.length-1;i>=0;i--){
+    const a=anns[i];
+    if((a.type==='box'||a.type==='hotspot') && p.x>=a.x&&p.x<=a.x+a.w&&p.y>=a.y&&p.y<=a.y+a.h) return i;
+    if(a.type==='text'&&Math.abs(p.x-a.x)<8&&Math.abs(p.y-a.y)<4) return i;
+    if(a.type==='arrow'){const dx=a.x2-a.x1,dy=a.y2-a.y1,len=Math.sqrt(dx*dx+dy*dy);if(len<1)continue;const t=Math.max(0,Math.min(1,((p.x-a.x1)*dx+(p.y-a.y1)*dy)/(len*len)));if(Math.sqrt(Math.pow(p.x-a.x1-t*dx,2)+Math.pow(p.y-a.y1-t*dy,2))<4)return i;}
+  }
+  return -1;
+}
+function cteItBindSvg() {
+  const map = {phone:{svgId:'cteCustomerSvg',field:'customerAnnotations'},agent:{svgId:'cteAgentSvg',field:'agentAnnotations'}};
+  Object.entries(map).forEach(([panel,cfg])=>{
+    const svg = document.getElementById(cfg.svgId);
+    if(!svg) return;
+    svg.style.pointerEvents = 'all';
+    svg.style.cursor = 'crosshair';
+    svg.onmousedown = e => {
+      if(e.button!==0) return;
+      const st = cteItSt[panel];
+      const step = cteStep();
+      const anns = step[cfg.field] || (step[cfg.field]=[]);
+      const p = cteItPct(svg, e);
+      if(st.tool==='text') return;
+      const hit = cteItHit(anns, p);
+      if(hit>=0){ st.selected=hit; cteItRedraw(panel,anns); return; }
+      st.drawing=true; st.start=p; st.temp=null;
+      e.preventDefault();
+    };
+    svg.onmousemove = e => {
+      const st = cteItSt[panel];
+      if(!st.drawing) return;
+      const p = cteItPct(svg, e);
+      st.temp = st.tool==='arrow'
+        ? {x1:st.start.x,y1:st.start.y,x2:p.x,y2:p.y}
+        : {x:Math.min(st.start.x,p.x),y:Math.min(st.start.y,p.y),w:Math.abs(p.x-st.start.x),h:Math.abs(p.y-st.start.y)};
+      cteItRedraw(panel, cteStep()[cfg.field]||[]);
+    };
+    svg.onmouseup = e => {
+      const st = cteItSt[panel];
+      if(!st.drawing) return;
+      st.drawing=false;
+      const step = cteStep();
+      const anns = step[cfg.field] || (step[cfg.field]=[]);
+      if(st.temp){
+        const r=st.temp;
+        if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
+          const rf = panel==='phone'?'customerScrollRegions':'agentScrollRegions';
+          (step[rf]||(step[rf]=[])).push({x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),image:''});
+          st.temp=null; cteItRedraw(panel, anns); cteRenderRegionsFor(panel); cteRenderAdmPanel(); return;
+        }
+        if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
+          const goto = cteAskGoto();
+          if(goto!=null) anns.push({type:'hotspot',x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),goto});
+        }
+        else if(r.x1!=null&&(Math.abs(r.x2-r.x1)>1||Math.abs(r.y2-r.y1)>1)) anns.push({type:'arrow',x1:round1(r.x1),y1:round1(r.y1),x2:round1(r.x2),y2:round1(r.y2),color:st.color});
+        else if(r.w!=null&&r.w>1&&r.h>1) anns.push({type:'box',x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),color:st.color});
+      }
+      st.temp=null;
+      cteItRedraw(panel, anns);
+      cteRenderAdmPanel();
+    };
+    svg.onclick = e => {
+      const st = cteItSt[panel];
+      if(st.tool!=='text') return;
+      const step = cteStep();
+      const anns = step[cfg.field] || (step[cfg.field]=[]);
+      const p = cteItPct(svg, e);
+      const hit = cteItHit(anns, p);
+      if(hit>=0){ st.selected=hit; cteItRedraw(panel,anns); return; }
+      const text = prompt('텍스트를 입력하세요:');
+      if(!text) return;
+      anns.push({type:'text',x:round1(p.x),y:round1(p.y),text,color:st.color});
+      cteItRedraw(panel, anns);
+      cteRenderAdmPanel();
+    };
+  });
+}
+function cteItSelect(panel, i) {
+  cteItSt[panel].selected = i;
+  const field = panel==='phone'?'customerAnnotations':'agentAnnotations';
+  cteItRedraw(panel, cteStep()[field]||[]);
+}
 function cteAskGoto() {
   const steps = cteConfig.tabs[cteCurTab].steps;
   const list = steps.map((s,i)=>`${i+1}. ${s.label}`).join('\n');
@@ -2611,209 +2515,48 @@ function cteAskGoto() {
   return n;
 }
 
-function cteItSelect(panel, i) {
-  cteItSt[panel].selected = i;
-  const field = panel==='phone'?'customerAnnotations':'agentAnnotations';
-  const anns = cteConfig.tabs[cteCurTab].steps[cteCurStep][field]||[];
-  cteItRedraw(panel, anns);
-}
-
-function cteAdmImgChange(sel, previewId) {
-  const img = document.getElementById(previewId);
-  if(!img) return;
-  img.src = sel.value;
-  img.classList.toggle('on', !!sel.value);
-  cteHandleAdmChange({target: sel});
-}
-
-function cteHandleAdmChange(e) {
-  const el=e.target,t=+el.dataset.tab,s=+el.dataset.step,f=el.dataset.field;
-  const step=cteConfig.tabs[t].steps[s];
-  if(el.type==='checkbox') step[f]=el.checked; else step[f]=el.value;
-}
-function cteDelStep(t,s) {
-  if(cteConfig.tabs[t].steps.length<=1){ alert('스텝이 1개 이상이어야 합니다.'); return; }
-  if(!confirm(`STEP ${s+1} "${cteConfig.tabs[t].steps[s].label}"을 삭제할까요?`)) return;
-  cteConfig.tabs[t].steps.splice(s,1);
-  cteRenderAdmin();
-}
-function cteAddStep(t) {
-  cteConfig.tabs[t].steps.push({label:'새 스텝',customerImage:'',agentMode:'image',agentImage:'',clickable:true,desc:'',customerAnnotations:[],agentAnnotations:[]});
-  cteRenderAdmin();
-  document.getElementById('cteAdmBody').scrollTop=99999;
-}
-function cteSaveConfig() {
-  const json=JSON.stringify(cteConfig,null,2);
-  const blob=new Blob([json],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='교육_flow.json'; a.click();
-  URL.revokeObjectURL(a.href);
-  cteCurStep=0; cteDynMsgs=[]; cteRender();
-}
-
-// ─── 어노테이션 에디터 ───
-let cteAnn = { tab:0, step:0, field:'', tool:'box', color:'#ef4444', annotations:[], selected:-1, drawing:false, dragStart:null, tempRect:null };
-
-function cteOpenAnnEditor(tab, step, field, imgPath) {
-  if(!imgPath){ alert('먼저 이미지를 선택해주세요.'); return; }
-  cteAnn.tab=tab; cteAnn.step=step; cteAnn.field=field;
-  const existing = cteConfig.tabs[tab].steps[step][field] || [];
-  cteAnn.annotations = JSON.parse(JSON.stringify(existing));
-  cteAnn.selected=-1; cteAnn.drawing=false; cteAnn.tempRect=null;
-  const img = document.getElementById('cteAnnImg');
-  img.src = imgPath;
-  const lbl = field==='customerAnnotations' ? '고객 이미지' : '상담사 이미지';
-  document.getElementById('cteAnnTitle').textContent = '📝 어노테이션 편집 — '+lbl;
-  document.getElementById('cteAnnOverlay').classList.add('on');
-  cteSetTool('box');
-  const svg = document.getElementById('cteAnnSvg');
-  svg.onmousedown = cteAnnDown;
-  svg.onmousemove = cteAnnMove;
-  svg.onmouseup   = cteAnnUp;
-  svg.onclick     = cteAnnClick;
-  cteAnnRender();
-}
-function cteCloseAnnEditor(){ document.getElementById('cteAnnOverlay').classList.remove('on'); }
-function cteConfirmAnn(){
-  const {tab,step,field,annotations}=cteAnn;
-  cteConfig.tabs[tab].steps[step][field]=JSON.parse(JSON.stringify(annotations));
-  cteCloseAnnEditor();
-  cteRenderAdmin();
-}
-function cteSetTool(t){
-  cteAnn.tool=t;
-  ['Box','Text','Arrow'].forEach(n=>document.getElementById('cteTool'+n).classList.toggle('on',t===n.toLowerCase()));
-}
-function cteSetAnnColor(el){
-  cteAnn.color=el.dataset.color;
-  document.querySelectorAll('.cte-ann-color').forEach(e=>e.classList.remove('on'));
-  el.classList.add('on');
-}
-function cteAnnDeleteSelected(){
-  if(cteAnn.selected<0) return;
-  cteAnn.annotations.splice(cteAnn.selected,1);
-  cteAnn.selected=-1; cteAnnRender();
-}
-function cteAnnClearAll(){
-  if(!confirm('모든 어노테이션을 삭제할까요?')) return;
-  cteAnn.annotations=[]; cteAnn.selected=-1; cteAnnRender();
-}
-
-function cteAnnPct(e){
-  const r=document.getElementById('cteAnnSvg').getBoundingClientRect();
-  return {x:(e.clientX-r.left)/r.width*100, y:(e.clientY-r.top)/r.height*100};
-}
-function cteAnnHit(p){
-  const A=cteAnn.annotations;
-  for(let i=A.length-1;i>=0;i--){
-    const a=A[i];
-    if(a.type==='box' && p.x>=a.x&&p.x<=a.x+a.w&&p.y>=a.y&&p.y<=a.y+a.h) return i;
-    if(a.type==='text'&&Math.abs(p.x-a.x)<8&&Math.abs(p.y-a.y)<5) return i;
-    if(a.type==='arrow'){
-      const dx=a.x2-a.x1,dy=a.y2-a.y1,len=Math.sqrt(dx*dx+dy*dy);
-      if(len<1) continue;
-      const t=((p.x-a.x1)*dx+(p.y-a.y1)*dy)/(len*len);
-      const ct=Math.max(0,Math.min(1,t));
-      const dist=Math.sqrt(Math.pow(p.x-a.x1-ct*dx,2)+Math.pow(p.y-a.y1-ct*dy,2));
-      if(dist<3) return i;
-    }
-  }
-  return -1;
-}
-function cteAnnDown(e){
-  if(e.button!==0) return;
-  const p=cteAnnPct(e);
-  if(cteAnn.tool==='text'){return;} // handled in click
-  if(cteAnn.tool==='arrow'){
-    const hit=cteAnnHit(p);
-    if(hit>=0){cteAnn.selected=hit;cteAnnRender();return;}
-    cteAnn.drawing=true; cteAnn.dragStart=p; cteAnn.tempRect=null;
-    return;
-  }
-  // box
-  const hit=cteAnnHit(p);
-  if(hit>=0){cteAnn.selected=hit;cteAnnRender();return;}
-  cteAnn.drawing=true; cteAnn.dragStart=p; cteAnn.tempRect=null;
-}
-function cteAnnMove(e){
-  if(!cteAnn.drawing) return;
-  const p=cteAnnPct(e),s=cteAnn.dragStart;
-  if(cteAnn.tool==='arrow'){
-    cteAnn.tempRect={x1:s.x,y1:s.y,x2:p.x,y2:p.y};
-  } else {
-    cteAnn.tempRect={x:Math.min(s.x,p.x),y:Math.min(s.y,p.y),w:Math.abs(p.x-s.x),h:Math.abs(p.y-s.y)};
-  }
-  cteAnnRender();
-}
-function cteAnnUp(e){
-  if(!cteAnn.drawing) return;
-  cteAnn.drawing=false;
-  if(cteAnn.tempRect){
-    const r=cteAnn.tempRect;
-    if(cteAnn.tool==='arrow'&&(Math.abs(r.x2-r.x1)>1||Math.abs(r.y2-r.y1)>1)){
-      cteAnn.annotations.push({type:'arrow',x1:r.x1,y1:r.y1,x2:r.x2,y2:r.y2,color:cteAnn.color});
-    } else if(r.w>1&&r.h>1){
-      cteAnn.annotations.push({type:'box',x:r.x,y:r.y,w:r.w,h:r.h,color:cteAnn.color});
-    }
-  }
-  cteAnn.tempRect=null; cteAnnRender();
-}
-function cteAnnClick(e){
-  if(cteAnn.drawing) return;
-  if(cteAnn.tool!=='text') return;
-  const p=cteAnnPct(e);
-  const hit=cteAnnHit(p);
-  if(hit>=0){cteAnn.selected=hit;cteAnnRender();return;}
-  const text=prompt('텍스트를 입력하세요:');
-  if(!text) return;
-  cteAnn.annotations.push({type:'text',x:p.x,y:p.y,text,color:cteAnn.color});
-  cteAnnRender();
-}
-
-function cteAnnRgba(hex,a){
-  if(!hex||hex.length<7) return `rgba(255,0,0,${a})`;
-  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-function cteEscSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function cteAnnRender(){
-  const svg=document.getElementById('cteAnnSvg');
-  const {annotations,selected,tempRect,tool,color}=cteAnn;
-  let h='';
-  annotations.forEach((a,i)=>{
-    const sel=i===selected;
-    const sw=sel?2.5:1.8;
-    if(a.type==='box'){
-      h+=`<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.12)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:pointer" onclick="event.stopPropagation();cteAnnSel(${i})"/>`;
+// 편집 모드 SVG 렌더 (선택/임시 드래그 포함)
+function cteItRedraw(panel, anns) {
+  const svgId = panel==='phone' ? 'cteCustomerSvg' : 'cteAgentSvg';
+  const svg = document.getElementById(svgId);
+  if(!svg) return;
+  const st = cteItSt[panel];
+  const H = svg.clientHeight || 400;
+  const fs = Math.max(11, Math.round(H*0.035));
+  let h = '';
+  (anns||[]).forEach((a,i)=>{
+    const sel = i===st.selected;
+    const sw = sel?2.6:1.8;
+    if(a.type==='hotspot'){
+      h+=`<rect class="cte-hot-edit${sel?' sel':''}" x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" rx="2" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
+      h+=`<text x="${a.x+a.w/2}%" y="${a.y+a.h/2}%" fill="#f59e0b" font-size="${fs}" font-weight="800" font-family="sans-serif" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#000" stroke-width="2.5" stroke-linejoin="round" pointer-events="none">→${(a.goto??0)+1}</text>`;
+    } else if(a.type==='box'){
+      h+=`<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
       if(sel) h+=`<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="none" stroke="#fff" stroke-width="0.7" rx="1" pointer-events="none"/>`;
     } else if(a.type==='text'){
-      h+=`<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="3%" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="0.6%" stroke-linejoin="round" style="cursor:pointer" onclick="event.stopPropagation();cteAnnSel(${i})">${cteEscSvg(a.text)}</text>`;
-      if(sel) h+=`<circle cx="${a.x}%" cy="${a.y}%" r="1.5%" fill="#fff4" pointer-events="none"/>`;
+      h+=`<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${fs}" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="${(fs*0.18).toFixed(1)}" stroke-linejoin="round" dominant-baseline="hanging" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
+      if(sel) h+=`<circle cx="${a.x}%" cy="${a.y}%" r="${fs*0.5}" fill="#ffffff44" pointer-events="none"/>`;
     } else if(a.type==='arrow'){
-      const id='arr'+i;
+      const id=`ivarr${panel}${i}`;
       h+=`<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
-      h+=`<line x1="${a.x1}%" y1="${a.y1}%" x2="${a.x2}%" y2="${a.y2}%" stroke="${a.color}" stroke-width="${sw}" marker-end="url(#${id})" style="cursor:pointer" onclick="event.stopPropagation();cteAnnSel(${i})"/>`;
+      h+=`<line x1="${a.x1}%" y1="${a.y1}%" x2="${a.x2}%" y2="${a.y2}%" stroke="${a.color}" stroke-width="${sw}" marker-end="url(#${id})" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
     }
   });
-  if(tempRect){
-    if(tool==='arrow'&&tempRect.x1!=null){
-      h+=`<line x1="${tempRect.x1}%" y1="${tempRect.y1}%" x2="${tempRect.x2}%" y2="${tempRect.y2}%" stroke="${color}" stroke-width="1.8" pointer-events="none"/>`;
-    } else if(tempRect.w!=null){
-      h+=`<rect x="${tempRect.x}%" y="${tempRect.y}%" width="${tempRect.w}%" height="${tempRect.h}%" fill="${cteAnnRgba(color,.12)}" stroke="${color}" stroke-width="1.8" rx="1" pointer-events="none"/>`;
-    }
+  if(st.temp){
+    const r=st.temp, c=(st.tool==='hotspot'?'#f59e0b':st.tool==='scroll'?'#22d3ee':st.color);
+    if(r.x1!=null) h+=`<line x1="${r.x1}%" y1="${r.y1}%" x2="${r.x2}%" y2="${r.y2}%" stroke="${c}" stroke-width="1.8" pointer-events="none" stroke-dasharray="4 2"/>`;
+    else if(r.w!=null) h+=`<rect x="${r.x}%" y="${r.y}%" width="${r.w}%" height="${r.h}%" fill="${cteAnnRgba(c,.12)}" stroke="${c}" stroke-width="1.8" rx="1" pointer-events="none" stroke-dasharray="${(st.tool==='hotspot'||st.tool==='scroll')?'4 2':'0'}"/>`;
   }
-  svg.innerHTML=h;
+  svg.innerHTML = h;
 }
-function cteAnnSel(i){ cteAnn.selected=i; cteAnnRender(); }
 
-// ─── 메인 뷰 어노테이션 렌더 (관리자 모드: 인라인 툴 사용) ───
+// 뷰 모드 SVG 렌더 (핫스팟 클릭→스텝 이동, hover 표시)
 function cteDrawViewAnns(svgEl, annotations) {
   if(!svgEl) return;
-  // 관리자 모드에서는 인라인 편집 렌더러가 처리
-  if(adminMode && activeSec==='채널톡') return;
+  if(adminMode && activeSec==='채널톡') return; // 편집 중엔 cteItRedraw가 담당
   svgEl.style.pointerEvents = 'none';
-  if(!annotations||!annotations.length){svgEl.innerHTML='';return;}
+  svgEl.style.cursor = '';
+  if(!annotations||!annotations.length){ svgEl.innerHTML=''; return; }
   const H = svgEl.clientHeight || 400;
   const fs = Math.max(11, Math.round(H*0.035));
   let h='';
@@ -2833,10 +2576,34 @@ function cteDrawViewAnns(svgEl, annotations) {
   svgEl.innerHTML=h;
 }
 
-function cteGoStep(n) {
-  const steps = cteConfig.tabs[cteCurTab].steps;
-  if(n>=0 && n<steps.length){ cteCurStep=n; cteDynMsgs=[]; cteRender(); }
+// ─── 요약/색상/escape 헬퍼 ───
+function cteAnnSummary(anns) {
+  if(!anns||!anns.length) return '';
+  const c = {hotspot:0,box:0,text:0,arrow:0};
+  anns.forEach(a=>{ if(c[a.type]!=null) c[a.type]++; });
+  const parts=[];
+  if(c.hotspot) parts.push('🔗'+c.hotspot);
+  if(c.box) parts.push('□'+c.box);
+  if(c.text) parts.push('T'+c.text);
+  if(c.arrow) parts.push('↗'+c.arrow);
+  return parts.length ? '('+parts.join(' ')+')' : '';
 }
+function cteAnnRgba(hex,a){
+  if(!hex||hex.length<7) return `rgba(255,0,0,${a})`;
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function cteEscSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─── 저장 ───
+function cteSaveConfig() {
+  const json=JSON.stringify(cteConfig,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='교육_flow.json'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+
 
 boot();
 </script>

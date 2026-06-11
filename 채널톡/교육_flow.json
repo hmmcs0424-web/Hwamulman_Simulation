@@ -1,8 +1,9 @@
 {
   "tabs": [
     {
-      "id": "text",
-      "label": "💬 텍스트 문의",
+      "id": "consult",
+      "label": "💬 채널톡 상담",
+      "homeStep": 0,
       "steps": [
         {
           "label": "채널톡 진입",
@@ -10,7 +11,11 @@
           "agentMode": "image",
           "agentImage": "채널톡/로그인_메인화면.png",
           "clickable": true,
-          "desc": "고객이 앱 우측 상단 <b>헤드셋 아이콘</b>을 누르면 '문의 방법 선택' 팝업이 나타납니다. <b>채널톡</b>을 선택합니다."
+          "desc": "고객이 앱 우측 상단 <b>헤드셋 아이콘</b>을 누르면 '문의 방법 선택' 팝업이 나타납니다. <b>채널톡</b>을 선택합니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
           "label": "문의하기 선택",
@@ -18,7 +23,11 @@
           "agentMode": "image",
           "agentImage": "채널톡/세로운 메시지 확인.png",
           "clickable": true,
-          "desc": "채널톡 홈 화면이 열립니다. <b>문의하기</b> 버튼을 누르면 채팅창으로 이동합니다."
+          "desc": "채널톡 홈 화면이 열립니다. <b>문의하기</b> 버튼을 누르면 채팅창으로 이동합니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
           "label": "채팅창 입장",
@@ -26,7 +35,11 @@
           "agentMode": "chat",
           "agentImage": "",
           "clickable": true,
-          "desc": "채팅창이 열리며 자동 환영 메시지가 표시됩니다. 상담사 화면에도 동일한 대화 내용이 실시간으로 보입니다."
+          "desc": "채팅창이 열리며 자동 환영 메시지가 표시됩니다. 상담사 화면에도 동일한 대화 내용이 실시간으로 보입니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
           "label": "고객 메시지 입력",
@@ -35,21 +48,30 @@
           "agentImage": "",
           "clickable": false,
           "typing": true,
-          "desc": "<b>아래 입력창</b>에 고객 문의 내용을 입력하고 전송하면 채널톡 화면에 실시간으로 반영됩니다."
+          "desc": "<b>아래 입력창</b>에 고객 문의 내용을 입력하고 전송하면 채널톡 화면에 실시간으로 반영됩니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
-          "label": "문의 접수 완료",
+          "label": "문의 접수 / 상담사 답변",
           "customerImage": "채널톡/2-2.차주앱_텍스트문의_고객 문의.png",
           "agentMode": "image",
           "agentImage": "채널톡/채팅화면.png",
           "clickable": false,
-          "desc": "고객의 문의 내용이 채팅창에 표시됩니다. 상담사가 <b>답변을 입력</b>하면 고객 앱에 실시간으로 전달됩니다."
+          "desc": "고객의 문의 내용이 채팅창에 표시됩니다. 상담사가 <b>답변을 입력</b>하면 고객 앱에 실시간으로 전달됩니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         }
       ]
     },
     {
       "id": "image",
       "label": "🖼️ 이미지 전송",
+      "homeStep": 0,
       "steps": [
         {
           "label": "채팅창 입장",
@@ -57,7 +79,11 @@
           "agentMode": "image",
           "agentImage": "채널톡/채팅화면.png",
           "clickable": true,
-          "desc": "고객이 채널톡 채팅창에 입장한 상태입니다. 이미지를 전송하려면 하단 <b>클립 아이콘(📎)</b>을 누릅니다."
+          "desc": "고객이 채널톡 채팅창에 입장한 상태입니다. 이미지를 전송하려면 하단 <b>클립 아이콘(📎)</b>을 누릅니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
           "label": "첨부 메뉴 선택",
@@ -65,15 +91,23 @@
           "agentMode": "image",
           "agentImage": "채널톡/채팅화면.png",
           "clickable": true,
-          "desc": "하단에 <b>카메라 / 앨범 / 파일</b> 메뉴가 나타납니다. 고객에게 앨범에서 이미지를 선택하도록 안내합니다."
+          "desc": "하단에 <b>카메라 / 앨범 / 파일</b> 메뉴가 나타납니다. 고객에게 앨범에서 이미지를 선택하도록 안내합니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         },
         {
           "label": "이미지 전송 완료",
           "customerImage": "채널톡/1-5.차주앱_고객 이미지전송.png",
           "agentMode": "image",
-          "agentImage": "채널톡/이미지를 올리는 경우.png",
+          "agentImage": "채널톡/채널톡_내부_이미지답변.png",
           "clickable": false,
-          "desc": "고객이 선택한 이미지가 채팅창으로 전송됩니다. 상담사 화면에도 <b>이미지가 즉시 표시</b>되며 확인하고 저장할 수 있습니다."
+          "desc": "고객이 선택한 이미지가 채팅창으로 전송됩니다. 상담사 화면에도 <b>이미지가 즉시 표시</b>되며 확인하고 저장할 수 있습니다.",
+          "customerAnnotations": [],
+          "agentAnnotations": [],
+          "customerScrollRegions": [],
+          "agentScrollRegions": []
         }
       ]
     }
