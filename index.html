@@ -2648,10 +2648,7 @@ function cteItRedraw(panel) {
   const fs = Math.max(10, Math.round(H*0.028));
   let h = '';
   scr.hotspots.forEach((hs,i)=>{
-    let name = (hs.goto||'').split('/').pop();
-    if(name.length>16) name = name.slice(0,15)+'…';
     h += `<rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:pointer" onclick="event.stopPropagation();cteEditHotClick('${panel}',${i})"/>`;
-    h += `<text x="${hs.x+hs.w/2}%" y="${hs.y+hs.h/2}%" fill="#f59e0b" font-size="${fs}" font-weight="800" font-family="sans-serif" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#000" stroke-width="2.5" stroke-linejoin="round" pointer-events="none">→${cteEscSvg(name)}</text>`;
   });
   scr.annotations.forEach((a,i)=>{
     const sel = i===st.selected;
