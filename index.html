@@ -1932,7 +1932,8 @@ let cteMode = 0;
 const cteNav = { phone:{cur:null,hist:[]}, agent:{cur:null,hist:[]} };
 
 // ─── 채널톡 폴더 이미지 목록 ───
-const CTE_CUSTOMER_IMGS = [
+// 폴더 안 파일을 이름 기준으로 분류합니다: "차주앱" 포함 = 모바일, 나머지 = 채널톡 PC.
+const CTE_ALL_IMGS = [
   '채널톡/1.차주앱_메인화면.jpg',
   '채널톡/1-1.차주앱_채널톡진입.jpg',
   '채널톡/1-2.차주앱_채널톡 상담 시작.jpg',
@@ -1942,36 +1943,40 @@ const CTE_CUSTOMER_IMGS = [
   '채널톡/2.차주앱_텍스트문의_입장.jpg',
   '채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg',
   '채널톡/2-2.차주앱_텍스트문의_고객 문의.png',
-];
-const CTE_AGENT_IMGS = [
-  '채널톡/채널톡_로그인.png',
-  '채널톡/로그인_채널목록.png',
-  '채널톡/로그인_메인화면.png',
-  '채널톡/세로운 메시지 확인.png',
-  '채널톡/수신함 확인.png',
-  '채널톡/채널톡_이미지_나에게 배정.png',
-  '채널톡/채널톡_이미지_배정완료.png',
-  '채널톡/고객 문의.png',
-  '채널톡/채팅화면.png',
-  '채널톡/채널톡_내부_이미지답변.png',
-  '채널톡/채널톡_확인안내.png',
+  '채널톡/차주앱_문자로 발송되는 메시지.jpg',
+  '채널톡/채널톡_고객 문의.png',
+  '채널톡/채널톡_로그인_메인화면.png',
+  '채널톡/채널톡_로그인_채널목록.png',
+  '채널톡/채널톡_새로운 메시지 확인.png',
+  '채널톡/채널톡_수신함 확인.png',
   '채널톡/채널톡_끝인사.png',
   '채널톡/채널톡_내부_끝인사.png',
-  '채널톡/채널톡_텍스트문의_끝인사.png',
-  '채널톡/채널톡_텍스트문의_다른문의.png',
+  '채널톡/채널톡_내부_이미지답변.png',
+  '채널톡/채널톡_로그인.png',
   '채널톡/채널톡_상담종료.png',
-  '채널톡/채널톡_상담종료_태그선택.png',
-  '채널톡/채널톡_상담종료_태그찾기.png',
-  '채널톡/채널톡_상담종료_태그적용.png',
   '채널톡/채널톡_상담종료_종료.png',
   '채널톡/채널톡_상담종료_종료됨.png',
+  '채널톡/채널톡_상담종료_태그선택.png',
+  '채널톡/채널톡_상담종료_태그적용.png',
+  '채널톡/채널톡_상담종료_태그찾기.png',
+  '채널톡/채널톡_이미지_나에게 배정.png',
+  '채널톡/채널톡_이미지_배정완료.png',
   '채널톡/채널톡_종료됨패널.png',
-  '채널톡/문자로 발송되는 메시지.jpg',
+  '채널톡/채널톡_텍스트문의_끝인사.png',
+  '채널톡/채널톡_텍스트문의_다른문의.png',
+  '채널톡/채널톡_확인안내.png',
+  '채널톡/채널톡_채팅화면.png',
 ];
+function ctePanelForImg(img) {
+  const name = String(img||'').split('/').pop();
+  return name.includes('차주앱') ? 'phone' : 'agent';
+}
+const CTE_CUSTOMER_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='phone');
+const CTE_AGENT_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='agent');
 function cteImgsFor(panel){ return panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS; }
 function cteRememberImg(panel, img) {
   if(!img) return;
-  const list = cteImgsFor(panel);
+  const list = cteImgsFor(ctePanelForImg(img)||panel);
   if(!list.includes(img)) list.push(img);
 }
 function cteSyncImageLists() {
