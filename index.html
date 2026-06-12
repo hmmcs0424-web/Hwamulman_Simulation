@@ -2110,7 +2110,7 @@ function cteDrawView(panel, svgEl) {
     if(a.type==='box'){
       h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.15)}" stroke="${a.color}" stroke-width="2" rx="1"/>`;
     } else if(a.type==='text'){
-      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${fs}" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="${(fs*0.18).toFixed(1)}" stroke-linejoin="round" dominant-baseline="hanging">${cteEscSvg(a.text)}</text>`;
+      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${a.size||16}" font-weight="${a.weight||500}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging">${cteEscSvg(a.text)}</text>`;
     } else if(a.type==='arrow'){
       const id='cvarr'+panel+i;
       h += `<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
@@ -2263,6 +2263,7 @@ function cteAdmColHtml(panel) {
         <button class="cte-it-del" onclick="cteItDelete('${panel}')" title="선택 삭제">✕ 삭제</button>
         <button class="cte-it-del" onclick="cteItClear('${panel}')" title="전체 삭제">⌫ 전체</button>
       </div>
+      ${cteSelectedAnnHtml(panel, scr)}
     </div>
 
     <div class="cte-adm-flbl" style="margin-top:7px;">이 이미지의 설명 (&lt;b&gt;강조&lt;/b&gt;)</div>
@@ -2422,8 +2423,8 @@ function cteRegionImg(panel, i, val) {
 // 인라인 편집 도구 (이미지 위 드래그)
 // ═══════════════════════════════════════════
 const cteItSt = {
-  phone: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null },
-  agent: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, start:null, temp:null }
+  phone: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
+  agent: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
 };
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
@@ -2435,6 +2436,13 @@ function cteItTool(panel, tool) {
 function cteItColor(el) {
   const panel = el.dataset.panel, color = el.dataset.color;
   cteItSt[panel].color = color;
+  const scr = cteScr(panel, cteNav[panel].cur);
+  const sel = cteItSt[panel].selected;
+  if(sel >= 0 && scr.annotations[sel]){
+    scr.annotations[sel].color = color;
+    cteItRedraw(panel);
+    cteRenderAdmPanel();
+  }
   document.querySelectorAll(`.cte-it-color[data-panel="${panel}"]`).forEach(e=>e.classList.remove('on'));
   el.classList.add('on');
 }
@@ -2462,10 +2470,23 @@ function cteItHit(anns, p) {
   for(let i=anns.length-1;i>=0;i--){
     const a=anns[i];
     if(a.type==='box' && p.x>=a.x&&p.x<=a.x+a.w&&p.y>=a.y&&p.y<=a.y+a.h) return i;
-    if(a.type==='text'&&Math.abs(p.x-a.x)<8&&Math.abs(p.y-a.y)<4) return i;
+    if(a.type==='text'){
+      const fs = a.size || 16;
+      const tw = Math.min(42, Math.max(8, String(a.text||'텍스트').length * fs * 0.06));
+      const th = Math.max(3.5, fs * 0.18);
+      if(p.x>=a.x&&p.x<=a.x+tw&&p.y>=a.y&&p.y<=a.y+th) return i;
+    }
     if(a.type==='arrow'){const dx=a.x2-a.x1,dy=a.y2-a.y1,len=Math.sqrt(dx*dx+dy*dy);if(len<1)continue;const t=Math.max(0,Math.min(1,((p.x-a.x1)*dx+(p.y-a.y1)*dy)/(len*len)));if(Math.sqrt(Math.pow(p.x-a.x1-t*dx,2)+Math.pow(p.y-a.y1-t*dy,2))<4)return i;}
   }
   return -1;
+}
+function cteMoveAnn(a, dx, dy) {
+  if(a.type==='box'){ a.x=round1(a.x+dx); a.y=round1(a.y+dy); }
+  else if(a.type==='text'){ a.x=round1(a.x+dx); a.y=round1(a.y+dy); }
+  else if(a.type==='arrow'){
+    a.x1=round1(a.x1+dx); a.y1=round1(a.y1+dy);
+    a.x2=round1(a.x2+dx); a.y2=round1(a.y2+dy);
+  }
 }
 function cteHotHit(hots, p) {
   for(let i=hots.length-1;i>=0;i--){
@@ -2485,17 +2506,42 @@ function cteItBindSvg() {
       const st = cteItSt[panel];
       const scr = cteScr(panel, cteNav[panel].cur);
       const p = cteItPct(svg, e);
-      if(st.tool==='text') return; // onclick에서 처리
+      if(st.tool==='text'){
+        const hit = cteItHit(scr.annotations, p);
+        if(hit<0) return; // 빈 곳 클릭은 onclick에서 새 텍스트 생성
+        st.selected=hit;
+        st.moving=true;
+        st.start=p;
+        st.moveBase=JSON.parse(JSON.stringify(scr.annotations[hit]));
+        cteItRedraw(panel);
+        e.preventDefault();
+        return;
+      }
       if(cteHotHit(scr.hotspots, p)>=0) return; // 핫스팟 클릭(삭제 confirm)은 onclick으로
       const hit = cteItHit(scr.annotations, p);
-      if(hit>=0){ st.selected=hit; cteItRedraw(panel); return; }
+      if(hit>=0){
+        st.selected=hit;
+        st.moving=true;
+        st.start=p;
+        st.moveBase=JSON.parse(JSON.stringify(scr.annotations[hit]));
+        cteItRedraw(panel);
+        e.preventDefault();
+        return;
+      }
       st.drawing=true; st.start=p; st.temp=null;
       e.preventDefault();
     };
     svg.onmousemove = e => {
       const st = cteItSt[panel];
-      if(!st.drawing) return;
       const p = cteItPct(svg, e);
+      if(st.moving && st.selected >= 0 && st.moveBase){
+        const scr = cteScr(panel, cteNav[panel].cur);
+        scr.annotations[st.selected] = JSON.parse(JSON.stringify(st.moveBase));
+        cteMoveAnn(scr.annotations[st.selected], p.x-st.start.x, p.y-st.start.y);
+        cteItRedraw(panel);
+        return;
+      }
+      if(!st.drawing) return;
       st.temp = st.tool==='arrow'
         ? {x1:st.start.x,y1:st.start.y,x2:p.x,y2:p.y}
         : {x:Math.min(st.start.x,p.x),y:Math.min(st.start.y,p.y),w:Math.abs(p.x-st.start.x),h:Math.abs(p.y-st.start.y)};
@@ -2503,6 +2549,14 @@ function cteItBindSvg() {
     };
     svg.onmouseup = e => {
       const st = cteItSt[panel];
+      if(st.moving){
+        st.moving=false;
+        st.moveBase=null;
+        st.suppressClick=true;
+        cteItRedraw(panel);
+        cteRenderAdmPanel();
+        return;
+      }
       if(!st.drawing) return;
       st.drawing=false;
       const scr = cteScr(panel, cteNav[panel].cur);
@@ -2531,13 +2585,13 @@ function cteItBindSvg() {
     svg.onclick = e => {
       const st = cteItSt[panel];
       if(st.tool!=='text') return;
+      if(st.suppressClick){ st.suppressClick=false; return; }
       const scr = cteScr(panel, cteNav[panel].cur);
       const p = cteItPct(svg, e);
       const hit = cteItHit(scr.annotations, p);
       if(hit>=0){ st.selected=hit; cteItRedraw(panel); return; }
-      const text = prompt('표시할 텍스트를 입력하세요:');
-      if(!text) return;
-      scr.annotations.push({type:'text',x:round1(p.x),y:round1(p.y),text,color:st.color});
+      scr.annotations.push({type:'text',x:round1(p.x),y:round1(p.y),text:'텍스트 입력',color:st.color,size:16,weight:500});
+      st.selected = scr.annotations.length - 1;
       cteItRedraw(panel);
       cteRenderAdmPanel();
     };
@@ -2545,6 +2599,43 @@ function cteItBindSvg() {
 }
 function cteItSelect(panel, i) {
   cteItSt[panel].selected = i;
+  cteItRedraw(panel);
+  cteRenderAdmPanel();
+}
+function cteSelectedAnnHtml(panel, scr) {
+  const idx = cteItSt[panel].selected;
+  const a = scr.annotations?.[idx];
+  if(!a) return `<div style="margin-top:6px;font-size:10px;color:#64748b;">편집할 박스·텍스트·화살표를 선택하세요.</div>`;
+  const title = a.type==='box' ? '선택된 박스' : a.type==='arrow' ? '선택된 화살표' : '선택된 텍스트';
+  let h = `<div style="margin-top:7px;padding:7px 8px;background:#111827;border-radius:6px;border:1px solid #374151;">
+    <div style="font-size:10px;font-weight:700;color:#c4b5fd;margin-bottom:6px;">${title} 설정</div>
+    <div style="display:flex;gap:5px;align-items:center;margin-bottom:6px;">
+      <label style="font-size:10px;color:#94a3b8;">색상</label>
+      <input type="color" value="${esc(a.color||'#ef4444')}" oninput="cteAnnSet('${panel}',${idx},'color',this.value)" style="width:38px;height:26px;border:0;background:transparent;padding:0;">
+      <button class="cte-it-del" onclick="cteItDelete('${panel}')" style="margin-left:auto;">삭제</button>
+    </div>`;
+  if(a.type==='text'){
+    h += `<textarea class="cte-adm-ta" style="min-height:44px;margin-bottom:6px;" oninput="cteAnnSet('${panel}',${idx},'text',this.value)">${esc(a.text||'')}</textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center;">
+        <label style="font-size:10px;color:#94a3b8;">크기
+          <input type="number" min="8" max="48" value="${a.size||16}" oninput="cteAnnSet('${panel}',${idx},'size',this.value)" style="width:100%;margin-top:3px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:4px;padding:4px;">
+        </label>
+        <label style="font-size:10px;color:#94a3b8;">굵기
+          <select onchange="cteAnnSet('${panel}',${idx},'weight',this.value)" style="width:100%;margin-top:3px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:4px;padding:4px;">
+            <option value="400" ${String(a.weight||500)==='400'?'selected':''}>보통</option>
+            <option value="500" ${String(a.weight||500)==='500'?'selected':''}>중간</option>
+            <option value="700" ${String(a.weight||500)==='700'?'selected':''}>굵게</option>
+            <option value="800" ${String(a.weight||500)==='800'?'selected':''}>아주 굵게</option>
+          </select>
+        </label>
+      </div>`;
+  }
+  return h + `<div style="margin-top:6px;font-size:10px;color:#64748b;">선택한 요소는 이미지 위에서 드래그해 이동할 수 있습니다.</div></div>`;
+}
+function cteAnnSet(panel, idx, key, value) {
+  const ann = cteScr(panel, cteNav[panel].cur).annotations?.[idx];
+  if(!ann) return;
+  ann[key] = (key==='size'||key==='weight') ? Number(value) : value;
   cteItRedraw(panel);
 }
 // 편집 모드 렌더: 핫스팟(파일명 라벨) + 어노테이션 + 드래그 미리보기
@@ -2569,8 +2660,10 @@ function cteItRedraw(panel) {
       h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
       if(sel) h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="none" stroke="#fff" stroke-width="0.7" rx="1" pointer-events="none"/>`;
     } else if(a.type==='text'){
-      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${Math.max(11,Math.round(H*0.035))}" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="2" stroke-linejoin="round" dominant-baseline="hanging" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
-      if(sel) h += `<circle cx="${a.x}%" cy="${a.y}%" r="${fs*0.6}" fill="#ffffff44" pointer-events="none"/>`;
+      const size = a.size || 16;
+      const weight = a.weight || 500;
+      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${size}" font-weight="${weight}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging" style="cursor:move" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
+      if(sel) h += `<rect x="${a.x-.7}%" y="${a.y-.7}%" width="${Math.min(42, Math.max(8, String(a.text||'텍스트').length * size * 0.06))}%" height="${Math.max(3.5, size * 0.18)}%" fill="none" stroke="#fff" stroke-width="0.9" stroke-dasharray="3 2" pointer-events="none"/>`;
     } else if(a.type==='arrow'){
       const id=`earr${panel}${i}`;
       h += `<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
