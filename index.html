@@ -422,9 +422,12 @@ textarea.form-input{resize:vertical;}
 .cte-it-del{padding:2px 6px;border-radius:5px;border:none;background:transparent;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
 .cte-it-del:hover{background:#450a0a;}
 
-/* ── 하단 관리자 편집 패널 (드래그로 크기 조절) ── */
-.cte-adm-panel{display:none;flex-direction:column;background:#0b1020;border-top:2px solid #6366f1;flex-shrink:0;min-height:44px;max-height:66vh;}
-.cte-adm-resizer{height:26px;display:flex;align-items:center;justify-content:center;cursor:ns-resize;background:#111a33;border-bottom:1px solid #1e293b;user-select:none;flex-shrink:0;}
+/* ── 미리보기 래퍼 (관리자 모드에서 고정 높이 유지) ── */
+.cte-preview{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+
+/* ── 하단 관리자 편집 패널 (스크롤로 접근) ── */
+.cte-adm-panel{display:none;flex-direction:column;background:#0b1020;border-top:2px solid #6366f1;}
+.cte-adm-resizer{height:26px;display:flex;align-items:center;justify-content:center;background:#111a33;border-bottom:1px solid #1e293b;user-select:none;flex-shrink:0;}
 .cte-adm-drag-lbl{font-size:10px;color:#64748b;font-weight:600;letter-spacing:.3px;}
 .cte-adm-panel-body{flex:1;overflow-y:auto;padding:10px 14px;}
 .cte-adm-panel-foot{border-top:1px solid #1e293b;padding:6px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
@@ -741,6 +744,9 @@ textarea.form-input{resize:vertical;}
       </div>
     </div>
 
+    <!-- 미리보기 래퍼: 관리자 모드에서도 풀사이즈 유지 -->
+    <div class="cte-preview" id="ctePreview">
+
     <!-- 메인 스플릿 뷰: 왼쪽 = 차주앱(모바일), 오른쪽 = 채널톡(PC) -->
     <div class="cte-main">
 
@@ -748,23 +754,6 @@ textarea.form-input{resize:vertical;}
       <div class="cte-panel-phone">
         <div class="cte-panel-tag">
           <span class="cte-badge cte-badge-c">고객</span> 차주앱 (휴대폰)
-          <div class="cte-it-bar" id="ctePhoneTB" style="display:none;">
-            <button class="cte-it-btn cte-it-hot on" id="ctePhoneTool_hotspot" onclick="cteItTool('phone','hotspot')" title="클릭 영역 지정 (드래그→이동할 이미지 선택)">🔗 영역</button>
-            <button class="cte-it-btn" id="ctePhoneTool_scroll" onclick="cteItTool('phone','scroll')" title="드래그한 영역에 다른/긴 이미지를 넣어 스크롤">📜 스크롤</button>
-            <div class="cte-it-sep"></div>
-            <button class="cte-it-btn" id="ctePhoneTool_box" onclick="cteItTool('phone','box')" title="강조 박스">□</button>
-            <button class="cte-it-btn" id="ctePhoneTool_text" onclick="cteItTool('phone','text')" title="텍스트">T</button>
-            <button class="cte-it-btn" id="ctePhoneTool_arrow" onclick="cteItTool('phone','arrow')" title="화살표">↗</button>
-            <div class="cte-it-sep"></div>
-            <div class="cte-it-color on" style="background:#ef4444" data-panel="phone" data-color="#ef4444" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#f59e0b" data-panel="phone" data-color="#f59e0b" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#10b981" data-panel="phone" data-color="#10b981" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#3b82f6" data-panel="phone" data-color="#3b82f6" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#fff" data-panel="phone" data-color="#fff" onclick="cteItColor(this)"></div>
-            <div class="cte-it-sep"></div>
-            <button class="cte-it-del" onclick="cteItDelete('phone')" title="선택 삭제">✕</button>
-            <button class="cte-it-del" onclick="cteItClear('phone')" title="전체 삭제">⌫</button>
-          </div>
         </div>
         <div class="cte-phone-outer">
           <div class="phone-frame" id="ctePhoneScreen" style="cursor:default;width:auto;max-width:none;height:calc(100% - 4px);aspect-ratio:9/19.5;">
@@ -802,23 +791,6 @@ textarea.form-input{resize:vertical;}
       <div class="cte-panel-agent">
         <div class="cte-panel-tag">
           <span class="cte-badge cte-badge-a">상담사</span> 채널톡 (PC)
-          <div class="cte-it-bar" id="cteAgentTB" style="display:none;">
-            <button class="cte-it-btn cte-it-hot on" id="cteAgentTool_hotspot" onclick="cteItTool('agent','hotspot')" title="클릭 영역 지정 (드래그→이동할 이미지 선택)">🔗 영역</button>
-            <button class="cte-it-btn" id="cteAgentTool_scroll" onclick="cteItTool('agent','scroll')" title="드래그한 영역에 다른/긴 이미지를 넣어 스크롤">📜 스크롤</button>
-            <div class="cte-it-sep"></div>
-            <button class="cte-it-btn" id="cteAgentTool_box" onclick="cteItTool('agent','box')" title="강조 박스">□</button>
-            <button class="cte-it-btn" id="cteAgentTool_text" onclick="cteItTool('agent','text')" title="텍스트">T</button>
-            <button class="cte-it-btn" id="cteAgentTool_arrow" onclick="cteItTool('agent','arrow')" title="화살표">↗</button>
-            <div class="cte-it-sep"></div>
-            <div class="cte-it-color on" style="background:#ef4444" data-panel="agent" data-color="#ef4444" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#f59e0b" data-panel="agent" data-color="#f59e0b" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#10b981" data-panel="agent" data-color="#10b981" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#3b82f6" data-panel="agent" data-color="#3b82f6" onclick="cteItColor(this)"></div>
-            <div class="cte-it-color" style="background:#fff" data-panel="agent" data-color="#fff" onclick="cteItColor(this)"></div>
-            <div class="cte-it-sep"></div>
-            <button class="cte-it-del" onclick="cteItDelete('agent')" title="선택 삭제">✕</button>
-            <button class="cte-it-del" onclick="cteItClear('agent')" title="전체 삭제">⌫</button>
-          </div>
         </div>
         <div class="cte-agent-outer">
           <div class="cte-pc-frame">
@@ -845,10 +817,12 @@ textarea.form-input{resize:vertical;}
       </div>
     </div>
 
-    <!-- 하단 관리자 편집 패널 (관리자 모드 전용, 위로 드래그하여 확대) -->
+    </div><!-- /cte-preview -->
+
+    <!-- 하단 관리자 편집 패널 (관리자 모드 전용, 위로 스크롤하면 미리보기) -->
     <div class="cte-adm-panel" id="cteAdmPanel">
       <div class="cte-adm-resizer" id="cteAdmResizer">
-        <div class="cte-adm-drag-lbl">⠿ 편집 패널 &nbsp;—&nbsp; 위로 드래그해서 크게 보기</div>
+        <div class="cte-adm-drag-lbl">▲ 편집 패널 &nbsp;—&nbsp; 위로 스크롤하면 미리보기</div>
       </div>
       <div class="cte-adm-panel-body" id="cteAdmPanelBody"></div>
       <div class="cte-adm-panel-foot">
@@ -2109,23 +2083,35 @@ function cteSendMsg() {
 }
 
 // ═══════════════════════════════════════════
-// 관리자 모드 — 하단 편집 패널 (드래그로 크기 조절)
+// 관리자 모드 — 하단 편집 패널 (스크롤로 접근)
 // ═══════════════════════════════════════════
 function cteOpenAdmin() {
   document.getElementById('topAdminBtn').classList.add('on');
   document.getElementById('topAdminBtn').textContent = '🔓 관리자 모드 ON';
-  const panel = document.getElementById('cteAdmPanel');
-  panel.style.display = 'flex';
-  panel.style.height = '260px';
-  document.getElementById('ctePhoneTB').style.display = 'flex';
-  document.getElementById('cteAgentTB').style.display = 'flex';
-  cteInitResizer();
+  // 미리보기 영역을 고정 높이로 설정해서 편집 패널이 아래로 흘러 스크롤되도록
+  const area = document.getElementById('ctEduArea');
+  area.style.overflowY = 'auto';
+  area.style.overflowX = 'hidden';
+  const preview = document.getElementById('ctePreview');
+  if(preview){
+    const topbarH = 44; // cte-topbar
+    preview.style.flex = 'none';
+    preview.style.height = `calc(100vh - var(--topnav-h) - ${topbarH}px)`;
+    preview.style.minHeight = '0';
+    preview.style.overflow = 'hidden';
+  }
+  document.getElementById('cteAdmPanel').style.display = 'flex';
   cteRender();
+  setTimeout(()=>document.getElementById('cteAdmPanel').scrollIntoView({behavior:'smooth'}), 120);
 }
 function cteCloseAdmin() {
+  // 레이아웃 원복
+  const area = document.getElementById('ctEduArea');
+  area.style.overflowY = '';
+  area.style.overflowX = '';
+  const preview = document.getElementById('ctePreview');
+  if(preview){ preview.style.flex='1'; preview.style.height=''; preview.style.minHeight='0'; preview.style.overflow='hidden'; }
   document.getElementById('cteAdmPanel').style.display = 'none';
-  document.getElementById('ctePhoneTB').style.display = 'none';
-  document.getElementById('cteAgentTB').style.display = 'none';
   adminMode = false;
   document.getElementById('topAdminBtn').classList.remove('on');
   document.getElementById('topAdminBtn').textContent = '🔐 관리자 로그인';
@@ -2134,21 +2120,6 @@ function cteCloseAdmin() {
     if(s){ s.onmousedown=null; s.onmousemove=null; s.onmouseup=null; s.onclick=null; s.style.pointerEvents='none'; s.style.cursor=''; }
   });
   if(cteConfig) cteRender();
-}
-function cteInitResizer() {
-  const handle = document.getElementById('cteAdmResizer');
-  const panel  = document.getElementById('cteAdmPanel');
-  if(!handle || !panel) return;
-  let startY, startH;
-  handle.onmousedown = e => {
-    startY = e.clientY; startH = panel.offsetHeight;
-    document.onmousemove = ev => {
-      const h = Math.max(40, Math.min(window.innerHeight*0.66, startH - (ev.clientY - startY)));
-      panel.style.height = h + 'px';
-    };
-    document.onmouseup = () => { document.onmousemove=null; document.onmouseup=null; };
-    e.preventDefault();
-  };
 }
 
 // ─── 하단 편집 패널: "어느 이미지에서 어떤 편집을 할 것인지"가 기본 ───
@@ -2176,11 +2147,23 @@ function cteAdmColHtml(panel) {
   const scr = cteScr(panel, cur);
   const isMain = (panel==='phone' ? m.phoneStart : m.agentStart) === cur && !!cur;
   const icon = panel==='phone' ? '📱 고객 (차주앱)' : '🖥 상담사 (채널톡)';
+  const st = cteItSt[panel];
+  const px = panel==='phone' ? 'Phone' : 'Agent';
+  const toolLabels = {hotspot:'🔗 영역', scroll:'📜 스크롤', box:'□ 박스', text:'T 텍스트', arrow:'↗ 화살표'};
+  const toolBtns = ['hotspot','scroll','box','text','arrow'].map(t =>
+    `<button class="cte-it-btn${st.tool===t?' on':''}" id="cte${px}Tool_${t}" onclick="cteItTool('${panel}','${t}')" title="${t==='hotspot'?'드래그→이동할 이미지 선택':t==='scroll'?'드래그한 영역에 이미지 넣어 스크롤':'강조 '+t}">${toolLabels[t]}</button>`
+  ).join('');
+  const colorBtns = ['#ef4444','#f59e0b','#10b981','#3b82f6','#fff'].map(c =>
+    `<div class="cte-it-color${st.color===c?' on':''}" style="background:${c}" data-panel="${panel}" data-color="${c}" onclick="cteItColor(this)" title="${c}"></div>`
+  ).join('');
   return `<div class="cte-adm-hcol grow">
     <div class="cte-adm-flbl">${icon} — 편집할 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(scr)}</span></div>
-    <select class="cte-adm-sel" onchange="cteAdmSetImage('${panel}',this.value)">${cteImgOpts(panel, cur, false)}</select>
-    <div style="display:flex;gap:8px;margin-top:5px;align-items:center;flex-wrap:wrap;">
-      <button class="cte-adm-mainbtn${isMain?' is-main':''}" onclick="cteSetMain('${panel}')" title="이 이미지를 '${esc(m.label)}' 모드의 시작(홈) 화면으로">${isMain?'🏠 이 모드의 메인':'🏠 메인으로 지정'}</button>
+    <div style="display:flex;gap:4px;align-items:center;">
+      <select class="cte-adm-sel" style="flex:1;" onchange="cteAdmSetImage('${panel}',this.value)">${cteImgOpts(panel, cur, false)}</select>
+      <button class="cte-adm-mainbtn" onclick="cteAddScreen('${panel}')" style="border-color:#22d3ee;color:#22d3ee;white-space:nowrap;" title="목록에 없는 이미지를 추가">+ 화면 추가</button>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:5px;align-items:center;flex-wrap:wrap;">
+      <button class="cte-adm-mainbtn${isMain?' is-main':''}" onclick="cteSetMain('${panel}')" title="이 이미지를 이 모드의 시작 화면으로">${isMain?'🏠 이 모드의 메인':'🏠 메인으로 지정'}</button>
       ${panel==='phone' ? `<label style="font-size:11px;color:#94a3b8;display:flex;gap:4px;align-items:center;cursor:pointer;">
         <input type="checkbox" ${scr.typing?'checked':''} onchange="cteSetTyping(this.checked)"> ✏ 고객 입력 표시
       </label>` : ''}
@@ -2188,6 +2171,17 @@ function cteAdmColHtml(panel) {
     ${panel==='phone' && scr.typing ? `
       <div class="cte-adm-flbl" style="margin-top:5px;">전송 시 이동할 이미지</div>
       <select class="cte-adm-sel" onchange="cteSetTypingGoto(this.value)">${cteImgOpts('phone', scr.typingGoto||'', true)}</select>` : ''}
+    <div style="margin-top:7px;padding:6px 8px;background:#111a33;border-radius:6px;border:1px solid #1e293b;">
+      <div class="cte-adm-flbl" style="margin-bottom:4px;">🖊 이미지 위에서 드래그로 편집</div>
+      <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;">
+        ${toolBtns}
+        <div class="cte-it-sep"></div>
+        ${colorBtns}
+        <div class="cte-it-sep"></div>
+        <button class="cte-it-del" onclick="cteItDelete('${panel}')" title="선택한 강조 삭제">✕</button>
+        <button class="cte-it-del" onclick="cteItClear('${panel}')" title="강조 전체 삭제">⌫</button>
+      </div>
+    </div>
     ${cteHotListHtml(panel, scr)}
     ${cteRegionListHtml(panel, scr)}
     <div class="cte-adm-flbl" style="margin-top:6px;">이 이미지의 설명 (&lt;b&gt;강조&lt;/b&gt;)</div>
@@ -2197,6 +2191,16 @@ function cteAdmColHtml(panel) {
 function cteAdmSetImage(panel, img) {
   cteNav[panel] = { cur:img, hist:[] };
   cteRender();
+}
+function cteAddScreen(panel) {
+  const path = prompt(
+    `추가할 이미지 경로를 입력하세요.\n예: 채널톡/새화면.png\n\n현재 목록에 없는 이미지 파일명을 직접 입력합니다.`
+  );
+  if(!path || !path.trim()) return;
+  const p = path.trim();
+  const list = panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS;
+  if(!list.includes(p)) list.push(p);
+  cteAdmSetImage(panel, p);
 }
 function cteSetMain(panel) {
   const m = cteConfig.modes[cteMode];
