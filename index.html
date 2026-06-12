@@ -2208,7 +2208,7 @@ function cteAdmColHtml(panel) {
   const icon = panel==='phone' ? '📱 고객 (차주앱)' : '🖥 상담사 (채널톡)';
   const st = cteItSt[panel];
   const px = panel==='phone' ? 'Phone' : 'Agent';
-  const colorBtns = ['#ef4444','#f59e0b','#10b981','#3b82f6','#fff'].map(c =>
+  const colorBtns = ['#000000','#ef4444','#f59e0b','#10b981','#3b82f6','#fff'].map(c =>
     `<div class="cte-it-color${st.color===c?' on':''}" style="background:${c}" data-panel="${panel}" data-color="${c}" onclick="cteItColor(this)"></div>`
   ).join('');
   return `<div class="cte-adm-hcol grow">
@@ -2423,8 +2423,8 @@ function cteRegionImg(panel, i, val) {
 // 인라인 편집 도구 (이미지 위 드래그)
 // ═══════════════════════════════════════════
 const cteItSt = {
-  phone: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
-  agent: { tool:'hotspot', color:'#ef4444', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
+  phone: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
+  agent: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
 };
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
