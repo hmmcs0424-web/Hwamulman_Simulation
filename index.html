@@ -941,6 +941,24 @@ let adminMode = false;
 let showHotspots = false;
 let drawing = false, drawStart = null, pendingHs = null;
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
+let siteImageManifest = null;
+
+async function loadSiteImageManifest() {
+  if(siteImageManifest) return siteImageManifest;
+  try {
+    const r = await fetch('image-manifest.json?_=' + Date.now());
+    siteImageManifest = await r.json();
+  } catch(e) {
+    siteImageManifest = {};
+    console.warn('image-manifest.json 로드 실패:', e);
+  }
+  return siteImageManifest;
+}
+function mergeImageManifest(sectionName, flow) {
+  const fromSite = siteImageManifest?.[sectionName] || [];
+  const merged = new Set([...(flow.imageManifest||[]), ...fromSite]);
+  flow.imageManifest = Array.from(merged);
+}
 
 // ═══════════════════════════════════════════
 // BOOT
@@ -981,6 +999,7 @@ async function boot() {
   setupDrawEvents('pcDrawOverlay', 'pcDrawRect');
 
   // Load first section
+  await loadSiteImageManifest();
   await loadSec('차주앱');
   applySec('차주앱');
 }
@@ -1001,12 +1020,15 @@ async function switchSec(name) {
 
 async function loadSec(name) {
   if(cache[name].flow) return; // already loaded
+  await loadSiteImageManifest();
   try {
     const r = await fetch(SECS[name].flowUrl + '?_=' + Date.now());
     cache[name].flow = await r.json();
+    mergeImageManifest(name, cache[name].flow);
     if(!cache[name].cur) cache[name].cur = cache[name].flow.start;
   } catch(e) {
     cache[name].flow = { imageManifest:[], screens:{}, start:null };
+    mergeImageManifest(name, cache[name].flow);
     console.warn('flow.json 로드 실패:', name, e);
   }
 }
@@ -1947,9 +1969,12 @@ const CTE_ALL_IMGS = [
   '채널톡/채널톡_고객 문의.png',
   '채널톡/채널톡_로그인_메인화면.png',
   '채널톡/채널톡_로그인_채널목록.png',
+  '채널톡/채널톡_로그인이후.png',
+  '채널톡/채널톡_목록선택.png',
   '채널톡/채널톡_새로운 메시지 확인.png',
   '채널톡/채널톡_수신함 확인.png',
   '채널톡/채널톡_끝인사.png',
+  '채널톡/채널톡_내부_고객발화.png',
   '채널톡/채널톡_내부_끝인사.png',
   '채널톡/채널톡_내부_이미지답변.png',
   '채널톡/채널톡_로그인.png',
@@ -1964,6 +1989,11 @@ const CTE_ALL_IMGS = [
   '채널톡/채널톡_종료됨패널.png',
   '채널톡/채널톡_텍스트문의_끝인사.png',
   '채널톡/채널톡_텍스트문의_다른문의.png',
+  '채널톡/채널톡_테이블1.png',
+  '채널톡/채널톡_테이블2.png',
+  '채널톡/채널톡_테이블3.png',
+  '채널톡/채널톡_테이블4.png',
+  '채널톡/채널톡_테이블5.png',
   '채널톡/채널톡_확인안내.png',
   '채널톡/채널톡_채팅화면.png',
 ];
@@ -2052,6 +2082,7 @@ function cteAllImgOpts(cur){
 // ─── 로드 / 초기화 ───
 async function cteLoadConfig() {
   if(cteConfig) return;
+  await loadSiteImageManifest();
   try {
     const r = await fetch('채널톡/교육_flow.json?_=' + Date.now());
     const j = await r.json();
@@ -2067,6 +2098,7 @@ async function cteLoadConfig() {
     };
   }
   cteNormalizeConfigPaths();
+  (siteImageManifest?.['채널톡'] || []).forEach(img => cteRememberImg(ctePanelForImg(img), img));
   cteSyncImageLists();
 }
 async function cteInit() {
