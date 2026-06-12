@@ -867,6 +867,24 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<!-- 채널톡 화면 선택: 파일명 직접 입력 없이 기존 이미지 목록에서 선택 -->
+<div class="modal-bg" id="cteScreenPickModal">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-title">🖼️ 편집할 화면 선택</div>
+    <div class="form-row">
+      <div class="form-label">추가/편집할 이미지</div>
+      <select class="form-input" id="cteScreenPickSel" onchange="cteScreenPickerPreview()"></select>
+    </div>
+    <div style="text-align:center;margin-top:4px;">
+      <img id="cteScreenPickPrevImg" alt="" style="max-width:100%;height:220px;object-fit:contain;border-radius:8px;border:1px solid #e2e2e2;background:#f5f5f5;">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="cteScreenPickCancel()">취소</button>
+      <button class="btn btn-primary" onclick="cteScreenPickConfirm()">선택</button>
+    </div>
+  </div>
+</div>
+
 <!-- 채널톡 핫스팟: 클릭 시 이동할 "이미지" 선택 모달 -->
 <div class="modal-bg" id="cteHotModal">
   <div class="modal" style="max-width:440px;">
@@ -1951,8 +1969,30 @@ const CTE_AGENT_IMGS = [
   '채널톡/문자로 발송되는 메시지.jpg',
 ];
 function cteImgsFor(panel){ return panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS; }
+function cteRememberImg(panel, img) {
+  if(!img) return;
+  const list = cteImgsFor(panel);
+  if(!list.includes(img)) list.push(img);
+}
+function cteSyncImageLists() {
+  if(!cteConfig) return;
+  (cteConfig.modes||[]).forEach(m => {
+    cteRememberImg('phone', m.phoneStart);
+    cteRememberImg('agent', m.agentStart);
+  });
+  Object.entries(cteConfig.phoneScreens||{}).forEach(([img, scr]) => {
+    cteRememberImg('phone', img);
+    (scr.hotspots||[]).forEach(hs => cteRememberImg('phone', hs.goto));
+    if(scr.typingGoto) cteRememberImg('phone', scr.typingGoto);
+  });
+  Object.entries(cteConfig.agentScreens||{}).forEach(([img, scr]) => {
+    cteRememberImg('agent', img);
+    (scr.hotspots||[]).forEach(hs => cteRememberImg('agent', hs.goto));
+  });
+}
 function cteOptList(list, cur){ return list.map(p=>`<option value="${esc(p)}" ${p===cur?'selected':''}>${esc(p.split('/').pop())}</option>`).join(''); }
 function cteImgOpts(panel, cur, withEmpty){
+  cteRememberImg(panel, cur);
   let h = withEmpty ? `<option value="" ${!cur?'selected':''}>-- 선택 안 함 --</option>`
                     : (cur ? '' : '<option value="" selected>-- 이미지 선택 --</option>');
   return h + cteOptList(cteImgsFor(panel), cur);
@@ -1980,6 +2020,7 @@ async function cteLoadConfig() {
       phoneScreens:{}, agentScreens:{}
     };
   }
+  cteSyncImageLists();
 }
 async function cteInit() {
   await cteLoadConfig();
@@ -2229,18 +2270,37 @@ function cteAdmColHtml(panel) {
   </div>`;
 }
 function cteAdmSetImage(panel, img) {
+  cteRememberImg(panel, img);
+  cteScr(panel, img);
   cteNav[panel] = { cur:img, hist:[] };
   cteRender();
 }
+let cteScreenPickPanel = null;
 function cteAddScreen(panel) {
-  const path = prompt(
-    `추가할 이미지 경로를 입력하세요.\n예: 채널톡/새화면.png\n\n현재 목록에 없는 이미지 파일명을 직접 입력합니다.`
-  );
-  if(!path || !path.trim()) return;
-  const p = path.trim();
-  const list = panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS;
-  if(!list.includes(p)) list.push(p);
-  cteAdmSetImage(panel, p);
+  cteScreenPickPanel = panel;
+  const sel = document.getElementById('cteScreenPickSel');
+  sel.innerHTML = cteImgOpts(panel, cteNav[panel].cur||'', false);
+  if(!sel.value && sel.options.length) sel.selectedIndex = 0;
+  cteScreenPickerPreview();
+  openModal('cteScreenPickModal');
+}
+function cteScreenPickerPreview() {
+  const v = document.getElementById('cteScreenPickSel').value;
+  const img = document.getElementById('cteScreenPickPrevImg');
+  img.src = v || '';
+  img.style.visibility = v ? 'visible' : 'hidden';
+}
+function cteScreenPickConfirm() {
+  const v = document.getElementById('cteScreenPickSel').value;
+  if(!v){ alert('편집할 이미지를 선택해주세요.'); return; }
+  const panel = cteScreenPickPanel || 'phone';
+  cteScreenPickPanel = null;
+  closeModal('cteScreenPickModal');
+  cteAdmSetImage(panel, v);
+}
+function cteScreenPickCancel() {
+  cteScreenPickPanel = null;
+  closeModal('cteScreenPickModal');
 }
 function cteSetMain(panel) {
   const m = cteConfig.modes[cteMode];
