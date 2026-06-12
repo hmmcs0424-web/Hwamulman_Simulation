@@ -148,6 +148,12 @@
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
+    },
+    "채널톡/채널톡_내부_고객발화.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   },
   "agentScreens": {
@@ -197,7 +203,117 @@
       "desc": "고객과의 채팅 화면입니다."
     },
     "채널톡/채널톡_로그인_채널목록.png": {
+      "hotspots": [
+        {
+          "x": 32.6,
+          "y": 66.8,
+          "w": 32.9,
+          "h": 8.3,
+          "goto": "채널톡/채널톡_로그인이후.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 32.4,
+          "y": 66.6,
+          "w": 33.3,
+          "h": 8.7,
+          "color": "#000000"
+        },
+        {
+          "type": "text",
+          "x": 67.7,
+          "y": 69.5,
+          "text": "화물맨을 선택해주세요.",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/1-4.차주앱_첨부파일넣기.jpg": {
       "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_로그인이후.png": {
+      "hotspots": [
+        {
+          "x": 0.1,
+          "y": 5.5,
+          "w": 3.2,
+          "h": 5,
+          "goto": "채널톡/채널톡_수신함 확인.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 5.2,
+          "w": 3.3,
+          "h": 5.4,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 3.9,
+          "y": 6.9,
+          "text": "수신함을 선택해 주세요. ",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_수신함 확인.png": {
+      "hotspots": [
+        {
+          "x": 7,
+          "y": 15,
+          "w": 14.2,
+          "h": 3.9,
+          "goto": "채널톡/채널톡_목록선택.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 6.9,
+          "y": 14.9,
+          "w": 14.3,
+          "h": 4.5,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 13.3,
+          "y": 21,
+          "text": "안 읽은 메시지 선택",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_목록선택.png": {
+      "hotspots": [
+        {
+          "x": 21.8,
+          "y": 12.8,
+          "w": 16.1,
+          "h": 8.5,
+          "goto": "채널톡/채널톡_새로운 메시지 확인.png"
+        }
+      ],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
