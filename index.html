@@ -740,6 +740,7 @@ textarea.form-input{resize:vertical;}
     <div class="cte-topbar">
       <div class="cte-tab-btns" id="cteTabBtns"></div>
       <div class="cte-step-nav">
+        <button class="cte-home-btn" onclick="cteGoBack()" title="이전 화면으로 돌아가기">← 뒤로</button>
         <button class="cte-home-btn" onclick="cteGoHome()" title="이 모드의 메인 화면으로 돌아가기">🏠 홈</button>
       </div>
     </div>
@@ -1952,6 +1953,7 @@ function round1(n) { return Math.round(n*10)/10; }
 let cteConfig = null;
 let cteMode = 0;
 const cteNav = { phone:{cur:null,hist:[]}, agent:{cur:null,hist:[]} };
+let cteLastMovedPanel = 'phone';
 
 // ─── 채널톡 폴더 이미지 목록 ───
 // 폴더 안 파일을 이름 기준으로 분류합니다: "차주앱" 포함 = 모바일, 나머지 = 채널톡 PC.
@@ -2209,6 +2211,7 @@ function cteGo(panel, img) {
   const nav = cteNav[panel];
   if(nav.cur) nav.hist.push(nav.cur);
   nav.cur = img;
+  cteLastMovedPanel = panel;
   cteApplyLinkedScreen(panel);
   cteRender();
 }
@@ -2222,6 +2225,14 @@ function cteApplyLinkedScreen(panel) {
 }
 function cteGoHome() {
   cteResetNav();
+  cteRender();
+}
+function cteGoBack() {
+  const panels = [cteLastMovedPanel, cteLastMovedPanel === 'phone' ? 'agent' : 'phone'];
+  const panel = panels.find(p => cteNav[p]?.hist?.length);
+  if(!panel) return;
+  cteNav[panel].cur = cteNav[panel].hist.pop();
+  cteLastMovedPanel = panel;
   cteRender();
 }
 // 고객 입력: 전송 시 설정된 이미지로 폰 화면 이동
@@ -2377,6 +2388,7 @@ function cteAdmSetImage(panel, img) {
   cteRememberImg(panel, img);
   cteScr(panel, img);
   cteNav[panel] = { cur:img, hist:[] };
+  cteLastMovedPanel = panel;
   cteRender();
 }
 let cteScreenPickPanel = null;
