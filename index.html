@@ -2038,14 +2038,13 @@ function cteNormalizeConfigPaths() {
   cteConfig.phoneScreens = cteNormalizeScreenDict(cteConfig.phoneScreens);
   cteConfig.agentScreens = cteNormalizeScreenDict(cteConfig.agentScreens);
 }
-const CTE_CUSTOMER_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='phone');
-const CTE_AGENT_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='agent');
-function cteImgsFor(panel){ return panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS; }
+const CTE_CUSTOMER_IMGS = CTE_ALL_IMGS;
+const CTE_AGENT_IMGS = CTE_ALL_IMGS;
+function cteImgsFor(panel){ return CTE_ALL_IMGS; }
 function cteRememberImg(panel, img) {
   img = cteNormalizeImg(img);
   if(!img) return;
-  const list = cteImgsFor(ctePanelForImg(img)||panel);
-  if(!list.includes(img)) list.push(img);
+  if(!CTE_ALL_IMGS.includes(img)) CTE_ALL_IMGS.push(img);
 }
 function cteSyncImageLists() {
   if(!cteConfig) return;
@@ -2075,8 +2074,7 @@ function cteImgOpts(panel, cur, withEmpty){
 }
 function cteAllImgOpts(cur){
   return `<option value="" ${!cur?'selected':''}>-- 이미지 선택 --</option>`
-    + `<optgroup label="차주앱(모바일)">${cteOptList(CTE_CUSTOMER_IMGS,cur)}</optgroup>`
-    + `<optgroup label="채널톡(PC)">${cteOptList(CTE_AGENT_IMGS,cur)}</optgroup>`;
+    + cteOptList(CTE_ALL_IMGS,cur);
 }
 
 // ─── 로드 / 초기화 ───
@@ -2091,8 +2089,8 @@ async function cteLoadConfig() {
   if(!cteConfig) {
     cteConfig = {
       modes: [
-        { id:'consult', label:'💬 채널톡 상담', phoneStart:CTE_CUSTOMER_IMGS[0], agentStart:CTE_AGENT_IMGS[0] },
-        { id:'image',   label:'🖼️ 이미지 전송', phoneStart:CTE_CUSTOMER_IMGS[3], agentStart:CTE_AGENT_IMGS[8] },
+        { id:'consult', label:'💬 채널톡 상담', phoneStart:'채널톡/1.차주앱_메인화면.jpg', agentStart:'채널톡/채널톡_로그인.png' },
+        { id:'image',   label:'🖼️ 이미지 전송', phoneStart:'채널톡/1-3.차주앱_입장.jpg', agentStart:'채널톡/채널톡_채팅화면.png' },
       ],
       phoneScreens:{}, agentScreens:{}
     };
