@@ -148,6 +148,35 @@
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
+    },
+    "채널톡/2-1.차주앱_기본틀.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.5,
+          "y": 8.3,
+          "w": 98.7,
+          "h": 83.8,
+          "image": "채널톡/2-2. 차주앱_내부 배차 문의.png"
+        }
+      ],
+      "desc": "",
+      "syncAgent": "채널톡/채널톡_테이블1.png"
+    },
+    "채널톡/2-1.차주앱_기본틀 2.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.9,
+          "y": 8.8,
+          "w": 99,
+          "h": 83.5,
+          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+        }
+      ],
+      "desc": ""
     }
   },
   "agentScreens": {
@@ -263,6 +292,105 @@
           "weight": 700
         }
       ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_수신함 확인.png": {
+      "hotspots": [
+        {
+          "x": 6.9,
+          "y": 15,
+          "w": 14.3,
+          "h": 3.8,
+          "goto": "채널톡/채널톡_목록선택.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_미배정상태.png": {
+      "hotspots": [
+        {
+          "x": 39.5,
+          "y": 93,
+          "w": 4.7,
+          "h": 5.1,
+          "goto": "채널톡/채널톡_이미지_나에게 배정.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 39.4,
+          "y": 92.7,
+          "w": 5.1,
+          "h": 5.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 45.5,
+          "y": 94.5,
+          "text": "나에게 배정을 클릭하세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_이미지_나에게 배정.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀.png"
+    },
+    "채널톡/채널톡_테이블1.png": {
+      "hotspots": [
+        {
+          "x": 38.5,
+          "y": 84.7,
+          "w": 40.6,
+          "h": 14.9,
+          "goto": "채널톡/채널톡_테이블2.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.7,
+          "y": 84.8,
+          "w": 40.5,
+          "h": 14.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.9,
+          "y": 90.4,
+          "text": "처리 후 답변을 입력하세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.9,
+          "y": 7.4,
+          "w": 40.1,
+          "h": 76.8,
+          "image": "채널톡/2-2. 차주앱_내부 배차 문의.png"
+        }
+      ],
+      "desc": ""
+    },
+    "채널톡/채널톡_테이블2.png": {
+      "hotspots": [],
+      "annotations": [],
       "scrollRegions": [],
       "desc": ""
     }
