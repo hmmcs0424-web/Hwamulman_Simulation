@@ -390,7 +390,7 @@ textarea.form-input{resize:vertical;}
 .cte-region::-webkit-scrollbar-track{background:#f1f5f9;}
 .cte-region.cte-region-edit{outline:2px dashed #22d3ee;outline-offset:-2px;}
 .cte-region-layer.adm{z-index:6;}
-.cte-region-layer.adm .cte-region{pointer-events:none;}
+.cte-region-layer.adm .cte-region{pointer-events:auto;}
 .cte-region-layer.adm .cte-region-tag{pointer-events:auto;}
 .cte-region-empty{display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;background:repeating-linear-gradient(45deg,#f8fafc,#f8fafc 6px,#eef2f6 6px,#eef2f6 12px);height:100%;text-align:center;padding:4px;white-space:pre-line;}
 .cte-region-tag{position:absolute;top:0;right:0;background:#0891b2;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-bottom-left-radius:5px;z-index:5;pointer-events:auto;cursor:pointer;}
@@ -2498,17 +2498,16 @@ function cteRenderRegions(panel) {
     if(r.image){
       const im=document.createElement('img'); im.src=r.image; im.alt=''; im.draggable=false;
       d.appendChild(im);
-      if(!editing){
-        // 드래그로 스크롤 (휠도 가능)
-        d.onmousedown = ev => {
-          const sy=ev.clientY, st0=d.scrollTop;
-          const mv = e2 => { d.scrollTop = st0 - (e2.clientY - sy); };
-          const up = () => { document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); };
-          document.addEventListener('mousemove',mv);
-          document.addEventListener('mouseup',up);
-          ev.preventDefault();
-        };
-      }
+      // 드래그로 스크롤 (관리자 미리보기와 영업 보기 모두 가능)
+      d.onmousedown = ev => {
+        if(ev.target.classList.contains('cte-region-tag')) return;
+        const sy=ev.clientY, st0=d.scrollTop;
+        const mv = e2 => { d.scrollTop = st0 - (e2.clientY - sy); };
+        const up = () => { document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); };
+        document.addEventListener('mousemove',mv);
+        document.addEventListener('mouseup',up);
+        ev.preventDefault();
+      };
     } else {
       const e=document.createElement('div'); e.className='cte-region-empty';
       e.textContent = editing ? '📜 이미지 선택 필요\n(아래 패널)' : '';
