@@ -83,7 +83,15 @@
       "desc": "채팅창입니다. 아래 입력창에 <b>문의 내용을 입력해 전송</b>하거나, <b>클립(📎)</b>으로 이미지를 첨부할 수 있습니다."
     },
     "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
-      "hotspots": [],
+      "hotspots": [
+        {
+          "x": 0.9,
+          "y": 78.6,
+          "w": 97.7,
+          "h": 12.8,
+          "goto": "채널톡/2-2.차주앱_텍스트문의_고객 문의.png"
+        }
+      ],
       "annotations": [
         {
           "type": "box",
@@ -103,8 +111,8 @@
         },
         {
           "type": "text",
-          "x": 11.8,
-          "y": 81.4,
+          "x": 63.6,
+          "y": 72,
           "text": "자동세팅",
           "color": "#ef4444",
           "size": 16,
@@ -112,6 +120,7 @@
         }
       ],
       "scrollRegions": [],
+      "syncAgent": "채널톡/채널톡_새로운 메시지 확인.png",
       "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
     },
     "채널톡/1-4.차주앱_첨부파일넣기.jpg": {
@@ -133,12 +142,45 @@
       "annotations": [],
       "scrollRegions": [],
       "desc": "이미지가 채팅창으로 전송되었습니다. 우측 채널톡 화면에서 상담사가 이미지를 확인합니다."
+    },
+    "채널톡/2-2.차주앱_텍스트문의_고객 문의.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   },
   "agentScreens": {
     "채널톡/채널톡_로그인.png": {
-      "hotspots": [],
-      "annotations": [],
+      "hotspots": [
+        {
+          "x": 37.2,
+          "y": 80.6,
+          "w": 24.4,
+          "h": 6.1,
+          "goto": "채널톡/채널톡_로그인_채널목록.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "text",
+          "x": 38.3,
+          "y": 60.4,
+          "text": "hmmcs.0424@gmail.com ",
+          "color": "#000000",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "text",
+          "x": 38.2,
+          "y": 71.1,
+          "text": "hmm1800!@#$",
+          "color": "#000000",
+          "size": 16,
+          "weight": 700
+        }
+      ],
       "scrollRegions": [],
       "desc": "채널톡에 <b>로그인</b>합니다."
     },
@@ -153,6 +195,12 @@
       "annotations": [],
       "scrollRegions": [],
       "desc": "고객과의 채팅 화면입니다."
+    },
+    "채널톡/채널톡_로그인_채널목록.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   }
 }

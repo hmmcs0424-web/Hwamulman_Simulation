@@ -1971,10 +1971,48 @@ function ctePanelForImg(img) {
   const name = String(img||'').split('/').pop();
   return name.includes('차주앱') ? 'phone' : 'agent';
 }
+function cteNormalizeImg(img) {
+  if(!img) return '';
+  const map = {
+    '채널톡/고객 문의.png': '채널톡/채널톡_고객 문의.png',
+    '채널톡/로그인_메인화면.png': '채널톡/채널톡_로그인_메인화면.png',
+    '채널톡/로그인_채널목록.png': '채널톡/채널톡_로그인_채널목록.png',
+    '채널톡/문자로 발송되는 메시지.jpg': '채널톡/차주앱_문자로 발송되는 메시지.jpg',
+    '채널톡/새로운 메시지 확인.png': '채널톡/채널톡_새로운 메시지 확인.png',
+    '채널톡/세로운 메시지 확인.png': '채널톡/채널톡_새로운 메시지 확인.png',
+    '채널톡/수신함 확인.png': '채널톡/채널톡_수신함 확인.png',
+    '채널톡/채팅화면.png': '채널톡/채널톡_채팅화면.png',
+  };
+  return map[img] || img;
+}
+function cteNormalizeScreenDict(dict) {
+  const next = {};
+  Object.entries(dict||{}).forEach(([key, scr]) => {
+    const nk = cteNormalizeImg(key);
+    const s = scr || {};
+    (s.hotspots||[]).forEach(hs => { hs.goto = cteNormalizeImg(hs.goto); });
+    (s.scrollRegions||[]).forEach(r => { r.image = cteNormalizeImg(r.image); });
+    if(s.typingGoto) s.typingGoto = cteNormalizeImg(s.typingGoto);
+    if(s.syncAgent) s.syncAgent = cteNormalizeImg(s.syncAgent);
+    if(s.syncPhone) s.syncPhone = cteNormalizeImg(s.syncPhone);
+    next[nk] = next[nk] ? {...next[nk], ...s} : s;
+  });
+  return next;
+}
+function cteNormalizeConfigPaths() {
+  if(!cteConfig) return;
+  (cteConfig.modes||[]).forEach(m => {
+    m.phoneStart = cteNormalizeImg(m.phoneStart);
+    m.agentStart = cteNormalizeImg(m.agentStart);
+  });
+  cteConfig.phoneScreens = cteNormalizeScreenDict(cteConfig.phoneScreens);
+  cteConfig.agentScreens = cteNormalizeScreenDict(cteConfig.agentScreens);
+}
 const CTE_CUSTOMER_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='phone');
 const CTE_AGENT_IMGS = CTE_ALL_IMGS.filter(img => ctePanelForImg(img)==='agent');
 function cteImgsFor(panel){ return panel==='phone' ? CTE_CUSTOMER_IMGS : CTE_AGENT_IMGS; }
 function cteRememberImg(panel, img) {
+  img = cteNormalizeImg(img);
   if(!img) return;
   const list = cteImgsFor(ctePanelForImg(img)||panel);
   if(!list.includes(img)) list.push(img);
@@ -1989,14 +2027,17 @@ function cteSyncImageLists() {
     cteRememberImg('phone', img);
     (scr.hotspots||[]).forEach(hs => cteRememberImg('phone', hs.goto));
     if(scr.typingGoto) cteRememberImg('phone', scr.typingGoto);
+    if(scr.syncAgent) cteRememberImg('agent', scr.syncAgent);
   });
   Object.entries(cteConfig.agentScreens||{}).forEach(([img, scr]) => {
     cteRememberImg('agent', img);
     (scr.hotspots||[]).forEach(hs => cteRememberImg('agent', hs.goto));
+    if(scr.syncPhone) cteRememberImg('phone', scr.syncPhone);
   });
 }
 function cteOptList(list, cur){ return list.map(p=>`<option value="${esc(p)}" ${p===cur?'selected':''}>${esc(p.split('/').pop())}</option>`).join(''); }
 function cteImgOpts(panel, cur, withEmpty){
+  cur = cteNormalizeImg(cur);
   cteRememberImg(panel, cur);
   let h = withEmpty ? `<option value="" ${!cur?'selected':''}>-- 선택 안 함 --</option>`
                     : (cur ? '' : '<option value="" selected>-- 이미지 선택 --</option>');
@@ -2025,6 +2066,7 @@ async function cteLoadConfig() {
       phoneScreens:{}, agentScreens:{}
     };
   }
+  cteNormalizeConfigPaths();
   cteSyncImageLists();
 }
 async function cteInit() {
@@ -2035,11 +2077,12 @@ async function cteInit() {
 }
 function cteResetNav() {
   const m = cteConfig.modes[cteMode];
-  cteNav.phone = { cur:m.phoneStart||'', hist:[] };
-  cteNav.agent = { cur:m.agentStart||'', hist:[] };
+  cteNav.phone = { cur:cteNormalizeImg(m.phoneStart)||'', hist:[] };
+  cteNav.agent = { cur:cteNormalizeImg(m.agentStart)||'', hist:[] };
 }
 // 이미지의 화면 데이터(없으면 생성) — 화면의 키는 "이미지 경로" 그 자체
 function cteScr(panel, img) {
+  img = cteNormalizeImg(img);
   const dict = panel==='phone' ? cteConfig.phoneScreens : cteConfig.agentScreens;
   if(!img) return { hotspots:[], annotations:[], scrollRegions:[], desc:'' };
   if(!dict[img]) dict[img] = { hotspots:[], annotations:[], scrollRegions:[], desc:'' };
@@ -2068,6 +2111,8 @@ function cteRender() {
   // 폰(고객) 이미지
   const pImg = document.getElementById('cteCustomerImg');
   pImg.onload = () => cteDrawPanel('phone');
+  pImg.onerror = () => console.warn('차주앱 모바일 이미지 로드 실패:', cteNav.phone.cur);
+  cteNav.phone.cur = cteNormalizeImg(cteNav.phone.cur);
   pImg.src = cteNav.phone.cur || '';
   cteDrawPanel('phone');
 
@@ -2080,6 +2125,8 @@ function cteRender() {
   // 상담사(채널톡 PC) 이미지
   const aImg = document.getElementById('cteAgentImg');
   aImg.onload = () => cteDrawPanel('agent');
+  aImg.onerror = () => console.warn('채널톡 PC 이미지 로드 실패:', cteNav.agent.cur);
+  cteNav.agent.cur = cteNormalizeImg(cteNav.agent.cur);
   aImg.src = cteNav.agent.cur || '';
   cteDrawPanel('agent');
 
@@ -2127,11 +2174,21 @@ function cteDrawView(panel, svgEl) {
 
 // ─── 네비게이션 (패널별 독립 이동 — 한쪽이 이동해도 다른 쪽은 유지) ───
 function cteGo(panel, img) {
+  img = cteNormalizeImg(img);
   if(!img) return;
   const nav = cteNav[panel];
   if(nav.cur) nav.hist.push(nav.cur);
   nav.cur = img;
+  cteApplyLinkedScreen(panel);
   cteRender();
+}
+function cteApplyLinkedScreen(panel) {
+  const scr = cteScr(panel, cteNav[panel].cur);
+  const other = panel === 'phone' ? 'agent' : 'phone';
+  const target = cteNormalizeImg(panel === 'phone' ? scr.syncAgent : scr.syncPhone);
+  if(!target) return;
+  if(cteNav[other].cur && cteNav[other].cur !== target) cteNav[other].hist.push(cteNav[other].cur);
+  cteNav[other].cur = target;
 }
 function cteGoHome() {
   cteResetNav();
@@ -2233,6 +2290,16 @@ function cteAdmColHtml(panel) {
       <div class="cte-adm-flbl" style="margin-top:5px;">전송 시 이동할 이미지</div>
       <select class="cte-adm-sel" onchange="cteSetTypingGoto(this.value)">${cteImgOpts('phone', scr.typingGoto||'', true)}</select>` : ''}
 
+    <div style="margin-top:7px;padding:7px 8px;background:#07111f;border-radius:6px;border:1px solid #1e3a5f;">
+      <div style="font-size:10px;font-weight:700;color:#7dd3fc;margin-bottom:5px;">↔ 반대 화면 자동 변경</div>
+      <div style="font-size:10px;color:#64748b;margin-bottom:5px;">
+        이 이미지가 이동으로 표시될 때 ${panel==='phone'?'채널톡 PC':'모바일'} 화면을 함께 바꿉니다.
+      </div>
+      <select class="cte-adm-sel" onchange="cteSetSyncTarget('${panel}',this.value)">
+        ${cteImgOpts(panel==='phone'?'agent':'phone', panel==='phone' ? (scr.syncAgent||'') : (scr.syncPhone||''), true)}
+      </select>
+    </div>
+
     <!-- ── 섹션 1: 이동 영역 ── -->
     <div style="margin-top:8px;padding:7px 8px;background:#1a1200;border-radius:6px;border:1px solid #3b2800;">
       <div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:5px;">🔗 클릭 이동 영역 &nbsp;<span style="font-weight:400;color:#78716c;">드래그로 영역을 그리면 → 이동할 이미지 선택</span></div>
@@ -2276,6 +2343,7 @@ function cteAdmColHtml(panel) {
   </div>`;
 }
 function cteAdmSetImage(panel, img) {
+  img = cteNormalizeImg(img);
   cteRememberImg(panel, img);
   cteScr(panel, img);
   cteNav[panel] = { cur:img, hist:[] };
@@ -2297,7 +2365,7 @@ function cteScreenPickerPreview() {
   img.style.visibility = v ? 'visible' : 'hidden';
 }
 function cteScreenPickConfirm() {
-  const v = document.getElementById('cteScreenPickSel').value;
+  const v = cteNormalizeImg(document.getElementById('cteScreenPickSel').value);
   if(!v){ alert('편집할 이미지를 선택해주세요.'); return; }
   const panel = cteScreenPickPanel || 'phone';
   cteScreenPickPanel = null;
@@ -2319,7 +2387,19 @@ function cteSetTyping(on) {
   cteRenderAdmPanel();
 }
 function cteSetTypingGoto(v) {
-  cteScr('phone', cteNav.phone.cur).typingGoto = v;
+  cteScr('phone', cteNav.phone.cur).typingGoto = cteNormalizeImg(v);
+}
+function cteSetSyncTarget(panel, v) {
+  const scr = cteScr(panel, cteNav[panel].cur);
+  v = cteNormalizeImg(v);
+  if(panel === 'phone') {
+    if(v) scr.syncAgent = v;
+    else delete scr.syncAgent;
+  } else {
+    if(v) scr.syncPhone = v;
+    else delete scr.syncPhone;
+  }
+  cteRenderAdmPanel();
 }
 function cteSetDesc(panel, v) {
   cteScr(panel, cteNav[panel].cur).desc = v;
@@ -2761,6 +2841,7 @@ function cteAnnSummary(scr) {
   const parts = [];
   if(scr.hotspots?.length) parts.push('🔗'+scr.hotspots.length);
   if(scr.scrollRegions?.length) parts.push('📜'+scr.scrollRegions.length);
+  if(scr.syncAgent || scr.syncPhone) parts.push('↔1');
   const c = {box:0,text:0,arrow:0};
   (scr.annotations||[]).forEach(a=>{ if(c[a.type]!=null) c[a.type]++; });
   if(c.box) parts.push('□'+c.box);
