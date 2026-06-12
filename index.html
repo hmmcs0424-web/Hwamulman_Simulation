@@ -2110,7 +2110,7 @@ function cteDrawView(panel, svgEl) {
     if(a.type==='box'){
       h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.15)}" stroke="${a.color}" stroke-width="2" rx="1"/>`;
     } else if(a.type==='text'){
-      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${a.size||16}" font-weight="${a.weight||500}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging">${cteEscSvg(a.text)}</text>`;
+      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color||'#000000'}" font-size="${a.size||16}" font-weight="${a.weight||500}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging">${cteEscSvg(a.text)}</text>`;
     } else if(a.type==='arrow'){
       const id='cvarr'+panel+i;
       h += `<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
@@ -2428,6 +2428,7 @@ const cteItSt = {
 };
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
+  if(tool === 'text' && cteItSt[panel].color === '#ef4444') cteItSt[panel].color = '#000000';
   ['hotspot','scroll','box','text','arrow'].forEach(t => {
     const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
     if(el) el.classList.toggle('on', t===tool);
@@ -2590,7 +2591,7 @@ function cteItBindSvg() {
       const p = cteItPct(svg, e);
       const hit = cteItHit(scr.annotations, p);
       if(hit>=0){ st.selected=hit; cteItRedraw(panel); return; }
-      scr.annotations.push({type:'text',x:round1(p.x),y:round1(p.y),text:'텍스트 입력',color:st.color,size:16,weight:500});
+      scr.annotations.push({type:'text',x:round1(p.x),y:round1(p.y),text:'텍스트 입력',color:'#000000',size:16,weight:500});
       st.selected = scr.annotations.length - 1;
       cteItRedraw(panel);
       cteRenderAdmPanel();
@@ -2602,6 +2603,19 @@ function cteItSelect(panel, i) {
   cteItRedraw(panel);
   cteRenderAdmPanel();
 }
+function cteStartAnnMove(panel, i, ev) {
+  ev.stopPropagation();
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  const scr = cteScr(panel, cteNav[panel].cur);
+  if(!svg || !scr.annotations?.[i]) return;
+  const st = cteItSt[panel];
+  st.selected = i;
+  st.moving = true;
+  st.start = cteItPct(svg, ev);
+  st.moveBase = JSON.parse(JSON.stringify(scr.annotations[i]));
+  cteItRedraw(panel);
+  ev.preventDefault();
+}
 function cteSelectedAnnHtml(panel, scr) {
   const idx = cteItSt[panel].selected;
   const a = scr.annotations?.[idx];
@@ -2611,7 +2625,7 @@ function cteSelectedAnnHtml(panel, scr) {
     <div style="font-size:10px;font-weight:700;color:#c4b5fd;margin-bottom:6px;">${title} 설정</div>
     <div style="display:flex;gap:5px;align-items:center;margin-bottom:6px;">
       <label style="font-size:10px;color:#94a3b8;">색상</label>
-      <input type="color" value="${esc(a.color||'#ef4444')}" oninput="cteAnnSet('${panel}',${idx},'color',this.value)" style="width:38px;height:26px;border:0;background:transparent;padding:0;">
+      <input type="color" value="${esc(a.color||'#000000')}" oninput="cteAnnSet('${panel}',${idx},'color',this.value)" style="width:38px;height:26px;border:0;background:transparent;padding:0;">
       <button class="cte-it-del" onclick="cteItDelete('${panel}')" style="margin-left:auto;">삭제</button>
     </div>`;
   if(a.type==='text'){
@@ -2654,17 +2668,17 @@ function cteItRedraw(panel) {
     const sel = i===st.selected;
     const sw = sel?2.6:1.8;
     if(a.type==='box'){
-      h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
+      h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:move" onmousedown="cteStartAnnMove('${panel}',${i},event)" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
       if(sel) h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="none" stroke="#fff" stroke-width="0.7" rx="1" pointer-events="none"/>`;
     } else if(a.type==='text'){
       const size = a.size || 16;
       const weight = a.weight || 500;
-      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color}" font-size="${size}" font-weight="${weight}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging" style="cursor:move" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
+      h += `<text x="${a.x}%" y="${a.y}%" fill="${a.color||'#000000'}" font-size="${size}" font-weight="${weight}" font-family="Pretendard, Arial, sans-serif" dominant-baseline="hanging" style="cursor:move" onmousedown="cteStartAnnMove('${panel}',${i},event)" onclick="event.stopPropagation();cteItSelect('${panel}',${i})">${cteEscSvg(a.text)}</text>`;
       if(sel) h += `<rect x="${a.x-.7}%" y="${a.y-.7}%" width="${Math.min(42, Math.max(8, String(a.text||'텍스트').length * size * 0.06))}%" height="${Math.max(3.5, size * 0.18)}%" fill="none" stroke="#fff" stroke-width="0.9" stroke-dasharray="3 2" pointer-events="none"/>`;
     } else if(a.type==='arrow'){
       const id=`earr${panel}${i}`;
       h += `<defs><marker id="${id}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${a.color}"/></marker></defs>`;
-      h += `<line x1="${a.x1}%" y1="${a.y1}%" x2="${a.x2}%" y2="${a.y2}%" stroke="${a.color}" stroke-width="${sw}" marker-end="url(#${id})" style="cursor:pointer" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
+      h += `<line x1="${a.x1}%" y1="${a.y1}%" x2="${a.x2}%" y2="${a.y2}%" stroke="${a.color}" stroke-width="${sw}" marker-end="url(#${id})" style="cursor:move" onmousedown="cteStartAnnMove('${panel}',${i},event)" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
     }
   });
   if(st.temp){
