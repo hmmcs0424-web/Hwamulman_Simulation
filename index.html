@@ -867,12 +867,12 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<!-- 채널톡 핫스팟: 클릭 시 이동할 "이미지" 선택 모달 (차주앱과 동일) -->
+<!-- 채널톡 핫스팟: 클릭 시 이동할 "이미지" 선택 모달 -->
 <div class="modal-bg" id="cteHotModal">
   <div class="modal" style="max-width:440px;">
-    <div class="modal-title">🔗 이 영역을 클릭하면 이동할 이미지</div>
+    <div class="modal-title">🔗 클릭 이동 영역 — 이동할 이미지 선택</div>
     <div class="form-row">
-      <div class="form-label">이동할 이미지</div>
+      <div class="form-label">이 영역을 클릭하면 이동할 이미지</div>
       <select class="form-input" id="cteHotGotoSel" onchange="cteHotPickerPreview()"></select>
     </div>
     <div style="text-align:center;margin-top:4px;">
@@ -880,7 +880,25 @@ textarea.form-input{resize:vertical;}
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="cteHotCancel()">취소</button>
-      <button class="btn btn-primary" onclick="cteHotConfirm()">이 이미지로 이동 설정</button>
+      <button class="btn btn-primary" onclick="cteHotConfirm()">이동 영역 설정</button>
+    </div>
+  </div>
+</div>
+
+<!-- 채널톡 스크롤 영역: 삽입할 이미지 선택 모달 -->
+<div class="modal-bg" id="cteScrollModal">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-title">📜 스크롤 영역 — 삽입할 이미지 선택</div>
+    <div class="form-row">
+      <div class="form-label">이 영역 안에 표시할 이미지 (드래그/휠로 전체를 볼 수 있습니다)</div>
+      <select class="form-input" id="cteScrollImgSel" onchange="cteScrollPickerPreview()"></select>
+    </div>
+    <div style="text-align:center;margin-top:4px;">
+      <img id="cteScrollPrevImg" alt="" style="max-width:100%;height:220px;object-fit:contain;border-radius:8px;border:1px solid #e2e2e2;background:#f5f5f5;">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="cteScrollCancel()">취소</button>
+      <button class="btn btn-primary" onclick="cteScrollConfirm()">스크롤 영역 설정</button>
     </div>
   </div>
 </div>
@@ -2149,21 +2167,18 @@ function cteAdmColHtml(panel) {
   const icon = panel==='phone' ? '📱 고객 (차주앱)' : '🖥 상담사 (채널톡)';
   const st = cteItSt[panel];
   const px = panel==='phone' ? 'Phone' : 'Agent';
-  const toolLabels = {hotspot:'🔗 영역', scroll:'📜 스크롤', box:'□ 박스', text:'T 텍스트', arrow:'↗ 화살표'};
-  const toolBtns = ['hotspot','scroll','box','text','arrow'].map(t =>
-    `<button class="cte-it-btn${st.tool===t?' on':''}" id="cte${px}Tool_${t}" onclick="cteItTool('${panel}','${t}')" title="${t==='hotspot'?'드래그→이동할 이미지 선택':t==='scroll'?'드래그한 영역에 이미지 넣어 스크롤':'강조 '+t}">${toolLabels[t]}</button>`
-  ).join('');
   const colorBtns = ['#ef4444','#f59e0b','#10b981','#3b82f6','#fff'].map(c =>
-    `<div class="cte-it-color${st.color===c?' on':''}" style="background:${c}" data-panel="${panel}" data-color="${c}" onclick="cteItColor(this)" title="${c}"></div>`
+    `<div class="cte-it-color${st.color===c?' on':''}" style="background:${c}" data-panel="${panel}" data-color="${c}" onclick="cteItColor(this)"></div>`
   ).join('');
   return `<div class="cte-adm-hcol grow">
+
     <div class="cte-adm-flbl">${icon} — 편집할 이미지 &nbsp;<span style="color:var(--cte);">${cteAnnSummary(scr)}</span></div>
     <div style="display:flex;gap:4px;align-items:center;">
       <select class="cte-adm-sel" style="flex:1;" onchange="cteAdmSetImage('${panel}',this.value)">${cteImgOpts(panel, cur, false)}</select>
-      <button class="cte-adm-mainbtn" onclick="cteAddScreen('${panel}')" style="border-color:#22d3ee;color:#22d3ee;white-space:nowrap;" title="목록에 없는 이미지를 추가">+ 화면 추가</button>
+      <button class="cte-adm-mainbtn" onclick="cteAddScreen('${panel}')" style="border-color:#22d3ee;color:#22d3ee;white-space:nowrap;">+ 화면 추가</button>
     </div>
     <div style="display:flex;gap:6px;margin-top:5px;align-items:center;flex-wrap:wrap;">
-      <button class="cte-adm-mainbtn${isMain?' is-main':''}" onclick="cteSetMain('${panel}')" title="이 이미지를 이 모드의 시작 화면으로">${isMain?'🏠 이 모드의 메인':'🏠 메인으로 지정'}</button>
+      <button class="cte-adm-mainbtn${isMain?' is-main':''}" onclick="cteSetMain('${panel}')">${isMain?'🏠 이 모드의 메인':'🏠 메인으로 지정'}</button>
       ${panel==='phone' ? `<label style="font-size:11px;color:#94a3b8;display:flex;gap:4px;align-items:center;cursor:pointer;">
         <input type="checkbox" ${scr.typing?'checked':''} onchange="cteSetTyping(this.checked)"> ✏ 고객 입력 표시
       </label>` : ''}
@@ -2171,20 +2186,45 @@ function cteAdmColHtml(panel) {
     ${panel==='phone' && scr.typing ? `
       <div class="cte-adm-flbl" style="margin-top:5px;">전송 시 이동할 이미지</div>
       <select class="cte-adm-sel" onchange="cteSetTypingGoto(this.value)">${cteImgOpts('phone', scr.typingGoto||'', true)}</select>` : ''}
-    <div style="margin-top:7px;padding:6px 8px;background:#111a33;border-radius:6px;border:1px solid #1e293b;">
-      <div class="cte-adm-flbl" style="margin-bottom:4px;">🖊 이미지 위에서 드래그로 편집</div>
+
+    <!-- ── 섹션 1: 이동 영역 ── -->
+    <div style="margin-top:8px;padding:7px 8px;background:#1a1200;border-radius:6px;border:1px solid #3b2800;">
+      <div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:5px;">🔗 클릭 이동 영역 &nbsp;<span style="font-weight:400;color:#78716c;">드래그로 영역을 그리면 → 이동할 이미지 선택</span></div>
+      <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot"
+        onclick="cteItTool('${panel}','hotspot')"
+        style="width:100%;justify-content:center;font-size:11px;padding:4px 0;">
+        ${st.tool==='hotspot'?'✏ 이동 영역 그리기 모드 ON (이미지 위에서 드래그)':'🔗 이동 영역 설정 모드'}
+      </button>
+      ${cteHotListHtml(panel, scr)}
+    </div>
+
+    <!-- ── 섹션 2: 스크롤 영역 ── -->
+    <div style="margin-top:6px;padding:7px 8px;background:#001a1a;border-radius:6px;border:1px solid #004040;">
+      <div style="font-size:10px;font-weight:700;color:#22d3ee;margin-bottom:5px;">📜 스크롤 영역 &nbsp;<span style="font-weight:400;color:#4b6b6b;">드래그로 영역을 그리면 → 삽입할 이미지 선택 (드래그/휠로 전체 보기)</span></div>
+      <button class="cte-it-btn${st.tool==='scroll'?' on':''}" id="cte${px}Tool_scroll"
+        onclick="cteItTool('${panel}','scroll')"
+        style="width:100%;justify-content:center;font-size:11px;padding:4px 0;">
+        ${st.tool==='scroll'?'✏ 스크롤 영역 그리기 모드 ON (이미지 위에서 드래그)':'📜 스크롤 영역 설정 모드'}
+      </button>
+      ${cteRegionListHtml(panel, scr)}
+    </div>
+
+    <!-- ── 섹션 3: 강조 편집 ── -->
+    <div style="margin-top:6px;padding:7px 8px;background:#0d0d1f;border-radius:6px;border:1px solid #1e1e40;">
+      <div style="font-size:10px;font-weight:700;color:#a5b4fc;margin-bottom:5px;">✏ 강조 편집 &nbsp;<span style="font-weight:400;color:#4b4b6b;">박스 · 텍스트 · 화살표</span></div>
       <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;">
-        ${toolBtns}
+        <button class="cte-it-btn${st.tool==='box'?' on':''}" id="cte${px}Tool_box" onclick="cteItTool('${panel}','box')">□ 박스</button>
+        <button class="cte-it-btn${st.tool==='text'?' on':''}" id="cte${px}Tool_text" onclick="cteItTool('${panel}','text')">T 텍스트</button>
+        <button class="cte-it-btn${st.tool==='arrow'?' on':''}" id="cte${px}Tool_arrow" onclick="cteItTool('${panel}','arrow')">↗ 화살표</button>
         <div class="cte-it-sep"></div>
         ${colorBtns}
         <div class="cte-it-sep"></div>
-        <button class="cte-it-del" onclick="cteItDelete('${panel}')" title="선택한 강조 삭제">✕</button>
-        <button class="cte-it-del" onclick="cteItClear('${panel}')" title="강조 전체 삭제">⌫</button>
+        <button class="cte-it-del" onclick="cteItDelete('${panel}')" title="선택 삭제">✕ 삭제</button>
+        <button class="cte-it-del" onclick="cteItClear('${panel}')" title="전체 삭제">⌫ 전체</button>
       </div>
     </div>
-    ${cteHotListHtml(panel, scr)}
-    ${cteRegionListHtml(panel, scr)}
-    <div class="cte-adm-flbl" style="margin-top:6px;">이 이미지의 설명 (&lt;b&gt;강조&lt;/b&gt;)</div>
+
+    <div class="cte-adm-flbl" style="margin-top:7px;">이 이미지의 설명 (&lt;b&gt;강조&lt;/b&gt;)</div>
     <textarea class="cte-adm-ta" oninput="cteSetDesc('${panel}',this.value)">${esc(scr.desc||'')}</textarea>
   </div>`;
 }
@@ -2416,9 +2456,9 @@ function cteItBindSvg() {
           return;
         }
         if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
-          scr.scrollRegions.push({x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h),image:''});
           st.temp=null;
-          cteItRedraw(panel); cteRenderRegions(panel); cteRenderAdmPanel();
+          cteItRedraw(panel);
+          cteOpenScrollPicker(panel, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)});
           return;
         }
         if(r.x1!=null && (Math.abs(r.x2-r.x1)>1||Math.abs(r.y2-r.y1)>1)) scr.annotations.push({type:'arrow',x1:round1(r.x1),y1:round1(r.y1),x2:round1(r.x2),y2:round1(r.y2),color:st.color});
@@ -2514,6 +2554,37 @@ function cteHotConfirm() {
 function cteHotCancel() {
   cteHotPending = null;
   closeModal('cteHotModal');
+}
+
+// ─── 스크롤 영역: 삽입할 "이미지" 선택 모달 ───
+let cteScrollPending = null; // {panel, rect}
+function cteOpenScrollPicker(panel, rect) {
+  cteScrollPending = { panel, rect };
+  const sel = document.getElementById('cteScrollImgSel');
+  sel.innerHTML = cteAllImgOpts('');
+  cteScrollPickerPreview();
+  openModal('cteScrollModal');
+}
+function cteScrollPickerPreview() {
+  const v = document.getElementById('cteScrollImgSel').value;
+  const img = document.getElementById('cteScrollPrevImg');
+  img.src = v || '';
+  img.style.visibility = v ? 'visible' : 'hidden';
+}
+function cteScrollConfirm() {
+  if(!cteScrollPending){ closeModal('cteScrollModal'); return; }
+  const v = document.getElementById('cteScrollImgSel').value;
+  if(!v){ alert('삽입할 이미지를 선택해주세요.'); return; }
+  const { panel, rect } = cteScrollPending;
+  cteScr(panel, cteNav[panel].cur).scrollRegions.push({ ...rect, image:v });
+  cteScrollPending = null;
+  closeModal('cteScrollModal');
+  cteRenderRegions(panel);
+  cteRenderAdmPanel();
+}
+function cteScrollCancel() {
+  cteScrollPending = null;
+  closeModal('cteScrollModal');
 }
 
 // ─── 헬퍼 ───
