@@ -198,9 +198,25 @@
           "y": 8.8,
           "w": 99,
           "h": 83.1,
-          "image": "채널톡/채널톡_내부_끝인사.png"
+          "image": "채널톡/2-2. 차주앱_내부_끝인사.png"
         }
       ],
+      "desc": ""
+    },
+    "채널톡/차주앱_문자로 발송되는 메시지.jpg": {
+      "hotspots": [],
+      "annotations": [
+        {
+          "type": "text",
+          "x": 3.5,
+          "y": 82.8,
+          "text": "채널톡 답변은 문자로 발송됨 ",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
       "desc": ""
     }
   },
@@ -496,8 +512,34 @@
       "desc": ""
     },
     "채널톡/채널톡_테이블3.png": {
-      "hotspots": [],
-      "annotations": [],
+      "hotspots": [
+        {
+          "x": 39,
+          "y": 85.1,
+          "w": 40,
+          "h": 14.3,
+          "goto": "채널톡/채널톡_테이블4.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.8,
+          "y": 84.7,
+          "w": 40.5,
+          "h": 15.2,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.7,
+          "y": 90.3,
+          "text": "끝인사 이후 반드시 처리자 이름 작성 '000 처리 완료'",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 800
+        }
+      ],
       "scrollRegions": [
         {
           "x": 39,
@@ -509,6 +551,101 @@
       ],
       "desc": "",
       "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
+    },
+    "채널톡/채널톡_상담종료_태그선택.png": {
+      "hotspots": [
+        {
+          "x": 34.9,
+          "y": 48.7,
+          "w": 30.6,
+          "h": 4.5,
+          "goto": "채널톡/채널톡_상담종료_태그적용.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_상담종료_태그적용.png": {
+      "hotspots": [
+        {
+          "x": 35.1,
+          "y": 61.7,
+          "w": 29.1,
+          "h": 3.6,
+          "goto": "채널톡/채널톡_상담종료_종료.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_상담종료_종료.png": {
+      "hotspots": [
+        {
+          "x": 61.8,
+          "y": 55.8,
+          "w": 3.4,
+          "h": 4.7,
+          "goto": "채널톡/채널톡_상담종료_종료됨.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_상담종료_종료됨.png": {
+      "hotspots": [
+        {
+          "x": 34.1,
+          "y": 7,
+          "w": 4.4,
+          "h": 5,
+          "goto": "채널톡/채널톡_종료됨패널.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 7.8,
+          "y": 92,
+          "w": 18.2,
+          "h": 6.9,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 8.1,
+          "y": 88.6,
+          "text": "정상 종료 시 알림 팝업",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "box",
+          "x": 34.3,
+          "y": 7.6,
+          "w": 4,
+          "h": 3.8,
+          "color": "#ef4444"
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_종료됨패널.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "",
+      "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
+    },
+    "채널톡/채널톡_테이블4.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   }
 }
