@@ -1011,6 +1011,9 @@ async function boot() {
     if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
     if(e.key === 'h' || e.key === 'H') toggleShowHotspots();
   });
+  window.addEventListener('resize', () => {
+    if(activeSec === '채널톡' && cteConfig) requestAnimationFrame(cteSyncAllPanelOverlays);
+  });
   document.getElementById('popupOverlay').onclick = function(e) { if(e.target===this) closePopup(); };
   document.querySelectorAll('.modal-bg').forEach(el => {
     el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
@@ -2236,10 +2239,40 @@ function cteRender() {
   if(editing){ cteRenderAdmPanel(); cteItBindSvg(); }
 }
 function cteDrawPanel(panel) {
+  cteSyncPanelOverlay(panel);
   const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
   if(cteIsEditing()) cteItRedraw(panel);
   else cteDrawView(panel, svg);
   cteRenderRegions(panel);
+}
+function cteSyncAllPanelOverlays() {
+  cteSyncPanelOverlay('phone');
+  cteSyncPanelOverlay('agent');
+}
+function cteSyncPanelOverlay(panel) {
+  const img = document.getElementById(panel==='phone'?'cteCustomerImg':'cteAgentImg');
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  const regions = document.getElementById(panel==='phone'?'ctePhoneRegions':'cteAgentRegions');
+  const host = document.getElementById(panel==='phone'?'ctePhoneContent':'cteImgScroll');
+  if(!img || !svg || !regions || !host) return;
+
+  let box = { left:0, top:0, width:host.clientWidth, height:host.clientHeight };
+  if(panel === 'agent' && img.naturalWidth && img.naturalHeight && host.clientWidth && host.clientHeight) {
+    const scale = Math.min(host.clientWidth / img.naturalWidth, host.clientHeight / img.naturalHeight);
+    box.width = img.naturalWidth * scale;
+    box.height = img.naturalHeight * scale;
+    box.left = (host.clientWidth - box.width) / 2;
+    box.top = 0;
+  }
+
+  [svg, regions].forEach(el => {
+    el.style.left = box.left + 'px';
+    el.style.top = box.top + 'px';
+    el.style.width = box.width + 'px';
+    el.style.height = box.height + 'px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+  });
 }
 
 // 뷰 모드: 핫스팟(hover 표시 / 영역보기 토글) + 강조 어노테이션
