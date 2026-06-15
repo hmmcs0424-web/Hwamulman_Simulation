@@ -89,7 +89,7 @@
           "y": 78.6,
           "w": 97.7,
           "h": 12.8,
-          "goto": "채널톡/2-2.차주앱_텍스트문의_고객 문의.png"
+          "goto": "채널톡/2-1.차주앱_기본틀.png"
         }
       ],
       "annotations": [
@@ -162,7 +162,7 @@
         }
       ],
       "desc": "",
-      "syncAgent": "채널톡/채널톡_테이블1.png"
+      "syncAgent": "채널톡/채널톡_로그인.png"
     },
     "채널톡/2-1.차주앱_기본틀 2.png": {
       "hotspots": [],
@@ -176,6 +176,18 @@
           "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
         }
       ],
+      "desc": ""
+    },
+    "채널톡/채널톡_테이블1.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/채널톡_테이블2.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
       "desc": ""
     }
   },
