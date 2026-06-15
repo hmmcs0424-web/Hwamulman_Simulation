@@ -362,8 +362,8 @@ textarea.form-input{resize:vertical;}
 .cte-phone-outer{flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0;padding:0 8px;}
 
 /* ── 고객 입력 시뮬 ── */
-.cte-typing-area{width:100%;max-width:340px;padding:6px 8px 0;display:none;flex-direction:column;gap:4px;flex-shrink:0;}
-.cte-typing-area.on{display:flex;}
+.cte-typing-area{display:none!important;}
+.cte-typing-area.on{display:none!important;}
 .cte-tlbl{font-size:9px;color:var(--cte);font-weight:700;letter-spacing:.5px;}
 .cte-trow{display:flex;gap:4px;}
 .cte-tinput{flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-size:12px;padding:6px 8px;font-family:inherit;outline:none;}
@@ -2188,8 +2188,7 @@ function cteRender() {
   // 고객 입력 시뮬 (이미지별 설정)
   const pScr = cteScr('phone', cteNav.phone.cur);
   const ta = document.getElementById('cteTypingArea');
-  if(pScr.typing && !editing){ ta.classList.add('on'); document.getElementById('cteTypingInput').value=''; }
-  else ta.classList.remove('on');
+  ta.classList.remove('on');
 
   // 상담사(채널톡 PC) 이미지
   const aImg = document.getElementById('cteAgentImg');
