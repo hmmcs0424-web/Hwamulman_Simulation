@@ -2660,16 +2660,51 @@ function cteHotDel(panel, idx) {
   cteItRedraw(panel);
   cteRenderAdmPanel();
 }
-// 편집 중 핫스팟 클릭 → 삭제 (차주앱과 동일)
-function cteEditHotClick(panel, idx) {
+// 핫스팟 드래그 이동
+function cteHotDragStart(panel, idx, ev) {
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
   const scr = cteScr(panel, cteNav[panel].cur);
   const hs = scr.hotspots[idx];
-  if(!hs) return;
-  if(confirm(`이 영역(→ ${hs.goto.split('/').pop()})을 삭제하시겠습니까?`)) {
-    scr.hotspots.splice(idx,1);
+  if(!hs || !svg) return;
+  ev.preventDefault();
+  const s = cteItPct(svg, ev);
+  const sx = hs.x, sy = hs.y;
+  const onMove = e => {
+    const p = cteItPct(svg, e);
+    hs.x = Math.max(0, Math.min(100-hs.w, round1(sx + p.x - s.x)));
+    hs.y = Math.max(0, Math.min(100-hs.h, round1(sy + p.y - s.y)));
     cteItRedraw(panel);
+  };
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
     cteRenderAdmPanel();
-  }
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+// 핫스팟 우하단 리사이즈
+function cteHotResizeStart(panel, idx, ev) {
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  const scr = cteScr(panel, cteNav[panel].cur);
+  const hs = scr.hotspots[idx];
+  if(!hs || !svg) return;
+  ev.preventDefault();
+  const s = cteItPct(svg, ev);
+  const sw = hs.w, sh = hs.h;
+  const onMove = e => {
+    const p = cteItPct(svg, e);
+    hs.w = Math.max(2, Math.min(100-hs.x, round1(sw + p.x - s.x)));
+    hs.h = Math.max(2, Math.min(100-hs.y, round1(sh + p.y - s.y)));
+    cteItRedraw(panel);
+  };
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    cteRenderAdmPanel();
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
 }
 
 // ─── 스크롤 영역 (특정 영역에 이미지를 넣어 드래그/스크롤로 전체 보기) ───
@@ -2833,7 +2868,6 @@ function cteItBindSvg() {
         e.preventDefault();
         return;
       }
-      if(cteHotHit(scr.hotspots, p)>=0) return; // 핫스팟 클릭(삭제 confirm)은 onclick으로
       const hit = cteItHit(scr.annotations, p);
       if(hit>=0){
         st.selected=hit;
@@ -2977,7 +3011,15 @@ function cteItRedraw(panel) {
   const fs = Math.max(10, Math.round(H*0.028));
   let h = '';
   scr.hotspots.forEach((hs,i)=>{
-    h += `<rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:pointer" onclick="event.stopPropagation();cteEditHotClick('${panel}',${i})"/>`;
+    const bx = hs.x+hs.w, by = hs.y; // X버튼 우상단
+    const rs = Math.min(hs.w, hs.h) * 0.18; // 버튼 반지름(%)
+    const btnR = Math.max(1.2, Math.min(rs, 3));
+    h += `<g>
+      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:move" onmousedown="event.stopPropagation();cteHotDragStart('${panel}',${i},event)"/>
+      <circle cx="${bx}%" cy="${by}%" r="${btnR}%" fill="#ef4444" style="cursor:pointer" onclick="event.stopPropagation();cteHotDel('${panel}',${i})"/>
+      <text x="${bx}%" y="${by}%" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="${btnR*1.4}%" font-weight="900" style="pointer-events:none">×</text>
+      <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>
+    </g>`;
   });
   scr.annotations.forEach((a,i)=>{
     const sel = i===st.selected;
