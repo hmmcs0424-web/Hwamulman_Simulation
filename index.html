@@ -2660,6 +2660,29 @@ function cteHotDel(panel, idx) {
   cteItRedraw(panel);
   cteRenderAdmPanel();
 }
+// 박스 어노테이션 리사이즈
+function cteBoxResizeStart(panel, idx, ev) {
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  const scr = cteScr(panel, cteNav[panel].cur);
+  const a = scr.annotations[idx];
+  if(!a || !svg) return;
+  ev.preventDefault();
+  const s = cteItPct(svg, ev);
+  const sw = a.w, sh = a.h;
+  const onMove = e => {
+    const p = cteItPct(svg, e);
+    a.w = Math.max(2, Math.min(100-a.x, round1(sw + p.x - s.x)));
+    a.h = Math.max(2, Math.min(100-a.y, round1(sh + p.y - s.y)));
+    cteItRedraw(panel);
+  };
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    cteRenderAdmPanel();
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
 // 핫스팟 드래그 이동
 function cteHotDragStart(panel, idx, ev) {
   const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
@@ -3025,8 +3048,11 @@ function cteItRedraw(panel) {
     const sel = i===st.selected;
     const sw = sel?2.6:1.8;
     if(a.type==='box'){
+      const brs = Math.min(a.w, a.h) * 0.18;
+      const bhr = Math.max(1.2, Math.min(brs, 3));
       h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="${cteAnnRgba(a.color,.13)}" stroke="${a.color}" stroke-width="${sw}" rx="1" style="cursor:move" onmousedown="cteStartAnnMove('${panel}',${i},event)" onclick="event.stopPropagation();cteItSelect('${panel}',${i})"/>`;
       if(sel) h += `<rect x="${a.x}%" y="${a.y}%" width="${a.w}%" height="${a.h}%" fill="none" stroke="#fff" stroke-width="0.7" rx="1" pointer-events="none"/>`;
+      h += `<rect x="${a.x+a.w-bhr*1.5}%" y="${a.y+a.h-bhr*1.5}%" width="${bhr*1.5}%" height="${bhr*1.5}%" fill="white" stroke="${a.color}" stroke-width="0.8" style="cursor:se-resize" onmousedown="event.stopPropagation();cteBoxResizeStart('${panel}',${i},event)"/>`;
     } else if(a.type==='text'){
       const size = a.size || 16;
       const weight = a.weight || 500;
