@@ -19,7 +19,9 @@
       "Bash(rm -f _new_css.txt _new_html.txt _new_js.txt _splice.js _check.js)",
       "Bash(cd \"C:\\\\Users\\\\owner\\\\OneDrive\\\\Desktop\\\\시뮬 이미지\\\\차주앱시뮬\" && rm -f index.backup-*.html && git status --short && echo \"---\" && ls *.txt *.js 2>/dev/null | grep -v node_modules || echo \"\\(임시파일 없음\\)\")",
       "Bash(node --check _chk.js)",
-      "Bash(rm -f _chk.js)"
+      "Bash(rm -f _chk.js)",
+      "Bash(cat .claude/launch.json)",
+      "Bash(npx -v)"
     ]
   }
 }

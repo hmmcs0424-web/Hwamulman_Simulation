@@ -1266,15 +1266,71 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     lbl.textContent = hs.label || hs.goto;
     el.appendChild(lbl);
     if(isAdmin) {
-      el.addEventListener('click', e => {
+      el.style.cursor = 'move';
+
+      // X 삭제 버튼
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.title = '핫스팟 삭제';
+      delBtn.style.cssText = 'position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:50%;background:#FF4444;color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;line-height:18px;text-align:center;z-index:10;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.4);';
+      delBtn.addEventListener('mousedown', e => e.stopPropagation());
+      delBtn.addEventListener('click', e => {
         e.stopPropagation();
-        if(confirm(`핫스팟 "${hs.label||hs.goto}" 을(를) 삭제하시겠습니까?`)) {
-          const st = cache[activeSec];
-          st.flow.screens[st.cur].hotspots.splice(i,1);
-          renderHotspots(layerId, st.flow.screens[st.cur].hotspots, false);
-          renderHsList();
-        }
+        const st = cache[activeSec];
+        st.flow.screens[st.cur].hotspots.splice(i,1);
+        renderHotspots(layerId, st.flow.screens[st.cur].hotspots, false);
+        renderHsList();
       });
+      el.appendChild(delBtn);
+
+      // 드래그 이동
+      el.addEventListener('mousedown', e => {
+        if(e.target === delBtn || e.target.classList.contains('hs-resize-handle')) return;
+        e.preventDefault(); e.stopPropagation();
+        const layerEl = document.getElementById(layerId);
+        const lr = layerEl.getBoundingClientRect();
+        const sx = e.clientX, sy = e.clientY;
+        const sl = hs.left, st2 = hs.top;
+        const onMove = ev => {
+          hs.left = Math.max(0, Math.min(100 - hs.width,  round1(sl + (ev.clientX - sx) / lr.width  * 100)));
+          hs.top  = Math.max(0, Math.min(100 - hs.height, round1(st2 + (ev.clientY - sy) / lr.height * 100)));
+          el.style.left = hs.left + '%';
+          el.style.top  = hs.top  + '%';
+        };
+        const onUp = () => {
+          renderHsList();
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+
+      // 우하단 리사이즈 핸들
+      const handle = document.createElement('div');
+      handle.className = 'hs-resize-handle';
+      handle.style.cssText = 'position:absolute;bottom:-5px;right:-5px;width:11px;height:11px;background:#fff;border:2px solid rgba(30,100,255,.85);border-radius:2px;cursor:se-resize;z-index:10;';
+      handle.addEventListener('mousedown', e => {
+        e.preventDefault(); e.stopPropagation();
+        const layerEl = document.getElementById(layerId);
+        const lr = layerEl.getBoundingClientRect();
+        const sx = e.clientX, sy = e.clientY;
+        const sw = hs.width, sh = hs.height;
+        const onMove = ev => {
+          hs.width  = Math.max(2, Math.min(100 - hs.left, round1(sw + (ev.clientX - sx) / lr.width  * 100)));
+          hs.height = Math.max(2, Math.min(100 - hs.top,  round1(sh + (ev.clientY - sy) / lr.height * 100)));
+          el.style.width  = hs.width  + '%';
+          el.style.height = hs.height + '%';
+        };
+        const onUp = () => {
+          renderHsList();
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+      el.appendChild(handle);
     } else {
       el.addEventListener('click', () => hs.goto && goTo(hs.goto));
     }
