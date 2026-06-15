@@ -960,6 +960,26 @@ function mergeImageManifest(sectionName, flow) {
   const merged = new Set([...(flow.imageManifest||[]), ...fromSite]);
   flow.imageManifest = Array.from(merged);
 }
+function clearTransientScreenState() {
+  closePopup();
+  ['hotspotLayer','pcHotspotLayer','popupHsLayer','cteCustomerSvg','cteAgentSvg','ctePhoneRegions','cteAgentRegions'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = '';
+  });
+  ['drawOverlay','pcDrawOverlay'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  clearChatScroll();
+  clearOverlays();
+  const ctArea = document.getElementById('ctEduArea');
+  if(ctArea) ctArea.scrollTop = 0;
+  const phoneImg = document.getElementById('screenImg');
+  const pcImg = document.getElementById('pcScreenImg');
+  const ctePhoneImg = document.getElementById('cteCustomerImg');
+  const cteAgentImg = document.getElementById('cteAgentImg');
+  if(phoneImg) phoneImg.src = '';
+  if(pcImg) pcImg.src = '';
+  if(ctePhoneImg) ctePhoneImg.src = '';
+  if(cteAgentImg) cteAgentImg.src = '';
+}
 
 // ═══════════════════════════════════════════
 // BOOT
@@ -1011,6 +1031,7 @@ async function boot() {
 async function switchSec(name) {
   if(name === activeSec) return;
   if(drawing) cancelDraw();
+  clearTransientScreenState();
 
   activeSec = name;
   document.querySelectorAll('.nav-menu').forEach(b => b.classList.toggle('active', b.dataset.sim===name));
@@ -1037,6 +1058,7 @@ async function loadSec(name) {
 function applySec(name) {
   const sec = SECS[name];
   const st = cache[name];
+  window.scrollTo(0,0);
 
   // 채널톡: 교육 전용 레이아웃
   const isCtEdu = (name === '채널톡');
@@ -1044,6 +1066,7 @@ function applySec(name) {
   document.querySelector('.info-panel').style.display = isCtEdu ? 'none' : '';
   document.getElementById('phoneArea').style.display = isCtEdu ? 'none' : (sec.type==='app' ? '' : 'none');
   document.getElementById('pcArea').classList.toggle('visible', !isCtEdu && sec.type==='pc');
+  if(!isCtEdu) cteTeardownEditLayout();
   if(isCtEdu) { cteInit().then(()=>syncAdminUI()); return; }
 
   // 예외 상황 컬럼: APP 타입(차주앱, 빽통앱)만 표시
@@ -1397,15 +1420,8 @@ function syncAdminUI() {
     if(adminMode) {
       cteSetupEditLayout();
       if(cteConfig) cteRender();
-      // 편집 패널이 보이도록 컨테이너 내부만 스크롤 (scrollIntoView는 window까지 밀어
-      // 고정 topnav 뒤로 레이아웃이 숨는 문제가 있어 사용하지 않는다)
-      setTimeout(() => {
-        const area = document.getElementById('ctEduArea');
-        if(area && adminMode && activeSec === '채널톡') {
-          area.scrollTo({top:area.scrollHeight, behavior:'smooth'});
-          window.scrollTo(0,0);
-        }
-      }, 120);
+      document.getElementById('ctEduArea')?.scrollTo({top:0});
+      window.scrollTo(0,0);
     } else {
       cteTeardownEditLayout();
       if(cteConfig) cteRender();
@@ -2315,10 +2331,53 @@ function cteRenderAdmPanel() {
       <b style="color:#a5b4fc;">□ T ↗</b>=박스·텍스트·화살표 강조 ·
       편집 중인 핫스팟을 클릭하면 삭제
     </div>
+    ${cteModeRoutesHtml()}
     <div class="cte-adm-hrow">
       ${cteAdmColHtml('phone')}
       ${cteAdmColHtml('agent')}
     </div>`;
+}
+function cteModeRoutesHtml() {
+  return `<div style="margin-bottom:10px;padding:8px 10px;background:#111827;border:1px solid #263244;border-radius:6px;">
+    <div style="font-size:11px;font-weight:800;color:#e2e8f0;margin-bottom:7px;">채널톡 경로 시작 화면 설정</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      ${cteConfig.modes.map((mode, idx) => `
+        <div style="display:grid;grid-template-columns:minmax(92px,.6fr) minmax(150px,1.4fr) minmax(150px,1.4fr) auto;gap:6px;align-items:center;">
+          <button class="cte-adm-mainbtn${idx===cteMode?' is-main':''}" onclick="cteSelectModeForEdit(${idx})" style="white-space:nowrap;">${esc(mode.label)}</button>
+          <select class="cte-adm-sel" onchange="cteSetModeStart(${idx},'phone',this.value)" title="고객 차주앱 시작 화면">
+            ${cteImgOpts('phone', mode.phoneStart||'', false)}
+          </select>
+          <select class="cte-adm-sel" onchange="cteSetModeStart(${idx},'agent',this.value)" title="상담사 채널톡 시작 화면">
+            ${cteImgOpts('agent', mode.agentStart||'', false)}
+          </select>
+          <button class="cte-adm-mainbtn" onclick="ctePreviewMode(${idx})" style="white-space:nowrap;">확인</button>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+function cteSelectModeForEdit(idx) {
+  cteMode = idx;
+  cteResetNav();
+  cteRender();
+}
+function ctePreviewMode(idx) {
+  cteSelectModeForEdit(idx);
+  document.getElementById('ctEduArea')?.scrollTo({top:0, behavior:'smooth'});
+}
+function cteSetModeStart(idx, panel, img) {
+  const mode = cteConfig?.modes?.[idx];
+  if(!mode) return;
+  img = cteNormalizeImg(img);
+  if(panel === 'phone') mode.phoneStart = img;
+  else mode.agentStart = img;
+  cteRememberImg(panel, img);
+  if(idx === cteMode) {
+    cteResetNav();
+    cteRender();
+  } else {
+    cteRenderAdmPanel();
+  }
 }
 function cteAdmColHtml(panel) {
   const m = cteConfig.modes[cteMode];
