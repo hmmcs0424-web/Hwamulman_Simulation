@@ -56,7 +56,6 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .phone-frame::before{content:'';position:absolute;right:-3px;top:130px;width:3px;height:64px;background:#2c2c2e;border-radius:0 3px 3px 0;}
 .phone-frame::after{content:'';position:absolute;left:-3px;top:90px;width:3px;height:36px;background:#2c2c2e;border-radius:3px 0 0 3px;box-shadow:0 52px 0 #2c2c2e,0 96px 0 #2c2c2e;}
 .phone-inner{flex:1;background:#fff;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
-.phone-island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:30px;background:#1c1c1e;border-radius:20px;z-index:10;}
 .status-bar{flex-shrink:0;height:50px;padding:16px 22px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:5;}
 .status-time{font-size:15px;font-weight:700;color:#000;}
 .status-icons{display:flex;gap:5px;align-items:center;}
@@ -475,7 +474,6 @@ textarea.form-input{resize:vertical;}
   <div class="phone-area" id="phoneArea">
   <div class="phone-frame">
   <div class="phone-inner">
-    <div class="phone-island"></div>
     <div class="status-bar">
       <span class="status-time" id="statusTime">09:41</span>
       <div class="status-icons">
@@ -759,7 +757,6 @@ textarea.form-input{resize:vertical;}
         <div class="cte-phone-outer">
           <div class="phone-frame" id="ctePhoneScreen" style="cursor:default;width:auto;max-width:none;height:calc(100% - 4px);aspect-ratio:9/19.5;">
             <div class="phone-inner">
-              <div class="phone-island"></div>
               <div class="status-bar">
                 <span class="status-time" id="cteStatusTime">09:41</span>
                 <div class="status-icons">
