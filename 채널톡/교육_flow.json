@@ -218,6 +218,20 @@
       ],
       "scrollRegions": [],
       "desc": ""
+    },
+    "채널톡/2-1.차주앱_기본틀 4.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.5,
+          "y": 8,
+          "w": 98.3,
+          "h": 90.6,
+          "image": "채널톡/2-2. 차주앱_내부_처리완료.png"
+        }
+      ],
+      "desc": ""
     }
   },
   "agentScreens": {
@@ -642,10 +656,54 @@
       "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
     },
     "채널톡/채널톡_테이블4.png": {
-      "hotspots": [],
-      "annotations": [],
-      "scrollRegions": [],
-      "desc": ""
+      "hotspots": [
+        {
+          "x": 81.8,
+          "y": 1,
+          "w": 2.6,
+          "h": 5.1,
+          "goto": "채널톡/채널톡_상담종료_태그선택.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 81.6,
+          "y": 0.6,
+          "w": 3.1,
+          "h": 5.8,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 58.5,
+          "y": 2.4,
+          "text": " 10분 이상 답변이 없을 경우 상담 종료 진행",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "text",
+          "x": 79.6,
+          "y": 8.5,
+          "text": "업무 종료 전 반드시 종료 처리 필요",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.9,
+          "y": 7.6,
+          "w": 40.1,
+          "h": 77.3,
+          "image": "채널톡/채널톡_내부_처리완료.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 4.png"
     }
   }
 }

@@ -339,7 +339,7 @@ textarea.form-input{resize:vertical;}
 #ctEduArea{flex:1;flex-direction:column;overflow:hidden;background:#0b1020;color:#fff;font-family:'Pretendard',-apple-system,sans-serif;}
 
 /* ── 상단 탭/네비 바 ── */
-.cte-topbar{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.cte-topbar{background:#0f172a;border-bottom:1px solid #1e293b;padding:0 14px;height:44px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:20;}
 .cte-tab-btns{display:flex;gap:5px;}
 .cte-tabbtn{padding:6px 16px;border-radius:8px;border:1px solid #1e293b;background:#0b1020;color:#94a3b8;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
 .cte-tabbtn:hover{background:#1e293b;color:#e2e8f0;}
@@ -1044,7 +1044,7 @@ function applySec(name) {
   document.querySelector('.info-panel').style.display = isCtEdu ? 'none' : '';
   document.getElementById('phoneArea').style.display = isCtEdu ? 'none' : (sec.type==='app' ? '' : 'none');
   document.getElementById('pcArea').classList.toggle('visible', !isCtEdu && sec.type==='pc');
-  if(isCtEdu) { cteInit(); return; }
+  if(isCtEdu) { cteInit().then(()=>syncAdminUI()); return; }
 
   // 예외 상황 컬럼: APP 타입(차주앱, 빽통앱)만 표시
   document.querySelector('.info-col-exception').style.display = sec.type==='app' ? '' : 'none';
@@ -1079,7 +1079,7 @@ function applySec(name) {
   renderOverlayAdminSection();
   renderChatScrollAdmin();
   detectUnreg();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
+  syncAdminUI();
 }
 
 // ═══════════════════════════════════════════
@@ -1372,36 +1372,57 @@ function submitPw() {
 
 function enterAdmin() {
   adminMode = true;
-  if(activeSec === '채널톡') { cteOpenAdmin(); return; }
-  document.getElementById('adminPanel').style.display = 'block';
-  document.getElementById('topAdminBtn').classList.add('on');
-  document.getElementById('topAdminBtn').textContent = '🔓 관리자 모드 ON';
-  const st = cache[activeSec];
-  const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
-  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], true);
-  renderHsList();
-  renderGuideEditor();
-  renderExceptionEditor();
-  renderOverlayAdminSection();
-  renderChatScrollAdmin();
-  // 관리자 모드 진입 시 스크롤 영역 하이라이트 재렌더
-  if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
+  syncAdminUI();
 }
 
 function exitAdmin() {
-  adminMode = false;
-  if(activeSec === '채널톡') { cteCloseAdmin(); return; }
   if(drawing) cancelDraw();
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('topAdminBtn').classList.remove('on');
-  document.getElementById('topAdminBtn').textContent = '🔐 관리자 로그인';
+  adminMode = false;
+  syncAdminUI();
+}
+
+// 현재 섹션 + adminMode 상태에 맞춰 관리자 UI를 동기화.
+// 탭 전환 / 로그인 / 로그아웃이 모두 이 함수를 거치므로 화면 잔상·패널 누락이 생기지 않는다.
+function syncAdminUI() {
+  const btn = document.getElementById('topAdminBtn');
+  btn.classList.toggle('on', adminMode);
+  btn.textContent = adminMode ? '🔓 관리자 모드 ON' : '🔐 관리자 로그인';
+
+  const isCte = activeSec === '채널톡';
+  // 일반(차주앱/빽통) 편집 패널은 채널톡이 아닐 때만 노출
+  document.getElementById('adminPanel').style.display = (adminMode && !isCte) ? 'block' : 'none';
+
+  if(isCte) {
+    // 채널톡: 전용 편집 레이아웃 (상단 모드 탭은 sticky로 항상 노출)
+    if(adminMode) {
+      cteSetupEditLayout();
+      if(cteConfig) cteRender();
+      // 편집 패널이 보이도록 컨테이너 내부만 스크롤 (scrollIntoView는 window까지 밀어
+      // 고정 topnav 뒤로 레이아웃이 숨는 문제가 있어 사용하지 않는다)
+      setTimeout(() => {
+        const area = document.getElementById('ctEduArea');
+        if(area && adminMode && activeSec === '채널톡') {
+          area.scrollTo({top:area.scrollHeight, behavior:'smooth'});
+          window.scrollTo(0,0);
+        }
+      }, 120);
+    } else {
+      cteTeardownEditLayout();
+      if(cteConfig) cteRender();
+    }
+    return;
+  }
+
+  // 일반 섹션: 채널톡 편집 레이아웃 잔상을 먼저 제거한 뒤 핫스팟/편집 패널 렌더
+  cteTeardownEditLayout();
   const st = cache[activeSec];
+  if(!st || !st.flow) return;
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
-  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], false);
+  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], adminMode);
+  if(adminMode) { renderHsList(); renderGuideEditor(); }
   renderExceptionEditor();
   renderOverlayAdminSection();
   renderChatScrollAdmin();
-  // 관리자 종료 시 하이라이트 제거
   if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
 }
 
@@ -2247,9 +2268,8 @@ function cteSendMsg() {
 // ═══════════════════════════════════════════
 // 관리자 모드 — 하단 편집 패널 (스크롤로 접근)
 // ═══════════════════════════════════════════
-function cteOpenAdmin() {
-  document.getElementById('topAdminBtn').classList.add('on');
-  document.getElementById('topAdminBtn').textContent = '🔓 관리자 모드 ON';
+// 편집 레이아웃만 담당 (adminMode/버튼 상태는 syncAdminUI가 제어)
+function cteSetupEditLayout() {
   // 미리보기 영역을 고정 높이로 설정해서 편집 패널이 아래로 흘러 스크롤되도록
   const area = document.getElementById('ctEduArea');
   area.style.overflowY = 'auto';
@@ -2263,26 +2283,23 @@ function cteOpenAdmin() {
     preview.style.overflow = 'hidden';
   }
   document.getElementById('cteAdmPanel').style.display = 'flex';
-  cteRender();
-  setTimeout(()=>document.getElementById('cteAdmPanel').scrollIntoView({behavior:'smooth'}), 120);
 }
-function cteCloseAdmin() {
-  // 레이아웃 원복
+function cteTeardownEditLayout() {
+  // 레이아웃 원복 + 편집 패널 숨김 (잔상 제거)
   const area = document.getElementById('ctEduArea');
   area.style.overflowY = '';
   area.style.overflowX = '';
   const preview = document.getElementById('ctePreview');
   if(preview){ preview.style.flex='1'; preview.style.height=''; preview.style.minHeight='0'; preview.style.overflow='hidden'; }
   document.getElementById('cteAdmPanel').style.display = 'none';
-  adminMode = false;
-  document.getElementById('topAdminBtn').classList.remove('on');
-  document.getElementById('topAdminBtn').textContent = '🔐 관리자 로그인';
   ['cteCustomerSvg','cteAgentSvg'].forEach(id=>{
     const s=document.getElementById(id);
     if(s){ s.onmousedown=null; s.onmousemove=null; s.onmouseup=null; s.onclick=null; s.style.pointerEvents='none'; s.style.cursor=''; }
   });
-  if(cteConfig) cteRender();
 }
+// 하위 호환 (외부 호출 대비)
+function cteOpenAdmin(){ adminMode=true; syncAdminUI(); }
+function cteCloseAdmin(){ adminMode=false; syncAdminUI(); }
 
 // ─── 하단 편집 패널: "어느 이미지에서 어떤 편집을 할 것인지"가 기본 ───
 function cteRenderAdmPanel() {
