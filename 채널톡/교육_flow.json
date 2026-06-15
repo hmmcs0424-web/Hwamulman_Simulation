@@ -120,7 +120,6 @@
         }
       ],
       "scrollRegions": [],
-      "syncAgent": "채널톡/채널톡_수신함 확인.png",
       "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
     },
     "채널톡/1-4.차주앱_첨부파일넣기.jpg": {
@@ -188,6 +187,20 @@
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
+      "desc": ""
+    },
+    "채널톡/2-1.차주앱_기본틀 3.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.2,
+          "y": 8.8,
+          "w": 99,
+          "h": 83.1,
+          "image": "채널톡/채널톡_내부_끝인사.png"
+        }
+      ],
       "desc": ""
     }
   },
@@ -270,8 +283,34 @@
       "desc": ""
     },
     "채널톡/채널톡_목록선택.png": {
-      "hotspots": [],
-      "annotations": [],
+      "hotspots": [
+        {
+          "x": 21.5,
+          "y": 12.4,
+          "w": 16.2,
+          "h": 8.9,
+          "goto": "채널톡/채널톡_테이블1.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 21.4,
+          "y": 12,
+          "w": 16.7,
+          "h": 9.8,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 20.8,
+          "y": 23.2,
+          "text": "상담을 진행할 목록을 선택해 주세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
       "scrollRegions": [],
       "desc": ""
     },
@@ -317,7 +356,16 @@
           "goto": "채널톡/채널톡_목록선택.png"
         }
       ],
-      "annotations": [],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 6.7,
+          "y": 14.6,
+          "w": 14.7,
+          "h": 4.7,
+          "color": "#000000"
+        }
+      ],
       "scrollRegions": [],
       "desc": ""
     },
@@ -401,10 +449,66 @@
       "desc": ""
     },
     "채널톡/채널톡_테이블2.png": {
+      "hotspots": [
+        {
+          "x": 38.7,
+          "y": 85.1,
+          "w": 40.3,
+          "h": 14,
+          "goto": "채널톡/채널톡_테이블3.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.5,
+          "y": 85.1,
+          "w": 40.7,
+          "h": 14.4,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.6,
+          "y": 90.7,
+          "text": "고객 답변이 없는 경우 5분 이후 끝인사 진행 후 종료 ",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.8,
+          "y": 7.4,
+          "w": 40.3,
+          "h": 77.4,
+          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 2.png"
+    },
+    "채널톡/2-1.차주앱_기본틀 3.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
+    },
+    "채널톡/채널톡_테이블3.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 39,
+          "y": 7.4,
+          "w": 40,
+          "h": 77.3,
+          "image": "채널톡/채널톡_내부_끝인사.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
     }
   }
 }
