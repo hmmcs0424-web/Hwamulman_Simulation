@@ -9,12 +9,12 @@
     {
       "id": "image",
       "label": "🖼️ 이미지 전송",
-      "phoneStart": "채널톡/1-3.차주앱_입장.jpg",
-      "agentStart": "채널톡/채널톡_채팅화면.png"
+      "phoneStart": "채널톡/1.차주앱_메인화면.jpg",
+      "agentStart": "채널톡/채널톡_로그인.png"
     }
   ],
   "phoneScreens": {
-    "채널톡/1.차주앱_메인화면.jpg": {
+    "consult::채널톡/1.차주앱_메인화면.jpg": {
       "hotspots": [
         {
           "x": 62.6,
@@ -28,7 +28,21 @@
       "scrollRegions": [],
       "desc": "메인화면 우측 상단 <b>헤드셋 아이콘</b>을 누르면 문의 화면으로 이동합니다."
     },
-    "채널톡/1-1.차주앱_채널톡진입.jpg": {
+    "image::채널톡/1.차주앱_메인화면.jpg": {
+      "hotspots": [
+        {
+          "x": 62.6,
+          "y": 2.4,
+          "w": 11.6,
+          "h": 5.5,
+          "goto": "채널톡/1-1.차주앱_채널톡진입.jpg"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "메인화면 우측 상단 <b>헤드셋 아이콘</b>을 누르면 문의 화면으로 이동합니다."
+    },
+    "consult::채널톡/1-1.차주앱_채널톡진입.jpg": {
       "hotspots": [
         {
           "x": 52.3,
@@ -42,7 +56,21 @@
       "scrollRegions": [],
       "desc": "문의 방법 선택 팝업에서 <b>채널톡</b>을 누릅니다."
     },
-    "채널톡/1-2.차주앱_채널톡 상담 시작.jpg": {
+    "image::채널톡/1-1.차주앱_채널톡진입.jpg": {
+      "hotspots": [
+        {
+          "x": 52.3,
+          "y": 83,
+          "w": 46.2,
+          "h": 13.5,
+          "goto": "채널톡/1-2.차주앱_채널톡 상담 시작.jpg"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "문의 방법 선택 팝업에서 <b>채널톡</b>을 누릅니다."
+    },
+    "consult::채널톡/1-2.차주앱_채널톡 상담 시작.jpg": {
       "hotspots": [
         {
           "x": 3.8,
@@ -56,7 +84,21 @@
       "scrollRegions": [],
       "desc": "<b>문의하기</b>를 누르면 채팅창에 입장합니다."
     },
-    "채널톡/1-3.차주앱_입장.jpg": {
+    "image::채널톡/1-2.차주앱_채널톡 상담 시작.jpg": {
+      "hotspots": [
+        {
+          "x": 3.8,
+          "y": 25.2,
+          "w": 93,
+          "h": 7.1,
+          "goto": "채널톡/1-3.차주앱_입장.jpg"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "<b>문의하기</b>를 누르면 채팅창에 입장합니다."
+    },
+    "consult::채널톡/1-3.차주앱_입장.jpg": {
       "hotspots": [
         {
           "x": 2.8,
@@ -82,7 +124,23 @@
       "typingGoto": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg",
       "desc": "채팅창입니다. 아래 입력창에 <b>문의 내용을 입력해 전송</b>하거나, <b>클립(📎)</b>으로 이미지를 첨부할 수 있습니다."
     },
-    "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
+    "image::채널톡/1-3.차주앱_입장.jpg": {
+      "hotspots": [
+        {
+          "x": 88.2,
+          "y": 92.1,
+          "w": 10.6,
+          "h": 5.8,
+          "goto": "채널톡/1-4.차주앱_첨부파일넣기.jpg"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "typing": true,
+      "typingGoto": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg",
+      "desc": "채팅창입니다. 아래 입력창에 <b>문의 내용을 입력해 전송</b>하거나, <b>클립(📎)</b>으로 이미지를 첨부할 수 있습니다."
+    },
+    "consult::채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
       "hotspots": [
         {
           "x": 0.9,
@@ -122,7 +180,47 @@
       "scrollRegions": [],
       "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
     },
-    "채널톡/1-4.차주앱_첨부파일넣기.jpg": {
+    "image::채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
+      "hotspots": [
+        {
+          "x": 0.9,
+          "y": 78.6,
+          "w": 97.7,
+          "h": 12.8,
+          "goto": "채널톡/2-1.차주앱_기본틀.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 69.3,
+          "y": 20.8,
+          "w": 28.9,
+          "h": 5.4,
+          "color": "#ef4444"
+        },
+        {
+          "type": "box",
+          "x": 0.5,
+          "y": 29.6,
+          "w": 98.3,
+          "h": 48.3,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 63.6,
+          "y": 72,
+          "text": "자동세팅",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
+    },
+    "consult::채널톡/1-4.차주앱_첨부파일넣기.jpg": {
       "hotspots": [
         {
           "x": 8,
@@ -136,19 +234,45 @@
       "scrollRegions": [],
       "desc": "<b>앨범</b>에서 전송할 이미지를 선택합니다."
     },
-    "채널톡/1-5.차주앱_고객 이미지전송.png": {
+    "image::채널톡/1-4.차주앱_첨부파일넣기.jpg": {
+      "hotspots": [
+        {
+          "x": -0.1,
+          "y": 78.9,
+          "w": 99,
+          "h": 18.9,
+          "goto": "채널톡/2-1.차주앱_기본틀.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "<b>앨범</b>에서 전송할 이미지를 선택합니다."
+    },
+    "consult::채널톡/1-5.차주앱_고객 이미지전송.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "이미지가 채팅창으로 전송되었습니다. 우측 채널톡 화면에서 상담사가 이미지를 확인합니다."
     },
-    "채널톡/2-2.차주앱_텍스트문의_고객 문의.png": {
+    "image::채널톡/1-5.차주앱_고객 이미지전송.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "이미지가 채팅창으로 전송되었습니다. 우측 채널톡 화면에서 상담사가 이미지를 확인합니다."
+    },
+    "consult::채널톡/2-2.차주앱_텍스트문의_고객 문의.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/2-1.차주앱_기본틀.png": {
+    "image::채널톡/2-2.차주앱_텍스트문의_고객 문의.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/2-1.차주앱_기본틀.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -163,7 +287,14 @@
       "desc": "",
       "syncAgent": "채널톡/채널톡_로그인.png"
     },
-    "채널톡/2-1.차주앱_기본틀 2.png": {
+    "image::채널톡/2-1.차주앱_기본틀.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "",
+      "syncAgent": "채널톡/채널톡_로그인.png"
+    },
+    "consult::채널톡/2-1.차주앱_기본틀 2.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -177,19 +308,45 @@
       ],
       "desc": ""
     },
-    "채널톡/채널톡_테이블1.png": {
+    "image::채널톡/2-1.차주앱_기본틀 2.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.9,
+          "y": 8.8,
+          "w": 99,
+          "h": 83.5,
+          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+        }
+      ],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_테이블1.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_테이블2.png": {
+    "image::채널톡/채널톡_테이블1.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/2-1.차주앱_기본틀 3.png": {
+    "consult::채널톡/채널톡_테이블2.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "image::채널톡/채널톡_테이블2.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/2-1.차주앱_기본틀 3.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -203,7 +360,21 @@
       ],
       "desc": ""
     },
-    "채널톡/차주앱_문자로 발송되는 메시지.jpg": {
+    "image::채널톡/2-1.차주앱_기본틀 3.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.2,
+          "y": 8.8,
+          "w": 99,
+          "h": 83.1,
+          "image": "채널톡/2-2. 차주앱_내부_끝인사.png"
+        }
+      ],
+      "desc": ""
+    },
+    "consult::채널톡/차주앱_문자로 발송되는 메시지.jpg": {
       "hotspots": [],
       "annotations": [
         {
@@ -219,7 +390,37 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/2-1.차주앱_기본틀 4.png": {
+    "image::채널톡/차주앱_문자로 발송되는 메시지.jpg": {
+      "hotspots": [],
+      "annotations": [
+        {
+          "type": "text",
+          "x": 3.5,
+          "y": 82.8,
+          "text": "채널톡 답변은 문자로 발송됨 ",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/2-1.차주앱_기본틀 4.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.5,
+          "y": 8,
+          "w": 98.3,
+          "h": 90.6,
+          "image": "채널톡/2-2. 차주앱_내부_처리완료.png"
+        }
+      ],
+      "desc": ""
+    },
+    "image::채널톡/2-1.차주앱_기본틀 4.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -235,7 +436,7 @@
     }
   },
   "agentScreens": {
-    "채널톡/채널톡_로그인.png": {
+    "consult::채널톡/채널톡_로그인.png": {
       "hotspots": [
         {
           "x": 37.2,
@@ -268,19 +469,64 @@
       "scrollRegions": [],
       "desc": "채널톡에 <b>로그인</b>합니다."
     },
-    "채널톡/채널톡_로그인_메인화면.png": {
+    "image::채널톡/채널톡_로그인.png": {
+      "hotspots": [
+        {
+          "x": 37.2,
+          "y": 80.6,
+          "w": 24.4,
+          "h": 6.1,
+          "goto": "채널톡/채널톡_로그인_채널목록.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "text",
+          "x": 38.3,
+          "y": 60.4,
+          "text": "hmmcs.0424@gmail.com ",
+          "color": "#000000",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "text",
+          "x": 38.2,
+          "y": 71.1,
+          "text": "hmm1800!@#$",
+          "color": "#000000",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": "채널톡에 <b>로그인</b>합니다."
+    },
+    "consult::채널톡/채널톡_로그인_메인화면.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "채널톡 메인 화면입니다. 새 문의가 오면 <b>수신함</b>에서 확인합니다."
     },
-    "채널톡/채널톡_채팅화면.png": {
+    "image::채널톡/채널톡_로그인_메인화면.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "채널톡 메인 화면입니다. 새 문의가 오면 <b>수신함</b>에서 확인합니다."
+    },
+    "consult::채널톡/채널톡_채팅화면.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "고객과의 채팅 화면입니다."
     },
-    "채널톡/채널톡_로그인_채널목록.png": {
+    "image::채널톡/채널톡_채팅화면.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "고객과의 채팅 화면입니다."
+    },
+    "consult::채널톡/채널톡_로그인_채널목록.png": {
       "hotspots": [
         {
           "x": 32.5,
@@ -312,7 +558,39 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_목록선택.png": {
+    "image::채널톡/채널톡_로그인_채널목록.png": {
+      "hotspots": [
+        {
+          "x": 32.5,
+          "y": 67.2,
+          "w": 33.3,
+          "h": 7.7,
+          "goto": "채널톡/채널톡_로그인이후.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 32.5,
+          "y": 67.1,
+          "w": 33.3,
+          "h": 7.9,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 68.2,
+          "y": 70,
+          "text": "화물맨을 선택해주세요. ",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_목록선택.png": {
       "hotspots": [
         {
           "x": 21.5,
@@ -344,7 +622,39 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_로그인이후.png": {
+    "image::채널톡/채널톡_목록선택.png": {
+      "hotspots": [
+        {
+          "x": 21.5,
+          "y": 12.4,
+          "w": 16.2,
+          "h": 8.9,
+          "goto": "채널톡/채널톡_테이블1.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 21.4,
+          "y": 12,
+          "w": 16.7,
+          "h": 9.8,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 20.8,
+          "y": 23.2,
+          "text": "상담을 진행할 목록을 선택해 주세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_로그인이후.png": {
       "hotspots": [
         {
           "x": 0.2,
@@ -376,7 +686,39 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_수신함 확인.png": {
+    "image::채널톡/채널톡_로그인이후.png": {
+      "hotspots": [
+        {
+          "x": 0.2,
+          "y": 5.5,
+          "w": 2.9,
+          "h": 4.5,
+          "goto": "채널톡/채널톡_수신함 확인.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 0.1,
+          "y": 5.2,
+          "w": 3.1,
+          "h": 4.8,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 4.5,
+          "y": 6.9,
+          "text": "수신함을 선택해주세요.",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_수신함 확인.png": {
       "hotspots": [
         {
           "x": 6.9,
@@ -393,13 +735,36 @@
           "y": 14.6,
           "w": 14.7,
           "h": 4.7,
-          "color": "#ef4444"
+          "color": "#000000"
         }
       ],
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_미배정상태.png": {
+    "image::채널톡/채널톡_수신함 확인.png": {
+      "hotspots": [
+        {
+          "x": 6.9,
+          "y": 15,
+          "w": 14.3,
+          "h": 3.8,
+          "goto": "채널톡/채널톡_목록선택.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 6.7,
+          "y": 14.6,
+          "w": 14.7,
+          "h": 4.7,
+          "color": "#000000"
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_미배정상태.png": {
       "hotspots": [
         {
           "x": 39.5,
@@ -431,14 +796,53 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_이미지_나에게 배정.png": {
+    "image::채널톡/채널톡_미배정상태.png": {
+      "hotspots": [
+        {
+          "x": 39.5,
+          "y": 93,
+          "w": 4.7,
+          "h": 5.1,
+          "goto": "채널톡/채널톡_이미지_나에게 배정.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 39.4,
+          "y": 92.7,
+          "w": 5.1,
+          "h": 5.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 45.5,
+          "y": 94.5,
+          "text": "나에게 배정을 클릭하세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_이미지_나에게 배정.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "",
       "syncPhone": "채널톡/2-1.차주앱_기본틀.png"
     },
-    "채널톡/채널톡_테이블1.png": {
+    "image::채널톡/채널톡_이미지_나에게 배정.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀.png"
+    },
+    "consult::채널톡/채널톡_테이블1.png": {
       "hotspots": [
         {
           "x": 38.5,
@@ -478,7 +882,47 @@
       ],
       "desc": ""
     },
-    "채널톡/채널톡_테이블2.png": {
+    "image::채널톡/채널톡_테이블1.png": {
+      "hotspots": [
+        {
+          "x": 38.5,
+          "y": 84.7,
+          "w": 40.6,
+          "h": 14.9,
+          "goto": "채널톡/채널톡_테이블2.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.7,
+          "y": 84.8,
+          "w": 40.5,
+          "h": 14.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.9,
+          "y": 90.4,
+          "text": "처리 후 답변을 입력하세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.9,
+          "y": 7.4,
+          "w": 40.1,
+          "h": 76.8,
+          "image": "채널톡/2-2. 차주앱_내부 배차 문의.png"
+        }
+      ],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_테이블2.png": {
       "hotspots": [
         {
           "x": 38.7,
@@ -519,13 +963,60 @@
       "desc": "",
       "syncPhone": "채널톡/2-1.차주앱_기본틀 2.png"
     },
-    "채널톡/2-1.차주앱_기본틀 3.png": {
+    "image::채널톡/채널톡_테이블2.png": {
+      "hotspots": [
+        {
+          "x": 38.7,
+          "y": 85.1,
+          "w": 40.3,
+          "h": 14,
+          "goto": "채널톡/채널톡_테이블3.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.5,
+          "y": 85.1,
+          "w": 40.7,
+          "h": 14.4,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.6,
+          "y": 90.7,
+          "text": "고객 답변이 없는 경우 5분 이후 끝인사 진행 후 종료 ",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.8,
+          "y": 7.4,
+          "w": 40.3,
+          "h": 77.4,
+          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 2.png"
+    },
+    "consult::채널톡/2-1.차주앱_기본틀 3.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_테이블3.png": {
+    "image::채널톡/2-1.차주앱_기본틀 3.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_테이블3.png": {
       "hotspots": [
         {
           "x": 39,
@@ -566,7 +1057,48 @@
       "desc": "",
       "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
     },
-    "채널톡/채널톡_상담종료_태그선택.png": {
+    "image::채널톡/채널톡_테이블3.png": {
+      "hotspots": [
+        {
+          "x": 39,
+          "y": 85.1,
+          "w": 40,
+          "h": 14.3,
+          "goto": "채널톡/채널톡_테이블4.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38.8,
+          "y": 84.7,
+          "w": 40.5,
+          "h": 15.2,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.7,
+          "y": 90.3,
+          "text": "끝인사 이후 반드시 처리자 이름 작성 '000 처리 완료'",
+          "color": "#ef4444",
+          "size": 18,
+          "weight": 800
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 39,
+          "y": 7.4,
+          "w": 40,
+          "h": 77.3,
+          "image": "채널톡/채널톡_내부_끝인사.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
+    },
+    "consult::채널톡/채널톡_상담종료_태그선택.png": {
       "hotspots": [
         {
           "x": 34.9,
@@ -580,7 +1112,21 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_상담종료_태그적용.png": {
+    "image::채널톡/채널톡_상담종료_태그선택.png": {
+      "hotspots": [
+        {
+          "x": 34.9,
+          "y": 48.7,
+          "w": 30.6,
+          "h": 4.5,
+          "goto": "채널톡/채널톡_상담종료_태그적용.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_상담종료_태그적용.png": {
       "hotspots": [
         {
           "x": 35.1,
@@ -594,7 +1140,21 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_상담종료_종료.png": {
+    "image::채널톡/채널톡_상담종료_태그적용.png": {
+      "hotspots": [
+        {
+          "x": 35.1,
+          "y": 61.7,
+          "w": 29.1,
+          "h": 3.6,
+          "goto": "채널톡/채널톡_상담종료_종료.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_상담종료_종료.png": {
       "hotspots": [
         {
           "x": 61.8,
@@ -608,7 +1168,21 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_상담종료_종료됨.png": {
+    "image::채널톡/채널톡_상담종료_종료.png": {
+      "hotspots": [
+        {
+          "x": 61.8,
+          "y": 55.8,
+          "w": 3.4,
+          "h": 4.7,
+          "goto": "채널톡/채널톡_상담종료_종료됨.png"
+        }
+      ],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_상담종료_종료됨.png": {
       "hotspots": [
         {
           "x": 34.1,
@@ -648,14 +1222,111 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "채널톡/채널톡_종료됨패널.png": {
+    "image::채널톡/채널톡_상담종료_종료됨.png": {
+      "hotspots": [
+        {
+          "x": 34.1,
+          "y": 7,
+          "w": 4.4,
+          "h": 5,
+          "goto": "채널톡/채널톡_종료됨패널.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 7.8,
+          "y": 92,
+          "w": 18.2,
+          "h": 6.9,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 8.1,
+          "y": 88.6,
+          "text": "정상 종료 시 알림 팝업",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "box",
+          "x": 34.3,
+          "y": 7.6,
+          "w": 4,
+          "h": 3.8,
+          "color": "#ef4444"
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/채널톡_종료됨패널.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "",
       "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
     },
-    "채널톡/채널톡_테이블4.png": {
+    "image::채널톡/채널톡_종료됨패널.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": "",
+      "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
+    },
+    "consult::채널톡/채널톡_테이블4.png": {
+      "hotspots": [
+        {
+          "x": 81.8,
+          "y": 1,
+          "w": 2.6,
+          "h": 5.1,
+          "goto": "채널톡/채널톡_상담종료_태그선택.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 81.6,
+          "y": 0.6,
+          "w": 3.1,
+          "h": 5.8,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 58.5,
+          "y": 2.4,
+          "text": " 10분 이상 답변이 없을 경우 상담 종료 진행",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        },
+        {
+          "type": "text",
+          "x": 79.6,
+          "y": 8.5,
+          "text": "업무 종료 전 반드시 종료 처리 필요",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [
+        {
+          "x": 38.9,
+          "y": 7.6,
+          "w": 40.1,
+          "h": 77.3,
+          "image": "채널톡/채널톡_내부_처리완료.png"
+        }
+      ],
+      "desc": "",
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 4.png"
+    },
+    "image::채널톡/채널톡_테이블4.png": {
       "hotspots": [
         {
           "x": 81.8,
