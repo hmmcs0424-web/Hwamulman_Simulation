@@ -1765,7 +1765,24 @@
     },
     "image::채널톡/첨부파일_다운완료.png": {
       "hotspots": [],
-      "annotations": [],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 93.8,
+          "y": 0.8,
+          "w": 2.9,
+          "h": 4.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "box",
+          "x": 91.5,
+          "y": 12,
+          "w": 2.5,
+          "h": 4.7,
+          "color": "#ef4444"
+        }
+      ],
       "scrollRegions": [],
       "desc": ""
     }
