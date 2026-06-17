@@ -4,7 +4,7 @@
       "id": "consult",
       "label": "💬 채널톡 상담",
       "phoneStart": "채널톡/1.차주앱_메인화면.jpg",
-      "agentStart": "채널톡/채널톡_로그인.png"
+      "agentStart": "채널톡/홈페이지 화면.png"
     },
     {
       "id": "image",
@@ -2047,6 +2047,78 @@
           "color": "#3b82f6",
           "size": 30,
           "weight": 800
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/홈페이지 화면.png": {
+      "hotspots": [
+        {
+          "x": 94.9,
+          "y": 89.5,
+          "w": 3.3,
+          "h": 7,
+          "goto": "채널톡/홈페이지_채널톡.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 94.5,
+          "y": 88.3,
+          "w": 4.2,
+          "h": 9.3,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 79.7,
+          "y": 93.7,
+          "text": "우측하단 채널톡 선택",
+          "color": "#f59e0b",
+          "size": 20,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "consult::채널톡/홈페이지_채널톡.png": {
+      "hotspots": [
+        {
+          "x": 29.3,
+          "y": 89.3,
+          "w": 29.7,
+          "h": 6.5,
+          "goto": "채널톡/채널톡_로그인.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 76.3,
+          "y": 28.9,
+          "w": 20.9,
+          "h": 7.6,
+          "color": "#3b82f6"
+        },
+        {
+          "type": "text",
+          "x": 30.4,
+          "y": 90.7,
+          "text": "- 채널톡 사이트로 이동하기 -",
+          "color": "#f59e0b",
+          "size": 30,
+          "weight": 800
+        },
+        {
+          "type": "box",
+          "x": 29.5,
+          "y": 89.5,
+          "w": 29.8,
+          "h": 6.9,
+          "color": "#f59e0b"
         }
       ],
       "scrollRegions": [],
