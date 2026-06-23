@@ -618,9 +618,56 @@
       "desc": ""
     },
     "image::채널톡/차주앱_이미지다운로드.jpg": {
+      "hotspots": [
+        {
+          "x": 71,
+          "y": 1.6,
+          "w": 10,
+          "h": 5.8,
+          "goto": "채널톡/차주앱_이미지 다운완료.jpg"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 69,
+          "y": 1.1,
+          "w": 14.6,
+          "h": 7.1,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 47.4,
+          "y": 10.6,
+          "text": "다운로드를 눌러주세요.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "image::채널톡/차주앱_이미지 다운완료.jpg": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
+      "desc": "",
+      "syncAgent": "채널톡/채널톡_테이블6.png"
+    },
+    "image::채널톡/2-1.차주앱_기본틀 5.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [
+        {
+          "x": 0.5,
+          "y": 6.8,
+          "w": 98.7,
+          "h": 85.5,
+          "image": "채널톡/차주앱_내부_상담사 이미지 전송.png"
+        }
+      ],
       "desc": ""
     }
   },
@@ -1253,7 +1300,7 @@
           "y": 7.3,
           "w": 42.9,
           "h": 77,
-          "image": "채널톡/채널톡_내부_이미지답변.png"
+          "image": "채널톡/채널톡_내부_이미지첨부완료.png"
         }
       ],
       "desc": "",
@@ -1347,7 +1394,7 @@
           "y": 7.3,
           "w": 42.9,
           "h": 76.7,
-          "image": "채널톡/3-3. 차주앱_이미지_내부_끝인사.png"
+          "image": "채널톡/채널톡_내부_이미지끝인사.png"
         }
       ],
       "desc": "",
@@ -2396,8 +2443,34 @@
       "desc": ""
     },
     "image::채널톡/채널톡_테이블6.png": {
-      "hotspots": [],
-      "annotations": [],
+      "hotspots": [
+        {
+          "x": 38.3,
+          "y": 85,
+          "w": 42.6,
+          "h": 14.4,
+          "goto": "채널톡/채널톡_테이블2.png"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": 38,
+          "y": 85,
+          "w": 43.2,
+          "h": 14.7,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 40.3,
+          "y": 90.6,
+          "text": "처리내용을 입력해주세요. ",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
       "scrollRegions": [
         {
           "x": 38,
@@ -2408,7 +2481,25 @@
         }
       ],
       "desc": "",
-      "syncPhone": "채널톡/4.차주앱_이미지첨부.jpg"
+      "syncPhone": "채널톡/2-1.차주앱_기본틀 2.png"
+    },
+    "image::채널톡/2-1.차주앱_기본틀 6.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "image::채널톡/3-3. 차주앱_이미지_내부_끝인사.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "image::채널톡/채널톡_내부_이미지끝인사.png": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   }
 }
