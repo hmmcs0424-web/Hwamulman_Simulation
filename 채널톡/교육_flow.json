@@ -584,6 +584,44 @@
         }
       ],
       "desc": ""
+    },
+    "image::채널톡/4.차주앱_이미지첨부.jpg": {
+      "hotspots": [
+        {
+          "x": 1.2,
+          "y": 58.1,
+          "w": 89,
+          "h": 21.7,
+          "goto": "채널톡/차주앱_이미지다운로드.jpg"
+        }
+      ],
+      "annotations": [
+        {
+          "type": "box",
+          "x": -0.1,
+          "y": 57.6,
+          "w": 91.7,
+          "h": 23,
+          "color": "#ef4444"
+        },
+        {
+          "type": "text",
+          "x": 8.5,
+          "y": 83.3,
+          "text": "이미지를 클릭합니다.",
+          "color": "#ef4444",
+          "size": 16,
+          "weight": 700
+        }
+      ],
+      "scrollRegions": [],
+      "desc": ""
+    },
+    "image::채널톡/차주앱_이미지다운로드.jpg": {
+      "hotspots": [],
+      "annotations": [],
+      "scrollRegions": [],
+      "desc": ""
     }
   },
   "agentScreens": {
@@ -2366,10 +2404,11 @@
           "y": 7.6,
           "w": 42.9,
           "h": 76.8,
-          "image": "채널톡/채널톡_이미지_내부_이미지전송.png"
+          "image": "채널톡/채널톡_내부_이미지첨부완료.png"
         }
       ],
-      "desc": ""
+      "desc": "",
+      "syncPhone": "채널톡/4.차주앱_이미지첨부.jpg"
     }
   }
 }
