@@ -2659,6 +2659,14 @@
           "color": "#ef4444",
           "size": 16,
           "weight": 700
+        },
+        {
+          "type": "box",
+          "x": 78.5,
+          "y": 93,
+          "w": 5.9,
+          "h": 6.7,
+          "color": "#ef4444"
         }
       ],
       "scrollRegions": [],
