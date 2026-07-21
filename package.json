@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "build": "node scripts/generate-image-manifest.js"
+    "build": "node scripts/generate-image-manifest.js",
+    "serve": "node scripts/static-server.js"
   }
 }

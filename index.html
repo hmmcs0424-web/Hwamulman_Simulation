@@ -824,7 +824,9 @@ textarea.form-input{resize:vertical;}
       </div>
       <div class="cte-adm-panel-body" id="cteAdmPanelBody"></div>
       <div class="cte-adm-panel-foot">
-        <span class="cte-adm-hint">💡 저장 후 <b style="color:#94a3b8;">채널톡/교육_flow.json</b>을 GitHub에 올려주세요.</span>
+        <span class="cte-adm-hint" id="cteAutoSaveStatus">자동 저장 준비 중…</span>
+        <button class="cte-abtn" onclick="cteClearDraft()">임시 저장 삭제</button>
+        <button class="cte-abtn" onclick="cteValidateFlow(true)">🔍 연결 검사</button>
         <button class="cte-abtn cte-abtn-save" onclick="cteSaveConfig()">💾 저장 (JSON 다운로드)</button>
       </div>
     </div>
@@ -2047,6 +2049,9 @@ let cteConfig = null;
 let cteMode = 0;
 const cteNav = { phone:{cur:null,hist:[]}, agent:{cur:null,hist:[]} };
 let cteLastMovedPanel = 'phone';
+const CTE_DRAFT_KEY = 'channelTalkEducationFlowDraftV1';
+let cteLastDraftJson = '';
+let cteDraftTimer = null;
 
 // ─── 채널톡 폴더 이미지 목록 ───
 // 폴더 안 파일을 이름 기준으로 분류합니다: "차주앱" 포함 = 모바일, 나머지 = 채널톡 PC.
@@ -2162,7 +2167,10 @@ function cteNormalizeConfigPaths() {
 }
 const CTE_CUSTOMER_IMGS = CTE_ALL_IMGS;
 const CTE_AGENT_IMGS = CTE_ALL_IMGS;
-function cteImgsFor(panel){ return CTE_ALL_IMGS; }
+function cteImgsFor(panel){
+  const filtered = CTE_ALL_IMGS.filter(img => ctePanelForImg(img) === panel);
+  return filtered.sort((a,b)=>a.localeCompare(b,'ko',{numeric:true,sensitivity:'base'}));
+}
 function cteRememberImg(panel, img) {
   img = cteNormalizeImg(img);
   if(!img) return;
@@ -2217,9 +2225,17 @@ async function cteLoadConfig() {
       phoneScreens:{}, agentScreens:{}
     };
   }
+  try {
+    const draft = JSON.parse(localStorage.getItem(CTE_DRAFT_KEY) || 'null');
+    if(draft?.config?.modes && draft?.config?.phoneScreens && draft?.config?.agentScreens) {
+      cteConfig = draft.config;
+      cteLastDraftJson = JSON.stringify(cteConfig);
+    }
+  } catch(e) { console.warn('채널톡 임시 저장 복구 실패:', e); }
   cteNormalizeConfigPaths();
   (siteImageManifest?.['채널톡'] || []).forEach(img => cteRememberImg(ctePanelForImg(img), img));
   cteSyncImageLists();
+  cteStartAutoSave();
 }
 async function cteInit() {
   await cteLoadConfig();
@@ -2444,6 +2460,7 @@ function cteRenderAdmPanel() {
       <b style="color:#a5b4fc;">□ T ↗</b>=박스·텍스트·화살표 강조 ·
       편집 중인 핫스팟을 클릭하면 삭제
     </div>
+    ${cteValidationHtml()}
     ${cteModeRoutesHtml()}
     <div class="cte-adm-hrow">
       ${cteAdmColHtml('phone')}
@@ -2512,6 +2529,7 @@ function cteAdmColHtml(panel) {
     </div>
     <div style="display:flex;gap:6px;margin-top:5px;align-items:center;flex-wrap:wrap;">
       <button class="cte-adm-mainbtn${isMain?' is-main':''}" onclick="cteSetMain('${panel}')">${isMain?'🏠 이 모드의 메인':'🏠 메인으로 지정'}</button>
+      <button class="cte-adm-mainbtn" onclick="cteCloneScreenTo('${panel}')" title="현재 화면의 연결·강조·설명을 다른 이미지에 복사">⧉ 설정 복사</button>
       ${panel==='phone' ? `<label style="font-size:11px;color:#94a3b8;display:flex;gap:4px;align-items:center;cursor:pointer;">
         <input type="checkbox" ${scr.typing?'checked':''} onchange="cteSetTyping(this.checked)"> ✏ 고객 입력 표시
       </label>` : ''}
@@ -2581,11 +2599,24 @@ function cteAdmSetImage(panel, img) {
   cteRender();
 }
 let cteScreenPickPanel = null;
+let cteScreenPickAction = 'open';
 function cteAddScreen(panel) {
   cteScreenPickPanel = panel;
+  cteScreenPickAction = 'open';
   const sel = document.getElementById('cteScreenPickSel');
   sel.innerHTML = cteImgOpts(panel, cteNav[panel].cur||'', false);
   if(!sel.value && sel.options.length) sel.selectedIndex = 0;
+  cteScreenPickerPreview();
+  openModal('cteScreenPickModal');
+}
+function cteCloneScreenTo(panel) {
+  cteScreenPickPanel = panel;
+  cteScreenPickAction = 'clone';
+  const sel = document.getElementById('cteScreenPickSel');
+  sel.innerHTML = cteImgOpts(panel, '', false);
+  const cur = cteNav[panel].cur;
+  const next = cteNextImg(panel, cur);
+  if(next) sel.value = next;
   cteScreenPickerPreview();
   openModal('cteScreenPickModal');
 }
@@ -2599,7 +2630,13 @@ function cteScreenPickConfirm() {
   const v = cteNormalizeImg(document.getElementById('cteScreenPickSel').value);
   if(!v){ alert('편집할 이미지를 선택해주세요.'); return; }
   const panel = cteScreenPickPanel || 'phone';
+  if(cteScreenPickAction === 'clone') {
+    const src = cteCloneScreen(cteScr(panel, cteNav[panel].cur));
+    const dict = panel==='phone' ? cteConfig.phoneScreens : cteConfig.agentScreens;
+    dict[cteScreenKey(cteMode, v)] = src;
+  }
   cteScreenPickPanel = null;
+  cteScreenPickAction = 'open';
   closeModal('cteScreenPickModal');
   cteAdmSetImage(panel, v);
 }
@@ -3078,8 +3115,16 @@ function cteOpenHotPicker(panel, rect) {
   cteHotPending = { panel, rect };
   const sel = document.getElementById('cteHotGotoSel');
   sel.innerHTML = cteImgOpts(panel, '', false);
+  const next = cteNextImg(panel, cteNav[panel].cur);
+  if(next) sel.value = next;
   cteHotPickerPreview();
   openModal('cteHotModal');
+}
+
+function cteNextImg(panel, current) {
+  const list = cteImgsFor(panel);
+  const idx = list.indexOf(cteNormalizeImg(current));
+  return idx >= 0 && idx < list.length-1 ? list[idx+1] : (list[0] || '');
 }
 function cteHotPickerPreview() {
   const v = document.getElementById('cteHotGotoSel').value;
@@ -3155,12 +3200,67 @@ function cteAnnRgba(hex,a){
 function cteEscSvg(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ─── 저장 ───
+function cteSetSaveStatus(text, color='#94a3b8') {
+  const el = document.getElementById('cteAutoSaveStatus');
+  if(el){ el.textContent = text; el.style.color = color; }
+}
+function cteStartAutoSave() {
+  clearInterval(cteDraftTimer);
+  cteDraftTimer = setInterval(() => {
+    if(!cteConfig) return;
+    const json = JSON.stringify(cteConfig);
+    if(json === cteLastDraftJson) return;
+    try {
+      localStorage.setItem(CTE_DRAFT_KEY, JSON.stringify({savedAt:Date.now(),config:cteConfig}));
+      cteLastDraftJson = json;
+      cteSetSaveStatus('✓ 이 브라우저에 자동 저장됨 · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
+    } catch(e) { cteSetSaveStatus('자동 저장 실패 — JSON으로 저장해주세요.', '#fca5a5'); }
+  }, 800);
+}
+function cteClearDraft() {
+  if(!confirm('브라우저의 채널톡 임시 저장본을 삭제할까요? 현재 열린 내용은 유지됩니다.')) return;
+  localStorage.removeItem(CTE_DRAFT_KEY);
+  cteLastDraftJson = JSON.stringify(cteConfig || {});
+  cteSetSaveStatus('임시 저장본을 삭제했습니다. 이후 수정부터 다시 자동 저장됩니다.');
+}
+function cteValidationResult() {
+  const known = new Set(CTE_ALL_IMGS.map(cteNormalizeImg));
+  const broken = [], empty = [];
+  ['phone','agent'].forEach(panel => {
+    const dict = panel==='phone' ? cteConfig.phoneScreens : cteConfig.agentScreens;
+    Object.entries(dict||{}).forEach(([key,scr]) => {
+      const from = cteSplitScreenKey(key).img;
+      (scr.hotspots||[]).forEach((hs,i) => {
+        if(!hs.goto) empty.push(`${from} #${i+1}`);
+        else if(!known.has(cteNormalizeImg(hs.goto))) broken.push(`${from} → ${hs.goto}`);
+      });
+    });
+  });
+  return {broken,empty,total:broken.length+empty.length};
+}
+function cteValidationHtml() {
+  const r = cteValidationResult();
+  const ok = !r.total;
+  return `<div style="margin-bottom:8px;padding:7px 9px;border-radius:6px;border:1px solid ${ok?'#14532d':'#7f1d1d'};background:${ok?'#052e16':'#450a0a'};color:${ok?'#86efac':'#fca5a5'};font-size:11px;display:flex;justify-content:space-between;align-items:center;">
+    <span>${ok?'✓ 모든 클릭 연결이 정상입니다.':`⚠ 확인이 필요한 연결 ${r.total}개`}</span>
+    <button class="cte-adm-mainbtn" onclick="cteValidateFlow(true)">자세히 검사</button>
+  </div>`;
+}
+function cteValidateFlow(showAlert) {
+  const r = cteValidationResult();
+  if(showAlert) {
+    const lines = [...r.empty.map(x=>'대상 미지정: '+x), ...r.broken.map(x=>'파일 없음: '+x)];
+    alert(r.total ? `연결 문제 ${r.total}개\n\n${lines.slice(0,20).join('\n')}${lines.length>20?'\n…':''}` : '모든 클릭 연결이 정상입니다.');
+  }
+  return r;
+}
 function cteSaveConfig() {
   const json = JSON.stringify(cteConfig, null, 2);
   const blob = new Blob([json], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = '교육_flow.json'; a.click();
   URL.revokeObjectURL(a.href);
+  cteSetSaveStatus('✓ JSON 파일을 저장했습니다. · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
 }
 
 
