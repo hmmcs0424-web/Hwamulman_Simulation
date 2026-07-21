@@ -2594,7 +2594,9 @@ function cteAdmSetImage(panel, img) {
   img = cteNormalizeImg(img);
   cteRememberImg(panel, img);
   cteScr(panel, img);
-  cteNav[panel] = { cur:img, hist:[] };
+  const nav = cteNav[panel];
+  if(nav.cur && nav.cur !== img) nav.hist.push(nav.cur);
+  nav.cur = img;
   cteLastMovedPanel = panel;
   cteRender();
 }
@@ -2681,6 +2683,7 @@ function cteHotListHtml(panel, scr) {
     h += `<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:#f59e0b;">
       🔗 클릭→
       <select style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#e2e8f0;font-size:10px;padding:2px 4px;" onchange="cteHotGoto('${panel}',${idx},this.value)">${cteImgOpts(panel, hs.goto||'', false)}</select>
+      <button class="cte-adm-mainbtn" style="font-size:10px;padding:2px 6px;white-space:nowrap;" onclick="cteGoHot('${panel}',${idx})">이동</button>
       <button class="cte-it-del" style="font-size:11px;padding:1px 5px;" onclick="cteHotDel('${panel}',${idx})">✕</button>
     </div>`;
   });
@@ -2690,6 +2693,10 @@ function cteHotGoto(panel, idx, val) {
   const scr = cteScr(panel, cteNav[panel].cur);
   if(scr.hotspots[idx]) scr.hotspots[idx].goto = val;
   cteItRedraw(panel);
+}
+function cteGoHot(panel, idx) {
+  const hs = cteScr(panel, cteNav[panel].cur).hotspots[idx];
+  if(hs?.goto) cteGo(panel, hs.goto);
 }
 function cteHotDel(panel, idx) {
   const scr = cteScr(panel, cteNav[panel].cur);
@@ -3075,7 +3082,7 @@ function cteItRedraw(panel) {
     const rs = Math.min(hs.w, hs.h) * 0.18; // 버튼 반지름(%)
     const btnR = Math.max(1.2, Math.min(rs, 3));
     h += `<g>
-      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:move" onmousedown="event.stopPropagation();cteHotDragStart('${panel}',${i},event)"/>
+      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:move" onmousedown="event.stopPropagation();cteHotDragStart('${panel}',${i},event)" ondblclick="event.stopPropagation();cteGo('${panel}','${esc(hs.goto||'')}')"/>
       <circle cx="${bx}%" cy="${by}%" r="${btnR}%" fill="#ef4444" style="cursor:pointer" onclick="event.stopPropagation();cteHotDel('${panel}',${i})"/>
       <text x="${bx}%" y="${by}%" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="${btnR*1.4}%" font-weight="900" style="pointer-events:none">×</text>
       <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>
