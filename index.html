@@ -1756,11 +1756,13 @@ function exitAdmin() {
 // 탭 전환 / 로그인 / 로그아웃이 모두 이 함수를 거치므로 화면 잔상·패널 누락이 생기지 않는다.
 function syncAdminUI() {
   const btn = document.getElementById('topAdminBtn');
+  const unregCard = document.getElementById('unregCard');
   btn.classList.toggle('on', adminMode);
   btn.textContent = adminMode ? '🔓 관리자 모드 ON' : '🔐 관리자 로그인';
   document.getElementById('btnAssetManager').style.display = adminMode && activePage==='simulator' ? '' : 'none';
 
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+  if(!adminMode || activePage !== 'simulator') unregCard.style.display = 'none';
   if(activePage !== 'simulator') { if(!adminMode) editingGuidePage = false; renderGuidePage(); return; }
 
   const isCte = activeSec === '채널톡';
@@ -1768,6 +1770,7 @@ function syncAdminUI() {
   document.getElementById('adminPanel').style.display = (adminMode && !isCte) ? 'block' : 'none';
 
   if(isCte) {
+    unregCard.style.display = 'none';
     // 채널톡: 전용 편집 레이아웃 (상단 모드 탭은 sticky로 항상 노출)
     if(adminMode) {
       cteSetupEditLayout();
@@ -1792,6 +1795,7 @@ function syncAdminUI() {
   renderOverlayAdminSection();
   renderChatScrollAdmin();
   if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
+  detectUnreg();
 }
 
 function renderHsList() {
@@ -2410,11 +2414,12 @@ function delException(i) {
 // UNREGISTERED IMAGES
 // ═══════════════════════════════════════════
 function detectUnreg() {
+  const card = document.getElementById('unregCard');
+  if(!adminMode || activePage!=='simulator' || activeSec==='채널톡') { card.style.display='none'; return; }
   const st = cache[activeSec];
   const manifest = st.flow.imageManifest || [];
   const used = new Set(Object.values(st.flow.screens||{}).map(s=>s.image));
   const unreg = manifest.filter(f => !used.has(f));
-  const card = document.getElementById('unregCard');
   if(!unreg.length) { card.style.display='none'; return; }
   card.style.display = 'block';
   document.getElementById('unregList').innerHTML = unreg.map(f => `
