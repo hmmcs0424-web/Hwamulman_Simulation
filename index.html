@@ -504,7 +504,7 @@ textarea.form-input{resize:vertical;}
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
       <span class="sidebar-title">WORK GUIDE</span>
-      <button class="sidebar-toggle" id="sidebarToggle" type="button" title="사이드바 접기" aria-label="사이드바 접기">☰</button>
+      <button class="sidebar-toggle" id="sidebarToggle" type="button" title="사이드바 접기" aria-label="사이드바 접기">«</button>
     </div>
     <div class="sidebar-nav">
       <div class="side-group open" id="simulatorGroup">
@@ -521,6 +521,8 @@ textarea.form-input{resize:vertical;}
       <button class="side-menu" type="button" data-page="signup"><span class="side-icon">＋</span><span class="side-label">신규가입</span></button>
       <button class="side-menu" type="button" data-page="membership"><span class="side-icon">Ⅱ</span><span class="side-label">일시정지/복구/탈퇴</span></button>
       <button class="side-menu" type="button" data-page="profile"><span class="side-icon">✎</span><span class="side-label">정보변경</span></button>
+      <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
+      <button class="side-menu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
     </div>
   </aside>
 
@@ -1033,7 +1035,9 @@ let firebaseReady = false;
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
-  profile: { title:'정보변경', desc:'회원 및 차량 정보 변경 절차를 정리하는 공간입니다.', html:'<h2>정보변경 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' }
+  profile: { title:'정보변경', desc:'회원 및 차량 정보 변경 절차를 정리하는 공간입니다.', html:'<h2>정보변경 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
+  notice: { title:'공지사항', desc:'업무 변경사항과 중요한 안내를 확인하는 공간입니다.', html:'<h2>공지사항</h2><p>등록된 공지사항이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
+  faq: { title:'FAQ', desc:'자주 묻는 질문과 답변을 정리하는 공간입니다.', html:'<h2>자주 묻는 질문</h2><p>등록된 질문과 답변이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' }
 };
 
 function loadGuidePages() {
@@ -1173,7 +1177,11 @@ async function boot() {
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('collapsed');
-    document.getElementById('sidebarToggle').title = sidebar.classList.contains('collapsed') ? '사이드바 펼치기' : '사이드바 접기';
+    const toggle = document.getElementById('sidebarToggle');
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    toggle.textContent = isCollapsed ? '»' : '«';
+    toggle.title = isCollapsed ? '사이드바 펼치기' : '사이드바 접기';
+    toggle.setAttribute('aria-label', toggle.title);
   });
   document.querySelectorAll('.side-menu[data-page]').forEach(btn => btn.addEventListener('click', () => {
     if(btn.dataset.page === 'simulator') {
