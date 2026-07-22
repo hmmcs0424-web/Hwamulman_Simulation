@@ -71,6 +71,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .guide-content{font-size:15px;line-height:1.8;color:#333}.guide-content h2{font-size:20px;margin-bottom:12px}.guide-content p{margin-bottom:12px}.guide-content ul{padding-left:22px}
 .guide-editor{display:none}.guide-editor textarea{width:100%;min-height:280px;border:1px solid #ddd;border-radius:10px;padding:14px;font:14px/1.6 inherit;resize:vertical;outline:none}.guide-editor textarea:focus{border-color:var(--brand)}
 .guide-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.guide-save-note{font-size:12px;color:#888;margin-top:10px;text-align:right}
+.asset-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.asset-status{font-size:12px;color:#666;margin:8px 0}.asset-list{max-height:360px;overflow:auto;border:1px solid #e5e5e5;border-radius:10px}.asset-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #eee}.asset-item:last-child{border-bottom:0}.asset-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee}.asset-name{flex:1;font-size:12px;word-break:break-all}.asset-progress{height:7px;background:#eee;border-radius:99px;overflow:hidden}.asset-progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .15s}
 
 /* ── PHONE FRAME ── */
 .phone-area{
@@ -494,6 +495,7 @@ textarea.form-input{resize:vertical;}
   </div>
   <div class="topnav-right">
     <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
+    <button class="btn-admin-login" id="btnAssetManager" style="display:none">🖼 이미지 관리</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
   </div>
 </nav>
@@ -537,7 +539,7 @@ textarea.form-input{resize:vertical;}
         <div class="guide-editor" id="guideEditorBox">
           <textarea id="guideEditorInput" aria-label="가이드 HTML 편집"></textarea>
           <div class="guide-editor-actions"><button class="btn btn-secondary" id="guideEditCancel" type="button">취소</button><button class="btn btn-primary" id="guideEditSave" type="button">저장</button></div>
-          <div class="guide-save-note">현재 단계에서는 이 브라우저의 localStorage에 저장됩니다.</div>
+          <div class="guide-save-note">관리자 저장 내용은 Firebase에 보관됩니다.</div>
         </div>
       </div>
     </div>
@@ -771,8 +773,10 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
       <div class="admin-section">
-        <div class="section-title">내보내기</div>
+        <div class="section-title">시뮬레이터 저장</div>
+        <button class="btn btn-primary" id="btnSaveFlow" style="margin-bottom:8px">💾 경로 설정 저장</button>
         <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
+        <div id="flowSaveStatus" style="font-size:12px;color:#888;margin-top:8px"></div>
       </div>
     </div>
     <div class="panel-card" id="unregCard" style="display:none">
@@ -900,7 +904,8 @@ textarea.form-input{resize:vertical;}
         <span class="cte-adm-hint" id="cteAutoSaveStatus">자동 저장 준비 중…</span>
         <button class="cte-abtn" onclick="cteClearDraft()">임시 저장 삭제</button>
         <button class="cte-abtn" onclick="cteValidateFlow(true)">🔍 연결 검사</button>
-        <button class="cte-abtn cte-abtn-save" onclick="cteSaveConfig()">💾 저장 (JSON 다운로드)</button>
+        <button class="cte-abtn cte-abtn-save" onclick="cteSaveConfig()">💾 경로 설정 저장</button>
+        <button class="cte-abtn" onclick="cteExportConfig()">📥 JSON 백업</button>
       </div>
     </div>
 
@@ -919,6 +924,25 @@ textarea.form-input{resize:vertical;}
       <button class="btn btn-secondary" onclick="closeModal('pwModal')">취소</button>
       <button class="btn btn-primary" id="adminLoginSubmit" onclick="submitPw()">로그인</button>
     </div>
+  </div>
+</div>
+
+<!-- Firebase Storage 이미지 관리자 -->
+<div class="modal-bg" id="assetModal">
+  <div class="modal" style="max-width:760px;width:min(92vw,760px)">
+    <div class="modal-title">🖼 시뮬레이터 이미지 관리</div>
+    <div class="asset-toolbar">
+      <button class="btn btn-primary" type="button" onclick="document.getElementById('assetFiles').click()">여러 이미지 올리기</button>
+      <button class="btn btn-secondary" type="button" onclick="document.getElementById('assetFolder').click()">폴더째 올리기</button>
+      <button class="btn btn-danger" type="button" onclick="deleteSelectedAssets()">선택 이미지 삭제</button>
+      <button class="btn btn-secondary" type="button" onclick="useSelectedAsset()">현재 화면에 적용</button>
+      <input id="assetFiles" type="file" accept="image/*" multiple hidden>
+      <input id="assetFolder" type="file" accept="image/*" multiple webkitdirectory hidden>
+    </div>
+    <div class="asset-progress"><span id="assetProgressBar"></span></div>
+    <div class="asset-status" id="assetStatus">이미지 목록을 불러오는 중입니다.</div>
+    <div class="asset-list" id="assetList"></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('assetModal')">닫기</button></div>
   </div>
 </div>
 
@@ -1030,8 +1054,10 @@ const FIREBASE_CONFIG = {
 };
 let firebaseAuth = null;
 let firestoreDb = null;
+let firebaseStorage = null;
 let firebaseFns = null;
 let firebaseReady = false;
+let managedAssets = [];
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1049,16 +1075,18 @@ function loadGuidePages() {
 
 async function initFirebase() {
   try {
-    const [appSdk, authSdk, firestoreSdk, analyticsSdk] = await Promise.all([
+    const [appSdk, authSdk, firestoreSdk, storageSdk, analyticsSdk] = await Promise.all([
       import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js'),
       import('https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js'),
       import('https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js'),
+      import('https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js'),
       import('https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js')
     ]);
     const app = appSdk.initializeApp(FIREBASE_CONFIG);
     firebaseAuth = authSdk.getAuth(app);
     firestoreDb = firestoreSdk.getFirestore(app);
-    firebaseFns = { ...authSdk, ...firestoreSdk };
+    firebaseStorage = storageSdk.getStorage(app);
+    firebaseFns = { ...authSdk, ...firestoreSdk, ...storageSdk };
     firebaseReady = true;
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
     authSdk.onAuthStateChanged(firebaseAuth, applyFirebaseUser);
@@ -1172,7 +1200,7 @@ function clearTransientScreenState() {
 async function boot() {
   tick(); setInterval(tick, 1000);
   loadGuidePages();
-  initFirebase();
+  await initFirebase();
 
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
@@ -1224,7 +1252,11 @@ async function boot() {
   document.getElementById('btnDraw').onclick = startDraw;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
+  document.getElementById('btnSaveFlow').onclick = saveSimulatorFlow;
   document.getElementById('btnExport').onclick = exportFlow;
+  document.getElementById('btnAssetManager').onclick = openAssetManager;
+  document.getElementById('assetFiles').onchange = e => uploadAssets(e.target.files);
+  document.getElementById('assetFolder').onchange = e => uploadAssets(e.target.files);
   document.getElementById('btnShowHotspots').onclick = toggleShowHotspots;
   document.getElementById('searchBox').oninput = renderList;
 
@@ -1268,6 +1300,17 @@ async function switchSec(name) {
 async function loadSec(name) {
   if(cache[name].flow) return; // already loaded
   await loadSiteImageManifest();
+  if(firebaseReady) {
+    try {
+      const cloud = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(name)));
+      if(cloud.exists() && cloud.data().flow?.screens) {
+        cache[name].flow = cloud.data().flow;
+        mergeImageManifest(name, cache[name].flow);
+        cache[name].cur = cache[name].flow.start;
+        return;
+      }
+    } catch(e) { console.warn('Firestore 시뮬레이터 로드 실패, JSON으로 대체:', name, e); }
+  }
   try {
     const r = await fetch(SECS[name].flowUrl + '?_=' + Date.now());
     cache[name].flow = await r.json();
@@ -1707,6 +1750,7 @@ function syncAdminUI() {
   const btn = document.getElementById('topAdminBtn');
   btn.classList.toggle('on', adminMode);
   btn.textContent = adminMode ? '🔓 관리자 모드 ON' : '🔐 관리자 로그인';
+  document.getElementById('btnAssetManager').style.display = adminMode && activePage==='simulator' ? '' : 'none';
 
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
   if(activePage !== 'simulator') { if(!adminMode) editingGuidePage = false; renderGuidePage(); return; }
@@ -1816,6 +1860,105 @@ function exportFlow() {
   const blob = new Blob([JSON.stringify(st.flow, null, 2)], {type:'application/json'});
   const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(blob), download:`${activeSec}-flow.json`});
   a.click(); URL.revokeObjectURL(a.href);
+}
+
+function simulatorDocId(name) {
+  return ({'차주앱':'driverApp','빽통앱':'backtongApp','빽통PC':'backtongPC','채널톡':'channelTalk'})[name] || name;
+}
+
+async function saveSimulatorFlow() {
+  if(!adminMode || !firebaseReady || !firebaseAuth.currentUser) { alert('관리자 로그인이 필요합니다.'); return; }
+  const status = document.getElementById('flowSaveStatus');
+  status.textContent = '저장 중...';
+  try {
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(activeSec)), {
+      flow: cache[activeSec].flow,
+      updatedAt: firebaseFns.serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+    }, {merge:true});
+    status.textContent = '✓ Firestore에 저장됨 · ' + new Date().toLocaleTimeString('ko-KR');
+  } catch(e) { status.textContent = '저장 실패'; alert('경로 설정 저장 실패: ' + (e.message||e)); }
+}
+
+function assetFolderName() { return simulatorDocId(activeSec); }
+function safeAssetPath(file) {
+  const raw = file.webkitRelativePath || file.name;
+  return raw.split('/').filter(Boolean).map(v=>v.replace(/[\\#?\[\]*]/g,'_')).join('/');
+}
+async function runLimited(items, limit, worker) {
+  let cursor = 0;
+  async function next(){ while(cursor < items.length){ const i=cursor++; await worker(items[i],i); } }
+  await Promise.all(Array.from({length:Math.min(limit,items.length)}, next));
+}
+async function openAssetManager() {
+  if(!adminMode) return;
+  openModal('assetModal');
+  await refreshAssetList();
+}
+async function refreshAssetList() {
+  const status = document.getElementById('assetStatus');
+  status.textContent = '이미지 목록을 불러오는 중...';
+  try {
+    const folderRef = firebaseFns.ref(firebaseStorage, 'simulator-images/' + assetFolderName());
+    const refs = await listAssetRefsRecursive(folderRef);
+    managedAssets = await Promise.all(refs.map(async item => ({ref:item,url:await firebaseFns.getDownloadURL(item),name:item.fullPath.split('/').pop(),path:item.fullPath})));
+    renderAssetList();
+    status.textContent = `총 ${managedAssets.length}개 이미지`;
+  } catch(e) { managedAssets=[]; renderAssetList(); status.textContent='목록을 불러오지 못했습니다: '+(e.message||e); }
+}
+async function listAssetRefsRecursive(folderRef) {
+  const result = await firebaseFns.listAll(folderRef);
+  const nested = await Promise.all(result.prefixes.map(listAssetRefsRecursive));
+  return [...result.items, ...nested.flat()];
+}
+function renderAssetList() {
+  document.getElementById('assetList').innerHTML = managedAssets.length ? managedAssets.map((a,i)=>`
+    <label class="asset-item"><input type="checkbox" class="asset-check" value="${i}"><img class="asset-thumb" src="${esc(a.url)}" alt=""><span class="asset-name">${esc(a.name)}</span></label>`).join('') : '<div style="padding:24px;text-align:center;color:#999">업로드된 이미지가 없습니다.</div>';
+}
+async function uploadAssets(fileList) {
+  const files = Array.from(fileList||[]).filter(f=>f.type.startsWith('image/'));
+  if(!files.length) return;
+  const status=document.getElementById('assetStatus'), bar=document.getElementById('assetProgressBar');
+  let done=0; status.textContent=`${files.length}개 업로드 준비 중...`;
+  try {
+    await runLimited(files, 6, async file => {
+      const target = firebaseFns.ref(firebaseStorage, `simulator-images/${assetFolderName()}/${safeAssetPath(file)}`);
+      await firebaseFns.uploadBytes(target, file, {contentType:file.type});
+      const url = await firebaseFns.getDownloadURL(target);
+      const flow = activeSec==='채널톡' ? null : cache[activeSec]?.flow;
+      if(flow) { flow.imageManifest = Array.from(new Set([...(flow.imageManifest||[]),url])); }
+      if(activeSec==='채널톡') { cteRememberImg('agent',url); cteRememberImg('phone',url); cteSyncImageLists(); }
+      done++; bar.style.width=Math.round(done/files.length*100)+'%'; status.textContent=`업로드 ${done}/${files.length}`;
+    });
+    if(activeSec!=='채널톡') detectUnreg();
+    await refreshAssetList();
+  } catch(e) { alert('이미지 업로드 실패: '+(e.message||e)); }
+  finally { document.getElementById('assetFiles').value=''; document.getElementById('assetFolder').value=''; setTimeout(()=>bar.style.width='0',800); }
+}
+function selectedAssetIndexes(){ return Array.from(document.querySelectorAll('.asset-check:checked')).map(el=>Number(el.value)); }
+async function deleteSelectedAssets() {
+  const selected=selectedAssetIndexes().map(i=>managedAssets[i]).filter(Boolean);
+  if(!selected.length){ alert('삭제할 이미지를 선택하세요.'); return; }
+  if(!confirm(`선택한 이미지 ${selected.length}개를 삭제할까요? 연결된 화면에서는 이미지가 보이지 않게 됩니다.`)) return;
+  let done=0; const status=document.getElementById('assetStatus'), bar=document.getElementById('assetProgressBar');
+  try {
+    await runLimited(selected, 6, async asset=>{ await firebaseFns.deleteObject(asset.ref); done++; bar.style.width=Math.round(done/selected.length*100)+'%'; status.textContent=`삭제 ${done}/${selected.length}`; });
+    const removed=new Set(selected.map(a=>a.url));
+    const flow=cache[activeSec]?.flow;
+    if(flow) flow.imageManifest=(flow.imageManifest||[]).filter(url=>!removed.has(url));
+    await refreshAssetList();
+  } catch(e){ alert('이미지 삭제 실패: '+(e.message||e)); }
+  finally { setTimeout(()=>bar.style.width='0',800); }
+}
+function useSelectedAsset() {
+  const selected=selectedAssetIndexes();
+  if(selected.length!==1){ alert('현재 화면에 적용할 이미지 한 개만 선택하세요.'); return; }
+  const asset=managedAssets[selected[0]];
+  if(activeSec==='채널톡'){ alert('채널톡은 편집 화면의 이미지 선택 목록에서 업로드한 이미지를 선택해 주세요.'); return; }
+  const st=cache[activeSec];
+  if(!st?.cur||!st.flow.screens?.[st.cur]) return;
+  st.flow.screens[st.cur].image=asset.url;
+  renderScreen(activeSec,st.cur); closeModal('assetModal');
 }
 
 // ═══════════════════════════════════════════
@@ -2453,10 +2596,18 @@ function cteAllImgOpts(cur){
 async function cteLoadConfig() {
   if(cteConfig) return;
   await loadSiteImageManifest();
+  if(firebaseReady) {
+    try {
+      const cloud = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', 'channelTalk'));
+      if(cloud.exists() && cloud.data().flow?.modes) cteConfig = cloud.data().flow;
+    } catch(e) { console.warn('채널톡 Firestore 로드 실패, JSON으로 대체:', e); }
+  }
   try {
-    const r = await fetch('채널톡/교육_flow.json?_=' + Date.now());
-    const j = await r.json();
-    if(j && j.modes && j.phoneScreens && j.agentScreens) cteConfig = j; // 신형 포맷만 사용
+    if(!cteConfig) {
+      const r = await fetch('채널톡/교육_flow.json?_=' + Date.now());
+      const j = await r.json();
+      if(j && j.modes && j.phoneScreens && j.agentScreens) cteConfig = j;
+    }
   } catch(e) {}
   if(!cteConfig) {
     cteConfig = {
@@ -3503,13 +3654,20 @@ function cteValidateFlow(showAlert) {
   }
   return r;
 }
-function cteSaveConfig() {
+async function cteSaveConfig() {
+  if(!adminMode || !firebaseReady || !firebaseAuth.currentUser) { alert('관리자 로그인이 필요합니다.'); return; }
+  try {
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'simulatorFlows','channelTalk'), {flow:cteConfig,updatedAt:firebaseFns.serverTimestamp(),updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid}, {merge:true});
+    cteSetSaveStatus('✓ Firestore에 저장했습니다. · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
+  } catch(e) { alert('채널톡 경로 저장 실패: '+(e.message||e)); }
+}
+function cteExportConfig() {
   const json = JSON.stringify(cteConfig, null, 2);
   const blob = new Blob([json], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = '교육_flow.json'; a.click();
   URL.revokeObjectURL(a.href);
-  cteSetSaveStatus('✓ JSON 파일을 저장했습니다. · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
+  cteSetSaveStatus('✓ JSON 백업 파일을 저장했습니다. · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
 }
 
 
