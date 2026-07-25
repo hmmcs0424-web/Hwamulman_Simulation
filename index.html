@@ -71,7 +71,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .guide-content{font-size:15px;line-height:1.8;color:#333}.guide-content h2{font-size:20px;margin-bottom:12px}.guide-content p{margin-bottom:12px}.guide-content ul{padding-left:22px}
 .guide-editor{display:none}.guide-editor textarea{width:100%;min-height:280px;border:1px solid #ddd;border-radius:10px;padding:14px;font:14px/1.6 inherit;resize:vertical;outline:none}.guide-editor textarea:focus{border-color:var(--brand)}
 .guide-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.guide-save-note{font-size:12px;color:#888;margin-top:10px;text-align:right}
-.asset-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}.asset-category{border:1px solid #ddd;background:#f7f7f8;color:#555;border-radius:9px;padding:9px 6px;font:700 12px inherit;cursor:pointer}.asset-category:hover{border-color:#aaa}.asset-category.active{border-color:var(--brand);background:#fff8df;color:#7a5600}.asset-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.asset-status{font-size:12px;color:#666;margin:8px 0}.asset-list{max-height:360px;overflow:auto;border:1px solid #e5e5e5;border-radius:10px}.asset-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #eee}.asset-item:last-child{border-bottom:0}.asset-select{display:flex;align-items:center;gap:10px;min-width:0;flex:1;cursor:pointer}.asset-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee}.asset-name{flex:1;font-size:12px;word-break:break-all}.asset-delete-one{border:1px solid #ffd0d0;background:#fff5f5;color:#d33;border-radius:7px;padding:6px 9px;font:700 11px inherit;cursor:pointer;white-space:nowrap}.asset-delete-one:hover{background:#ffe7e7}.asset-progress{height:7px;background:#eee;border-radius:99px;overflow:hidden}.asset-progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .15s}
+.asset-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}.asset-category{border:1px solid #ddd;background:#f7f7f8;color:#555;border-radius:9px;padding:9px 6px;font:700 12px inherit;cursor:pointer}.asset-category:hover{border-color:#aaa}.asset-category.active{border-color:var(--brand);background:#fff8df;color:#7a5600}.asset-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.asset-status{font-size:12px;color:#666;margin:8px 0}.asset-list{max-height:360px;overflow:auto;border:1px solid #e5e5e5;border-radius:10px}.asset-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #eee}.asset-item:last-child{border-bottom:0}.asset-select{display:flex;align-items:center;gap:10px;min-width:0;flex:1;cursor:pointer}.asset-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee}.asset-name{flex:1;font-size:12px;word-break:break-all}.asset-origin{border-radius:99px;padding:3px 7px;background:#f0f0f2;color:#777;font:700 10px inherit;white-space:nowrap}.asset-origin.cloud{background:#eef6ff;color:#2874b8}.asset-delete-one{border:1px solid #ffd0d0;background:#fff5f5;color:#d33;border-radius:7px;padding:6px 9px;font:700 11px inherit;cursor:pointer;white-space:nowrap}.asset-delete-one:hover{background:#ffe7e7}.asset-progress{height:7px;background:#eee;border-radius:99px;overflow:hidden}.asset-progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .15s}
 
 /* ── PHONE FRAME ── */
 .phone-area{
@@ -1306,6 +1306,10 @@ async function switchSec(name) {
 async function loadSec(name) {
   if(cache[name].flow) return; // already loaded
   await loadSiteImageManifest();
+  if(name==='채널톡') {
+    cache[name].flow = { imageManifest:[...(siteImageManifest?.[name]||[])], screens:{}, start:null };
+    return;
+  }
   if(firebaseReady) {
     try {
       const cloud = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(name)));
@@ -1315,7 +1319,9 @@ async function loadSec(name) {
         cache[name].cur = cache[name].flow.start;
         return;
       }
-    } catch(e) { console.warn('Firestore 시뮬레이터 로드 실패, JSON으로 대체:', name, e); }
+    } catch(e) {
+      if(e?.code!=='permission-denied') console.warn('Firestore 시뮬레이터 로드 실패, JSON으로 대체:', name, e);
+    }
   }
   try {
     const r = await fetch(SECS[name].flowUrl + '?_=' + Date.now());
@@ -1956,25 +1962,43 @@ async function refreshAssetList() {
   const status = document.getElementById('assetStatus');
   const requestedSec = assetManageSec;
   status.textContent = '이미지 목록을 불러오는 중...';
+  await loadSiteImageManifest();
+  const staticAssets=(siteImageManifest?.[requestedSec]||[]).map(path=>({
+    source:'static',
+    pathname:path,
+    path,
+    baseUrl:path,
+    url:path,
+    name:path.split('/').pop()
+  }));
   try {
     const result=await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(requestedSec))}`);
-    const loadedAssets=result.assets.map(item=>({
+    const blobAssets=result.assets.map(item=>({
       ...item,
+      source:'blob',
       baseUrl:item.url,
       path:item.pathname,
       url:`${item.url}?v=${encodeURIComponent(item.uploadedAt||Date.now())}`
     }));
     if(requestedSec!==assetManageSec) return;
-    managedAssets = loadedAssets;
+    const byName=new Map(staticAssets.map(asset=>[asset.name,asset]));
+    blobAssets.forEach(asset=>byName.set(asset.name,asset));
+    managedAssets = Array.from(byName.values()).sort((a,b)=>a.name.localeCompare(b.name,'ko'));
     renderAssetList();
-    status.textContent = `${requestedSec} · 총 ${managedAssets.length}개 이미지`;
-  } catch(e) { managedAssets=[]; renderAssetList(); status.textContent='목록을 불러오지 못했습니다: '+(e.message||e); }
+    status.textContent = `${requestedSec} · 총 ${managedAssets.length}개 (기본 ${staticAssets.length}개 · 업로드 ${blobAssets.length}개)`;
+  } catch(e) {
+    if(requestedSec!==assetManageSec) return;
+    managedAssets=staticAssets;
+    renderAssetList();
+    status.textContent=`${requestedSec} · 기본 이미지 ${staticAssets.length}개 (업로드 목록을 불러오지 못함: ${e.message||e})`;
+  }
 }
 function renderAssetList() {
   document.getElementById('assetList').innerHTML = managedAssets.length ? managedAssets.map((a,i)=>`
     <div class="asset-item">
       <label class="asset-select"><input type="checkbox" class="asset-check" value="${i}"><img class="asset-thumb" src="${esc(a.url)}" alt=""><span class="asset-name">${esc(a.name)}</span></label>
-      <button class="asset-delete-one" type="button" onclick="deleteAssetAt(${i})">삭제</button>
+      <span class="asset-origin ${a.source==='blob'?'cloud':''}">${a.source==='blob'?'업로드':'기본'}</span>
+      ${a.source==='blob'?`<button class="asset-delete-one" type="button" onclick="deleteAssetAt(${i})">삭제</button>`:''}
     </div>`).join('') : '<div style="padding:24px;text-align:center;color:#999">업로드된 이미지가 없습니다.</div>';
 }
 async function uploadAssets(fileList) {
@@ -1983,6 +2007,7 @@ async function uploadAssets(fileList) {
   const targetSec=assetManageSec;
   const status=document.getElementById('assetStatus'), bar=document.getElementById('assetProgressBar');
   const previousByPath = new Map(managedAssets.map(asset=>[asset.path,asset]));
+  const previousByName = new Map(managedAssets.map(asset=>[asset.name,asset]));
   const authorization=await assetAuthHeader();
   const {upload}=await import('/vendor/vercel-blob-client.js');
   let done=0, replaced=0;
@@ -1992,7 +2017,7 @@ async function uploadAssets(fileList) {
     await runLimited(files, 6, async file => {
       try {
         const pathname=`simulator-images/${assetFolderName(targetSec)}/${safeAssetPath(file)}`;
-        const previous=previousByPath.get(pathname);
+        const previous=previousByPath.get(pathname)||previousByName.get(file.name);
         const uploaded=await upload(pathname,file,{
           access:'public',
           handleUploadUrl:'/api/assets/upload',
@@ -2003,13 +2028,13 @@ async function uploadAssets(fileList) {
         const flow = targetSec==='채널톡' ? null : cache[targetSec]?.flow;
         if(previous) {
           replaced++;
-          if(flow) replaceAssetPath(flow,pathname,url);
+          if(flow) replaceAssetPath(flow,previous.path,url);
         }
         if(flow) flow.imageManifest = Array.from(new Set([...(flow.imageManifest||[]),url]));
         if(targetSec==='채널톡') {
           if(previous) {
-            replaceAssetPath(cteConfig,pathname,url);
-            replaceAssetPath(CTE_ALL_IMGS,pathname,url);
+            replaceAssetPath(cteConfig,previous.path,url);
+            replaceAssetPath(CTE_ALL_IMGS,previous.path,url);
           }
           cteRememberImg('agent',url); cteRememberImg('phone',url); cteSyncImageLists();
         }
@@ -2042,6 +2067,11 @@ function deleteAssetAt(index) {
 async function deleteSelectedAssets() {
   const selected=selectedAssetIndexes().map(i=>managedAssets[i]).filter(Boolean);
   if(!selected.length){ alert('삭제할 이미지를 선택하세요.'); return; }
+  const staticSelected=selected.filter(asset=>asset.source!=='blob');
+  if(staticSelected.length){
+    alert(`기본 이미지 ${staticSelected.length}개는 배포 파일이므로 팝업에서 삭제할 수 없습니다.\n삭제하려면 해당 파일을 프로젝트에서 제거해야 합니다. 업로드 이미지만 선택해 주세요.`);
+    return;
+  }
   if(!confirm(`선택한 이미지 ${selected.length}개를 삭제할까요? 연결된 화면에서는 이미지가 보이지 않게 됩니다.`)) return;
   let done=0; const status=document.getElementById('assetStatus'), bar=document.getElementById('assetProgressBar');
   try {
@@ -2706,7 +2736,9 @@ async function cteLoadConfig() {
     try {
       const cloud = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', 'channelTalk'));
       if(cloud.exists() && cloud.data().flow?.modes) cteConfig = cloud.data().flow;
-    } catch(e) { console.warn('채널톡 Firestore 로드 실패, JSON으로 대체:', e); }
+    } catch(e) {
+      if(e?.code!=='permission-denied') console.warn('채널톡 Firestore 로드 실패, JSON으로 대체:', e);
+    }
   }
   try {
     if(!cteConfig) {
