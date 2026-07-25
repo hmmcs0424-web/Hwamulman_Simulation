@@ -2,7 +2,7 @@
   "screens": {
     "빽통PC_001": {
       "label": "로그인",
-      "image": "빽통PC/빽통PC_로그인.png",
+      "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
       "type": "normal",
       "show_navbar": false,
       "hotspots": [],

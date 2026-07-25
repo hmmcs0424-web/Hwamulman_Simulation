@@ -3,25 +3,25 @@
     {
       "id": "consult",
       "label": "💬 채널톡 상담",
-      "phoneStart": "채널톡/1.차주앱_메인화면.jpg",
-      "agentStart": "채널톡/홈페이지 화면.png"
+      "phoneStart": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "agentStart": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png"
     },
     {
       "id": "image",
       "label": "🖼️ 이미지 전송",
-      "phoneStart": "채널톡/1.차주앱_메인화면.jpg",
-      "agentStart": "채널톡/채널톡_로그인.png"
+      "phoneStart": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "agentStart": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
     }
   ],
   "phoneScreens": {
-    "consult::채널톡/1.차주앱_메인화면.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg": {
       "hotspots": [
         {
           "x": 62.6,
           "y": 2.4,
           "w": 11.6,
           "h": 5.5,
-          "goto": "채널톡/1-1.차주앱_채널톡진입.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg"
         }
       ],
       "annotations": [
@@ -46,14 +46,14 @@
       "scrollRegions": [],
       "desc": "메인화면 우측 상단 <b>헤드셋 아이콘</b>을 누르면 문의 화면으로 이동합니다."
     },
-    "image::채널톡/1.차주앱_메인화면.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg": {
       "hotspots": [
         {
           "x": 62.9,
           "y": 2.2,
           "w": 12.3,
           "h": 5.2,
-          "goto": "채널톡/1-1.차주앱_채널톡진입.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg"
         }
       ],
       "annotations": [
@@ -69,14 +69,14 @@
       "scrollRegions": [],
       "desc": "메인화면 우측 상단 <b>헤드셋 아이콘</b>을 누르면 문의 화면으로 이동합니다."
     },
-    "consult::채널톡/1-1.차주앱_채널톡진입.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg": {
       "hotspots": [
         {
           "x": 52.3,
           "y": 83,
           "w": 46.2,
           "h": 13.5,
-          "goto": "채널톡/1-2.차주앱_채널톡 상담 시작.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg"
         }
       ],
       "annotations": [
@@ -101,14 +101,14 @@
       "scrollRegions": [],
       "desc": "문의 방법 선택 팝업에서 <b>채널톡</b>을 누릅니다."
     },
-    "image::채널톡/1-1.차주앱_채널톡진입.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg": {
       "hotspots": [
         {
           "x": 52.3,
           "y": 83,
           "w": 46.2,
           "h": 13.5,
-          "goto": "채널톡/1-2.차주앱_채널톡 상담 시작.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg"
         }
       ],
       "annotations": [
@@ -124,14 +124,14 @@
       "scrollRegions": [],
       "desc": "문의 방법 선택 팝업에서 <b>채널톡</b>을 누릅니다."
     },
-    "consult::채널톡/1-2.차주앱_채널톡 상담 시작.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg": {
       "hotspots": [
         {
           "x": 3.8,
           "y": 25.2,
           "w": 93,
           "h": 7.1,
-          "goto": "채널톡/1-3.차주앱_입장.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg"
         }
       ],
       "annotations": [
@@ -156,14 +156,14 @@
       "scrollRegions": [],
       "desc": "<b>문의하기</b>를 누르면 채팅창에 입장합니다."
     },
-    "image::채널톡/1-2.차주앱_채널톡 상담 시작.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg": {
       "hotspots": [
         {
           "x": 3.8,
           "y": 25.2,
           "w": 93,
           "h": 7.1,
-          "goto": "채널톡/1-3.차주앱_입장.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg"
         }
       ],
       "annotations": [
@@ -179,14 +179,14 @@
       "scrollRegions": [],
       "desc": "<b>문의하기</b>를 누르면 채팅창에 입장합니다."
     },
-    "consult::채널톡/1-3.차주앱_입장.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg": {
       "hotspots": [
         {
           "x": 2.8,
           "y": 92.3,
           "w": 83.7,
           "h": 5.7,
-          "goto": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg"
         }
       ],
       "annotations": [
@@ -202,17 +202,17 @@
       ],
       "scrollRegions": [],
       "typing": true,
-      "typingGoto": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg",
+      "typingGoto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg",
       "desc": "채팅창입니다. 아래 입력창에 <b>문의 내용을 입력해 전송</b>하거나, <b>클립(📎)</b>으로 이미지를 첨부할 수 있습니다."
     },
-    "image::채널톡/1-3.차주앱_입장.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg": {
       "hotspots": [
         {
           "x": 88.2,
           "y": 92.1,
           "w": 10.6,
           "h": 5.8,
-          "goto": "채널톡/1-4.차주앱_첨부파일넣기.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg"
         }
       ],
       "annotations": [
@@ -236,17 +236,17 @@
       ],
       "scrollRegions": [],
       "typing": true,
-      "typingGoto": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg",
+      "typingGoto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg",
       "desc": "채팅창입니다. 아래 입력창에 <b>문의 내용을 입력해 전송</b>하거나, <b>클립(📎)</b>으로 이미지를 첨부할 수 있습니다."
     },
-    "consult::채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg": {
       "hotspots": [
         {
           "x": 1.3,
           "y": 92.2,
           "w": 97,
           "h": 6.2,
-          "goto": "채널톡/2-1.차주앱_기본틀.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
         }
       ],
       "annotations": [
@@ -296,14 +296,14 @@
       "scrollRegions": [],
       "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
     },
-    "image::채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg": {
       "hotspots": [
         {
           "x": 0.9,
           "y": 78.6,
           "w": 97.7,
           "h": 12.8,
-          "goto": "채널톡/2-1.차주앱_기본틀.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
         }
       ],
       "annotations": [
@@ -336,7 +336,7 @@
       "scrollRegions": [],
       "desc": "고객이 문의 내용을 전송한 화면입니다. 우측 채널톡 화면에서 상담사가 문의를 확인하고 답변합니다."
     },
-    "consult::채널톡/1-4.차주앱_첨부파일넣기.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg": {
       "hotspots": [
         {
           "x": 8,
@@ -350,14 +350,14 @@
       "scrollRegions": [],
       "desc": "<b>앨범</b>에서 전송할 이미지를 선택합니다."
     },
-    "image::채널톡/1-4.차주앱_첨부파일넣기.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg": {
       "hotspots": [
         {
           "x": -0.1,
           "y": 78.9,
           "w": 99,
           "h": 18.9,
-          "goto": "채널톡/2-1.차주앱_기본틀.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
         }
       ],
       "annotations": [
@@ -415,7 +415,7 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/2-1.차주앱_기본틀.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -424,13 +424,13 @@
           "y": 8.3,
           "w": 98.7,
           "h": 83.8,
-          "image": "채널톡/2-2. 차주앱_내부 배차 문의.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png"
         }
       ],
       "desc": "",
-      "syncAgent": "채널톡/채널톡_로그인.png"
+      "syncAgent": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
     },
-    "image::채널톡/2-1.차주앱_기본틀.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -439,13 +439,13 @@
           "y": 7.9,
           "w": 99,
           "h": 84.3,
-          "image": "채널톡/3-1. 차주앱_이미지_이미지전송.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-1.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
         }
       ],
       "desc": "",
-      "syncAgent": "채널톡/채널톡_로그인.png"
+      "syncAgent": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
     },
-    "consult::채널톡/2-1.차주앱_기본틀 2.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -454,12 +454,12 @@
           "y": 8.8,
           "w": 99,
           "h": 83.5,
-          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/2-1.차주앱_기본틀 2.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -468,36 +468,36 @@
           "y": 8.2,
           "w": 99.7,
           "h": 84.3,
-          "image": "채널톡/3-2.차주앱_이미지_내부 답변.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png"
         }
       ],
       "desc": ""
     },
-    "consult::채널톡/채널톡_테이블1.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_테이블1.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_테이블2.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_테이블2.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/2-1.차주앱_기본틀 3.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -506,12 +506,12 @@
           "y": 1.3,
           "w": 99.7,
           "h": 98.1,
-          "image": "채널톡/2-2. 차주앱_내부_끝인사.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/2-1.차주앱_기본틀 3.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -520,12 +520,12 @@
           "y": 8.3,
           "w": 99,
           "h": 84.1,
-          "image": "채널톡/3-3. 차주앱_이미지_내부_끝인사.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-3.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
         }
       ],
       "desc": ""
     },
-    "consult::채널톡/차주앱_문자로 발송되는 메시지.jpg": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg": {
       "hotspots": [],
       "annotations": [
         {
@@ -541,7 +541,7 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/차주앱_문자로 발송되는 메시지.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg": {
       "hotspots": [],
       "annotations": [
         {
@@ -557,7 +557,7 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/2-1.차주앱_기본틀 4.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -566,12 +566,12 @@
           "y": 0.6,
           "w": 99.7,
           "h": 98.9,
-          "image": "채널톡/2-2. 차주앱_내부_처리완료.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/2-1.차주앱_기본틀 4.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -580,19 +580,19 @@
           "y": 7.1,
           "w": 98.7,
           "h": 85.2,
-          "image": "채널톡/3-4.차주앱_이미지_내부_처리완료.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/4.차주앱_이미지첨부.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg": {
       "hotspots": [
         {
           "x": 1.2,
           "y": 58.1,
           "w": 89,
           "h": 21.7,
-          "goto": "채널톡/차주앱_이미지다운로드.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg"
         }
       ],
       "annotations": [
@@ -617,14 +617,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/차주앱_이미지다운로드.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg": {
       "hotspots": [
         {
           "x": 71,
           "y": 1.6,
           "w": 10,
           "h": 5.8,
-          "goto": "채널톡/차주앱_이미지 다운완료.jpg"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg"
         }
       ],
       "annotations": [
@@ -649,14 +649,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/차주앱_이미지 다운완료.jpg": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "",
-      "syncAgent": "채널톡/채널톡_테이블6.png"
+      "syncAgent": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png"
     },
-    "image::채널톡/2-1.차주앱_기본틀 5.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%205.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [
@@ -665,21 +665,21 @@
           "y": 6.8,
           "w": 98.7,
           "h": 85.5,
-          "image": "채널톡/차주앱_내부_상담사 이미지 전송.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%83%81%EB%8B%B4%EC%82%AC%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%A0%84%EC%86%A1.png"
         }
       ],
       "desc": ""
     }
   },
   "agentScreens": {
-    "consult::채널톡/채널톡_로그인.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png": {
       "hotspots": [
         {
           "x": 38.7,
           "y": 72.8,
           "w": 22.7,
           "h": 4.2,
-          "goto": "채널톡/채널톡_로그인_채널목록.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png"
         }
       ],
       "annotations": [
@@ -722,14 +722,14 @@
       "scrollRegions": [],
       "desc": "채널톡에 <b>로그인</b>합니다."
     },
-    "image::채널톡/채널톡_로그인.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png": {
       "hotspots": [
         {
           "x": 38.3,
           "y": 71.8,
           "w": 23.6,
           "h": 5.3,
-          "goto": "채널톡/채널톡_로그인_채널목록.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png"
         }
       ],
       "annotations": [
@@ -784,26 +784,26 @@
       "scrollRegions": [],
       "desc": "채널톡 메인 화면입니다. 새 문의가 오면 <b>수신함</b>에서 확인합니다."
     },
-    "consult::채널톡/채널톡_채팅화면.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "고객과의 채팅 화면입니다."
     },
-    "image::채널톡/채널톡_채팅화면.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "고객과의 채팅 화면입니다."
     },
-    "consult::채널톡/채널톡_로그인_채널목록.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png": {
       "hotspots": [
         {
           "x": 36.8,
           "y": 50.4,
           "w": 26.2,
           "h": 6.3,
-          "goto": "채널톡/채널톡_로그인이후.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png"
         }
       ],
       "annotations": [
@@ -828,14 +828,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_로그인_채널목록.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png": {
       "hotspots": [
         {
           "x": 36.9,
           "y": 50.6,
           "w": 26,
           "h": 5.8,
-          "goto": "채널톡/채널톡_로그인이후.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png"
         }
       ],
       "annotations": [
@@ -860,14 +860,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_목록선택.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png": {
       "hotspots": [
         {
           "x": 39.3,
           "y": 91.7,
           "w": 7.4,
           "h": 6,
-          "goto": "채널톡/채널톡_테이블1.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
         }
       ],
       "annotations": [
@@ -909,14 +909,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_목록선택.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png": {
       "hotspots": [
         {
           "x": 39.8,
           "y": 92.4,
           "w": 6.6,
           "h": 4.9,
-          "goto": "채널톡/채널톡_테이블1.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
         }
       ],
       "annotations": [
@@ -958,14 +958,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_로그인이후.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png": {
       "hotspots": [
         {
           "x": 42.8,
           "y": 0.4,
           "w": 4.2,
           "h": 4.5,
-          "goto": "채널톡/채널톡_수신함 확인.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png"
         }
       ],
       "annotations": [
@@ -990,14 +990,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_로그인이후.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png": {
       "hotspots": [
         {
           "x": 42.8,
           "y": 0.6,
           "w": 4.1,
           "h": 4.6,
-          "goto": "채널톡/채널톡_수신함 확인.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png"
         }
       ],
       "annotations": [
@@ -1022,14 +1022,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_수신함 확인.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png": {
       "hotspots": [
         {
           "x": 4,
           "y": 18.5,
           "w": 15.1,
           "h": 3.9,
-          "goto": "채널톡/채널톡_목록선택.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png"
         }
       ],
       "annotations": [
@@ -1071,14 +1071,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_수신함 확인.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png": {
       "hotspots": [
         {
           "x": 4,
           "y": 18.6,
           "w": 15.2,
           "h": 3.8,
-          "goto": "채널톡/채널톡_목록선택.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png"
         }
       ],
       "annotations": [
@@ -1127,7 +1127,7 @@
           "y": 92.9,
           "w": 4.7,
           "h": 5.1,
-          "goto": "채널톡/채널톡_테이블1.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
         }
       ],
       "annotations": [
@@ -1159,7 +1159,7 @@
           "y": 93,
           "w": 4.7,
           "h": 5.1,
-          "goto": "채널톡/채널톡_이미지_나에게 배정.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png"
         }
       ],
       "annotations": [
@@ -1184,28 +1184,28 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_이미지_나에게 배정.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "",
-      "syncPhone": "채널톡/2-1.차주앱_기본틀.png"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
     },
-    "image::채널톡/채널톡_이미지_나에게 배정.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": "",
-      "syncPhone": "채널톡/2-1.차주앱_기본틀.png"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
     },
-    "consult::채널톡/채널톡_테이블1.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png": {
       "hotspots": [
         {
           "x": 38,
           "y": 84.8,
           "w": 43,
           "h": 14.6,
-          "goto": "채널톡/채널톡_매크로사용.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png"
         }
       ],
       "annotations": [
@@ -1233,26 +1233,26 @@
           "y": 7.4,
           "w": 40.1,
           "h": 76.8,
-          "image": "채널톡/2-2. 차주앱_내부 배차 문의.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/채널톡_테이블1.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png": {
       "hotspots": [
         {
           "x": 37.8,
           "y": 84.5,
           "w": 43.2,
           "h": 15.2,
-          "goto": "채널톡/채널톡_상담사이미지전송.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
         },
         {
           "x": 2.6,
           "y": 17.1,
           "w": 34.1,
           "h": 3.6,
-          "goto": "채널톡/첨부파일_파일 다운.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png"
         }
       ],
       "annotations": [
@@ -1297,19 +1297,19 @@
           "y": 7.3,
           "w": 43.1,
           "h": 77.1,
-          "image": "채널톡/채널톡_이미지_내부_이미지전송.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
         }
       ],
       "desc": ""
     },
-    "consult::채널톡/채널톡_테이블2.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png": {
       "hotspots": [
         {
           "x": 38.2,
           "y": 85.1,
           "w": 42.8,
           "h": 14.6,
-          "goto": "채널톡/채널톡_테이블3.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png"
         }
       ],
       "annotations": [
@@ -1337,20 +1337,20 @@
           "y": 7.4,
           "w": 40.3,
           "h": 77.4,
-          "image": "채널톡/2-2. 차주앱_내부 다른문의.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png"
         }
       ],
       "desc": "",
-      "syncPhone": "채널톡/2-1.차주앱_기본틀 2.png"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png"
     },
-    "image::채널톡/채널톡_테이블2.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png": {
       "hotspots": [
         {
           "x": 38.1,
           "y": 85.2,
           "w": 42.7,
           "h": 13.3,
-          "goto": "채널톡/채널톡_매크로사용.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png"
         }
       ],
       "annotations": [
@@ -1378,31 +1378,31 @@
           "y": 7.3,
           "w": 42.9,
           "h": 77,
-          "image": "채널톡/3-2.차주앱_이미지_내부 답변.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png"
         }
       ],
       "desc": ""
     },
-    "consult::채널톡/2-1.차주앱_기본틀 3.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/2-1.차주앱_기본틀 3.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_테이블3.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png": {
       "hotspots": [
         {
           "x": 41.6,
           "y": 85.3,
           "w": 3.9,
           "h": 4.2,
-          "goto": "채널톡/채널톡_내부대화.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png"
         }
       ],
       "annotations": [
@@ -1439,20 +1439,20 @@
           "y": 7.1,
           "w": 43.2,
           "h": 76.8,
-          "image": "채널톡/채널톡_내부_끝인사.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
         }
       ],
       "desc": "",
-      "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png"
     },
-    "image::채널톡/채널톡_테이블3.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png": {
       "hotspots": [
         {
           "x": 41.5,
           "y": 85.3,
           "w": 3.9,
           "h": 3.9,
-          "goto": "채널톡/채널톡_내부대화.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png"
         }
       ],
       "annotations": [
@@ -1489,20 +1489,20 @@
           "y": 7.3,
           "w": 42.9,
           "h": 76.7,
-          "image": "채널톡/채널톡_내부_이미지끝인사.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%81%9D%EC%9D%B8%EC%82%AC.png"
         }
       ],
       "desc": "",
-      "syncPhone": "채널톡/2-1.차주앱_기본틀 3.png"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png"
     },
-    "consult::채널톡/채널톡_상담종료_태그선택.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png": {
       "hotspots": [
         {
           "x": 33.9,
           "y": 48.7,
           "w": 32.2,
           "h": 4.2,
-          "goto": "채널톡/채널톡_상담종료_태그적용.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png"
         }
       ],
       "annotations": [
@@ -1527,14 +1527,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담종료_태그선택.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png": {
       "hotspots": [
         {
           "x": 33.8,
           "y": 48.7,
           "w": 32.5,
           "h": 4.2,
-          "goto": "채널톡/채널톡_상담종료_태그적용.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png"
         }
       ],
       "annotations": [
@@ -1559,14 +1559,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_상담종료_태그적용.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png": {
       "hotspots": [
         {
           "x": 34.5,
           "y": 61.8,
           "w": 30.3,
           "h": 3.6,
-          "goto": "채널톡/채널톡_상담종료_종료.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png"
         }
       ],
       "annotations": [
@@ -1591,14 +1591,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담종료_태그적용.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png": {
       "hotspots": [
         {
           "x": 34.4,
           "y": 61.7,
           "w": 30.4,
           "h": 3.3,
-          "goto": "채널톡/채널톡_상담종료_종료.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png"
         }
       ],
       "annotations": [
@@ -1623,14 +1623,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_상담종료_종료.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png": {
       "hotspots": [
         {
           "x": 62.6,
           "y": 55.8,
           "w": 3.4,
           "h": 4.7,
-          "goto": "채널톡/채널톡_상담종료_종료됨.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png"
         }
       ],
       "annotations": [
@@ -1655,14 +1655,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담종료_종료.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png": {
       "hotspots": [
         {
           "x": 62.5,
           "y": 55.7,
           "w": 3.8,
           "h": 4.8,
-          "goto": "채널톡/채널톡_상담종료_종료됨.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png"
         }
       ],
       "annotations": [
@@ -1687,14 +1687,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_상담종료_종료됨.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png": {
       "hotspots": [
         {
           "x": 33.4,
           "y": 7,
           "w": 4.4,
           "h": 5,
-          "goto": "채널톡/채널톡_종료됨패널.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png"
         }
       ],
       "annotations": [
@@ -1736,14 +1736,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담종료_종료됨.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png": {
       "hotspots": [
         {
           "x": 33.5,
           "y": 7,
           "w": 4.4,
           "h": 5,
-          "goto": "채널톡/채널톡_종료됨패널.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png"
         }
       ],
       "annotations": [
@@ -1785,7 +1785,7 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_종료됨패널.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png": {
       "hotspots": [],
       "annotations": [
         {
@@ -1800,9 +1800,9 @@
       ],
       "scrollRegions": [],
       "desc": "",
-      "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg"
     },
-    "image::채널톡/채널톡_종료됨패널.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png": {
       "hotspots": [],
       "annotations": [
         {
@@ -1817,16 +1817,16 @@
       ],
       "scrollRegions": [],
       "desc": "",
-      "syncPhone": "채널톡/차주앱_문자로 발송되는 메시지.jpg"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg"
     },
-    "consult::채널톡/채널톡_테이블4.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png": {
       "hotspots": [
         {
           "x": 84,
           "y": 1,
           "w": 2.6,
           "h": 5.1,
-          "goto": "채널톡/채널톡_상담종료_태그선택.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png"
         }
       ],
       "annotations": [
@@ -1863,19 +1863,19 @@
           "y": 7.6,
           "w": 40.1,
           "h": 77.3,
-          "image": "채널톡/채널톡_내부_처리완료.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/채널톡_테이블4.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png": {
       "hotspots": [
         {
           "x": 84,
           "y": 0.9,
           "w": 2.6,
           "h": 5.1,
-          "goto": "채널톡/채널톡_상담종료_태그선택.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png"
         }
       ],
       "annotations": [
@@ -1912,19 +1912,19 @@
           "y": 7.4,
           "w": 42.7,
           "h": 77.4,
-          "image": "채널톡/채널톡_내부_이미지 처리완료.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
         }
       ],
       "desc": ""
     },
-    "image::채널톡/첨부파일_파일 다운.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png": {
       "hotspots": [
         {
           "x": 60,
           "y": 12.1,
           "w": 3.9,
           "h": 6.6,
-          "goto": "채널톡/첨부파일_다운완료.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png"
         }
       ],
       "annotations": [
@@ -1949,14 +1949,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_다운완료.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png": {
       "hotspots": [
         {
           "x": 91.4,
           "y": 11.6,
           "w": 2.8,
           "h": 5.3,
-          "goto": "채널톡/첨부파일_그림판검색.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png"
         }
       ],
       "annotations": [
@@ -1997,14 +1997,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_그림판검색.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png": {
       "hotspots": [
         {
           "x": 3.6,
           "y": 23.9,
           "w": 18.6,
           "h": 6.4,
-          "goto": "채널톡/첨부파일_그림판_파일열기.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png"
         }
       ],
       "annotations": [
@@ -2063,14 +2063,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_그림판_파일열기.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png": {
       "hotspots": [
         {
           "x": 0.2,
           "y": 8.5,
           "w": 13,
           "h": 4.7,
-          "goto": "채널톡/첨부파일_그림판_이미지불러오기.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png"
         }
       ],
       "annotations": [
@@ -2103,14 +2103,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_그림판_이미지불러오기.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png": {
       "hotspots": [
         {
           "x": 38.6,
           "y": 47.2,
           "w": 5.1,
           "h": 3.1,
-          "goto": "채널톡/첨부파일_다른이름저장.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png"
         }
       ],
       "annotations": [
@@ -2159,14 +2159,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_다른이름저장.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png": {
       "hotspots": [
         {
           "x": 13.2,
           "y": 21.6,
           "w": 5.3,
           "h": 12.9,
-          "goto": "채널톡/첨부파일_확장자 변경 완료.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png"
         }
       ],
       "annotations": [
@@ -2215,14 +2215,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/첨부파일_확장자 변경 완료.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png": {
       "hotspots": [
         {
           "x": 43,
           "y": 82.8,
           "w": 26.7,
           "h": 6.9,
-          "goto": "채널톡/채널톡_테이블1.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
         }
       ],
       "annotations": [
@@ -2256,14 +2256,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/홈페이지 화면.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png": {
       "hotspots": [
         {
           "x": 94.9,
           "y": 89.5,
           "w": 3.3,
           "h": 7,
-          "goto": "채널톡/홈페이지_채널톡.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png"
         }
       ],
       "annotations": [
@@ -2288,14 +2288,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/홈페이지_채널톡.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png": {
       "hotspots": [
         {
           "x": 76.9,
           "y": 30.1,
           "w": 19.7,
           "h": 5.2,
-          "goto": "채널톡/채널톡_홈페이지_정보입력.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png"
         }
       ],
       "annotations": [
@@ -2311,14 +2311,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_홈페이지_정보입력.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png": {
       "hotspots": [
         {
           "x": 22.4,
           "y": 86.3,
           "w": 33.5,
           "h": 6.3,
-          "goto": "채널톡/채널톡_로그인.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
         }
       ],
       "annotations": [
@@ -2351,14 +2351,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_매크로사용.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png": {
       "hotspots": [
         {
           "x": 73.5,
           "y": 93.4,
           "w": 6.4,
           "h": 5.5,
-          "goto": "채널톡/채널톡_테이블2.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png"
         }
       ],
       "annotations": [
@@ -2416,14 +2416,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담사이미지전송.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png": {
       "hotspots": [
         {
           "x": 39.1,
           "y": 75.7,
           "w": 31.6,
           "h": 6.4,
-          "goto": "채널톡/채널톡_상담사이미지전송_파일첨부.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png"
         }
       ],
       "annotations": [
@@ -2456,14 +2456,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담사이미지전송_파일첨부.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png": {
       "hotspots": [
         {
           "x": 45.6,
           "y": 68.4,
           "w": 5.2,
           "h": 3.6,
-          "goto": "채널톡/채널톡_상담사이미지전송_첨부됨.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png"
         }
       ],
       "annotations": [
@@ -2513,14 +2513,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_상담사이미지전송_첨부됨.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png": {
       "hotspots": [
         {
           "x": 73,
           "y": 93.7,
           "w": 6.5,
           "h": 5,
-          "goto": "채널톡/채널톡_테이블6.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png"
         }
       ],
       "annotations": [
@@ -2553,14 +2553,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_테이블6.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png": {
       "hotspots": [
         {
           "x": 38.3,
           "y": 85,
           "w": 42.6,
           "h": 14.4,
-          "goto": "채널톡/채널톡_테이블2.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png"
         }
       ],
       "annotations": [
@@ -2588,38 +2588,38 @@
           "y": 7.6,
           "w": 42.9,
           "h": 76.8,
-          "image": "채널톡/채널톡_내부_이미지첨부완료.png"
+          "image": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80%EC%99%84%EB%A3%8C.png"
         }
       ],
       "desc": "",
-      "syncPhone": "채널톡/4.차주앱_이미지첨부.jpg"
+      "syncPhone": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg"
     },
-    "image::채널톡/2-1.차주앱_기본틀 6.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%206.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/3-3. 차주앱_이미지_내부_끝인사.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-3.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_내부_이미지끝인사.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%81%9D%EC%9D%B8%EC%82%AC.png": {
       "hotspots": [],
       "annotations": [],
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_매크로사용.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png": {
       "hotspots": [
         {
           "x": 73,
           "y": 93.1,
           "w": 7.1,
           "h": 6,
-          "goto": "채널톡/채널톡_테이블3.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png"
         }
       ],
       "annotations": [
@@ -2669,14 +2669,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "consult::채널톡/채널톡_내부대화.png": {
+    "consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png": {
       "hotspots": [
         {
           "x": 78.7,
           "y": 93.9,
           "w": 5.1,
           "h": 4.8,
-          "goto": "채널톡/채널톡_테이블4.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png"
         }
       ],
       "annotations": [
@@ -2701,14 +2701,14 @@
       "scrollRegions": [],
       "desc": ""
     },
-    "image::채널톡/채널톡_내부대화.png": {
+    "image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png": {
       "hotspots": [
         {
           "x": 78.7,
           "y": 93.7,
           "w": 5.2,
           "h": 5,
-          "goto": "채널톡/채널톡_테이블4.png"
+          "goto": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png"
         }
       ],
       "annotations": [

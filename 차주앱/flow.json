@@ -1,79 +1,79 @@
 ﻿{
     "imageManifest":  [
-                          "차주앱/메인화면.jpg",
-                          "차주앱/비밀번호입력.jpg",
-                          "차주앱/비밀번호입력시.jpg",
-                          "차주앱/마이페이지.png",
-                          "차주앱/마이페이지_내정보.png",
-                          "차주앱/내정보_계산서이메일변경.jpg",
-                          "차주앱/내정보_실운전자정보변경.png",
-                          "차주앱/내정보_이메일 변경.jpg",
-                          "차주앱/내정보_주민등록번호 변경.png",
-                          "차주앱/배차내역.png",
-                          "차주앱/배차내역_수금미확인.jpg",
-                          "차주앱/배차내역_수금확인.jpg",
-                          "차주앱/예치금.jpg",
-                          "차주앱/예치금_가상계좌만들기.jpg",
-                          "차주앱/예치금_기간설정.jpg",
-                          "차주앱/예치금_사용내역.jpg",
-                          "차주앱/예치금_실계좌출금.jpg",
-                          "차주앱/예치금_실계좌출금_메시지입력.jpg",
-                          "차주앱/예치금_실계좌출금_출금금액입력.jpg",
-                          "차주앱/예치금_입금내역.jpg",
-                          "차주앱/예치금_정기결제인경우.jpg",
-                          "차주앱/예치금_정보이용료_단기_일반결제_앱결제이동.png",
-                          "차주앱/예치금_정보이용료_단기_일반결제_약관.png",
-                          "차주앱/예치금_정보이용료_단기_일반결제_예치금.png",
-                          "차주앱/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
-                          "차주앱/예치금_정보이용료_단기_일반결제_정보확인.png",
-                          "차주앱/예치금_정보이용료_단기_일반결제_카드선택.png",
-                          "차주앱/예치금_정보이용료_단기_일반결제_할부선택.png",
-                          "차주앱/예치금_정보이용료관리.png",
-                          "차주앱/예치금_정보이용료관리_3자제공.jpg",
-                          "차주앱/예치금_정보이용료관리_개인정보수집.jpg",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_약관.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_완료.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_입력.png",
-                          "차주앱/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
-                          "차주앱/예치금_정보이용료관리_결제수단관리.jpg",
-                          "차주앱/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
-                          "차주앱/예치금_정보이용료관리_금융거래.jpg",
-                          "차주앱/예치금_정보이용료관리_약관.jpg",
-                          "차주앱/예치금_정보이용료관리_정기결제동의.jpg",
-                          "차주앱/예치금_정보이용료납부_단기_일반결제.png",
-                          "차주앱/예치금_정보이용료납부_단기_페이.png",
-                          "차주앱/예치금_정보이용료납부_예치금_결제완료.jpg",
-                          "차주앱/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
-                          "차주앱/예치금_정보이용료납부_정기_예치금.png",
-                          "차주앱/예치금_정보이용료납부_정기_페이.png",
-                          "차주앱/예치금_회원간이체.jpg",
-                          "차주앱/예치금_회원간이체_금액입력.png",
-                          "차주앱/예치금_회원간이체_완료.jpg",
-                          "차주앱/예치금_회원간이체_이름조회.png",
-                          "차주앱/포인트.jpg",
-                          "차주앱/화물등록.jpg",
-                          "차주앱/화물등록_등록.png",
-                          "차주앱/화물등록_등록대수.jpg",
-                          "차주앱/화물등록_등록목록.jpg",
-                          "차주앱/화물등록_상차방법.jpg",
-                          "차주앱/화물등록_상차일시.jpg",
-                          "차주앱/화물등록_상차지입력.jpg",
-                          "차주앱/화물등록_지불방식선택.jpg",
-                          "차주앱/화물등록_차종선택.jpg",
-                          "차주앱/화물등록_톤수선택.jpg",
-                          "차주앱/화물등록_하차방법.jpg",
-                          "차주앱/화물등록_하차일시.jpg",
-                          "차주앱/화물등록_하차지입력.jpg",
-                          "차주앱/회차검색_불가.jpg"
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80_%EB%82%B4%EC%A0%95%EB%B3%B4.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%9D%B4%EB%A9%94%EC%9D%BC%20%EB%B3%80%EA%B2%BD.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%EB%AF%B8%ED%99%95%EC%9D%B8.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%ED%99%95%EC%9D%B8.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+                          "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg"
                       ],
     "screens":  {
                     "login":  {
                                   "label":  "로그인",
-                                  "image":  "차주앱/차주앱_로그인.jpg",
+                                  "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
                                   "type":  "normal",
                                   "show_navbar":  true,
                                   "hotspots":  [
@@ -89,7 +89,7 @@
                               },
                     "main":  {
                                  "label":  "메인화면",
-                                 "image":  "차주앱/메인화면.jpg",
+                                 "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
                                  "type":  "normal",
                                  "show_navbar":  true,
                                  "hotspots":  [
@@ -112,7 +112,7 @@
                              },
                     "password_input":  {
                                            "label":  "비밀번호 입력",
-                                           "image":  "차주앱/비밀번호입력.jpg",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
                                            "type":  "normal",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -128,7 +128,7 @@
                                        },
                     "password_typing":  {
                                             "label":  "비밀번호 입력중",
-                                            "image":  "차주앱/비밀번호입력시.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg",
                                             "type":  "normal",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -144,7 +144,7 @@
                                         },
                     "mypage":  {
                                    "label":  "마이페이지",
-                                   "image":  "차주앱/마이페이지.png",
+                                   "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80.png",
                                    "type":  "scroll",
                                    "show_navbar":  true,
                                    "hotspots":  [
@@ -167,7 +167,7 @@
                                },
                     "mypage_info":  {
                                         "label":  "마이페이지 \u003e 내정보",
-                                        "image":  "차주앱/마이페이지_내정보.png",
+                                        "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80_%EB%82%B4%EC%A0%95%EB%B3%B4.png",
                                         "type":  "scroll",
                                         "show_navbar":  true,
                                         "hotspots":  [
@@ -183,7 +183,7 @@
                                     },
                     "info_invoice_email":  {
                                                "label":  "내정보 \u003e 계산서이메일변경",
-                                               "image":  "차주앱/내정보_계산서이메일변경.jpg",
+                                               "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg",
                                                "type":  "normal",
                                                "show_navbar":  true,
                                                "hotspots":  [
@@ -199,7 +199,7 @@
                                            },
                     "info_driver_change":  {
                                                "label":  "내정보 \u003e 실운전자정보변경",
-                                               "image":  "차주앱/내정보_실운전자정보변경.png",
+                                               "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png",
                                                "type":  "scroll",
                                                "show_navbar":  true,
                                                "hotspots":  [
@@ -215,7 +215,7 @@
                                            },
                     "info_email_change":  {
                                               "label":  "내정보 \u003e 이메일변경",
-                                              "image":  "차주앱/내정보_이메일 변경.jpg",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%9D%B4%EB%A9%94%EC%9D%BC%20%EB%B3%80%EA%B2%BD.jpg",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -231,7 +231,7 @@
                                           },
                     "info_id_change":  {
                                            "label":  "내정보 \u003e 주민번호변경",
-                                           "image":  "차주앱/내정보_주민등록번호 변경.png",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png",
                                            "type":  "normal",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -247,7 +247,7 @@
                                        },
                     "dispatch":  {
                                      "label":  "배차내역",
-                                     "image":  "차주앱/배차내역.png",
+                                     "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD.png",
                                      "type":  "scroll",
                                      "show_navbar":  true,
                                      "hotspots":  [
@@ -263,7 +263,7 @@
                                  },
                     "dispatch_unpaid":  {
                                             "label":  "배차내역 \u003e 수금미확인",
-                                            "image":  "차주앱/배차내역_수금미확인.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%EB%AF%B8%ED%99%95%EC%9D%B8.jpg",
                                             "type":  "scroll",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -279,7 +279,7 @@
                                         },
                     "dispatch_paid":  {
                                           "label":  "배차내역 \u003e 수금확인",
-                                          "image":  "차주앱/배차내역_수금확인.jpg",
+                                          "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%ED%99%95%EC%9D%B8.jpg",
                                           "type":  "scroll",
                                           "show_navbar":  true,
                                           "hotspots":  [
@@ -295,7 +295,7 @@
                                       },
                     "deposit":  {
                                     "label":  "예치금",
-                                    "image":  "차주앱/예치금.jpg",
+                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88.jpg",
                                     "type":  "scroll",
                                     "show_navbar":  true,
                                     "hotspots":  [
@@ -311,7 +311,7 @@
                                 },
                     "deposit_virtual":  {
                                             "label":  "예치금 \u003e 가상계좌만들기",
-                                            "image":  "차주앱/예치금_가상계좌만들기.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg",
                                             "type":  "scroll",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -327,7 +327,7 @@
                                         },
                     "deposit_period":  {
                                            "label":  "예치금 \u003e 기간설정",
-                                           "image":  "차주앱/예치금_기간설정.jpg",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg",
                                            "type":  "normal",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -343,7 +343,7 @@
                                        },
                     "deposit_usage":  {
                                           "label":  "예치금 \u003e 사용내역",
-                                          "image":  "차주앱/예치금_사용내역.jpg",
+                                          "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg",
                                           "type":  "scroll",
                                           "show_navbar":  true,
                                           "hotspots":  [
@@ -359,7 +359,7 @@
                                       },
                     "deposit_withdraw":  {
                                              "label":  "예치금 \u003e 실계좌출금",
-                                             "image":  "차주앱/예치금_실계좌출금.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg",
                                              "type":  "normal",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -375,7 +375,7 @@
                                          },
                     "deposit_withdraw_msg":  {
                                                  "label":  "예치금 \u003e 실계좌출금 \u003e 메시지입력",
-                                                 "image":  "차주앱/예치금_실계좌출금_메시지입력.jpg",
+                                                 "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
                                                  "type":  "normal",
                                                  "show_navbar":  true,
                                                  "hotspots":  [
@@ -391,7 +391,7 @@
                                              },
                     "deposit_withdraw_amount":  {
                                                     "label":  "예치금 \u003e 실계좌출금 \u003e 금액입력",
-                                                    "image":  "차주앱/예치금_실계좌출금_출금금액입력.jpg",
+                                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg",
                                                     "type":  "normal",
                                                     "show_navbar":  true,
                                                     "hotspots":  [
@@ -407,7 +407,7 @@
                                                 },
                     "deposit_income":  {
                                            "label":  "예치금 \u003e 입금내역",
-                                           "image":  "차주앱/예치금_입금내역.jpg",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg",
                                            "type":  "scroll",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -423,7 +423,7 @@
                                        },
                     "deposit_regular":  {
                                             "label":  "예치금 \u003e 정기결제인경우",
-                                            "image":  "차주앱/예치금_정기결제인경우.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg",
                                             "type":  "normal",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -439,7 +439,7 @@
                                         },
                     "fee_short_app":  {
                                           "label":  "정보이용료(단기) \u003e 앱결제이동",
-                                          "image":  "차주앱/예치금_정보이용료_단기_일반결제_앱결제이동.png",
+                                          "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png",
                                           "type":  "normal",
                                           "show_navbar":  true,
                                           "hotspots":  [
@@ -455,7 +455,7 @@
                                       },
                     "fee_short_terms":  {
                                             "label":  "정보이용료(단기) \u003e 약관",
-                                            "image":  "차주앱/예치금_정보이용료_단기_일반결제_약관.png",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png",
                                             "type":  "scroll",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -471,7 +471,7 @@
                                         },
                     "fee_short_deposit":  {
                                               "label":  "정보이용료(단기) \u003e 예치금결제",
-                                              "image":  "차주앱/예치금_정보이용료_단기_일반결제_예치금.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -487,7 +487,7 @@
                                           },
                     "fee_short_deposit_pw":  {
                                                  "label":  "정보이용료(단기) \u003e 예치금비밀번호",
-                                                 "image":  "차주앱/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+                                                 "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg",
                                                  "type":  "normal",
                                                  "show_navbar":  true,
                                                  "hotspots":  [
@@ -503,7 +503,7 @@
                                              },
                     "fee_short_info":  {
                                            "label":  "정보이용료(단기) \u003e 정보확인",
-                                           "image":  "차주앱/예치금_정보이용료_단기_일반결제_정보확인.png",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png",
                                            "type":  "scroll",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -519,7 +519,7 @@
                                        },
                     "fee_short_card":  {
                                            "label":  "정보이용료(단기) \u003e 카드선택",
-                                           "image":  "차주앱/예치금_정보이용료_단기_일반결제_카드선택.png",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png",
                                            "type":  "normal",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -535,7 +535,7 @@
                                        },
                     "fee_short_install":  {
                                               "label":  "정보이용료(단기) \u003e 할부선택",
-                                              "image":  "차주앱/예치금_정보이용료_단기_일반결제_할부선택.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -551,7 +551,7 @@
                                           },
                     "fee_mgmt":  {
                                      "label":  "정보이용료관리",
-                                     "image":  "차주앱/예치금_정보이용료관리.png",
+                                     "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png",
                                      "type":  "scroll",
                                      "show_navbar":  true,
                                      "hotspots":  [
@@ -567,7 +567,7 @@
                                  },
                     "fee_mgmt_3rd":  {
                                          "label":  "정보이용료관리 \u003e 3자제공",
-                                         "image":  "차주앱/예치금_정보이용료관리_3자제공.jpg",
+                                         "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg",
                                          "type":  "scroll",
                                          "show_navbar":  true,
                                          "hotspots":  [
@@ -583,7 +583,7 @@
                                      },
                     "fee_mgmt_privacy":  {
                                              "label":  "정보이용료관리 \u003e 개인정보수집",
-                                             "image":  "차주앱/예치금_정보이용료관리_개인정보수집.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg",
                                              "type":  "scroll",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -599,7 +599,7 @@
                                          },
                     "fee_mgmt_pw":  {
                                         "label":  "정보이용료관리 \u003e 결제비밀번호변경",
-                                        "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경.png",
+                                        "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png",
                                         "type":  "normal",
                                         "show_navbar":  true,
                                         "hotspots":  [
@@ -615,7 +615,7 @@
                                     },
                     "fee_mgmt_pw_auth":  {
                                              "label":  "결제비밀번호변경 \u003e 본인인증",
-                                             "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png",
                                              "type":  "normal",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -631,7 +631,7 @@
                                          },
                     "fee_mgmt_pw_auth_sms":  {
                                                  "label":  "결제비밀번호변경 \u003e 인증문자",
-                                                 "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+                                                 "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png",
                                                  "type":  "normal",
                                                  "show_navbar":  true,
                                                  "hotspots":  [
@@ -647,7 +647,7 @@
                                              },
                     "fee_mgmt_pw_auth_ok":  {
                                                 "label":  "결제비밀번호변경 \u003e 인증성공",
-                                                "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+                                                "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png",
                                                 "type":  "normal",
                                                 "show_navbar":  true,
                                                 "hotspots":  [
@@ -663,7 +663,7 @@
                                             },
                     "fee_mgmt_pw_terms":  {
                                               "label":  "결제비밀번호변경 \u003e 약관",
-                                              "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_약관.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png",
                                               "type":  "scroll",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -679,7 +679,7 @@
                                           },
                     "fee_mgmt_pw_done":  {
                                              "label":  "결제비밀번호변경 \u003e 완료",
-                                             "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_완료.png",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png",
                                              "type":  "normal",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -695,7 +695,7 @@
                                          },
                     "fee_mgmt_pw_input":  {
                                               "label":  "결제비밀번호변경 \u003e 번호입력",
-                                              "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_입력.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -711,7 +711,7 @@
                                           },
                     "fee_mgmt_pw_again":  {
                                               "label":  "결제비밀번호변경 \u003e 한번더",
-                                              "image":  "차주앱/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -727,7 +727,7 @@
                                           },
                     "fee_mgmt_payment":  {
                                              "label":  "정보이용료관리 \u003e 결제수단관리",
-                                             "image":  "차주앱/예치금_정보이용료관리_결제수단관리.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg",
                                              "type":  "scroll",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -743,7 +743,7 @@
                                          },
                     "fee_mgmt_payment_cancel":  {
                                                     "label":  "결제수단관리 \u003e 결제해지",
-                                                    "image":  "차주앱/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+                                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg",
                                                     "type":  "normal",
                                                     "show_navbar":  true,
                                                     "hotspots":  [
@@ -759,7 +759,7 @@
                                                 },
                     "fee_mgmt_finance":  {
                                              "label":  "정보이용료관리 \u003e 금융거래",
-                                             "image":  "차주앱/예치금_정보이용료관리_금융거래.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg",
                                              "type":  "scroll",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -775,7 +775,7 @@
                                          },
                     "fee_mgmt_terms":  {
                                            "label":  "정보이용료관리 \u003e 약관",
-                                           "image":  "차주앱/예치금_정보이용료관리_약관.jpg",
+                                           "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg",
                                            "type":  "scroll",
                                            "show_navbar":  true,
                                            "hotspots":  [
@@ -791,7 +791,7 @@
                                        },
                     "fee_mgmt_regular":  {
                                              "label":  "정보이용료관리 \u003e 정기결제동의",
-                                             "image":  "차주앱/예치금_정보이용료관리_정기결제동의.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg",
                                              "type":  "scroll",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -807,7 +807,7 @@
                                          },
                     "fee_pay_short":  {
                                           "label":  "정보이용료납부(단기) \u003e 일반결제",
-                                          "image":  "차주앱/예치금_정보이용료납부_단기_일반결제.png",
+                                          "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png",
                                           "type":  "normal",
                                           "show_navbar":  true,
                                           "hotspots":  [
@@ -823,7 +823,7 @@
                                       },
                     "fee_pay_short_pay":  {
                                               "label":  "정보이용료납부(단기) \u003e 페이",
-                                              "image":  "차주앱/예치금_정보이용료납부_단기_페이.png",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -839,7 +839,7 @@
                                           },
                     "fee_pay_deposit_done":  {
                                                  "label":  "정보이용료납부 \u003e 예치금결제완료",
-                                                 "image":  "차주앱/예치금_정보이용료납부_예치금_결제완료.jpg",
+                                                 "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg",
                                                  "type":  "normal",
                                                  "show_navbar":  true,
                                                  "hotspots":  [
@@ -855,7 +855,7 @@
                                              },
                     "fee_pay_deposit_pw":  {
                                                "label":  "정보이용료납부 \u003e 예치금비밀번호",
-                                               "image":  "차주앱/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+                                               "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
                                                "type":  "normal",
                                                "show_navbar":  true,
                                                "hotspots":  [
@@ -871,7 +871,7 @@
                                            },
                     "fee_pay_regular_deposit":  {
                                                     "label":  "정보이용료납부(정기) \u003e 예치금",
-                                                    "image":  "차주앱/예치금_정보이용료납부_정기_예치금.png",
+                                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png",
                                                     "type":  "normal",
                                                     "show_navbar":  true,
                                                     "hotspots":  [
@@ -887,7 +887,7 @@
                                                 },
                     "fee_pay_regular_pay":  {
                                                 "label":  "정보이용료납부(정기) \u003e 페이",
-                                                "image":  "차주앱/예치금_정보이용료납부_정기_페이.png",
+                                                "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
                                                 "type":  "normal",
                                                 "show_navbar":  true,
                                                 "hotspots":  [
@@ -903,7 +903,7 @@
                                             },
                     "deposit_transfer":  {
                                              "label":  "예치금 \u003e 회원간이체",
-                                             "image":  "차주앱/예치금_회원간이체.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg",
                                              "type":  "normal",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -919,7 +919,7 @@
                                          },
                     "deposit_transfer_amount":  {
                                                     "label":  "회원간이체 \u003e 금액입력",
-                                                    "image":  "차주앱/예치금_회원간이체_금액입력.png",
+                                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
                                                     "type":  "normal",
                                                     "show_navbar":  true,
                                                     "hotspots":  [
@@ -935,7 +935,7 @@
                                                 },
                     "deposit_transfer_done":  {
                                                   "label":  "회원간이체 \u003e 완료",
-                                                  "image":  "차주앱/예치금_회원간이체_완료.jpg",
+                                                  "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg",
                                                   "type":  "normal",
                                                   "show_navbar":  true,
                                                   "hotspots":  [
@@ -951,7 +951,7 @@
                                               },
                     "deposit_transfer_name":  {
                                                   "label":  "회원간이체 \u003e 이름조회",
-                                                  "image":  "차주앱/예치금_회원간이체_이름조회.png",
+                                                  "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png",
                                                   "type":  "normal",
                                                   "show_navbar":  true,
                                                   "hotspots":  [
@@ -967,7 +967,7 @@
                                               },
                     "point":  {
                                   "label":  "포인트",
-                                  "image":  "차주앱/포인트.jpg",
+                                  "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg",
                                   "type":  "scroll",
                                   "show_navbar":  true,
                                   "hotspots":  [
@@ -983,7 +983,7 @@
                               },
                     "freight":  {
                                     "label":  "화물등록",
-                                    "image":  "차주앱/화물등록.jpg",
+                                    "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D.jpg",
                                     "type":  "scroll",
                                     "show_navbar":  true,
                                     "hotspots":  [
@@ -999,7 +999,7 @@
                                 },
                     "freight_register":  {
                                              "label":  "화물등록 \u003e 등록",
-                                             "image":  "차주앱/화물등록_등록.png",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png",
                                              "type":  "scroll",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -1015,7 +1015,7 @@
                                          },
                     "freight_count":  {
                                           "label":  "화물등록 \u003e 등록대수",
-                                          "image":  "차주앱/화물등록_등록대수.jpg",
+                                          "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg",
                                           "type":  "normal",
                                           "show_navbar":  true,
                                           "hotspots":  [
@@ -1031,7 +1031,7 @@
                                       },
                     "freight_list":  {
                                          "label":  "화물등록 \u003e 등록목록",
-                                         "image":  "차주앱/화물등록_등록목록.jpg",
+                                         "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg",
                                          "type":  "scroll",
                                          "show_navbar":  true,
                                          "hotspots":  [
@@ -1047,7 +1047,7 @@
                                      },
                     "freight_load_method":  {
                                                 "label":  "화물등록 \u003e 상차방법",
-                                                "image":  "차주앱/화물등록_상차방법.jpg",
+                                                "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
                                                 "type":  "normal",
                                                 "show_navbar":  true,
                                                 "hotspots":  [
@@ -1063,7 +1063,7 @@
                                             },
                     "freight_load_time":  {
                                               "label":  "화물등록 \u003e 상차일시",
-                                              "image":  "차주앱/화물등록_상차일시.jpg",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -1079,7 +1079,7 @@
                                           },
                     "freight_load_loc":  {
                                              "label":  "화물등록 \u003e 상차지입력",
-                                             "image":  "차주앱/화물등록_상차지입력.jpg",
+                                             "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
                                              "type":  "normal",
                                              "show_navbar":  true,
                                              "hotspots":  [
@@ -1095,7 +1095,7 @@
                                          },
                     "freight_payment":  {
                                             "label":  "화물등록 \u003e 지불방식",
-                                            "image":  "차주앱/화물등록_지불방식선택.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg",
                                             "type":  "normal",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -1111,7 +1111,7 @@
                                         },
                     "freight_vehicle":  {
                                             "label":  "화물등록 \u003e 차종선택",
-                                            "image":  "차주앱/화물등록_차종선택.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg",
                                             "type":  "normal",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -1127,7 +1127,7 @@
                                         },
                     "freight_tonnage":  {
                                             "label":  "화물등록 \u003e 톤수선택",
-                                            "image":  "차주앱/화물등록_톤수선택.jpg",
+                                            "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg",
                                             "type":  "normal",
                                             "show_navbar":  true,
                                             "hotspots":  [
@@ -1143,7 +1143,7 @@
                                         },
                     "freight_unload_method":  {
                                                   "label":  "화물등록 \u003e 하차방법",
-                                                  "image":  "차주앱/화물등록_하차방법.jpg",
+                                                  "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
                                                   "type":  "normal",
                                                   "show_navbar":  true,
                                                   "hotspots":  [
@@ -1159,7 +1159,7 @@
                                               },
                     "freight_unload_time":  {
                                                 "label":  "화물등록 \u003e 하차일시",
-                                                "image":  "차주앱/화물등록_하차일시.jpg",
+                                                "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
                                                 "type":  "normal",
                                                 "show_navbar":  true,
                                                 "hotspots":  [
@@ -1175,7 +1175,7 @@
                                             },
                     "freight_unload_loc":  {
                                                "label":  "화물등록 \u003e 하차지입력",
-                                               "image":  "차주앱/화물등록_하차지입력.jpg",
+                                               "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
                                                "type":  "normal",
                                                "show_navbar":  true,
                                                "hotspots":  [
@@ -1191,7 +1191,7 @@
                                            },
                     "route_unavailable":  {
                                               "label":  "회차검색 불가",
-                                              "image":  "차주앱/회차검색_불가.jpg",
+                                              "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg",
                                               "type":  "normal",
                                               "show_navbar":  true,
                                               "hotspots":  [
@@ -1207,7 +1207,7 @@
                                           },
                     "m_1":  {
                                 "label":  "메인페이지",
-                                "image":  "차주앱/메인화면.jpg",
+                                "image":  "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
                                 "type":  "normal",
                                 "show_navbar":  true,
                                 "hotspots":  [
