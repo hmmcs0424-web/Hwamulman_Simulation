@@ -1897,6 +1897,25 @@ function safeAssetPath(file) {
   const raw = file.webkitRelativePath || file.name;
   return raw.split('/').filter(Boolean).map(v=>v.replace(/[\\#?\[\]*]/g,'_')).join('/');
 }
+function publicAssetUrl(storageRef, version='') {
+  const bucket = firebaseStorage.app.options.storageBucket;
+  const base = `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent(bucket)}/o/${encodeURIComponent(storageRef.fullPath)}?alt=media`;
+  return version ? `${base}&v=${encodeURIComponent(version)}` : base;
+}
+function replaceAssetUrl(value, oldUrl, newUrl) {
+  if(value===oldUrl) return newUrl;
+  if(Array.isArray(value)) {
+    for(let i=0;i<value.length;i++) value[i]=replaceAssetUrl(value[i],oldUrl,newUrl);
+  } else if(value && typeof value==='object') {
+    Object.keys(value).forEach(key=>{
+      const nextKey=key===oldUrl ? newUrl : key;
+      const nextValue=replaceAssetUrl(value[key],oldUrl,newUrl);
+      if(nextKey!==key) delete value[key];
+      value[nextKey]=nextValue;
+    });
+  }
+  return value;
+}
 async function runLimited(items, limit, worker) {
   let cursor = 0;
   async function next(){ while(cursor < items.length){ const i=cursor++; await worker(items[i],i); } }
@@ -1928,7 +1947,7 @@ async function refreshAssetList() {
   try {
     const folderRef = firebaseFns.ref(firebaseStorage, 'simulator-images/' + assetFolderName(requestedSec));
     const refs = await listAssetRefsRecursive(folderRef);
-    const loadedAssets = await Promise.all(refs.map(async item => ({ref:item,url:await firebaseFns.getDownloadURL(item),name:item.fullPath.split('/').pop(),path:item.fullPath})));
+    const loadedAssets = refs.map(item => ({ref:item,url:publicAssetUrl(item),name:item.fullPath.split('/').pop(),path:item.fullPath}));
     if(requestedSec!==assetManageSec) return;
     managedAssets = loadedAssets;
     renderAssetList();
@@ -1949,19 +1968,43 @@ async function uploadAssets(fileList) {
   if(!files.length) return;
   const targetSec=assetManageSec;
   const status=document.getElementById('assetStatus'), bar=document.getElementById('assetProgressBar');
-  let done=0; status.textContent=`${files.length}개 업로드 준비 중...`;
+  const previousByPath = new Map(managedAssets.map(asset=>[asset.path,asset]));
+  let done=0, replaced=0;
+  const failures=[];
+  status.textContent=`${files.length}개 업로드 준비 중...`;
   try {
     await runLimited(files, 6, async file => {
-      const target = firebaseFns.ref(firebaseStorage, `simulator-images/${assetFolderName(targetSec)}/${safeAssetPath(file)}`);
-      await firebaseFns.uploadBytes(target, file, {contentType:file.type});
-      const url = await firebaseFns.getDownloadURL(target);
-      const flow = targetSec==='채널톡' ? null : cache[targetSec]?.flow;
-      if(flow) { flow.imageManifest = Array.from(new Set([...(flow.imageManifest||[]),url])); }
-      if(targetSec==='채널톡') { cteRememberImg('agent',url); cteRememberImg('phone',url); cteSyncImageLists(); }
-      done++; bar.style.width=Math.round(done/files.length*100)+'%'; status.textContent=`업로드 ${done}/${files.length}`;
+      try {
+        const target = firebaseFns.ref(firebaseStorage, `simulator-images/${assetFolderName(targetSec)}/${safeAssetPath(file)}`);
+        const previous = previousByPath.get(target.fullPath);
+        const uploaded = await firebaseFns.uploadBytes(target, file, {contentType:file.type,cacheControl:'public,max-age=3600'});
+        const url = publicAssetUrl(uploaded.ref, `${Date.now()}-${file.lastModified}`);
+        const flow = targetSec==='채널톡' ? null : cache[targetSec]?.flow;
+        if(previous) {
+          replaced++;
+          if(flow) replaceAssetUrl(flow,previous.url,url);
+        }
+        if(flow) flow.imageManifest = Array.from(new Set([...(flow.imageManifest||[]),url]));
+        if(targetSec==='채널톡') {
+          if(previous) {
+            replaceAssetUrl(cteConfig,previous.url,url);
+            replaceAssetUrl(CTE_ALL_IMGS,previous.url,url);
+          }
+          cteRememberImg('agent',url); cteRememberImg('phone',url); cteSyncImageLists();
+        }
+      } catch(e) {
+        failures.push(`${file.name}: ${e.message||e}`);
+      } finally {
+        done++;
+        bar.style.width=Math.round(done/files.length*100)+'%';
+        status.textContent=`업로드 ${done}/${files.length}`;
+      }
     });
     if(targetSec===activeSec && targetSec!=='채널톡') detectUnreg();
     if(targetSec===assetManageSec) await refreshAssetList();
+    const succeeded=files.length-failures.length;
+    status.textContent=`완료 · ${succeeded}개 업로드${replaced ? ` (${replaced}개 교체)` : ''}${failures.length ? ` · ${failures.length}개 실패` : ''}`;
+    if(failures.length) alert(`일부 이미지 업로드 실패 (${failures.length}/${files.length})\n\n${failures.slice(0,5).join('\n')}`);
   } catch(e) { alert('이미지 업로드 실패: '+(e.message||e)); }
   finally { document.getElementById('assetFiles').value=''; document.getElementById('assetFolder').value=''; setTimeout(()=>bar.style.width='0',800); }
 }
