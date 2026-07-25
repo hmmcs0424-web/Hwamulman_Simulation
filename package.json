@@ -1,7 +1,12 @@
 {
   "scripts": {
-    "build": "node scripts/generate-image-manifest.js",
-    "serve": "node scripts/static-server.js",
-    "storage:cors": "gcloud storage buckets update gs://hmm-work-guide.firebasestorage.app --cors-file=storage.cors.json"
+    "build": "node scripts/generate-image-manifest.js && node scripts/build-vercel-blob-client.js",
+    "serve": "node scripts/static-server.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.6.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
   }
 }
