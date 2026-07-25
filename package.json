@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "node scripts/generate-image-manifest.js",
-    "serve": "node scripts/static-server.js"
+    "serve": "node scripts/static-server.js",
+    "storage:cors": "gcloud storage buckets update gs://hmm-work-guide.firebasestorage.app --cors-file=storage.cors.json"
   }
 }
