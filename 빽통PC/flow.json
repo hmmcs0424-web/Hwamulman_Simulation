@@ -1,0 +1,13 @@
+{
+  "screens": {
+    "빽통PC_001": {
+      "label": "로그인",
+      "image": "빽통PC/빽통PC_로그인.png",
+      "type": "normal",
+      "show_navbar": false,
+      "hotspots": [],
+      "guide": { "points": [], "caution": "", "kms_link": "" }
+    }
+  },
+  "start": "빽통PC_001"
+}
