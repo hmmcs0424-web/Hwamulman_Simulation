@@ -2634,7 +2634,12 @@ function cteNormalizeImg(img) {
     '채널톡/수신함 확인.png': 'https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png',
     '채널톡/채팅화면.png': 'https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4.png',
   };
-  return map[img] || img;
+  const normalized = map[img] || String(img);
+  if(/^채널톡\//.test(normalized)) {
+    const filename = normalized.slice(normalized.indexOf('/') + 1);
+    return `https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/${encodeURIComponent(filename)}`;
+  }
+  return normalized;
 }
 function cteModeKey(idx=cteMode) {
   const m = cteConfig?.modes?.[idx];
