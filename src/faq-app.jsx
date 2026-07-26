@@ -102,9 +102,10 @@ function BatchEditor({ group, categories, onClose }) {
     })),
   }));
   const [saving, setSaving] = useState(false);
-  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(!group);
   const [bulkText, setBulkText] = useState('');
   const [bulkMessage, setBulkMessage] = useState('');
+  const [showItems, setShowItems] = useState(!!group);
   const updateItem = (index, field, value) => setForm(current => ({
     ...current,
     items: current.items.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: value } : item),
@@ -126,6 +127,7 @@ function BatchEditor({ group, categories, onClose }) {
     }));
     setBulkMessage(`${parsed.items.length}개 FAQ로 나눴습니다. 아래 입력칸에서 내용을 확인하고 저장해 주세요.`);
     setBulkOpen(false);
+    setShowItems(false);
   };
   const save = async () => {
     const validItems = form.items.filter(item => item.question.trim() && item.shortAnswer.trim());
@@ -164,10 +166,10 @@ function BatchEditor({ group, categories, onClose }) {
         <label className="wide"><span>KMS 가이드 주소</span><input value={form.kmsUrl} onChange={event => setForm({ ...form, kmsUrl: event.target.value })} placeholder="https://faq.logishm.com/..." /></label>
         <label className="wide faq-publish-check"><input type="checkbox" checked={form.isPublished} onChange={event => setForm({ ...form, isPublished: event.target.checked })} /><span>저장 후 바로 게시</span></label>
       </div>
-      <section className="faq-bulk-import">
-        <button className="faq-bulk-toggle" onClick={() => setBulkOpen(!bulkOpen)}>▣ 텍스트 한꺼번에 붙여넣기 <span>{bulkOpen ? '접기' : '열기'}</span></button>
+      <section className={`faq-bulk-import ${bulkOpen ? 'open' : ''}`}>
+        <button className="faq-bulk-toggle" onClick={() => setBulkOpen(!bulkOpen)}>▣ FAQ 전체 텍스트 붙여넣기 <span>{bulkOpen ? '접기' : '열기'}</span></button>
         {bulkOpen && <div className="faq-bulk-box">
-          <p>아래 형식의 텍스트를 붙여넣으면 질문별 입력칸으로 자동 분리됩니다.</p>
+          <p>10개의 FAQ가 포함된 전체 텍스트를 한 번만 붙여넣으세요. 질문을 자동으로 나눠 하나의 묶음 게시글로 만듭니다.</p>
           <pre>{`묶음 제목: 회원 정지·복구 가이드
 카테고리: 회원관리
 KMS: https://faq.logishm.com/...
@@ -180,13 +182,16 @@ A: 정지 사유를 확인한 뒤 사유별 복구 절차를 진행합니다.
 ---
 Q: 미결제 회원도 복구할 수 있나요?
 A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
-          <textarea value={bulkText} onChange={event => { setBulkText(event.target.value); setBulkMessage(''); }} placeholder="여기에 만들어진 FAQ 전체 텍스트를 붙여넣으세요." />
-          <button className="faq-parse-button" onClick={importBulk}>FAQ 자동 나누기</button>
+          <textarea autoFocus={!group} value={bulkText} onChange={event => { setBulkText(event.target.value); setBulkMessage(''); }} placeholder="여기에 FAQ 10개가 포함된 전체 텍스트를 한 번에 붙여넣으세요." />
+          <button className="faq-parse-button" onClick={importBulk}>붙여넣은 내용으로 FAQ 일괄 생성</button>
         </div>}
         {bulkMessage && <p className="faq-bulk-message">{bulkMessage}</p>}
       </section>
-      <div className="faq-editor-heading"><strong>질문 {form.items.length}개</strong><span>질문과 한 줄 답변은 필수입니다.</span></div>
-      <div className="faq-item-editors">
+      <div className="faq-editor-heading"><strong>{form.items.some(item => item.question.trim()) ? `분리된 FAQ ${form.items.filter(item => item.question.trim()).length}개` : '아직 분리된 FAQ가 없습니다.'}</strong>
+        <button className="faq-detail-toggle" onClick={() => setShowItems(!showItems)}>{showItems ? '세부 입력 접기' : '세부 내용 확인·수정'}</button></div>
+      {!showItems && form.items.some(item => item.question.trim()) && <div className="faq-parse-preview">{form.items.filter(item => item.question.trim()).map((item, index) =>
+        <div key={item.id}><b>{index + 1}</b><span>{item.question}</span><small>{item.shortAnswer}</small></div>)}</div>}
+      {showItems && <div className="faq-item-editors">
         {form.items.map((item, index) => <article key={item.id}>
           <div className="faq-item-number"><b>FAQ {index + 1}</b>{form.items.length > 1 && <button onClick={() => setForm({ ...form, items: form.items.filter((_, itemIndex) => itemIndex !== index) })}>삭제</button>}</div>
           <label><span>질문</span><input value={item.question} onChange={event => updateItem(index, 'question', event.target.value)} placeholder="상담사가 실제로 검색할 질문" /></label>
@@ -197,8 +202,8 @@ A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
             <label><span>유사 검색어</span><input value={item.synonyms} onChange={event => updateItem(index, 'synonyms', event.target.value)} placeholder="해지, 재가입, 회원삭제" /></label>
           </div>
         </article>)}
-      </div>
-      <button className="faq-add-item" onClick={() => setForm({ ...form, items: [...form.items, emptyItem()] })}>＋ 질문 추가</button>
+      </div>}
+      {showItems && <button className="faq-add-item" onClick={() => setForm({ ...form, items: [...form.items, emptyItem()] })}>＋ 질문 직접 추가</button>}
       <footer><span>한 번 저장하면 위 FAQ가 하나의 가이드 묶음으로 관리됩니다.</span><div><button onClick={onClose}>취소</button><button className="primary" disabled={saving} onClick={save}>{saving ? '저장 중…' : `${form.items.length}개 FAQ 저장`}</button></div></footer>
     </section>
   </div>;
