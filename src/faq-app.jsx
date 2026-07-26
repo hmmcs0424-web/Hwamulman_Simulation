@@ -15,6 +15,64 @@ const emptyItem = () => ({
 const text = value => String(value || '').toLocaleLowerCase('ko-KR');
 const splitWords = value => String(value || '').split(',').map(item => item.trim()).filter(Boolean);
 
+function parseBulkFaq(source) {
+  const lines = String(source || '').replace(/\r\n?/g, '\n').split('\n');
+  const meta = {};
+  const items = [];
+  let current = null;
+  let field = '';
+  const pushCurrent = () => {
+    if (!current?.question?.trim()) return;
+    items.push({
+      ...emptyItem(),
+      question: current.question.trim(),
+      shortAnswer: current.shortAnswer.trim(),
+      content: current.content.trim(),
+      tags: current.tags.trim(),
+      synonyms: current.synonyms.trim(),
+    });
+  };
+  lines.forEach(rawLine => {
+    const line = rawLine.trimEnd();
+    const trimmed = line.trim();
+    if (!current) {
+      const groupMeta = trimmed.match(/^(?:묶음\s*제목|가이드\s*제목)\s*[:：]\s*(.+)$/i);
+      const categoryMeta = trimmed.match(/^카테고리\s*[:：]\s*(.+)$/i);
+      const kmsMeta = trimmed.match(/^(?:KMS|KMS\s*주소|KMS\s*가이드)\s*[:：]\s*(.+)$/i);
+      if (groupMeta) { meta.title = groupMeta[1].trim(); return; }
+      if (categoryMeta) { meta.category = categoryMeta[1].trim(); return; }
+      if (kmsMeta) { meta.kmsUrl = kmsMeta[1].trim(); return; }
+    }
+    if (trimmed === '---') {
+      pushCurrent();
+      current = null;
+      field = '';
+      return;
+    }
+    const question = trimmed.match(/^(?:#{1,3}\s*)?(?:\d+[.)]\s*)?(?:Q\s*\d*|질문\s*\d*)\s*[.:：]\s*(.+)$/i);
+    const answer = trimmed.match(/^(?:A\s*\d*|답변|한\s*줄\s*답변)\s*[.:：]\s*(.*)$/i);
+    const detail = trimmed.match(/^(?:상세|상세\s*안내|내용)\s*[:：]\s*(.*)$/i);
+    const tags = trimmed.match(/^태그\s*[:：]\s*(.*)$/i);
+    const synonyms = trimmed.match(/^(?:유사어|유사\s*검색어|검색어)\s*[:：]\s*(.*)$/i);
+    if (question) {
+      pushCurrent();
+      current = { question: question[1], shortAnswer: '', content: '', tags: '', synonyms: '' };
+      field = 'question';
+      return;
+    }
+    if (!current) return;
+    if (answer) { field = 'shortAnswer'; current.shortAnswer = answer[1]; return; }
+    if (detail) { field = 'content'; current.content = detail[1]; return; }
+    if (tags) { field = 'tags'; current.tags = tags[1]; return; }
+    if (synonyms) { field = 'synonyms'; current.synonyms = synonyms[1]; return; }
+    if (trimmed && ['question', 'shortAnswer', 'content'].includes(field)) {
+      current[field] = `${current[field]}${current[field] ? '\n' : ''}${line}`.trim();
+    }
+  });
+  pushCurrent();
+  return { meta, items };
+}
+
 function highlight(value, query) {
   const source = String(value || '');
   const words = query.trim().split(/\s+/).filter(Boolean);
@@ -37,10 +95,31 @@ function BatchEditor({ group, onClose }) {
     })),
   }));
   const [saving, setSaving] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkText, setBulkText] = useState('');
+  const [bulkMessage, setBulkMessage] = useState('');
   const updateItem = (index, field, value) => setForm(current => ({
     ...current,
     items: current.items.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: value } : item),
   }));
+  const importBulk = () => {
+    const parsed = parseBulkFaq(bulkText);
+    if (!parsed.items.length) {
+      setBulkMessage('분리할 FAQ를 찾지 못했습니다. 각 질문을 “Q:” 또는 “질문:”으로 시작해 주세요.');
+      return;
+    }
+    const hasWrittenItems = form.items.some(item => item.question.trim() || item.shortAnswer.trim());
+    if (hasWrittenItems && !confirm(`현재 입력된 FAQ를 붙여넣은 ${parsed.items.length}개 FAQ로 교체할까요?`)) return;
+    setForm(current => ({
+      ...current,
+      title: parsed.meta.title || current.title,
+      category: parsed.meta.category || current.category,
+      kmsUrl: parsed.meta.kmsUrl || current.kmsUrl,
+      items: parsed.items,
+    }));
+    setBulkMessage(`${parsed.items.length}개 FAQ로 나눴습니다. 아래 입력칸에서 내용을 확인하고 저장해 주세요.`);
+    setBulkOpen(false);
+  };
   const save = async () => {
     const validItems = form.items.filter(item => item.question.trim() && item.shortAnswer.trim());
     if (!form.title.trim()) return alert('FAQ 묶음 제목을 입력해 주세요.');
@@ -76,6 +155,27 @@ function BatchEditor({ group, onClose }) {
         <label><span>카테고리</span><input value={form.category} onChange={event => setForm({ ...form, category: event.target.value })} placeholder="예: 회원관리" /></label>
         <label className="wide"><span>KMS 가이드 주소</span><input value={form.kmsUrl} onChange={event => setForm({ ...form, kmsUrl: event.target.value })} placeholder="https://faq.logishm.com/..." /></label>
       </div>
+      <section className="faq-bulk-import">
+        <button className="faq-bulk-toggle" onClick={() => setBulkOpen(!bulkOpen)}>▣ 텍스트 한꺼번에 붙여넣기 <span>{bulkOpen ? '접기' : '열기'}</span></button>
+        {bulkOpen && <div className="faq-bulk-box">
+          <p>아래 형식의 텍스트를 붙여넣으면 질문별 입력칸으로 자동 분리됩니다.</p>
+          <pre>{`묶음 제목: 회원 정지·복구 가이드
+카테고리: 회원관리
+KMS: https://faq.logishm.com/...
+
+Q: 정지 회원은 어떻게 복구하나요?
+A: 정지 사유를 확인한 뒤 사유별 복구 절차를 진행합니다.
+상세: 회원 조회 → 정지 사유 확인 → 필요 서류 확인
+태그: 정지, 복구, 회원
+유사어: 재가입, 정지해제
+---
+Q: 미결제 회원도 복구할 수 있나요?
+A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
+          <textarea value={bulkText} onChange={event => { setBulkText(event.target.value); setBulkMessage(''); }} placeholder="여기에 만들어진 FAQ 전체 텍스트를 붙여넣으세요." />
+          <button className="faq-parse-button" onClick={importBulk}>FAQ 자동 나누기</button>
+        </div>}
+        {bulkMessage && <p className="faq-bulk-message">{bulkMessage}</p>}
+      </section>
       <div className="faq-editor-heading"><strong>질문 {form.items.length}개</strong><span>질문과 한 줄 답변은 필수입니다.</span></div>
       <div className="faq-item-editors">
         {form.items.map((item, index) => <article key={item.id}>
