@@ -38,6 +38,13 @@ function dateLabel(value) {
   if (value.toDate) return value.toDate().toISOString().slice(0, 10);
   return '';
 }
+function commentDateLabel(value) {
+  if (!value) return '방금 전';
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('ko-KR', {
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+  });
+}
 
 function SearchModal({ open, onClose, posts, guides, onSelect }) {
   const [query, setQuery] = useState('');
@@ -244,6 +251,47 @@ function CategoryManager({ categories, onClose, onSaved }) {
   </section></div>;
 }
 
+function Comments({ announcementId, isAdmin }) {
+  const [comments, setComments] = useState([]);
+  const [author, setAuthor] = useState(() => localStorage.getItem('hmm-comment-author') || '');
+  const [content, setContent] = useState('');
+  const [saving, setSaving] = useState(false);
+  useEffect(() => window.announcementBridge.subscribeComments(announcementId, setComments), [announcementId]);
+  const submit = async event => {
+    event.preventDefault();
+    const nextAuthor = author.trim();
+    const nextContent = content.trim();
+    if (!nextAuthor || !nextContent) return alert('이름과 댓글 내용을 입력해 주세요.');
+    setSaving(true);
+    try {
+      await window.announcementBridge.addComment(announcementId, { author: nextAuthor, content: nextContent });
+      localStorage.setItem('hmm-comment-author', nextAuthor);
+      setContent('');
+    } catch (error) { alert(`댓글을 등록하지 못했습니다: ${error.message || error}`); }
+    finally { setSaving(false); }
+  };
+  const remove = async comment => {
+    if (!confirm('이 댓글을 삭제할까요?')) return;
+    try { await window.announcementBridge.removeComment(announcementId, comment.id); }
+    catch (error) { alert(`댓글을 삭제하지 못했습니다: ${error.message || error}`); }
+  };
+  return <section className="an-comments">
+    <header><h2>댓글 <span>{comments.length}</span></h2></header>
+    <form className="an-comment-form" onSubmit={submit}>
+      <input aria-label="댓글 작성자" maxLength="30" value={author} onChange={event => setAuthor(event.target.value)} placeholder="이름" />
+      <textarea aria-label="댓글 내용" maxLength="500" value={content} onChange={event => setContent(event.target.value)}
+        placeholder="댓글을 입력해 주세요." />
+      <footer><span>{content.length}/500</span><button type="submit" disabled={saving}>{saving ? '등록 중…' : '댓글 등록'}</button></footer>
+    </form>
+    <div className="an-comment-list">{comments.map(comment => <article className="an-comment" key={comment.id}>
+      <div><strong>{comment.author}</strong><time>{commentDateLabel(comment.createdAt)}</time>
+        {isAdmin && <button type="button" onClick={() => remove(comment)}>삭제</button>}</div>
+      <p>{comment.content}</p>
+    </article>)}
+    {!comments.length && <p className="an-comment-empty">첫 댓글을 남겨보세요.</p>}</div>
+  </section>;
+}
+
 function Workspace() {
   const [posts, setPosts] = useState([]);
   const [guides, setGuides] = useState([]);
@@ -311,6 +359,7 @@ function Workspace() {
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
           {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">KMS 가이드 열기</a>}
           {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
+          <Comments announcementId={selected.id} isAdmin={isAdmin} />
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
           <div className="an-card-list">{filtered.map(post => <button key={post.id} className="an-page-row" onClick={() => navigate(`/announcement/${encodeURIComponent(post.id)}`)}>
