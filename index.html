@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<link href="/announcement-app.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1065,6 +1066,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<script type="module" src="/vendor/announcement-app.js"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -1214,7 +1216,9 @@ function renderGuidePage() {
   if(activePage === 'notice') {
     editingGuidePage = false;
     document.getElementById('guideEditorBox').style.display = 'none';
-    renderNoticeBoard();
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="announcementReactRoot"></div>';
+    window.mountAnnouncementApp?.(document.getElementById('announcementReactRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
     return;
   }
@@ -1939,6 +1943,7 @@ function syncAdminUI() {
   document.getElementById('btnAssetManager').style.display = adminMode && activePage==='simulator' ? '' : 'none';
 
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+  window.dispatchEvent(new CustomEvent('announcement-admin-change',{detail:{adminMode}}));
   if(!adminMode || activePage !== 'simulator') unregCard.style.display = 'none';
   if(activePage !== 'simulator') { if(!adminMode) editingGuidePage = false; renderGuidePage(); return; }
 
@@ -2176,6 +2181,102 @@ async function saveNoticePostsToFirestore() {
     updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
   }, { merge:true });
 }
+
+function legacyNoticeToAnnouncement(post) {
+  const text = `${post.title||''} ${post.body||''}`;
+  const category = /정산|결제|운임|세금/.test(text) ? '정산'
+    : /배차|화물/.test(text) ? '배차'
+    : /환불/.test(text) ? '환불'
+    : /회원|가입|복구|정지|탈퇴/.test(text) ? '회원관리'
+    : /이벤트|쿠폰|골드바/.test(text) ? '이벤트' : '시스템';
+  return {
+    id:post.id,
+    title:post.title,
+    content:post.body,
+    category,
+    tags:[],
+    createdAt:post.date,
+    isPinned:false,
+    link:'',
+    images:[],
+    author:post.author||''
+  };
+}
+
+async function ensureAnnouncementsSeeded() {
+  const collectionRef = firebaseFns.collection(firestoreDb,'announcements');
+  const current = await firebaseFns.getDocs(collectionRef);
+  if(!current.empty || !noticePosts.length) return;
+  const batch = firebaseFns.writeBatch(firestoreDb);
+  noticePosts.map(legacyNoticeToAnnouncement).forEach(post => {
+    batch.set(firebaseFns.doc(collectionRef,post.id),post);
+  });
+  await batch.commit();
+}
+
+window.announcementBridge = {
+  isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
+  subscribe(callback) {
+    callback(noticePosts.map(legacyNoticeToAnnouncement));
+    if(!firebaseReady) return () => {};
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'announcements'), snapshot => {
+      if(snapshot.empty) callback(noticePosts.map(legacyNoticeToAnnouncement));
+      else callback(snapshot.docs.map(item=>({id:item.id,...item.data()})));
+    }, error => {
+      if(error?.code!=='permission-denied') console.warn('공지 실시간 연결 실패:',error);
+    });
+  },
+  subscribeCategories(callback) {
+    const defaults=['회원관리','배차','정산','환불','시스템','이벤트'];
+    callback(defaults);
+    if(!firebaseReady) return () => {};
+    return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'guides','announcementCategories'), snapshot => {
+      callback(snapshot.exists() && Array.isArray(snapshot.data().categories) ? snapshot.data().categories : defaults);
+    });
+  },
+  async saveCategories(categories) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides','announcementCategories'),{
+      categories,updatedAt:firebaseFns.serverTimestamp(),updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
+    },{merge:true});
+  },
+  async save(post) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await ensureAnnouncementsSeeded();
+    const id=post.id||`announcement-${Date.now()}`;
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'announcements',id),{
+      title:post.title,
+      content:post.content,
+      category:post.category||'일반',
+      tags:Array.isArray(post.tags)?post.tags:[],
+      createdAt:post.id ? (post.createdAt||firebaseFns.serverTimestamp()) : firebaseFns.serverTimestamp(),
+      isPinned:!!post.isPinned,
+      link:post.link||'',
+      images:Array.isArray(post.images)?post.images:[],
+      author:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid,
+      updatedAt:firebaseFns.serverTimestamp()
+    },{merge:true});
+    return id;
+  },
+  async remove(id) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'announcements',id));
+  },
+  async uploadImage(file) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    const authorization=await assetAuthHeader();
+    const {upload}=await import('/vendor/vercel-blob-client.js');
+    const safeName=String(file.name||`capture-${Date.now()}.png`).normalize('NFC').replace(/[\\/:*?"<>|]+/g,'_');
+    const pathname=`announcement-images/${Date.now()}-${safeName}`;
+    const result=await upload(pathname,file,{
+      access:'public',
+      handleUploadUrl:'/api/assets/upload',
+      headers:{authorization},
+      multipart:file.size>4*1024*1024
+    });
+    return result.url;
+  }
+};
 function renderAssetList() {
   document.getElementById('assetList').innerHTML = managedAssets.length ? managedAssets.map((a,i)=>`
     <div class="asset-item">
