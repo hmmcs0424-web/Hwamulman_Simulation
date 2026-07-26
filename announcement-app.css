@@ -29,4 +29,5 @@
 .an-category-items{display:flex;flex-direction:column;gap:5px;margin-top:14px;max-height:300px;overflow:auto}
 .an-category-items>div{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--an-line);border-radius:5px;padding:8px 10px}
 .an-category-items>div>span{font-size:13px}.an-category-items>div>div{display:flex;gap:4px}.an-category-items button{padding:4px 8px}.an-category-items button.danger{color:#d44}.an-category-items button:disabled{opacity:.3;cursor:default}
+.an-category-badge.guide{background:#f0eafa;color:#6940a5}.announcement-app[data-theme=dark] .an-category-badge.guide{background:#3b2c51;color:#c7a9ec}
 @media(max-width:900px){.an-index,.an-document{padding:40px 22px}.an-compose{grid-template-columns:1fr}.an-compose-pane+.an-compose-pane{border-left:0;border-top:1px solid var(--an-line)}}

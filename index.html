@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=2" rel="stylesheet">
+<link href="/announcement-app.css?v=3" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1066,7 +1066,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=2"></script>
+<script type="module" src="/vendor/announcement-app.js?v=3"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -2225,6 +2225,37 @@ window.announcementBridge = {
     }, error => {
       if(error?.code!=='permission-denied') console.warn('공지 실시간 연결 실패:',error);
     });
+  },
+  subscribeGuides(callback) {
+    const searchableKeys=['signup','membership','profile','faq'];
+    const buildDefaults=() => searchableKeys.map(id=>({
+      id,
+      title:guidePages[id].title,
+      content:String(guidePages[id].html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
+      category:'업무 가이드',
+      tags:[guidePages[id].title]
+    }));
+    callback(buildDefaults());
+    if(!firebaseReady) return () => {};
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+      const cloud=new Map();
+      snapshot.forEach(item => {
+        if(searchableKeys.includes(item.id) && typeof item.data().content==='string') cloud.set(item.id,item.data().content);
+      });
+      callback(searchableKeys.map(id=>({
+        id,
+        title:guidePages[id].title,
+        content:String(cloud.get(id)||guidePages[id].html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
+        category:'업무 가이드',
+        tags:[guidePages[id].title]
+      })));
+    },error => {
+      if(error?.code!=='permission-denied') console.warn('가이드 검색 연결 실패:',error);
+    });
+  },
+  openGuide(id) {
+    if(!guidePages[id]) return;
+    setWorkspacePage(id);
   },
   subscribeCategories(callback) {
     const defaults=['회원관리','배차','정산','환불','시스템','이벤트'];

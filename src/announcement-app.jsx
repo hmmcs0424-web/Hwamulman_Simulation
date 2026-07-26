@@ -39,7 +39,7 @@ function dateLabel(value) {
   return '';
 }
 
-function SearchModal({ open, onClose, posts, onSelect }) {
+function SearchModal({ open, onClose, posts, guides, onSelect }) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
   const inputRef = useRef(null);
@@ -47,9 +47,13 @@ function SearchModal({ open, onClose, posts, onSelect }) {
     try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch { return []; }
   });
   const results = useMemo(() => {
+    const pool = [
+      ...posts.map(post => ({ ...post, kind: 'announcement' })),
+      ...guides.map(guide => ({ ...guide, kind: 'guide', isPinned: false })),
+    ];
     const words = query.trim().toLocaleLowerCase('ko-KR').split(/\s+/).filter(Boolean);
-    if (!words.length) return posts.filter(post => post.isPinned).slice(0, 6);
-    return posts.map(post => {
+    if (!words.length) return pool.filter(item => item.isPinned).slice(0, 6);
+    return pool.map(post => {
       const title = toText(post.title);
       const body = toText(post.content);
       const tags = toText((post.tags || []).join(' '));
@@ -57,7 +61,7 @@ function SearchModal({ open, onClose, posts, onSelect }) {
         sum + (title.includes(word) ? 5 : 0) + (body.includes(word) ? 2 : 0) + (tags.includes(word) ? 3 : 0), 0);
       return { post, score };
     }).filter(item => item.score).sort((a, b) => b.score - a.score).slice(0, 12).map(item => item.post);
-  }, [posts, query]);
+  }, [posts, guides, query]);
   useEffect(() => {
     if (open) {
       setQuery('');
@@ -67,11 +71,11 @@ function SearchModal({ open, onClose, posts, onSelect }) {
   }, [open]);
   useEffect(() => setActive(0), [query]);
   if (!open) return null;
-  const choose = post => {
+  const choose = item => {
     const next = query.trim() ? [query.trim(), ...recent.filter(item => item !== query.trim())].slice(0, 3) : recent;
     setRecent(next);
     localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    onSelect(post.id);
+    onSelect(item);
     onClose();
   };
   const onKeyDown = event => {
@@ -81,11 +85,11 @@ function SearchModal({ open, onClose, posts, onSelect }) {
     if (event.key === 'Escape') onClose();
   };
   return <div className="an-command-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
-    <section className="an-command" role="dialog" aria-label="공지 검색">
+    <section className="an-command" role="dialog" aria-label="공지와 가이드 검색">
       <div className="an-command-input">
         <span>⌕</span>
         <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown}
-          placeholder="공지 검색…" aria-label="공지 검색어" />
+          placeholder="공지와 가이드 검색…" aria-label="공지와 가이드 검색어" />
         <kbd>ESC</kbd>
       </div>
       {!query && recent.length > 0 && <div className="an-recent">
@@ -94,15 +98,15 @@ function SearchModal({ open, onClose, posts, onSelect }) {
       </div>}
       <div className="an-command-results">
         <div className="an-command-label">{query ? `검색 결과 ${results.length}건` : '중요 공지'}</div>
-        {results.map((post, index) => <button key={post.id} className={index === active ? 'active' : ''} onMouseEnter={() => setActive(index)} onClick={() => choose(post)}>
-          <span className="an-result-icon">📄</span>
+        {results.map((post, index) => <button key={`${post.kind}-${post.id}`} className={index === active ? 'active' : ''} onMouseEnter={() => setActive(index)} onClick={() => choose(post)}>
+          <span className="an-result-icon">{post.kind === 'guide' ? '📘' : '📄'}</span>
           <span className="an-result-copy">
             <strong>{highlight(post.title, query)}</strong>
             <small>{highlight(snippetFor(post.content, query), query)}</small>
           </span>
-          <span className="an-category-badge">{post.category || '일반'}</span>
+          <span className={`an-category-badge ${post.kind === 'guide' ? 'guide' : ''}`}>{post.kind === 'guide' ? '가이드' : post.category || '공지'}</span>
         </button>)}
-        {!results.length && <div className="an-no-results">일치하는 공지가 없습니다.</div>}
+        {!results.length && <div className="an-no-results">일치하는 공지나 가이드가 없습니다.</div>}
       </div>
       <footer><span>↑↓ 이동</span><span>↵ 열기</span><span>ESC 닫기</span></footer>
     </section>
@@ -231,6 +235,7 @@ function CategoryManager({ categories, onClose, onSaved }) {
 
 function Workspace() {
   const [posts, setPosts] = useState([]);
+  const [guides, setGuides] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [category, setCategory] = useState('전체');
   const [searchOpen, setSearchOpen] = useState(false);
@@ -241,6 +246,7 @@ function Workspace() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => window.announcementBridge.subscribe(setPosts), []);
+  useEffect(() => window.announcementBridge.subscribeGuides(setGuides), []);
   useEffect(() => window.announcementBridge.subscribeCategories(values => setCategories(['전체', '중요', ...values])), []);
   useEffect(() => {
     const update = () => setIsAdmin(!!window.announcementBridge.isAdmin());
@@ -265,7 +271,7 @@ function Workspace() {
   };
   return <div className="announcement-app" data-theme={theme}>
     <div className="an-topbar">
-      <button className="an-search-trigger" onClick={() => setSearchOpen(true)}><span>⌕</span><span>공지 검색</span><kbd>Ctrl K</kbd></button>
+      <button className="an-search-trigger" onClick={() => setSearchOpen(true)}><span>⌕</span><span>통합 검색</span><kbd>Ctrl K</kbd></button>
       <div className="an-top-actions">
         <button title="다크모드" onClick={() => { setDark(!dark); localStorage.setItem('hmm-announcement-theme', !dark ? 'dark' : 'light'); }}>{dark ? '☀' : '◐'}</button>
         {isAdmin && <button className="an-new-button" onClick={() => setEditor({ mode: 'new' })}>＋ 새 공지</button>}
@@ -301,7 +307,10 @@ function Workspace() {
         </section>}
       </main>
     </div>
-    <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={posts} onSelect={id => navigate(`/announcement/${encodeURIComponent(id)}`)} />
+    <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={posts} guides={guides} onSelect={item => {
+      if (item.kind === 'guide') window.announcementBridge.openGuide(item.id);
+      else navigate(`/announcement/${encodeURIComponent(item.id)}`);
+    }} />
     {editor && <Editor post={editor.post} categories={categories} onClose={() => setEditor(null)} />}
     {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)}
       onSaved={values => { setCategories(['전체', '중요', ...values]); setCategoryEditor(false); }} />}
