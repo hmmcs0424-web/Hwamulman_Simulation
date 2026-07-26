@@ -2267,8 +2267,8 @@ window.announcementBridge = {
     },error => {
       if(error?.code!=='permission-denied') console.warn('가이드 검색 연결 실패:',error);
     });
-    const unsubscribeFaqs=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'faqGroups'), snapshot => {
-      faqResults=snapshot.docs.flatMap(groupDoc => {
+    const unsubscribeFaqs=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+      faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup').flatMap(groupDoc => {
         const group=groupDoc.data();
         return (Array.isArray(group.items)?group.items:[]).map(item=>({
           id:`faq:${groupDoc.id}:${item.id}`,
@@ -2349,8 +2349,8 @@ window.faqBridge = {
   subscribe(callback) {
     callback([]);
     if(!firebaseReady) return () => {};
-    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'faqGroups'), snapshot => {
-      const groups=snapshot.docs.map(item=>({id:item.id,...item.data()}))
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+      const groups=snapshot.docs.filter(item=>item.data().type==='faqGroup').map(item=>({id:item.id,...item.data()}))
         .sort((a,b)=>String(b.updatedAt?.seconds||'').localeCompare(String(a.updatedAt?.seconds||'')));
       callback(groups);
     },error => {
@@ -2360,7 +2360,8 @@ window.faqBridge = {
   async saveGroup(group) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     const id=group.id||`faq-group-${Date.now()}`;
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'faqGroups',id),{
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides',id),{
+      type:'faqGroup',
       title:group.title,
       category:group.category||'일반',
       kmsUrl:group.kmsUrl||'',
@@ -2373,7 +2374,7 @@ window.faqBridge = {
   },
   async removeGroup(id) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'faqGroups',id));
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'guides',id));
   }
 };
 
