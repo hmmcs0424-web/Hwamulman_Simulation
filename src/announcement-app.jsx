@@ -25,7 +25,8 @@ function highlight(text, query) {
   );
 }
 function snippetFor(content, query) {
-  const plain = String(content || '').replace(/[#>*_`[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim();
+  const plain = String(content || '').replace(/!\[[^\]]*\]\([^)]+\)/g, '🖼 이미지')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[#>*_`[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim();
   const words = query.trim().split(/\s+/).filter(Boolean);
   const found = words.map(word => plain.toLocaleLowerCase('ko-KR').indexOf(word.toLocaleLowerCase('ko-KR'))).filter(i => i >= 0);
   const start = found.length ? Math.max(0, Math.min(...found) - 45) : 0;
@@ -139,6 +140,10 @@ function Editor({ post, categories, onClose }) {
     const file = [...event.clipboardData.items].find(item => item.type.startsWith('image/'))?.getAsFile();
     if (file) { event.preventDefault(); addImage(file); }
   };
+  const previewHtml = useMemo(
+    () => ({ __html: DOMPurify.sanitize(marked.parse(form.content || '*작성한 내용과 이미지가 여기에 표시됩니다.*')) }),
+    [form.content],
+  );
   const save = async () => {
     if (!form.title.trim() || !form.content.trim()) return alert('제목과 본문을 입력해 주세요.');
     setSaving(true);
@@ -160,14 +165,23 @@ function Editor({ post, categories, onClose }) {
           {categories.filter(item => item !== '전체' && item !== '중요').map(item => <option key={item}>{item}</option>)}
         </select></label>
         <label><span>태그</span><input value={form.tags} onChange={event => update('tags', event.target.value)} placeholder="쉼표로 구분: 긴급, 앱, 회원" /></label>
-        <label><span>연결 링크</span><input type="url" value={form.link} onChange={event => update('link', event.target.value)} placeholder="https://…" /></label>
+        <label><span>KMS 가이드</span><input type="url" value={form.link} onChange={event => update('link', event.target.value)} placeholder="KMS 가이드 URL을 입력하세요" /></label>
       </div>
       <label className="an-pin-check"><input type="checkbox" checked={form.isPinned} onChange={event => update('isPinned', event.target.checked)} /> 중요 공지로 고정</label>
-      <div className="an-editor-toolbar"><strong>Markdown</strong><span>굵게 **텍스트** · 목록 - 항목 · 링크 [이름](URL)</span>
+      <div className="an-editor-toolbar"><strong>본문 · Markdown</strong><span>굵게 **텍스트** · 목록 - 항목 · 링크 [이름](URL)</span>
         <label className="an-image-button">＋ 이미지<input type="file" accept="image/*" hidden onChange={event => addImage(event.target.files[0])} /></label>
       </div>
-      <textarea ref={contentRef} value={form.content} onChange={event => update('content', event.target.value)} onPaste={onPaste}
-        placeholder="내용을 입력하세요. 캡처한 이미지는 Ctrl+V로 바로 붙여넣을 수 있습니다." />
+      <div className="an-compose">
+        <div className="an-compose-pane">
+          <div className="an-pane-label">편집</div>
+          <textarea ref={contentRef} value={form.content} onChange={event => update('content', event.target.value)} onPaste={onPaste}
+            placeholder="내용을 입력하세요. 캡처한 이미지는 Ctrl+V로 바로 붙여넣을 수 있습니다." />
+        </div>
+        <div className="an-compose-pane an-preview-pane">
+          <div className="an-pane-label">미리보기</div>
+          <div className="an-live-preview an-markdown" dangerouslySetInnerHTML={previewHtml} />
+        </div>
+      </div>
       <footer><span>{uploading ? '이미지 업로드 중…' : '이미지를 복사한 뒤 본문에서 Ctrl+V'}</span>
         <div><button className="secondary" onClick={onClose}>취소</button><button className="primary" disabled={saving || uploading} onClick={save}>{saving ? '저장 중…' : '저장'}</button></div>
       </footer>
@@ -175,18 +189,43 @@ function Editor({ post, categories, onClose }) {
   </div>;
 }
 
-function CategoryManager({ categories, onClose }) {
-  const [value, setValue] = useState(categories.filter(item => item !== '전체' && item !== '중요').join('\n'));
+function CategoryManager({ categories, onClose, onSaved }) {
+  const [items, setItems] = useState(categories.filter(item => item !== '전체' && item !== '중요'));
+  const [value, setValue] = useState('');
+  const [saving, setSaving] = useState(false);
+  const add = () => {
+    const name = value.trim();
+    if (!name || items.includes(name)) return;
+    setItems(current => [...current, name]);
+    setValue('');
+  };
+  const move = (index, offset) => setItems(current => {
+    const next = [...current];
+    [next[index], next[index + offset]] = [next[index + offset], next[index]];
+    return next;
+  });
   const save = async () => {
-    const next = value.split('\n').map(item => item.trim()).filter(Boolean);
-    await window.announcementBridge.saveCategories(next);
-    onClose();
+    if (!items.length) return alert('카테고리를 하나 이상 등록해 주세요.');
+    setSaving(true);
+    try {
+      await window.announcementBridge.saveCategories(items);
+      onSaved(items);
+    } catch (error) { alert(`카테고리를 저장하지 못했습니다: ${error.message || error}`); }
+    finally { setSaving(false); }
   };
   return <div className="an-editor-backdrop"><section className="an-category-editor">
     <header><h2>카테고리 관리</h2><button onClick={onClose}>×</button></header>
-    <p>한 줄에 하나씩 입력하세요. 순서대로 사이드바에 표시됩니다.</p>
-    <textarea value={value} onChange={event => setValue(event.target.value)} />
-    <footer><button onClick={onClose}>취소</button><button className="primary" onClick={save}>저장</button></footer>
+    <p>공지 분류를 추가하거나 삭제할 수 있습니다. 저장 즉시 왼쪽 사이드바에 반영됩니다.</p>
+    <div className="an-category-add"><input value={value} onChange={event => setValue(event.target.value)}
+      onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); add(); } }} placeholder="새 카테고리 이름" />
+      <button onClick={add}>추가</button></div>
+    <div className="an-category-items">{items.map((item, index) => <div key={item}>
+      <span>▤ {item}</span>
+      <div><button disabled={index === 0} onClick={() => move(index, -1)}>↑</button>
+        <button disabled={index === items.length - 1} onClick={() => move(index, 1)}>↓</button>
+        <button className="danger" onClick={() => setItems(current => current.filter(value => value !== item))}>삭제</button></div>
+    </div>)}</div>
+    <footer><button onClick={onClose}>취소</button><button className="primary" disabled={saving} onClick={save}>{saving ? '저장 중…' : '변경사항 저장'}</button></footer>
   </section></div>;
 }
 
@@ -248,7 +287,7 @@ function Workspace() {
           <h1>{selected.title}</h1>
           <div className="an-tags">{(selected.tags || []).map(tag => <span key={tag}>#{tag}</span>)}</div>
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
-          {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">↗ 연결된 페이지 열기<span>{selected.link}</span></a>}
+          {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">↗ KMS 가이드 열기<span>{selected.link}</span></a>}
           {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
@@ -264,7 +303,8 @@ function Workspace() {
     </div>
     <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={posts} onSelect={id => navigate(`/announcement/${encodeURIComponent(id)}`)} />
     {editor && <Editor post={editor.post} categories={categories} onClose={() => setEditor(null)} />}
-    {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)} />}
+    {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)}
+      onSaved={values => { setCategories(['전체', '중요', ...values]); setCategoryEditor(false); }} />}
   </div>;
 }
 
