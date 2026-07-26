@@ -338,12 +338,6 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
     <div className="faq-breadcrumb">{group.category || '일반'} &gt; {group.title}</div>
     <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개</p></div>
       <span className={group.isPublished === false ? 'hidden' : ''}>{group.isPublished === false ? '숨김' : '게시 중'}</span></div>
-    <nav className="faq-question-index">
-      {(group.items || []).map((item, index) => <button key={item.id} onClick={() => {
-        setOpenItems(current => new Set(current).add(item.id));
-        document.getElementById(`faq-answer-${item.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }}><b>{index + 1}</b>{item.question}</button>)}
-    </nav>
     <div className="faq-detail-items">
       {(group.items || []).map((item, index) => {
         const opened = openItems.has(item.id);
