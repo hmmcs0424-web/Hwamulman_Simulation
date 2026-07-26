@@ -309,7 +309,7 @@ function Workspace() {
           <h1>{selected.title}</h1>
           <div className="an-tags">{(selected.tags || []).map(tag => <span key={tag}>#{tag}</span>)}</div>
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
-          {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">↗ KMS 가이드 열기<span>{selected.link}</span></a>}
+          {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">KMS 가이드 열기</a>}
           {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
