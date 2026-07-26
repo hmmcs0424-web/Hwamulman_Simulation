@@ -5,7 +5,7 @@
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="/announcement-app.css?v=5" rel="stylesheet">
-<link href="/faq-app.css?v=2" rel="stylesheet">
+<link href="/faq-app.css?v=3" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1068,7 +1068,7 @@ textarea.form-input{resize:vertical;}
 </div>
 
 <script type="module" src="/vendor/announcement-app.js?v=6"></script>
-<script type="module" src="/vendor/faq-app.js?v=2"></script>
+<script type="module" src="/vendor/faq-app.js?v=3"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -2268,7 +2268,7 @@ window.announcementBridge = {
       if(error?.code!=='permission-denied') console.warn('가이드 검색 연결 실패:',error);
     });
     const unsubscribeFaqs=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
-      faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup').flatMap(groupDoc => {
+      faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup' && (adminMode || groupDoc.data().isPublished!==false)).flatMap(groupDoc => {
         const group=groupDoc.data();
         return (Array.isArray(group.items)?group.items:[]).map(item=>({
           id:`faq:${groupDoc.id}:${item.id}`,
@@ -2357,19 +2357,38 @@ window.faqBridge = {
       if(error?.code!=='permission-denied') console.warn('FAQ 실시간 연결 실패:',error);
     });
   },
+  subscribeCategories(callback) {
+    const defaults=['회원관리','신규가입','정지·복구','정보변경','배차','정산','앱 사용법','기타'];
+    callback(defaults);
+    if(!firebaseReady) return () => {};
+    return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'guides','faqCategories'), snapshot => {
+      callback(snapshot.exists() && Array.isArray(snapshot.data().categories) ? snapshot.data().categories : defaults);
+    });
+  },
+  async saveCategories(categories) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides','faqCategories'),{
+      type:'faqCategories',
+      categories,
+      updatedAt:firebaseFns.serverTimestamp(),
+      updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
+    },{merge:true});
+  },
   async saveGroup(group) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     const id=group.id||`faq-group-${Date.now()}`;
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides',id),{
+    const payload={
       type:'faqGroup',
       title:group.title,
       category:group.category||'일반',
       kmsUrl:group.kmsUrl||'',
+      isPublished:group.isPublished!==false,
       items:Array.isArray(group.items)?group.items:[],
-      createdAt:group.id ? (group.createdAt||firebaseFns.serverTimestamp()) : firebaseFns.serverTimestamp(),
       updatedAt:firebaseFns.serverTimestamp(),
       updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
-    },{merge:true});
+    };
+    if(!group.id) payload.createdAt=firebaseFns.serverTimestamp();
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides',id),payload,{merge:true});
     return id;
   },
   async removeGroup(id) {
