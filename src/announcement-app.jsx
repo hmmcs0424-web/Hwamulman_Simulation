@@ -69,6 +69,17 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
       setTimeout(() => inputRef.current?.focus(), 30);
     }
   }, [open]);
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open, onClose]);
   useEffect(() => setActive(0), [query]);
   if (!open) return null;
   const choose = item => {
@@ -85,12 +96,12 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
     if (event.key === 'Escape') onClose();
   };
   return <div className="an-command-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
-    <section className="an-command" role="dialog" aria-label="공지와 가이드 검색">
+    <section className="an-command" role="dialog" aria-label="통합 검색">
       <div className="an-command-input">
         <span>⌕</span>
         <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown}
-          placeholder="공지와 가이드 검색…" aria-label="공지와 가이드 검색어" />
-        <kbd>ESC</kbd>
+          placeholder="공지·가이드·FAQ 통합 검색…" aria-label="통합 검색어" />
+        <button className="an-escape-button" type="button" onClick={onClose} aria-label="검색 닫기">ESC</button>
       </div>
       {!query && recent.length > 0 && <div className="an-recent">
         <span>최근 검색</span>
@@ -260,6 +271,11 @@ function Workspace() {
     window.addEventListener('keydown', key);
     return () => window.removeEventListener('keydown', key);
   }, []);
+  useEffect(() => {
+    const openAnnouncement = event => navigate(`/announcement/${encodeURIComponent(event.detail?.id || '')}`);
+    window.addEventListener('announcement-open', openAnnouncement);
+    return () => window.removeEventListener('announcement-open', openAnnouncement);
+  }, [navigate]);
   const filtered = posts.filter(post => category === '전체' || (category === '중요' ? post.isPinned : post.category === category))
     .sort((a, b) => Number(b.isPinned) - Number(a.isPinned) || dateLabel(b.createdAt).localeCompare(dateLabel(a.createdAt)));
   const selectedId = location.pathname.startsWith('/announcement/') ? decodeURIComponent(location.pathname.split('/').pop()) : '';

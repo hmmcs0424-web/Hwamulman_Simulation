@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -15,6 +15,7 @@ const emptyItem = () => ({
 const text = value => String(value || '').toLocaleLowerCase('ko-KR');
 const splitWords = value => String(value || '').split(',').map(item => item.trim()).filter(Boolean);
 const DEFAULT_CATEGORIES = ['회원관리', '신규가입', '정지·복구', '정보변경', '배차', '정산', '앱 사용법', '기타'];
+const RECENT_KEY = 'hmm-announcement-recent-searches';
 const dateLabel = value => {
   if (value?.toDate) return value.toDate().toISOString().slice(0, 10);
   if (value?.seconds) return new Date(value.seconds * 1000).toISOString().slice(0, 10);
@@ -86,6 +87,89 @@ function highlight(value, query) {
   const escaped = words.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   return source.split(new RegExp(`(${escaped})`, 'gi')).map((part, index) =>
     new RegExp(`^(?:${escaped})$`, 'i').test(part) ? <mark key={index}>{part}</mark> : part);
+}
+
+function searchSnippet(content, query) {
+  const plain = String(content || '').replace(/!\[[^\]]*\]\([^)]+\)/g, ' 이미지 ')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[#>*_`[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim();
+  const word = query.trim().split(/\s+/).find(Boolean);
+  const found = word ? plain.toLocaleLowerCase('ko-KR').indexOf(word.toLocaleLowerCase('ko-KR')) : -1;
+  const start = found >= 0 ? Math.max(0, found - 45) : 0;
+  return `${start ? '…' : ''}${plain.slice(start, start + 150)}${plain.length > start + 150 ? '…' : ''}`;
+}
+
+function UnifiedSearchModal({ open, onClose, posts, guides, onSelect }) {
+  const [query, setQuery] = useState('');
+  const [active, setActive] = useState(0);
+  const inputRef = useRef(null);
+  const [recent, setRecent] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch { return []; }
+  });
+  const results = useMemo(() => {
+    const pool = [
+      ...posts.map(post => ({ ...post, kind: 'announcement' })),
+      ...guides.map(guide => ({ ...guide, kind: 'guide', isPinned: false })),
+    ];
+    const words = text(query).trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return pool.filter(item => item.isPinned).slice(0, 6);
+    return pool.map(item => {
+      const title = text(item.title);
+      const content = text(item.content);
+      const tags = text((item.tags || []).join(' '));
+      const score = words.reduce((sum, word) => sum + (title.includes(word) ? 5 : 0) + (content.includes(word) ? 2 : 0) + (tags.includes(word) ? 3 : 0), 0);
+      return { item, score };
+    }).filter(result => result.score).sort((a, b) => b.score - a.score).slice(0, 12).map(result => result.item);
+  }, [posts, guides, query]);
+  useEffect(() => {
+    if (!open) return;
+    setQuery('');
+    setActive(0);
+    setTimeout(() => inputRef.current?.focus(), 30);
+  }, [open]);
+  useEffect(() => {
+    if (!open) return undefined;
+    const closeOnEscape = event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open, onClose]);
+  useEffect(() => setActive(0), [query]);
+  if (!open) return null;
+  const choose = item => {
+    const next = query.trim() ? [query.trim(), ...recent.filter(value => value !== query.trim())].slice(0, 3) : recent;
+    setRecent(next);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+    onSelect(item);
+    onClose();
+  };
+  const onKeyDown = event => {
+    if (event.key === 'ArrowDown') { event.preventDefault(); setActive(index => Math.min(index + 1, results.length - 1)); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); setActive(index => Math.max(index - 1, 0)); }
+    if (event.key === 'Enter' && results[active]) { event.preventDefault(); choose(results[active]); }
+  };
+  return <div className="an-command-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
+    <section className="an-command" role="dialog" aria-label="통합 검색">
+      <div className="an-command-input"><span>⌕</span>
+        <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown} placeholder="공지·가이드·FAQ 통합 검색…" aria-label="통합 검색어" />
+        <button className="an-escape-button" type="button" onClick={onClose} aria-label="검색 닫기">ESC</button>
+      </div>
+      {!query && recent.length > 0 && <div className="an-recent"><span>최근 검색</span>{recent.map(item => <button key={item} onClick={() => setQuery(item)}>↗ {item}</button>)}</div>}
+      <div className="an-command-results">
+        <div className="an-command-label">{query ? `검색 결과 ${results.length}건` : '중요 공지'}</div>
+        {results.map((item, index) => <button key={`${item.kind}-${item.id}`} className={index === active ? 'active' : ''} onMouseEnter={() => setActive(index)} onClick={() => choose(item)}>
+          <span className="an-result-icon">{item.category === 'FAQ' ? '❓' : item.kind === 'guide' ? '📘' : '📄'}</span>
+          <span className="an-result-copy"><strong>{highlight(item.title, query)}</strong><small>{highlight(searchSnippet(item.content, query), query)}</small></span>
+          <span className={`an-category-badge ${item.kind === 'guide' ? 'guide' : ''}`}>{item.category === 'FAQ' ? 'FAQ' : item.kind === 'guide' ? '가이드' : item.category || '공지'}</span>
+        </button>)}
+        {!results.length && <div className="an-no-results">일치하는 공지, 가이드 또는 FAQ가 없습니다.</div>}
+      </div>
+      <footer><span>↑↓ 이동</span><span>↵ 열기</span><span>ESC 닫기</span></footer>
+    </section>
+  </div>;
 }
 
 function BatchEditor({ group, categories, onClose }) {
@@ -284,20 +368,35 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
 
 function FaqApp() {
   const [groups, setGroups] = useState([]);
+  const [searchPosts, setSearchPosts] = useState([]);
+  const [searchGuides, setSearchGuides] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [category, setCategory] = useState('전체');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState('');
   const [editor, setEditor] = useState(null);
   const [categoryEditor, setCategoryEditor] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(!!window.faqBridge.isAdmin());
 
   useEffect(() => window.faqBridge.subscribe(setGroups), []);
+  useEffect(() => window.announcementBridge.subscribe(setSearchPosts), []);
+  useEffect(() => window.announcementBridge.subscribeGuides(setSearchGuides), []);
   useEffect(() => window.faqBridge.subscribeCategories(setCategories), []);
   useEffect(() => {
     const update = () => setIsAdmin(!!window.faqBridge.isAdmin());
     window.addEventListener('announcement-admin-change', update);
     return () => window.removeEventListener('announcement-admin-change', update);
+  }, []);
+  useEffect(() => {
+    const key = event => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLocaleLowerCase() === 'k') {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', key);
+    return () => window.removeEventListener('keydown', key);
   }, []);
 
   const availableGroups = groups.filter(group => isAdmin || group.isPublished !== false);
@@ -321,7 +420,7 @@ function FaqApp() {
 
   return <div className="faq-app">
     <div className="faq-toolbar">
-      <div className="faq-search"><span>⌕</span><input value={query} onChange={event => { setQuery(event.target.value); setSelectedId(''); }} placeholder="FAQ 통합 검색" />{query && <button onClick={() => setQuery('')}>×</button>}</div>
+      <button className="an-search-trigger faq-search-trigger" onClick={() => setSearchOpen(true)}><span>⌕</span><span>통합 검색</span><kbd>Ctrl K</kbd></button>
       {isAdmin && <button className="faq-new" onClick={() => setEditor({})}>＋ 새 FAQ 게시글</button>}
     </div>
     <div className="faq-layout">
@@ -348,6 +447,13 @@ function FaqApp() {
     </div>
     {editor && <BatchEditor group={editor.id ? editor : null} categories={categories} onClose={() => setEditor(null)} />}
     {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)} />}
+    <UnifiedSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={searchPosts} guides={searchGuides} onSelect={item => {
+      if (item.category === 'FAQ' && String(item.id).startsWith('faq:')) {
+        const [, groupId] = String(item.id).split(':');
+        setSelectedId(groupId);
+      } else if (item.kind === 'announcement') window.announcementBridge.openAnnouncement(item.id);
+      else window.announcementBridge.openGuide(item.id);
+    }} />
   </div>;
 }
 
