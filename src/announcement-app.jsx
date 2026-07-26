@@ -132,6 +132,8 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
 }
 
 function Editor({ post, categories, onClose }) {
+  const initialLinks = Array.isArray(post?.links) && post.links.length
+    ? post.links : post?.link ? [{ name: 'KMS 가이드 열기', url: post.link }] : [];
   const [form, setForm] = useState(() => ({
     id: post?.id || '',
     createdAt: post?.createdAt || '',
@@ -139,7 +141,10 @@ function Editor({ post, categories, onClose }) {
     content: post?.content || '',
     category: post?.category || categories.find(item => item !== '전체' && item !== '중요') || '일반',
     tags: (post?.tags || []).join(', '),
-    link: post?.link || '',
+    links: Array.from({ length: 3 }, (_, index) => ({
+      name: initialLinks[index]?.name || '',
+      url: initialLinks[index]?.url || '',
+    })),
     isPinned: !!post?.isPinned,
     images: post?.images || [],
   }));
@@ -147,6 +152,10 @@ function Editor({ post, categories, onClose }) {
   const [uploading, setUploading] = useState(false);
   const contentRef = useRef(null);
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }));
+  const updateLink = (index, key, value) => setForm(current => ({
+    ...current,
+    links: current.links.map((link, linkIndex) => linkIndex === index ? { ...link, [key]: value } : link),
+  }));
   const addImage = async file => {
     if (!file?.type?.startsWith('image/')) return;
     setUploading(true);
@@ -173,6 +182,7 @@ function Editor({ post, categories, onClose }) {
       await window.announcementBridge.save({
         ...form,
         tags: form.tags.split(',').map(item => item.trim()).filter(Boolean),
+        links: form.links.map(link => ({ name: link.name.trim(), url: link.url.trim() })).filter(link => link.url),
       });
       onClose();
     } catch (error) { alert(`저장하지 못했습니다: ${error.message || error}`); }
@@ -187,7 +197,11 @@ function Editor({ post, categories, onClose }) {
           {categories.filter(item => item !== '전체' && item !== '중요').map(item => <option key={item}>{item}</option>)}
         </select></label>
         <label><span>태그</span><input value={form.tags} onChange={event => update('tags', event.target.value)} placeholder="쉼표로 구분: 긴급, 앱, 회원" /></label>
-        <label><span>KMS 가이드</span><input type="url" value={form.link} onChange={event => update('link', event.target.value)} placeholder="KMS 가이드 URL을 입력하세요" /></label>
+        <div className="an-kms-fields"><span>KMS 가이드 · 최대 3개</span>{form.links.map((link, index) =>
+          <div key={index}><input value={link.name} onChange={event => updateLink(index, 'name', event.target.value)}
+            placeholder={`버튼 이름 ${index + 1}`} maxLength="30" />
+          <input type="url" value={link.url} onChange={event => updateLink(index, 'url', event.target.value)}
+            placeholder={`KMS URL ${index + 1}`} /></div>)}</div>
       </div>
       <label className="an-pin-check"><input type="checkbox" checked={form.isPinned} onChange={event => update('isPinned', event.target.checked)} /> 중요 공지로 고정</label>
       <div className="an-editor-toolbar"><strong>본문 · Markdown</strong><span>굵게 **텍스트** · 목록 - 항목 · 링크 [이름](URL)</span>
@@ -277,12 +291,12 @@ function Comments({ announcementId, isAdmin }) {
   };
   return <section className="an-comments">
     <header><h2>댓글 <span>{comments.length}</span></h2></header>
-    <form className="an-comment-form" onSubmit={submit}>
+    {isAdmin && <form className="an-comment-form" onSubmit={submit}>
       <input aria-label="댓글 작성자" maxLength="30" value={author} onChange={event => setAuthor(event.target.value)} placeholder="이름" />
       <textarea aria-label="댓글 내용" maxLength="500" value={content} onChange={event => setContent(event.target.value)}
         placeholder="댓글을 입력해 주세요." />
       <footer><span>{content.length}/500</span><button type="submit" disabled={saving}>{saving ? '등록 중…' : '댓글 등록'}</button></footer>
-    </form>
+    </form>}
     <div className="an-comment-list">{comments.map(comment => <article className="an-comment" key={comment.id}>
       <div><strong>{comment.author}</strong><time>{commentDateLabel(comment.createdAt)}</time>
         {isAdmin && <button type="button" onClick={() => remove(comment)}>삭제</button>}</div>
@@ -328,6 +342,8 @@ function Workspace() {
     .sort((a, b) => Number(b.isPinned) - Number(a.isPinned) || dateLabel(b.createdAt).localeCompare(dateLabel(a.createdAt)));
   const selectedId = location.pathname.startsWith('/announcement/') ? decodeURIComponent(location.pathname.split('/').pop()) : '';
   const selected = posts.find(post => post.id === selectedId);
+  const selectedLinks = selected ? (Array.isArray(selected.links) && selected.links.length
+    ? selected.links : selected.link ? [{ name: 'KMS 가이드 열기', url: selected.link }] : []) : [];
   const theme = dark ? 'dark' : 'light';
   const renderMarkdown = content => ({ __html: DOMPurify.sanitize(marked.parse(content || '')) });
   const remove = async post => {
@@ -357,7 +373,9 @@ function Workspace() {
           <h1>{selected.title}</h1>
           <div className="an-tags">{(selected.tags || []).map(tag => <span key={tag}>#{tag}</span>)}</div>
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
-          {selected.link && <a className="an-link-card" href={selected.link} target="_blank" rel="noopener">KMS 가이드 열기</a>}
+          {!!selectedLinks.length && <div className="an-link-list">{selectedLinks.map((link, index) =>
+            <a className="an-link-card" key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener">
+              {link.name || 'KMS 가이드 열기'}</a>)}</div>}
           {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
           <Comments announcementId={selected.id} isAdmin={isAdmin} />
         </article> : <section className="an-index">

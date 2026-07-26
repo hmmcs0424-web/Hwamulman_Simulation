@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=9" rel="stylesheet">
+<link href="/announcement-app.css?v=10" rel="stylesheet">
 <link href="/faq-app.css?v=7" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1067,7 +1067,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=9"></script>
+<script type="module" src="/vendor/announcement-app.js?v=10"></script>
 <script type="module" src="/vendor/faq-app.js?v=8"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -2209,7 +2209,9 @@ function legacyNoticeToAnnouncement(post) {
     createdAt:post.date,
     isPinned:false,
     link:'',
+    links:[],
     images:[],
+    comments:[],
     author:post.author||''
   };
 }
@@ -2310,7 +2312,11 @@ window.announcementBridge = {
       tags:Array.isArray(post.tags)?post.tags:[],
       createdAt:post.id ? (post.createdAt||firebaseFns.serverTimestamp()) : firebaseFns.serverTimestamp(),
       isPinned:!!post.isPinned,
-      link:post.link||'',
+      link:Array.isArray(post.links) && post.links[0]?.url ? post.links[0].url : post.link||'',
+      links:(Array.isArray(post.links)?post.links:[]).slice(0,3).map(item=>({
+        name:String(item.name||'').trim().slice(0,30),
+        url:String(item.url||'').trim()
+      })).filter(item=>item.url),
       images:Array.isArray(post.images)?post.images:[],
       author:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid,
       updatedAt:firebaseFns.serverTimestamp()
@@ -2319,34 +2325,36 @@ window.announcementBridge = {
   },
   async remove(id) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    const comments=await firebaseFns.getDocs(firebaseFns.collection(firestoreDb,'announcements',id,'comments'));
-    const batch=firebaseFns.writeBatch(firestoreDb);
-    comments.forEach(item=>batch.delete(item.ref));
-    batch.delete(firebaseFns.doc(firestoreDb,'announcements',id));
-    await batch.commit();
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'announcements',id));
   },
   subscribeComments(announcementId, callback) {
     callback([]);
     if(!firebaseReady || !announcementId) return () => {};
-    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'announcements',announcementId,'comments'), snapshot => {
-      callback(snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>
-        Number(a.createdAt?.seconds||0)-Number(b.createdAt?.seconds||0)));
+    return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'announcements',announcementId), snapshot => {
+      callback((Array.isArray(snapshot.data()?.comments)?snapshot.data().comments:[]).slice().sort((a,b)=>
+        String(a.createdAt||'').localeCompare(String(b.createdAt||''))));
     }, error => {
       if(error?.code!=='permission-denied') console.warn('댓글 실시간 연결 실패:',error);
     });
   },
   async addComment(announcementId, comment) {
-    if(!firebaseReady || !announcementId) throw new Error('댓글 서버에 연결할 수 없습니다.');
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     const author=String(comment.author||'').trim();
     const content=String(comment.content||'').trim();
     if(!author || author.length>30 || !content || content.length>500) throw new Error('댓글 입력 내용을 확인해 주세요.');
-    await firebaseFns.addDoc(firebaseFns.collection(firestoreDb,'announcements',announcementId,'comments'),{
-      author,content,createdAt:firebaseFns.serverTimestamp()
+    await firebaseFns.updateDoc(firebaseFns.doc(firestoreDb,'announcements',announcementId),{
+      comments:firebaseFns.arrayUnion({id:`comment-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
+        author,content,createdAt:new Date().toISOString()})
     });
   },
   async removeComment(announcementId, commentId) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'announcements',announcementId,'comments',commentId));
+    const ref=firebaseFns.doc(firestoreDb,'announcements',announcementId);
+    await firebaseFns.runTransaction(firestoreDb,async transaction=>{
+      const snapshot=await transaction.get(ref);
+      transaction.update(ref,{comments:(Array.isArray(snapshot.data()?.comments)?snapshot.data().comments:[])
+        .filter(item=>item.id!==commentId)});
+    });
   },
   async uploadImage(file) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
