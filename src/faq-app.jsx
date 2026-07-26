@@ -169,7 +169,7 @@ function BatchEditor({ group, categories, onClose }) {
       <section className={`faq-bulk-import ${bulkOpen ? 'open' : ''}`}>
         <button className="faq-bulk-toggle" onClick={() => setBulkOpen(!bulkOpen)}>▣ FAQ 전체 텍스트 붙여넣기 <span>{bulkOpen ? '접기' : '열기'}</span></button>
         {bulkOpen && <div className="faq-bulk-box">
-          <p>10개의 FAQ가 포함된 전체 텍스트를 한 번만 붙여넣으세요. 질문을 자동으로 나눠 하나의 묶음 게시글로 만듭니다.</p>
+          <p>개수와 관계없이 FAQ 전체 텍스트를 한 번만 붙여넣으세요. 모든 질문을 자동으로 나눠 하나의 묶음 게시글로 만듭니다.</p>
           <pre>{`묶음 제목: 회원 정지·복구 가이드
 카테고리: 회원관리
 KMS: https://faq.logishm.com/...
@@ -182,7 +182,7 @@ A: 정지 사유를 확인한 뒤 사유별 복구 절차를 진행합니다.
 ---
 Q: 미결제 회원도 복구할 수 있나요?
 A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
-          <textarea autoFocus={!group} value={bulkText} onChange={event => { setBulkText(event.target.value); setBulkMessage(''); }} placeholder="여기에 FAQ 10개가 포함된 전체 텍스트를 한 번에 붙여넣으세요." />
+          <textarea autoFocus={!group} value={bulkText} onChange={event => { setBulkText(event.target.value); setBulkMessage(''); }} placeholder="여기에 개수와 관계없이 FAQ 전체 텍스트를 한 번에 붙여넣으세요." />
           <button className="faq-parse-button" onClick={importBulk}>붙여넣은 내용으로 FAQ 일괄 생성</button>
         </div>}
         {bulkMessage && <p className="faq-bulk-message">{bulkMessage}</p>}
