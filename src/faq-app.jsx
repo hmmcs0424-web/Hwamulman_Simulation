@@ -352,7 +352,7 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
         </section>;
       })}
     </div>
-    {group.kmsUrl && <a className="faq-kms-link" href={group.kmsUrl} target="_blank" rel="noopener">관련 KMS 보기 ↗</a>}
+    {group.kmsUrl && <a className="faq-kms-link" href={group.kmsUrl} target="_blank" rel="noopener">KMS 가이드 열기</a>}
     {isAdmin && <div className="faq-document-admin">
       <button onClick={onPublish}>{group.isPublished === false ? '게시하기' : '숨기기'}</button>
       <button onClick={onEdit}>수정</button><button className="danger" onClick={onDelete}>삭제</button>

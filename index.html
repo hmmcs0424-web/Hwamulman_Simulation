@@ -1068,7 +1068,7 @@ textarea.form-input{resize:vertical;}
 </div>
 
 <script type="module" src="/vendor/announcement-app.js?v=8"></script>
-<script type="module" src="/vendor/faq-app.js?v=7"></script>
+<script type="module" src="/vendor/faq-app.js?v=8"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -2214,25 +2214,15 @@ function legacyNoticeToAnnouncement(post) {
   };
 }
 
-async function ensureAnnouncementsSeeded() {
-  const collectionRef = firebaseFns.collection(firestoreDb,'announcements');
-  const current = await firebaseFns.getDocs(collectionRef);
-  if(!current.empty || !noticePosts.length) return;
-  const batch = firebaseFns.writeBatch(firestoreDb);
-  noticePosts.map(legacyNoticeToAnnouncement).forEach(post => {
-    batch.set(firebaseFns.doc(collectionRef,post.id),post);
-  });
-  await batch.commit();
-}
-
 window.announcementBridge = {
   isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
   subscribe(callback) {
-    callback(noticePosts.map(legacyNoticeToAnnouncement));
-    if(!firebaseReady) return () => {};
+    if(!firebaseReady) {
+      callback(noticePosts.map(legacyNoticeToAnnouncement));
+      return () => {};
+    }
     return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'announcements'), snapshot => {
-      if(snapshot.empty) callback(noticePosts.map(legacyNoticeToAnnouncement));
-      else callback(snapshot.docs.map(item=>({id:item.id,...item.data()})));
+      callback(snapshot.docs.map(item=>({id:item.id,...item.data()})));
     }, error => {
       if(error?.code!=='permission-denied') console.warn('공지 실시간 연결 실패:',error);
     });
@@ -2312,7 +2302,6 @@ window.announcementBridge = {
   },
   async save(post) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    await ensureAnnouncementsSeeded();
     const id=post.id||`announcement-${Date.now()}`;
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'announcements',id),{
       title:post.title,
