@@ -81,6 +81,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .guide-content{font-size:15px;line-height:1.8;color:#333}.guide-content h2{font-size:20px;margin-bottom:12px}.guide-content p{margin-bottom:12px}.guide-content ul{padding-left:22px}
 .guide-editor{display:none}.guide-editor textarea{width:100%;min-height:280px;border:1px solid #ddd;border-radius:10px;padding:14px;font:14px/1.6 inherit;resize:vertical;outline:none}.guide-editor textarea:focus{border-color:var(--brand)}
 .guide-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.guide-save-note{font-size:12px;color:#888;margin-top:10px;text-align:right}
+.notice-board{display:flex;flex-direction:column;gap:14px}.notice-search-wrap{position:relative}.notice-search{width:100%;height:48px;border:1px solid #d8d8df;border-radius:12px;padding:0 46px 0 16px;font:14px inherit;outline:none;background:#fff}.notice-search:focus{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.12)}.notice-search-icon{position:absolute;right:16px;top:13px;font-size:18px}.notice-summary{display:flex;justify-content:space-between;align-items:center;color:#777;font-size:12px}.notice-list{display:grid;gap:10px}.notice-card{border:1px solid #e7e7eb;border-radius:12px;padding:16px 18px;background:#fff;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}.notice-card:hover{border-color:#fca5a5;transform:translateY(-1px);box-shadow:0 5px 18px rgba(30,30,40,.07)}.notice-card-top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.notice-card h3{font-size:15px;line-height:1.45;color:#222;margin:0}.notice-date{font-size:11px;color:#999;white-space:nowrap}.notice-snippet{font-size:13px;line-height:1.55;color:#666;margin-top:8px}.notice-author{font-size:11px;color:#a0a0a8;margin-top:9px}.notice-empty{text-align:center;color:#999;padding:48px 20px;border:1px dashed #ddd;border-radius:12px}.notice-detail-back{border:0;background:transparent;color:#d74c4c;font:700 13px inherit;cursor:pointer;padding:0;margin-bottom:18px}.notice-detail h2{font-size:23px;line-height:1.45;margin:0 0 10px}.notice-detail-meta{font-size:12px;color:#888;padding-bottom:16px;border-bottom:1px solid #eee}.notice-detail-body{font-size:14px;line-height:1.85;white-space:pre-wrap;color:#333;padding-top:20px}.notice-detail-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:24px}.notice-editor-modal{max-width:680px}.notice-editor-modal textarea{min-height:330px}
 .asset-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}.asset-category{border:1px solid #ddd;background:#f7f7f8;color:#555;border-radius:9px;padding:9px 6px;font:700 12px inherit;cursor:pointer}.asset-category:hover{border-color:#aaa}.asset-category.active{border-color:var(--brand);background:#fff8df;color:#7a5600}.asset-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.asset-status{font-size:12px;color:#666;margin:8px 0}.asset-list{max-height:360px;overflow:auto;border:1px solid #e5e5e5;border-radius:10px}.asset-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #eee}.asset-item:last-child{border-bottom:0}.asset-select{display:flex;align-items:center;gap:10px;min-width:0;flex:1;cursor:pointer}.asset-thumb{width:48px;height:48px;object-fit:cover;border-radius:6px;background:#eee}.asset-name{flex:1;font-size:12px;word-break:break-all}.asset-origin{border-radius:99px;padding:3px 7px;background:#f0f0f2;color:#777;font:700 10px inherit;white-space:nowrap}.asset-origin.cloud{background:#eef6ff;color:#2874b8}.asset-delete-one{border:1px solid #ffd0d0;background:#fff5f5;color:#d33;border-radius:7px;padding:6px 9px;font:700 11px inherit;cursor:pointer;white-space:nowrap}.asset-delete-one:hover{background:#ffe7e7}.asset-progress{height:7px;background:#eee;border-radius:99px;overflow:hidden}.asset-progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .15s}
 
 /* ── PHONE FRAME ── */
@@ -937,6 +938,34 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<!-- 공지사항 작성/수정 모달 -->
+<div class="modal-bg" id="noticeEditorModal">
+  <div class="modal notice-editor-modal">
+    <div class="modal-title" id="noticeEditorTitle">📢 공지 작성</div>
+    <input type="hidden" id="noticeEditId">
+    <div class="form-row">
+      <div class="form-label">제목</div>
+      <input class="form-input" id="noticeTitleInput" placeholder="공지 제목을 입력하세요">
+    </div>
+    <div class="form-row">
+      <div class="form-label">작성자</div>
+      <input class="form-input" id="noticeAuthorInput" placeholder="예: 운영관리팀">
+    </div>
+    <div class="form-row">
+      <div class="form-label">게시일</div>
+      <input class="form-input" id="noticeDateInput" type="date">
+    </div>
+    <div class="form-row">
+      <div class="form-label">내용</div>
+      <textarea class="form-input" id="noticeBodyInput" placeholder="공지 내용을 입력하세요"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" type="button" onclick="closeModal('noticeEditorModal')">취소</button>
+      <button class="btn btn-primary" type="button" id="noticeSaveBtn" onclick="saveNoticePost()">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- Firebase Storage 이미지 관리자 -->
 <div class="modal-bg" id="assetModal">
   <div class="modal" style="max-width:760px;width:min(92vw,760px)">
@@ -1075,6 +1104,9 @@ let firebaseFns = null;
 let firebaseReady = false;
 let managedAssets = [];
 let assetManageSec = '차주앱';
+let noticePosts = [];
+let noticeQuery = '';
+let selectedNoticeId = null;
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1088,6 +1120,17 @@ function loadGuidePages() {
     const saved = JSON.parse(localStorage.getItem(GUIDE_STORAGE_KEY) || '{}');
     Object.keys(guidePages).forEach(key => { if(typeof saved[key] === 'string') guidePages[key].html = saved[key]; });
   } catch(e) { console.warn('업무 가이드 임시 저장 데이터 로드 실패:', e); }
+}
+
+async function loadDefaultNotices() {
+  try {
+    const response = await fetch('notices.json?_=' + Date.now());
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    noticePosts = await response.json();
+  } catch(e) {
+    noticePosts = [];
+    console.warn('기본 공지사항 로드 실패:', e);
+  }
 }
 
 async function initFirebase() {
@@ -1118,6 +1161,7 @@ async function loadGuidePagesFromFirestore() {
     const snapshot = await firebaseFns.getDocs(firebaseFns.collection(firestoreDb, 'guides'));
     snapshot.forEach(item => {
       if(guidePages[item.id] && typeof item.data().content === 'string') guidePages[item.id].html = item.data().content;
+      if(item.id === 'notice' && Array.isArray(item.data().posts)) noticePosts = item.data().posts;
     });
     if(activePage !== 'simulator') renderGuidePage();
   } catch(e) { console.error('Firestore 가이드 로드 실패:', e); }
@@ -1165,11 +1209,125 @@ function renderGuidePage() {
   if(!page) return;
   document.getElementById('guidePageTitle').textContent = page.title;
   document.getElementById('guidePageDesc').textContent = page.desc;
+  const editBtn = document.getElementById('guideEditBtn');
+  editBtn.textContent = activePage === 'notice' ? '＋ 공지 작성' : '✎ 내용 수정';
+  if(activePage === 'notice') {
+    editingGuidePage = false;
+    document.getElementById('guideEditorBox').style.display = 'none';
+    renderNoticeBoard();
+    document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
   document.getElementById('guideContent').innerHTML = page.html;
   document.getElementById('guideContent').style.display = editingGuidePage ? 'none' : '';
   document.getElementById('guideEditorBox').style.display = editingGuidePage ? 'block' : 'none';
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
   if(editingGuidePage) document.getElementById('guideEditorInput').value = page.html;
+}
+
+function noticeSearchText(post) {
+  return `${post.title||''} ${post.body||''} ${post.author||''}`.toLocaleLowerCase('ko-KR');
+}
+function formatNoticeBody(body) {
+  return esc(body||'').replace(/https?:\/\/[^\s<]+/g, url => `<a href="${url}" target="_blank" rel="noopener">${url}</a>`);
+}
+
+function renderNoticeBoard() {
+  const content = document.getElementById('guideContent');
+  content.style.display = '';
+  if(selectedNoticeId) {
+    const post = noticePosts.find(item => item.id === selectedNoticeId);
+    if(post) {
+      content.innerHTML = `<div class="notice-detail">
+        <button class="notice-detail-back" type="button" onclick="closeNoticeDetail()">← 공지 목록으로</button>
+        <h2>${esc(post.title)}</h2>
+        <div class="notice-detail-meta">${esc(post.date||'')} ${post.author ? `· ${esc(post.author)}` : ''}</div>
+        <div class="notice-detail-body">${formatNoticeBody(post.body)}</div>
+        ${adminMode ? `<div class="notice-detail-actions"><button class="btn btn-secondary" type="button" onclick="openNoticeEditor('${esc(post.id)}')">수정</button><button class="btn btn-danger" type="button" onclick="deleteNoticePost('${esc(post.id)}')">삭제</button></div>` : ''}
+      </div>`;
+      return;
+    }
+    selectedNoticeId = null;
+  }
+  const words = noticeQuery.trim().toLocaleLowerCase('ko-KR').split(/\s+/).filter(Boolean);
+  const ranked = noticePosts.map(post => {
+    const title = String(post.title||'').toLocaleLowerCase('ko-KR');
+    const all = noticeSearchText(post);
+    const score = words.reduce((sum, word) => sum + (title.includes(word) ? 3 : 0) + (all.includes(word) ? 1 : 0), 0);
+    return {post, score};
+  }).filter(item => !words.length || item.score > 0)
+    .sort((a,b) => words.length ? b.score-a.score || String(b.post.date).localeCompare(String(a.post.date)) : String(b.post.date).localeCompare(String(a.post.date)));
+  const cards = ranked.map(({post}) => {
+    const plain = String(post.body||'').replace(/\s+/g,' ').trim();
+    const snippet = plain.length > 150 ? plain.slice(0,150)+'…' : plain;
+    return `<article class="notice-card" onclick="openNoticeDetail('${esc(post.id)}')">
+      <div class="notice-card-top"><h3>${esc(post.title)}</h3><span class="notice-date">${esc(post.date||'')}</span></div>
+      <div class="notice-snippet">${esc(snippet)}</div>
+      ${post.author ? `<div class="notice-author">${esc(post.author)}</div>` : ''}
+    </article>`;
+  }).join('');
+  content.innerHTML = `<div class="notice-board">
+    <div class="notice-search-wrap"><input class="notice-search" id="noticeSearchInput" value="${esc(noticeQuery)}" placeholder="제목, 내용, 작성자 또는 업무 단어로 검색" oninput="searchNotices(this.value)"><span class="notice-search-icon">⌕</span></div>
+    <div class="notice-summary"><span>${words.length ? `검색 결과 ${ranked.length}건` : `전체 공지 ${noticePosts.length}건`}</span><span>제목과 내용의 유사 단어를 함께 검색합니다.</span></div>
+    <div class="notice-list">${cards || '<div class="notice-empty">일치하는 공지사항이 없습니다.<br>다른 단어로 검색해 보세요.</div>'}</div>
+  </div>`;
+}
+
+function searchNotices(value) {
+  noticeQuery = value;
+  renderNoticeBoard();
+  const input = document.getElementById('noticeSearchInput');
+  if(input) { input.focus(); input.setSelectionRange(value.length,value.length); }
+}
+function openNoticeDetail(id) { selectedNoticeId=id; renderNoticeBoard(); }
+function closeNoticeDetail() { selectedNoticeId=null; renderNoticeBoard(); }
+function openNoticeEditor(id='') {
+  if(!adminMode) return;
+  const post = noticePosts.find(item => item.id === id);
+  document.getElementById('noticeEditorTitle').textContent = post ? '📢 공지 수정' : '📢 공지 작성';
+  document.getElementById('noticeEditId').value = post?.id || '';
+  document.getElementById('noticeTitleInput').value = post?.title || '';
+  document.getElementById('noticeAuthorInput').value = post?.author || '';
+  document.getElementById('noticeDateInput').value = post?.date || new Date().toISOString().slice(0,10);
+  document.getElementById('noticeBodyInput').value = post?.body || '';
+  openModal('noticeEditorModal');
+  setTimeout(()=>document.getElementById('noticeTitleInput').focus(),60);
+}
+async function saveNoticePost() {
+  const id = document.getElementById('noticeEditId').value;
+  const title = document.getElementById('noticeTitleInput').value.trim();
+  const author = document.getElementById('noticeAuthorInput').value.trim();
+  const date = document.getElementById('noticeDateInput').value;
+  const body = document.getElementById('noticeBodyInput').value.trim();
+  if(!title || !body) { alert('제목과 내용을 입력해 주세요.'); return; }
+  const previous = noticePosts.map(item=>({...item}));
+  const next = {id:id || `notice-${Date.now()}`,title,author,date,body};
+  const index = noticePosts.findIndex(item => item.id === id);
+  if(index >= 0) noticePosts[index] = next; else noticePosts.push(next);
+  const btn = document.getElementById('noticeSaveBtn');
+  btn.disabled=true; btn.textContent='저장 중...';
+  try {
+    await saveNoticePostsToFirestore();
+    selectedNoticeId=next.id;
+    closeModal('noticeEditorModal');
+    renderNoticeBoard();
+  } catch(e) {
+    noticePosts = previous;
+    alert('공지를 저장하지 못했습니다: '+(e.message||e));
+  } finally { btn.disabled=false; btn.textContent='저장'; }
+}
+async function deleteNoticePost(id) {
+  if(!adminMode || !confirm('이 공지를 삭제할까요?')) return;
+  const previous = [...noticePosts];
+  noticePosts = noticePosts.filter(item => item.id !== id);
+  try {
+    await saveNoticePostsToFirestore();
+    selectedNoticeId=null;
+    renderNoticeBoard();
+  } catch(e) {
+    noticePosts=previous;
+    alert('공지를 삭제하지 못했습니다: '+(e.message||e));
+  }
 }
 
 async function loadSiteImageManifest() {
@@ -1215,6 +1373,7 @@ function clearTransientScreenState() {
 async function boot() {
   tick(); setInterval(tick, 1000);
   loadGuidePages();
+  await loadDefaultNotices();
   await initFirebase();
 
   document.getElementById('sidebarToggle').addEventListener('click', () => {
@@ -1237,7 +1396,11 @@ async function boot() {
     document.querySelectorAll('.side-submenu').forEach(b => b.classList.toggle('active', b === btn));
     await switchSec(btn.dataset.sim);
   }));
-  document.getElementById('guideEditBtn').addEventListener('click', () => { editingGuidePage = true; renderGuidePage(); });
+  document.getElementById('guideEditBtn').addEventListener('click', () => {
+    if(activePage === 'notice') { openNoticeEditor(); return; }
+    editingGuidePage = true;
+    renderGuidePage();
+  });
   document.getElementById('guideEditCancel').addEventListener('click', () => { editingGuidePage = false; renderGuidePage(); });
   document.getElementById('guideEditSave').addEventListener('click', async () => {
     const saveBtn = document.getElementById('guideEditSave');
@@ -2002,6 +2165,16 @@ async function refreshAssetList() {
     renderAssetList();
     status.textContent=`${requestedSec} · 기본 이미지 ${staticAssets.length}개 (업로드 목록을 불러오지 못함: ${e.message||e})`;
   }
+}
+
+async function saveNoticePostsToFirestore() {
+  if(!firebaseReady || !adminMode || !firebaseAuth.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+  await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'notice'), {
+    title: guidePages.notice.title,
+    posts: noticePosts,
+    updatedAt: firebaseFns.serverTimestamp(),
+    updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+  }, { merge:true });
 }
 function renderAssetList() {
   document.getElementById('assetList').innerHTML = managedAssets.length ? managedAssets.map((a,i)=>`
