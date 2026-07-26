@@ -13,3 +13,14 @@ esbuild.buildSync({
   target: ['es2020'],
   jsx: 'automatic',
 });
+
+esbuild.buildSync({
+  absWorkingDir: root,
+  entryPoints: ['./src/faq-app.jsx'],
+  bundle: true,
+  format: 'esm',
+  minify: true,
+  outfile: 'vendor/faq-app.js',
+  target: ['es2020'],
+  jsx: 'automatic',
+});

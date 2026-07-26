@@ -99,12 +99,12 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
       <div className="an-command-results">
         <div className="an-command-label">{query ? `검색 결과 ${results.length}건` : '중요 공지'}</div>
         {results.map((post, index) => <button key={`${post.kind}-${post.id}`} className={index === active ? 'active' : ''} onMouseEnter={() => setActive(index)} onClick={() => choose(post)}>
-          <span className="an-result-icon">{post.kind === 'guide' ? '📘' : '📄'}</span>
+          <span className="an-result-icon">{post.category === 'FAQ' ? '❓' : post.kind === 'guide' ? '📘' : '📄'}</span>
           <span className="an-result-copy">
             <strong>{highlight(post.title, query)}</strong>
             <small>{highlight(snippetFor(post.content, query), query)}</small>
           </span>
-          <span className={`an-category-badge ${post.kind === 'guide' ? 'guide' : ''}`}>{post.kind === 'guide' ? '가이드' : post.category || '공지'}</span>
+          <span className={`an-category-badge ${post.kind === 'guide' ? 'guide' : ''}`}>{post.category === 'FAQ' ? 'FAQ' : post.kind === 'guide' ? '가이드' : post.category || '공지'}</span>
         </button>)}
         {!results.length && <div className="an-no-results">일치하는 공지나 가이드가 없습니다.</div>}
       </div>

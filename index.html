@@ -5,6 +5,7 @@
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="/announcement-app.css?v=4" rel="stylesheet">
+<link href="/faq-app.css?v=1" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1066,7 +1067,8 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=4"></script>
+<script type="module" src="/vendor/announcement-app.js?v=5"></script>
+<script type="module" src="/vendor/faq-app.js?v=1"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -1219,6 +1221,15 @@ function renderGuidePage() {
     document.getElementById('guideContent').style.display = '';
     document.getElementById('guideContent').innerHTML = '<div id="announcementReactRoot"></div>';
     window.mountAnnouncementApp?.(document.getElementById('announcementReactRoot'));
+    document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
+  if(activePage === 'faq') {
+    editingGuidePage = false;
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="faqReactRoot"></div>';
+    window.mountFaqApp?.(document.getElementById('faqReactRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
     return;
   }
@@ -2227,7 +2238,7 @@ window.announcementBridge = {
     });
   },
   subscribeGuides(callback) {
-    const searchableKeys=['signup','membership','profile','faq'];
+    const searchableKeys=['signup','membership','profile'];
     const buildDefaults=() => searchableKeys.map(id=>({
       id,
       title:guidePages[id].title,
@@ -2235,25 +2246,49 @@ window.announcementBridge = {
       category:'업무 가이드',
       tags:[guidePages[id].title]
     }));
-    callback(buildDefaults());
+    let guideResults=buildDefaults();
+    let faqResults=[];
+    const emit=()=>callback([...guideResults,...faqResults]);
+    emit();
     if(!firebaseReady) return () => {};
-    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+    const unsubscribeGuides=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
       const cloud=new Map();
       snapshot.forEach(item => {
         if(searchableKeys.includes(item.id) && typeof item.data().content==='string') cloud.set(item.id,item.data().content);
       });
-      callback(searchableKeys.map(id=>({
+      guideResults=searchableKeys.map(id=>({
         id,
         title:guidePages[id].title,
         content:String(cloud.get(id)||guidePages[id].html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
         category:'업무 가이드',
         tags:[guidePages[id].title]
-      })));
+      }));
+      emit();
     },error => {
       if(error?.code!=='permission-denied') console.warn('가이드 검색 연결 실패:',error);
     });
+    const unsubscribeFaqs=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'faqGroups'), snapshot => {
+      faqResults=snapshot.docs.flatMap(groupDoc => {
+        const group=groupDoc.data();
+        return (Array.isArray(group.items)?group.items:[]).map(item=>({
+          id:`faq:${groupDoc.id}:${item.id}`,
+          title:item.question||'FAQ',
+          content:[item.shortAnswer,item.content,...(item.synonyms||[])].filter(Boolean).join(' '),
+          category:'FAQ',
+          tags:[...(item.tags||[]),group.title||'',group.category||''].filter(Boolean)
+        }));
+      });
+      emit();
+    },error => {
+      if(error?.code!=='permission-denied') console.warn('FAQ 검색 연결 실패:',error);
+    });
+    return () => { unsubscribeGuides(); unsubscribeFaqs(); };
   },
   openGuide(id) {
+    if(String(id).startsWith('faq:')) {
+      setWorkspacePage('faq');
+      return;
+    }
     if(!guidePages[id]) return;
     setWorkspacePage(id);
   },
@@ -2308,6 +2343,40 @@ window.announcementBridge = {
     return result.url;
   }
 };
+
+window.faqBridge = {
+  isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
+  subscribe(callback) {
+    callback([]);
+    if(!firebaseReady) return () => {};
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'faqGroups'), snapshot => {
+      const groups=snapshot.docs.map(item=>({id:item.id,...item.data()}))
+        .sort((a,b)=>String(b.updatedAt?.seconds||'').localeCompare(String(a.updatedAt?.seconds||'')));
+      callback(groups);
+    },error => {
+      if(error?.code!=='permission-denied') console.warn('FAQ 실시간 연결 실패:',error);
+    });
+  },
+  async saveGroup(group) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    const id=group.id||`faq-group-${Date.now()}`;
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'faqGroups',id),{
+      title:group.title,
+      category:group.category||'일반',
+      kmsUrl:group.kmsUrl||'',
+      items:Array.isArray(group.items)?group.items:[],
+      createdAt:group.id ? (group.createdAt||firebaseFns.serverTimestamp()) : firebaseFns.serverTimestamp(),
+      updatedAt:firebaseFns.serverTimestamp(),
+      updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
+    },{merge:true});
+    return id;
+  },
+  async removeGroup(id) {
+    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'faqGroups',id));
+  }
+};
+
 function renderAssetList() {
   document.getElementById('assetList').innerHTML = managedAssets.length ? managedAssets.map((a,i)=>`
     <div class="asset-item">
