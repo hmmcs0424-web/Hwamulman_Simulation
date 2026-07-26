@@ -298,9 +298,9 @@ function Workspace() {
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
           <div className="an-card-list">{filtered.map(post => <button key={post.id} className="an-page-row" onClick={() => navigate(`/announcement/${encodeURIComponent(post.id)}`)}>
-            <span className="an-page-icon">{post.isPinned ? '★' : '▤'}</span>
+            <span className="an-page-category" data-category={post.category || '일반'}>{post.isPinned && <i>★</i>}{post.category || '일반'}</span>
             <span className="an-page-copy"><strong>{post.title}</strong><small>{snippetFor(post.content, '')}</small>
-              <span className="an-row-tags"><b>{post.category || '일반'}</b>{(post.tags || []).slice(0, 3).map(tag => <i key={tag}>#{tag}</i>)}</span></span>
+              {!!post.tags?.length && <span className="an-row-tags">{post.tags.slice(0, 3).map(tag => <i key={tag}>#{tag}</i>)}</span>}</span>
             <time>{dateLabel(post.createdAt)}</time>
           </button>)}
           {!filtered.length && <div className="an-empty">이 카테고리에 등록된 공지가 없습니다.</div>}</div>
