@@ -7,6 +7,7 @@
 <link href="/announcement-app.css?v=18" rel="stylesheet">
 <link href="/faq-app.css?v=14" rel="stylesheet">
 <link href="/signup-guide.css?v=3" rel="stylesheet">
+<link href="/signup-checklist.css?v=1" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -69,6 +70,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .side-menu[data-page="signup"],.side-menu[data-page="membership"],.side-menu[data-page="profile"],
 .side-menu[data-page="signup"]:hover,.side-menu[data-page="membership"]:hover,.side-menu[data-page="profile"]:hover{color:#60a5fa}
 .side-menu[data-page="signup"].active,.side-menu[data-page="membership"].active,.side-menu[data-page="profile"].active{color:#93c5fd;background:#172d4d}
+#signupGroup .side-submenu:hover,#signupGroup .side-submenu.active{color:#60a5fa;background:#172d4d}
 .side-menu[data-page="notice"],.side-menu[data-page="notice"]:hover{color:#f87171}
 .side-menu[data-page="notice"].active{color:#fca5a5;background:#491f25}
 .side-menu[data-page="faq"],.side-menu[data-page="faq"]:hover{color:#facc15}
@@ -544,7 +546,15 @@ textarea.form-input{resize:vertical;}
           <button class="side-submenu" type="button" data-sim="채널톡">채널톡</button>
         </div>
       </div>
-      <button class="side-menu" type="button" data-page="signup"><span class="side-icon">＋</span><span class="side-label">신규가입</span></button>
+      <div class="side-group" id="signupGroup">
+        <button class="side-menu" type="button" data-page="signup">
+          <span class="side-icon">＋</span><span class="side-label">신규가입</span><span class="side-arrow">▶</span>
+        </button>
+        <div class="side-submenus">
+          <button class="side-submenu" type="button" data-signup-page="signup">가입 업무 가이드</button>
+          <button class="side-submenu" type="button" data-signup-page="signupChecklist">상담 체크리스트</button>
+        </div>
+      </div>
       <button class="side-menu" type="button" data-page="membership"><span class="side-icon">Ⅱ</span><span class="side-label">일시정지/복구/탈퇴</span></button>
       <button class="side-menu" type="button" data-page="profile"><span class="side-icon">✎</span><span class="side-label">정보변경</span></button>
       <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
@@ -1094,6 +1104,7 @@ textarea.form-input{resize:vertical;}
 <script type="module" src="/vendor/announcement-app.js?v=20"></script>
 <script type="module" src="/vendor/faq-app.js?v=16"></script>
 <script src="/vendor/signup-guide.js?v=3"></script>
+<script src="/vendor/signup-checklist.js?v=1"></script>
 <script src="/vendor/membership-guide.js?v=1"></script>
 <script src="/vendor/profile-guide.js?v=1"></script>
 <script>
@@ -1145,6 +1156,7 @@ const COUNSELOR_NAME_KEY = 'hmm-remembered-counselor-name';
 const ADMIN_EMAIL_KEY = 'hmm-remembered-admin-email';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
+  signupChecklist: { title:'상담 체크리스트', desc:'신규가입 상담 중 안내 사항을 확인하며 체크할 수 있습니다.', html:'' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   profile: { title:'정보변경', desc:'회원 및 차량 정보 변경 절차를 정리하는 공간입니다.', html:'<h2>정보변경 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   notice: { title:'공지사항', desc:'업무 변경사항과 중요한 안내를 확인하는 공간입니다.', html:'<h2>공지사항</h2><p>등록된 공지사항이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1184,6 +1196,7 @@ async function initFirebase() {
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
     window.signupGuideBridge?.connect?.();
+    window.signupChecklistBridge?.connect?.();
     window.membershipGuideBridge?.connect?.();
     window.profileGuideBridge?.connect?.();
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
@@ -1244,7 +1257,11 @@ function setWorkspacePage(page) {
   if(!isSimulator) document.querySelector('.info-panel').style.display = 'none';
   document.getElementById('ctEduArea').style.display = 'none';
   document.getElementById('btnShowHotspots').style.display = isSimulator ? '' : 'none';
-  document.querySelectorAll('.side-menu[data-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+  document.querySelectorAll('.side-menu[data-page]').forEach(btn => {
+    const isSignupPage = page === 'signup' || page === 'signupChecklist';
+    btn.classList.toggle('active', btn.dataset.page === page || (btn.dataset.page === 'signup' && isSignupPage));
+  });
+  document.querySelectorAll('[data-signup-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.signupPage === page));
   if(isSimulator) { applySec(activeSec); return; }
   editingGuidePage = false;
   renderGuidePage();
@@ -1265,6 +1282,16 @@ function renderGuidePage() {
     document.getElementById('guideContent').style.display = '';
     document.getElementById('guideContent').innerHTML = '<div id="signupGuideRoot"></div>';
     window.mountSignupGuide?.(document.getElementById('signupGuideRoot'));
+    document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
+  if(activePage === 'signupChecklist') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="signupChecklistRoot"></div>';
+    window.mountSignupChecklist?.(document.getElementById('signupChecklistRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
     return;
   }
@@ -1477,12 +1504,19 @@ async function boot() {
     if(btn.dataset.page === 'simulator') {
       document.getElementById('simulatorGroup').classList.toggle('open');
       setWorkspacePage('simulator');
+    } else if(btn.dataset.page === 'signup') {
+      document.getElementById('signupGroup').classList.toggle('open');
+      setWorkspacePage('signup');
     } else setWorkspacePage(btn.dataset.page);
   }));
-  document.querySelectorAll('.side-submenu').forEach(btn => btn.addEventListener('click', async () => {
+  document.querySelectorAll('.side-submenu[data-sim]').forEach(btn => btn.addEventListener('click', async () => {
     setWorkspacePage('simulator');
-    document.querySelectorAll('.side-submenu').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.side-submenu[data-sim]').forEach(b => b.classList.toggle('active', b === btn));
     await switchSec(btn.dataset.sim);
+  }));
+  document.querySelectorAll('.side-submenu[data-signup-page]').forEach(btn => btn.addEventListener('click', () => {
+    document.getElementById('signupGroup').classList.add('open');
+    setWorkspacePage(btn.dataset.signupPage);
   }));
   document.getElementById('guideEditBtn').addEventListener('click', () => {
     if(activePage === 'notice') { openNoticeEditor(); return; }
@@ -2442,6 +2476,42 @@ window.signupGuideBridge = {
     if(!Array.isArray(steps) || !steps.length) throw new Error('저장할 단계가 없습니다.');
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guideFlows', 'signup'), {
       steps,
+      updatedAt: firebaseFns.serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
+      updatedByName: currentAdminProfile?.name || '관리자'
+    }, {merge:true});
+  }
+};
+
+const signupChecklistListeners = new Set();
+let signupChecklistCache = null;
+let signupChecklistUnsubscribe = null;
+window.signupChecklistBridge = {
+  isAdmin: () => adminMode && !!firebaseAuth?.currentUser,
+  subscribe(callback) {
+    signupChecklistListeners.add(callback);
+    if(signupChecklistCache) callback(signupChecklistCache);
+    this.connect();
+    return () => signupChecklistListeners.delete(callback);
+  },
+  connect() {
+    if(!firebaseReady || !firestoreDb || signupChecklistUnsubscribe) return;
+    signupChecklistUnsubscribe = firebaseFns.onSnapshot(
+      firebaseFns.doc(firestoreDb, 'guides', 'signupChecklist'),
+      snapshot => {
+        const data = snapshot.exists() ? snapshot.data() : null;
+        if(!Array.isArray(data?.sections) || !data.sections.length) return;
+        signupChecklistCache = {title:data.title || '신규가입 안내 체크리스트', sections:data.sections};
+        signupChecklistListeners.forEach(callback => callback(signupChecklistCache));
+      },
+      error => console.error('신규가입 체크리스트 구독 실패:', error)
+    );
+  },
+  async save(data) {
+    if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'signupChecklist'), {
+      title: data.title || '신규가입 안내 체크리스트',
+      sections: data.sections,
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
       updatedByName: currentAdminProfile?.name || '관리자'
