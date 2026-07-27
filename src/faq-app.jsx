@@ -37,6 +37,9 @@ const dateTimeLabel = value => {
   const date = value?.toDate ? value.toDate() : value?.seconds ? new Date(value.seconds * 1000) : new Date(value || '');
   return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('ko-KR');
 };
+const renderFaqMarkdown = value => DOMPurify.sanitize(
+  marked.parse(String(value || '').replace(/~~/g, '\\~\\~')),
+);
 
 function parseBulkFaq(source) {
   const lines = String(source || '').replace(/\r\n?/g, '\n').split('\n');
@@ -390,7 +393,7 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
           {opened && <div className="faq-detail-answer">
             <div className="faq-core-answer"><small>핵심답변</small><strong>{item.shortAnswer}</strong></div>
             <div className="faq-guide-copy"><span>안내 및 처리기준</span><button onClick={() => copy(item)}>복사</button></div>
-            <div className="faq-markdown" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(item.content || item.shortAnswer || '')) }} />
+            <div className="faq-markdown" dangerouslySetInnerHTML={{ __html: renderFaqMarkdown(item.content || item.shortAnswer || '') }} />
             {!!item.tags?.length && <div className="faq-tags">{item.tags.map(tag => <span key={tag}>#{tag}</span>)}</div>}
           </div>}
         </section>;
