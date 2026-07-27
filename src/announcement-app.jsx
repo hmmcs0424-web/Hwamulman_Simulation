@@ -6,8 +6,28 @@ import DOMPurify from 'dompurify';
 
 const RECENT_KEY = 'hmm-announcement-recent-searches';
 const DEFAULT_CATEGORIES = ['전체', '중요', '회원관리', '배차', '정산', '환불', '시스템', '이벤트'];
+const CATEGORY_PALETTE = [
+  '#7F1D1D', '#9A3412', '#92400E', '#3F6212', '#166534',
+  '#065F46', '#115E59', '#155E75', '#1E40AF', '#3730A3',
+  '#5B21B6', '#6B21A8', '#86198F', '#9D174D', '#881337',
+  '#334155', '#3F3F46', '#1F2937', '#4C1D95', '#0F4C5C',
+];
 let root;
 let rootElement;
+
+function categoryColor(category, colors) {
+  if (colors?.[category]) return colors[category];
+  let seed = 0;
+  for (const char of String(category || '')) seed = (seed + char.charCodeAt(0)) % CATEGORY_PALETTE.length;
+  return CATEGORY_PALETTE[seed];
+}
+
+function authorLabel(post, adminProfile) {
+  const raw = String(post?.authorName || post?.author || '').trim();
+  if (raw && !raw.includes('@')) return raw;
+  if (post?.authorId && adminProfile?.uid === post.authorId && adminProfile.name) return adminProfile.name;
+  return '관리자';
+}
 
 function toText(value) {
   return String(value || '').toLocaleLowerCase('ko-KR');
@@ -225,14 +245,18 @@ function Editor({ post, categories, onClose }) {
   </div>;
 }
 
-function CategoryManager({ categories, onClose, onSaved }) {
+function CategoryManager({ categories, colors, onClose, onSaved }) {
   const [items, setItems] = useState(categories.filter(item => item !== '전체' && item !== '중요'));
+  const [categoryColors, setCategoryColors] = useState(colors);
+  const [selected, setSelected] = useState(items[0] || '');
   const [value, setValue] = useState('');
   const [saving, setSaving] = useState(false);
   const add = () => {
     const name = value.trim();
     if (!name || items.includes(name)) return;
     setItems(current => [...current, name]);
+    setCategoryColors(current => ({ ...current, [name]: categoryColor(name, current) }));
+    setSelected(name);
     setValue('');
   };
   const move = (index, offset) => setItems(current => {
@@ -244,23 +268,35 @@ function CategoryManager({ categories, onClose, onSaved }) {
     if (!items.length) return alert('카테고리를 하나 이상 등록해 주세요.');
     setSaving(true);
     try {
-      await window.announcementBridge.saveCategories(items);
-      onSaved(items);
+      await window.announcementBridge.saveCategories(items, categoryColors);
+      onSaved(items, categoryColors);
     } catch (error) { alert(`카테고리를 저장하지 못했습니다: ${error.message || error}`); }
     finally { setSaving(false); }
   };
   return <div className="an-editor-backdrop"><section className="an-category-editor">
     <header><h2>카테고리 관리</h2><button onClick={onClose}>×</button></header>
-    <p>공지 분류를 추가하거나 삭제할 수 있습니다. 저장 즉시 왼쪽 사이드바에 반영됩니다.</p>
+    <p>공지 분류와 표시 색상을 설정할 수 있습니다. 라이트·다크 모드에서 모두 흰색 글자로 표시됩니다.</p>
     <div className="an-category-add"><input value={value} onChange={event => setValue(event.target.value)}
       onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); add(); } }} placeholder="새 카테고리 이름" />
       <button onClick={add}>추가</button></div>
-    <div className="an-category-items">{items.map((item, index) => <div key={item}>
-      <span>▤ {item}</span>
+    <div className="an-category-items">{items.map((item, index) => <div key={item}
+      className={selected === item ? 'selected' : ''} onClick={() => setSelected(item)}>
+      <span><i style={{ backgroundColor: categoryColor(item, categoryColors) }} />{item}</span>
       <div><button disabled={index === 0} onClick={() => move(index, -1)}>↑</button>
         <button disabled={index === items.length - 1} onClick={() => move(index, 1)}>↓</button>
         <button className="danger" onClick={() => setItems(current => current.filter(value => value !== item))}>삭제</button></div>
     </div>)}</div>
+    {!!selected && <div className="an-color-editor">
+      <strong>{selected} 색상</strong>
+      <div className="an-color-palette">{CATEGORY_PALETTE.map(color => <button key={color} type="button"
+        className={categoryColor(selected, categoryColors) === color ? 'active' : ''}
+        style={{ backgroundColor: color }} aria-label={color}
+        onClick={() => setCategoryColors(current => ({ ...current, [selected]: color }))} />)}</div>
+      <div className="an-color-preview">
+        <div className="light"><small>라이트 모드</small><span style={{ backgroundColor: categoryColor(selected, categoryColors) }}>{selected}</span></div>
+        <div className="dark"><small>다크 모드</small><span style={{ backgroundColor: categoryColor(selected, categoryColors) }}>{selected}</span></div>
+      </div>
+    </div>}
     <footer><button onClick={onClose}>취소</button><button className="primary" disabled={saving} onClick={save}>{saving ? '저장 중…' : '변경사항 저장'}</button></footer>
   </section></div>;
 }
@@ -385,6 +421,7 @@ function Workspace() {
   const [posts, setPosts] = useState([]);
   const [guides, setGuides] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [categoryColors, setCategoryColors] = useState({});
   const [category, setCategory] = useState('전체');
   const [searchOpen, setSearchOpen] = useState(false);
   const [editor, setEditor] = useState(null);
@@ -392,13 +429,20 @@ function Workspace() {
   const [receiptPost, setReceiptPost] = useState(null);
   const [dark, setDark] = useState(() => localStorage.getItem('hmm-announcement-theme') === 'dark');
   const [isAdmin, setIsAdmin] = useState(() => !!window.announcementBridge?.isAdmin());
+  const [adminProfile, setAdminProfile] = useState(() => window.announcementBridge?.getAdmin());
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => window.announcementBridge.subscribe(setPosts), []);
   useEffect(() => window.announcementBridge.subscribeGuides(setGuides), []);
-  useEffect(() => window.announcementBridge.subscribeCategories(values => setCategories(['전체', '중요', ...values])), []);
+  useEffect(() => window.announcementBridge.subscribeCategories(settings => {
+    setCategories(['전체', '중요', ...settings.categories]);
+    setCategoryColors(settings.colors || {});
+  }), []);
   useEffect(() => {
-    const update = () => setIsAdmin(!!window.announcementBridge.isAdmin());
+    const update = () => {
+      setIsAdmin(!!window.announcementBridge.isAdmin());
+      setAdminProfile(window.announcementBridge.getAdmin());
+    };
     window.addEventListener('announcement-admin-change', update);
     return () => window.removeEventListener('announcement-admin-change', update);
   }, []);
@@ -444,9 +488,9 @@ function Workspace() {
       <main className="an-main">
         {selected ? <article className="an-document">
           <button className="an-back" onClick={() => navigate('/')}>← {selected.category || '공지사항'}</button>
-          <div className="an-document-meta"><span className="an-category-badge">{selected.category || '일반'}</span>
+          <div className="an-document-meta"><span className="an-category-badge" style={{ backgroundColor: categoryColor(selected.category || '일반', categoryColors), color: '#fff' }}>{selected.category || '일반'}</span>
             {selected.isPinned && <span className="an-priority">중요</span>}<time>{dateLabel(selected.createdAt)}</time>
-            <span>작성자 {selected.authorName || selected.author || '관리자'}</span></div>
+            <span>작성자 {authorLabel(selected, adminProfile)}</span></div>
           <h1>{selected.title}</h1>
           <div className="an-tags">{(selected.tags || []).map(tag => <span key={tag}>#{tag}</span>)}</div>
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
@@ -463,7 +507,7 @@ function Workspace() {
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
           <div className="an-card-list">{filtered.map(post => <button key={post.id} className="an-page-row" onClick={() => navigate(`/announcement/${encodeURIComponent(post.id)}`)}>
-            <span className="an-page-category" data-category={post.category || '일반'}>{post.isPinned && <i>★</i>}{post.category || '일반'}</span>
+            <span className="an-page-category" style={{ backgroundColor: categoryColor(post.category || '일반', categoryColors), color: '#fff' }}>{post.isPinned && <i>★</i>}{post.category || '일반'}</span>
             <span className="an-page-copy"><strong>{post.title}</strong><small>{snippetFor(post.content, '')}</small>
               {!!post.tags?.length && <span className="an-row-tags">{post.tags.slice(0, 3).map(tag => <i key={tag}>#{tag}</i>)}</span>}</span>
             <time>{dateLabel(post.createdAt)}</time>
@@ -478,8 +522,8 @@ function Workspace() {
     }} />
     {editor && <Editor post={editor.post} categories={categories} onClose={() => setEditor(null)} />}
     {receiptPost && <ReceiptSummary post={receiptPost} onClose={() => setReceiptPost(null)} />}
-    {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)}
-      onSaved={values => { setCategories(['전체', '중요', ...values]); setCategoryEditor(false); }} />}
+    {categoryEditor && <CategoryManager categories={categories} colors={categoryColors} onClose={() => setCategoryEditor(false)}
+      onSaved={(values, colors) => { setCategories(['전체', '중요', ...values]); setCategoryColors(colors); setCategoryEditor(false); }} />}
   </div>;
 }
 

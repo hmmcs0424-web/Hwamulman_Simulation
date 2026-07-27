@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=14" rel="stylesheet">
+<link href="/announcement-app.css?v=15" rel="stylesheet">
 <link href="/faq-app.css?v=9" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1084,7 +1084,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=14"></script>
+<script type="module" src="/vendor/announcement-app.js?v=15"></script>
 <script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -2439,16 +2439,20 @@ window.announcementBridge = {
   },
   subscribeCategories(callback) {
     const defaults=['회원관리','배차','정산','환불','시스템','이벤트'];
-    callback(defaults);
+    callback({categories:defaults,colors:{}});
     if(!firebaseReady) return () => {};
     return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'guides','announcementCategories'), snapshot => {
-      callback(snapshot.exists() && Array.isArray(snapshot.data().categories) ? snapshot.data().categories : defaults);
+      const data=snapshot.exists()?snapshot.data():{};
+      callback({
+        categories:Array.isArray(data.categories)?data.categories:defaults,
+        colors:data.colors && typeof data.colors==='object'?data.colors:{}
+      });
     });
   },
-  async saveCategories(categories) {
+  async saveCategories(categories,colors={}) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides','announcementCategories'),{
-      categories,updatedAt:firebaseFns.serverTimestamp(),updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
+      categories,colors,updatedAt:firebaseFns.serverTimestamp(),updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
     },{merge:true});
   },
   async save(post) {
@@ -2460,7 +2464,10 @@ window.announcementBridge = {
       const snapshot=await firebaseFns.getDoc(ref);
       if(snapshot.exists()) existing=snapshot.data();
     }
-    const authorName=existing.authorName||currentAdminProfile?.name||firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid;
+    const previousAuthor=String(existing.authorName||existing.author||'').trim();
+    const authorName=previousAuthor && !previousAuthor.includes('@')
+      ? previousAuthor
+      : currentAdminProfile?.name||'관리자';
     const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
     if(post.id && existing.title) history.push({
       editedAt:new Date().toISOString(),
@@ -2631,7 +2638,10 @@ window.faqBridge = {
       const snapshot=await firebaseFns.getDoc(ref);
       if(snapshot.exists()) existing=snapshot.data();
     }
-    const authorName=existing.authorName||currentAdminProfile?.name||firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid;
+    const previousAuthor=String(existing.authorName||existing.author||'').trim();
+    const authorName=previousAuthor && !previousAuthor.includes('@')
+      ? previousAuthor
+      : currentAdminProfile?.name||'관리자';
     const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
     if(group.id && existing.title) history.push({
       editedAt:new Date().toISOString(),
