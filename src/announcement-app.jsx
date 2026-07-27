@@ -60,6 +60,17 @@ function dateLabel(value) {
   if (value.toDate) return value.toDate().toISOString().slice(0, 10);
   return '';
 }
+function timestamp(value) {
+  if (value?.toMillis) return value.toMillis();
+  if (value?.toDate) return value.toDate().getTime();
+  if (value?.seconds) return value.seconds * 1000 + Number(value.nanoseconds || 0) / 1e6;
+  const parsed = new Date(value || 0).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+const renderRichMarkdown = value => DOMPurify.sanitize(
+  marked.parse(String(value || '')),
+  { ADD_ATTR: ['style'] },
+);
 function commentDateLabel(value) {
   if (!value) return '방금 전';
   const date = value.toDate ? value.toDate() : new Date(value);
@@ -207,7 +218,7 @@ function Editor({ post, categories, onClose }) {
     if (file) { event.preventDefault(); addImage(file); }
   };
   const previewHtml = useMemo(
-    () => ({ __html: DOMPurify.sanitize(marked.parse(form.content || '*작성한 내용과 이미지가 여기에 표시됩니다.*')) }),
+    () => ({ __html: renderRichMarkdown(form.content || '*작성한 내용과 이미지가 여기에 표시됩니다.*') }),
     [form.content],
   );
   const save = async () => {
@@ -480,13 +491,13 @@ function Workspace() {
     return () => window.removeEventListener('announcement-open', openAnnouncement);
   }, [navigate]);
   const filtered = posts.filter(post => category === '전체' || (category === '중요' ? post.isPinned : post.category === category))
-    .sort((a, b) => Number(b.isPinned) - Number(a.isPinned) || dateLabel(b.createdAt).localeCompare(dateLabel(a.createdAt)));
+    .sort((a, b) => timestamp(b.createdAt || b.updatedAt) - timestamp(a.createdAt || a.updatedAt));
   const selectedId = location.pathname.startsWith('/announcement/') ? decodeURIComponent(location.pathname.split('/').pop()) : '';
   const selected = posts.find(post => post.id === selectedId);
   const selectedLinks = selected ? (Array.isArray(selected.links) && selected.links.length
     ? selected.links : selected.link ? [{ name: 'KMS 가이드 열기', url: selected.link }] : []) : [];
   const theme = dark ? 'dark' : 'light';
-  const renderMarkdown = content => ({ __html: DOMPurify.sanitize(marked.parse(content || '')) });
+  const renderMarkdown = content => ({ __html: renderRichMarkdown(content) });
   const remove = async post => {
     if (confirm('이 공지를 삭제할까요?')) { await window.announcementBridge.remove(post.id); navigate('/'); }
   };

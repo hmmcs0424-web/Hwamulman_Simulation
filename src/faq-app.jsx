@@ -47,7 +47,15 @@ const dateTimeLabel = value => {
 };
 const renderFaqMarkdown = value => DOMPurify.sanitize(
   marked.parse(String(value || '').replace(/~~/g, '\\~\\~')),
+  { ADD_ATTR: ['style'] },
 );
+const timestamp = value => {
+  if (value?.toMillis) return value.toMillis();
+  if (value?.toDate) return value.toDate().getTime();
+  if (value?.seconds) return value.seconds * 1000 + Number(value.nanoseconds || 0) / 1e6;
+  const parsed = new Date(value || 0).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
 
 function parseBulkFaq(source) {
   const lines = String(source || '').replace(/\r\n?/g, '\n').split('\n');
@@ -490,7 +498,7 @@ function FaqApp() {
     if (!words.length) return true;
     const haystack = text([group.title, group.category, ...(group.items || []).flatMap(item => [item.question, item.shortAnswer, item.content, ...(item.tags || []), ...(item.synonyms || [])])].join(' '));
     return words.every(word => haystack.includes(word));
-  });
+  }).sort((a, b) => timestamp(b.createdAt || b.updatedAt) - timestamp(a.createdAt || a.updatedAt));
   const selected = availableGroups.find(group => group.id === selectedId);
   const remove = async group => {
     if (!confirm(`“${group.title}” 게시글과 FAQ ${group.items?.length || 0}개를 삭제할까요?`)) return;
