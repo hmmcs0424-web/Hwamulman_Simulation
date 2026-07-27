@@ -1084,7 +1084,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=15"></script>
+<script type="module" src="/vendor/announcement-app.js?v=16"></script>
 <script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -2379,37 +2379,10 @@ window.announcementBridge = {
     });
   },
   subscribeGuides(callback) {
-    const searchableKeys=['signup','membership','profile'];
-    const buildDefaults=() => searchableKeys.map(id=>({
-      id,
-      title:guidePages[id].title,
-      content:String(guidePages[id].html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
-      category:'업무 가이드',
-      tags:[guidePages[id].title]
-    }));
-    let guideResults=buildDefaults();
-    let faqResults=[];
-    const emit=()=>callback([...guideResults,...faqResults]);
-    emit();
+    callback([]);
     if(!firebaseReady) return () => {};
-    const unsubscribeGuides=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
-      const cloud=new Map();
-      snapshot.forEach(item => {
-        if(searchableKeys.includes(item.id) && typeof item.data().content==='string') cloud.set(item.id,item.data().content);
-      });
-      guideResults=searchableKeys.map(id=>({
-        id,
-        title:guidePages[id].title,
-        content:String(cloud.get(id)||guidePages[id].html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
-        category:'업무 가이드',
-        tags:[guidePages[id].title]
-      }));
-      emit();
-    },error => {
-      if(error?.code!=='permission-denied') console.warn('가이드 검색 연결 실패:',error);
-    });
-    const unsubscribeFaqs=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
-      faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup' && (adminMode || groupDoc.data().isPublished!==false)).flatMap(groupDoc => {
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+      const faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup' && (adminMode || groupDoc.data().isPublished!==false)).flatMap(groupDoc => {
         const group=groupDoc.data();
         return (Array.isArray(group.items)?group.items:[]).map(item=>({
           id:`faq:${groupDoc.id}:${item.id}`,
@@ -2419,11 +2392,10 @@ window.announcementBridge = {
           tags:[...(item.tags||[]),group.title||'',group.category||''].filter(Boolean)
         }));
       });
-      emit();
+      callback(faqResults);
     },error => {
       if(error?.code!=='permission-denied') console.warn('FAQ 검색 연결 실패:',error);
     });
-    return () => { unsubscribeGuides(); unsubscribeFaqs(); };
   },
   openGuide(id) {
     if(String(id).startsWith('faq:')) {

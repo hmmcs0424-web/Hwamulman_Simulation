@@ -127,7 +127,7 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
       <div className="an-command-input">
         <span>⌕</span>
         <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown}
-          placeholder="공지·가이드·FAQ 통합 검색…" aria-label="통합 검색어" />
+          placeholder="공지·FAQ 통합 검색…" aria-label="공지 및 FAQ 검색어" />
         <button className="an-escape-button" type="button" onClick={onClose} aria-label="검색 닫기">ESC</button>
       </div>
       {!query && recent.length > 0 && <div className="an-recent">
