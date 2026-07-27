@@ -519,7 +519,7 @@ textarea.form-input{resize:vertical;}
   <div class="topnav-right">
     <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
     <button class="btn-admin-login" id="btnAssetManager" style="display:none">🖼 이미지 관리</button>
-    <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 로그인</button>
+    <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 직원 로그인</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
   </div>
 </nav>
@@ -1179,6 +1179,7 @@ async function initFirebase() {
     ]);
     const app = appSdk.initializeApp(FIREBASE_CONFIG);
     firebaseAuth = authSdk.getAuth(app);
+    await authSdk.setPersistence(firebaseAuth, authSdk.browserLocalPersistence);
     firestoreDb = firestoreSdk.getFirestore(app);
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
@@ -1190,7 +1191,6 @@ async function initFirebase() {
     currentCounselor=null;
     syncCounselorUI();
     await firebaseAuth.authStateReady();
-    if(firebaseAuth.currentUser) await authSdk.signOut(firebaseAuth);
     authSdk.onAuthStateChanged(firebaseAuth, applyFirebaseUser);
     await loadGuidePagesFromFirestore();
   } catch(e) {
@@ -2047,7 +2047,8 @@ function syncCounselorUI() {
   const btn=document.getElementById('topCounselorBtn');
   if(!btn) return;
   btn.classList.toggle('on',!!currentCounselor);
-  btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 로그인';
+  btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 직원 로그인';
+  btn.style.display=adminMode ? 'none' : '';
   window.dispatchEvent(new CustomEvent('counselor-session-change',{detail:{counselor:currentCounselor}}));
   syncAccessGate();
 }
@@ -2139,9 +2140,13 @@ function exitAdmin() {
 // 탭 전환 / 로그인 / 로그아웃이 모두 이 함수를 거치므로 화면 잔상·패널 누락이 생기지 않는다.
 function syncAdminUI() {
   const btn = document.getElementById('topAdminBtn');
+  const counselorBtn = document.getElementById('topCounselorBtn');
   const unregCard = document.getElementById('unregCard');
   btn.classList.toggle('on', adminMode);
-  btn.textContent = adminMode ? '🔓 관리자 모드 ON' : '🔐 관리자 로그인';
+  btn.textContent = adminMode
+    ? `🔓 ${currentAdminProfile?.name || '관리자'} · 로그아웃`
+    : '🔐 관리자 로그인';
+  if(counselorBtn) counselorBtn.style.display = adminMode ? 'none' : '';
   document.getElementById('btnAssetManager').style.display = adminMode && activePage==='simulator' ? '' : 'none';
 
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
