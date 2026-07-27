@@ -5,7 +5,7 @@
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="/announcement-app.css?v=15" rel="stylesheet">
-<link href="/faq-app.css?v=9" rel="stylesheet">
+<link href="/faq-app.css?v=10" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1085,7 +1085,7 @@ textarea.form-input{resize:vertical;}
 </div>
 
 <script type="module" src="/vendor/announcement-app.js?v=16"></script>
-<script type="module" src="/vendor/faq-app.js?v=9"></script>
+<script type="module" src="/vendor/faq-app.js?v=10"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -2586,17 +2586,22 @@ window.faqBridge = {
   },
   subscribeCategories(callback) {
     const defaults=['회원관리','신규가입','정지·복구','정보변경','배차','정산','앱 사용법','기타'];
-    callback(defaults);
+    callback({categories:defaults,colors:{}});
     if(!firebaseReady) return () => {};
     return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'guides','faqCategories'), snapshot => {
-      callback(snapshot.exists() && Array.isArray(snapshot.data().categories) ? snapshot.data().categories : defaults);
+      const data=snapshot.exists()?snapshot.data():{};
+      callback({
+        categories:Array.isArray(data.categories)?data.categories:defaults,
+        colors:data.colors && typeof data.colors==='object'?data.colors:{}
+      });
     });
   },
-  async saveCategories(categories) {
+  async saveCategories(categories,colors={}) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides','faqCategories'),{
       type:'faqCategories',
       categories,
+      colors,
       updatedAt:firebaseFns.serverTimestamp(),
       updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
     },{merge:true});
@@ -2619,13 +2624,17 @@ window.faqBridge = {
       editedAt:new Date().toISOString(),
       editedById:firebaseAuth.currentUser.uid,
       editedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
-      previous:{title:existing.title||'',category:existing.category||'',kmsUrl:existing.kmsUrl||'',isPublished:existing.isPublished!==false,items:existing.items||[]}
+      previous:{title:existing.title||'',category:existing.category||'',kmsUrl:existing.kmsUrl||'',kmsLinks:existing.kmsLinks||[],isPublished:existing.isPublished!==false,items:existing.items||[]}
     });
     const payload={
       type:'faqGroup',
       title:group.title,
       category:group.category||'일반',
-      kmsUrl:group.kmsUrl||'',
+      kmsUrl:Array.isArray(group.kmsLinks) && group.kmsLinks[0]?.url ? group.kmsLinks[0].url : group.kmsUrl||'',
+      kmsLinks:(Array.isArray(group.kmsLinks)?group.kmsLinks:[]).slice(0,3).map(item=>({
+        name:String(item.name||'').trim().slice(0,30),
+        url:String(item.url||'').trim()
+      })).filter(item=>item.url),
       isPublished:group.isPublished!==false,
       items:Array.isArray(group.items)?group.items:[],
       authorId:existing.authorId||firebaseAuth.currentUser.uid,

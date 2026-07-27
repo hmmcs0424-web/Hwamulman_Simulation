@@ -15,6 +15,18 @@ const emptyItem = () => ({
 const text = value => String(value || '').toLocaleLowerCase('ko-KR');
 const splitWords = value => String(value || '').split(',').map(item => item.trim()).filter(Boolean);
 const DEFAULT_CATEGORIES = ['회원관리', '신규가입', '정지·복구', '정보변경', '배차', '정산', '앱 사용법', '기타'];
+const CATEGORY_PALETTE = [
+  '#7F1D1D', '#9A3412', '#92400E', '#3F6212', '#166534',
+  '#065F46', '#115E59', '#155E75', '#1E40AF', '#3730A3',
+  '#5B21B6', '#6B21A8', '#86198F', '#9D174D', '#881337',
+  '#334155', '#3F3F46', '#1F2937', '#4C1D95', '#0F4C5C',
+];
+const categoryColor = (category, colors) => {
+  if (colors?.[category]) return colors[category];
+  let seed = 0;
+  for (const char of String(category || '')) seed = (seed + char.charCodeAt(0)) % CATEGORY_PALETTE.length;
+  return CATEGORY_PALETTE[seed];
+};
 const RECENT_KEY = 'hmm-announcement-recent-searches';
 const dateLabel = value => {
   if (value?.toDate) return value.toDate().toISOString().slice(0, 10);
@@ -158,7 +170,7 @@ function UnifiedSearchModal({ open, onClose, posts, guides, onSelect }) {
   return <div className="an-command-backdrop" onMouseDown={event => event.target === event.currentTarget && onClose()}>
     <section className="an-command" role="dialog" aria-label="통합 검색">
       <div className="an-command-input"><span>⌕</span>
-        <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown} placeholder="공지·가이드·FAQ 통합 검색…" aria-label="통합 검색어" />
+        <input ref={inputRef} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={onKeyDown} placeholder="공지·FAQ 통합 검색…" aria-label="공지 및 FAQ 검색어" />
         <button className="an-escape-button" type="button" onClick={onClose} aria-label="검색 닫기">ESC</button>
       </div>
       {!query && recent.length > 0 && <div className="an-recent"><span>최근 검색</span>{recent.map(item => <button key={item} onClick={() => setQuery(item)}>↗ {item}</button>)}</div>}
@@ -169,7 +181,7 @@ function UnifiedSearchModal({ open, onClose, posts, guides, onSelect }) {
           <span className="an-result-copy"><strong>{highlight(item.title, query)}</strong><small>{highlight(searchSnippet(item.content, query), query)}</small></span>
           <span className={`an-category-badge ${item.kind === 'guide' ? 'guide' : ''}`}>{item.category === 'FAQ' ? 'FAQ' : item.kind === 'guide' ? '가이드' : item.category || '공지'}</span>
         </button>)}
-        {!results.length && <div className="an-no-results">일치하는 공지, 가이드 또는 FAQ가 없습니다.</div>}
+        {!results.length && <div className="an-no-results">일치하는 공지 또는 FAQ가 없습니다.</div>}
       </div>
       <footer><span>↑↓ 이동</span><span>↵ 열기</span><span>ESC 닫기</span></footer>
     </section>
@@ -177,11 +189,16 @@ function UnifiedSearchModal({ open, onClose, posts, guides, onSelect }) {
 }
 
 function BatchEditor({ group, categories, onClose }) {
+  const initialKmsLinks = Array.isArray(group?.kmsLinks) && group.kmsLinks.length
+    ? group.kmsLinks : group?.kmsUrl ? [{ name: 'KMS 가이드 열기', url: group.kmsUrl }] : [];
   const [form, setForm] = useState(() => ({
     id: group?.id || '',
     title: group?.title || '',
     category: group?.category || '회원관리',
-    kmsUrl: group?.kmsUrl || '',
+    kmsLinks: Array.from({ length: 3 }, (_, index) => ({
+      name: initialKmsLinks[index]?.name || '',
+      url: initialKmsLinks[index]?.url || '',
+    })),
     isPublished: group?.isPublished !== false,
     items: (group?.items?.length ? group.items : [emptyItem()]).map(item => ({
       ...item,
@@ -210,7 +227,9 @@ function BatchEditor({ group, categories, onClose }) {
       ...current,
       title: parsed.meta.title || current.title,
       category: parsed.meta.category && categories.includes(parsed.meta.category) ? parsed.meta.category : current.category,
-      kmsUrl: parsed.meta.kmsUrl || current.kmsUrl,
+      kmsLinks: parsed.meta.kmsUrl
+        ? current.kmsLinks.map((link, index) => index === 0 ? { name: link.name || 'KMS 가이드 열기', url: parsed.meta.kmsUrl } : link)
+        : current.kmsLinks,
       items: parsed.items,
     }));
     setBulkMessage(`${parsed.items.length}개 FAQ로 나눴습니다. 아래 입력칸에서 내용을 확인하고 저장해 주세요.`);
@@ -227,7 +246,7 @@ function BatchEditor({ group, categories, onClose }) {
         id: form.id,
         title: form.title.trim(),
         category: form.category.trim() || '일반',
-        kmsUrl: form.kmsUrl.trim(),
+        kmsLinks: form.kmsLinks.map(link => ({ name: link.name.trim(), url: link.url.trim() })).filter(link => link.url),
         isPublished: form.isPublished,
         items: validItems.map(item => ({
           ...item,
@@ -251,7 +270,11 @@ function BatchEditor({ group, categories, onClose }) {
       <div className="faq-group-fields">
         <label><span>묶음 제목</span><input value={form.title} onChange={event => setForm({ ...form, title: event.target.value })} placeholder="예: 회원 정지·복구 가이드" /></label>
         <label><span>카테고리</span><select value={form.category} onChange={event => setForm({ ...form, category: event.target.value })}>{categories.map(item => <option key={item}>{item}</option>)}</select></label>
-        <label className="wide"><span>KMS 가이드 주소</span><input value={form.kmsUrl} onChange={event => setForm({ ...form, kmsUrl: event.target.value })} placeholder="https://faq.logishm.com/..." /></label>
+        <div className="wide faq-kms-fields"><span>KMS 가이드 · 최대 3개</span>{form.kmsLinks.map((link, index) =>
+          <div key={index}><input value={link.name} maxLength="30" placeholder={`버튼 이름 ${index + 1}`}
+            onChange={event => setForm({ ...form, kmsLinks: form.kmsLinks.map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value } : item) })} />
+          <input value={link.url} type="url" placeholder={`KMS URL ${index + 1}`}
+            onChange={event => setForm({ ...form, kmsLinks: form.kmsLinks.map((item, itemIndex) => itemIndex === index ? { ...item, url: event.target.value } : item) })} /></div>)}</div>
         <label className="wide faq-publish-check"><input type="checkbox" checked={form.isPublished} onChange={event => setForm({ ...form, isPublished: event.target.checked })} /><span>저장 후 바로 게시</span></label>
       </div>
       <section className={`faq-bulk-import ${bulkOpen ? 'open' : ''}`}>
@@ -297,35 +320,52 @@ A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
   </div>;
 }
 
-function CategoryManager({ categories, onClose }) {
+function CategoryManager({ categories, colors, onClose, onSaved }) {
   const [items, setItems] = useState(categories);
+  const [categoryColors, setCategoryColors] = useState(colors);
+  const [selected, setSelected] = useState(items[0] || '');
   const [value, setValue] = useState('');
   const [saving, setSaving] = useState(false);
   const add = () => {
     const next = value.trim();
     if (!next || items.includes(next)) return;
     setItems([...items, next]);
+    setCategoryColors(current => ({ ...current, [next]: categoryColor(next, current) }));
+    setSelected(next);
     setValue('');
   };
   const save = async () => {
     setSaving(true);
-    try { await window.faqBridge.saveCategories(items); onClose(); }
+    try { await window.faqBridge.saveCategories(items, categoryColors); onSaved(items, categoryColors); }
     catch (error) { alert(`카테고리를 저장하지 못했습니다. ${error.message || error}`); }
     finally { setSaving(false); }
   };
   return <div className="faq-modal-backdrop"><section className="faq-category-editor">
     <header><div><small>FAQ 분류 관리</small><h2>카테고리 편집</h2></div><button onClick={onClose}>×</button></header>
     <div className="faq-category-add"><input value={value} onChange={event => setValue(event.target.value)} onKeyDown={event => event.key === 'Enter' && add()} placeholder="새 카테고리" /><button onClick={add}>추가</button></div>
-    <div className="faq-category-list">{items.map((item, index) => <div key={item}><span>{item}</span><div>
+    <div className="faq-category-list">{items.map((item, index) => <div key={item} className={selected === item ? 'selected' : ''} onClick={() => setSelected(item)}>
+      <span><i style={{ backgroundColor: categoryColor(item, categoryColors) }} />{item}</span><div>
       <button disabled={!index} onClick={() => setItems(current => current.map((value, itemIndex) => itemIndex === index - 1 ? item : itemIndex === index ? current[index - 1] : value))}>↑</button>
       <button disabled={index === items.length - 1} onClick={() => setItems(current => current.map((value, itemIndex) => itemIndex === index + 1 ? item : itemIndex === index ? current[index + 1] : value))}>↓</button>
       <button className="danger" onClick={() => setItems(items.filter(value => value !== item))}>삭제</button>
     </div></div>)}</div>
+    {!!selected && <div className="faq-color-editor">
+      <strong>{selected} 색상</strong>
+      <div className="faq-color-palette">{CATEGORY_PALETTE.map(color => <button key={color} type="button"
+        className={categoryColor(selected, categoryColors) === color ? 'active' : ''} style={{ backgroundColor: color }}
+        aria-label={color} onClick={() => setCategoryColors(current => ({ ...current, [selected]: color }))} />)}</div>
+      <div className="faq-color-preview">
+        <div className="light"><small>라이트 모드</small><span style={{ backgroundColor: categoryColor(selected, categoryColors) }}>{selected}</span></div>
+        <div className="dark"><small>다크 모드</small><span style={{ backgroundColor: categoryColor(selected, categoryColors) }}>{selected}</span></div>
+      </div>
+    </div>}
     <footer><button onClick={onClose}>취소</button><button className="primary" disabled={saving || !items.length} onClick={save}>{saving ? '저장 중…' : '저장'}</button></footer>
   </section></div>;
 }
 
 function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
+  const kmsLinks = Array.isArray(group.kmsLinks) && group.kmsLinks.length
+    ? group.kmsLinks : group.kmsUrl ? [{ name: 'KMS 가이드 열기', url: group.kmsUrl }] : [];
   const [openItems, setOpenItems] = useState(new Set(group.items?.[0]?.id ? [group.items[0].id] : []));
   const toggle = id => setOpenItems(current => {
     const next = new Set(current);
@@ -356,7 +396,9 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
         </section>;
       })}
     </div>
-    {group.kmsUrl && <a className="faq-kms-link" href={group.kmsUrl} target="_blank" rel="noopener">KMS 가이드 열기</a>}
+    {!!kmsLinks.length && <div className="faq-kms-links">{kmsLinks.map((link, index) =>
+      <a className="faq-kms-link" key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener">
+        {link.name || 'KMS 가이드 열기'}</a>)}</div>}
     {isAdmin && !!group.history?.length && <details className="faq-history"><summary>수정 이력 {group.history.length}건</summary>
       {[...group.history].reverse().map((entry, index) => <div key={`${entry.editedAt}-${index}`}>
         <strong>{entry.editedByName || '관리자'}</strong><time>{dateTimeLabel(entry.editedAt)}</time>
@@ -373,6 +415,7 @@ function FaqApp() {
   const [searchPosts, setSearchPosts] = useState([]);
   const [searchGuides, setSearchGuides] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [categoryColors, setCategoryColors] = useState({});
   const [category, setCategory] = useState('전체');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState('');
@@ -384,7 +427,10 @@ function FaqApp() {
   useEffect(() => window.faqBridge.subscribe(setGroups), []);
   useEffect(() => window.announcementBridge.subscribe(setSearchPosts), []);
   useEffect(() => window.announcementBridge.subscribeGuides(setSearchGuides), []);
-  useEffect(() => window.faqBridge.subscribeCategories(setCategories), []);
+  useEffect(() => window.faqBridge.subscribeCategories(settings => {
+    setCategories(settings.categories);
+    setCategoryColors(settings.colors || {});
+  }), []);
   useEffect(() => {
     const update = () => setIsAdmin(!!window.faqBridge.isAdmin());
     window.addEventListener('announcement-admin-change', update);
@@ -438,7 +484,7 @@ function FaqApp() {
           <header><p>QUICK ANSWERS</p><h1>{category}</h1><span>상담 중 필요한 답을 게시글과 질문 단위로 빠르게 찾아보세요.</span></header>
           <div className="faq-list-summary"><b>{query ? `검색 결과 ${visibleGroups.length}건` : `FAQ 게시글 ${visibleGroups.length}건`}</b><span>게시글 하나에 여러 FAQ가 포함됩니다.</span></div>
           <div className="faq-post-list">{visibleGroups.map(group => <button key={group.id} className="faq-post-row" onClick={() => setSelectedId(group.id)}>
-            <span className="faq-post-category">{group.category || '일반'}</span>
+            <span className="faq-post-category" style={{ backgroundColor: categoryColor(group.category || '일반', categoryColors), color: '#fff' }}>{group.category || '일반'}</span>
             <span className="faq-post-copy"><strong>{highlight(group.title, query)}</strong><small>{highlight(group.items?.[0]?.shortAnswer || group.items?.[0]?.question || '', query)}</small>
               <span><b>FAQ {group.items?.length || 0}개</b>{group.isPublished === false && <i>숨김</i>}</span></span>
             <time>{dateLabel(group.updatedAt)}</time>
@@ -448,7 +494,8 @@ function FaqApp() {
       </main>
     </div>
     {editor && <BatchEditor group={editor.id ? editor : null} categories={categories} onClose={() => setEditor(null)} />}
-    {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)} />}
+    {categoryEditor && <CategoryManager categories={categories} colors={categoryColors} onClose={() => setCategoryEditor(false)}
+      onSaved={(values, colors) => { setCategories(values); setCategoryColors(colors); setCategoryEditor(false); }} />}
     <UnifiedSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={searchPosts} guides={searchGuides} onSelect={item => {
       if (item.category === 'FAQ' && String(item.id).startsWith('faq:')) {
         const [, groupId] = String(item.id).split(':');
