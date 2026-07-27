@@ -349,6 +349,38 @@ function Acknowledgement({ post }) {
   </section>;
 }
 
+function ReceiptSummary({ post, onClose }) {
+  const [data, setData] = useState({ employees: [], receipts: [] });
+  const [tab, setTab] = useState('confirmed');
+  useEffect(() => window.announcementBridge.subscribeReceiptSummary(post.id, setData), [post.id]);
+  const currentVersion = Number(post.version || 1);
+  const receiptMap = new Map(data.receipts.map(item => [String(item.employeeNo || item.id), item]));
+  const confirmed = data.employees.filter(employee =>
+    Number(receiptMap.get(String(employee.employeeNo || employee.id))?.announcementVersion || 0) === currentVersion);
+  const unconfirmed = data.employees.filter(employee =>
+    Number(receiptMap.get(String(employee.employeeNo || employee.id))?.announcementVersion || 0) !== currentVersion);
+  const rows = tab === 'confirmed' ? confirmed : unconfirmed;
+  return <div className="an-editor-backdrop">
+    <section className="an-receipt-dialog">
+      <header><div><h2>✓ 수신 확인자 명단</h2><p>{post.title}</p></div><button onClick={onClose}>×</button></header>
+      <div className="an-receipt-tabs">
+        <button className={tab === 'confirmed' ? 'active' : ''} onClick={() => setTab('confirmed')}>확인 완료 ({confirmed.length})</button>
+        <button className={tab === 'unconfirmed' ? 'active' : ''} onClick={() => setTab('unconfirmed')}>미확인 ({unconfirmed.length})</button>
+      </div>
+      <div className="an-receipt-table">
+        <div className="head"><span>이름</span><span>사번</span><span>{tab === 'confirmed' ? '확인 일시' : '상태'}</span></div>
+        {rows.map(employee => {
+          const employeeNo = String(employee.employeeNo || employee.id);
+          const receipt = receiptMap.get(employeeNo);
+          return <div key={employeeNo}><strong>{employee.name || '-'}</strong><span>{employeeNo}</span>
+            <span>{tab === 'confirmed' ? commentDateLabel(receipt?.confirmedAt) : '미확인'}</span></div>;
+        })}
+        {!rows.length && <p>표시할 사용자가 없습니다.</p>}
+      </div>
+    </section>
+  </div>;
+}
+
 function Workspace() {
   const [posts, setPosts] = useState([]);
   const [guides, setGuides] = useState([]);
@@ -357,6 +389,7 @@ function Workspace() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [editor, setEditor] = useState(null);
   const [categoryEditor, setCategoryEditor] = useState(false);
+  const [receiptPost, setReceiptPost] = useState(null);
   const [dark, setDark] = useState(() => localStorage.getItem('hmm-announcement-theme') === 'dark');
   const [isAdmin, setIsAdmin] = useState(() => !!window.announcementBridge?.isAdmin());
   const navigate = useNavigate();
@@ -425,7 +458,7 @@ function Workspace() {
             {[...selected.history].reverse().map((entry, index) => <div key={`${entry.editedAt}-${index}`}>
               <strong>{entry.editedByName || '관리자'}</strong><time>{commentDateLabel(entry.editedAt)}</time>
               <span>{entry.previous?.title || '이전 게시글'}</span></div>)}</details>}
-          {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
+          {isAdmin && <div className="an-admin-actions"><button className="receipt" onClick={() => setReceiptPost(selected)}>✓ 수신 확인</button><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
           <Comments announcementId={selected.id} isAdmin={isAdmin} />
         </article> : <section className="an-index">
           <header><p>TEAM KNOWLEDGE</p><h1>{category}</h1><span>업무 변경사항과 중요한 안내를 빠르게 찾아보세요.</span></header>
@@ -444,6 +477,7 @@ function Workspace() {
       else navigate(`/announcement/${encodeURIComponent(item.id)}`);
     }} />
     {editor && <Editor post={editor.post} categories={categories} onClose={() => setEditor(null)} />}
+    {receiptPost && <ReceiptSummary post={receiptPost} onClose={() => setReceiptPost(null)} />}
     {categoryEditor && <CategoryManager categories={categories} onClose={() => setCategoryEditor(false)}
       onSaved={values => { setCategories(['전체', '중요', ...values]); setCategoryEditor(false); }} />}
   </div>;

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=12" rel="stylesheet">
+<link href="/announcement-app.css?v=14" rel="stylesheet">
 <link href="/faq-app.css?v=9" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1084,7 +1084,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=13"></script>
+<script type="module" src="/vendor/announcement-app.js?v=14"></script>
 <script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -2520,6 +2520,30 @@ window.announcementBridge = {
         if(error?.code!=='permission-denied') console.warn('수신 확인 연결 실패:',error);
       }
     );
+  },
+  subscribeReceiptSummary(announcementId, callback) {
+    callback({employees:[],receipts:[]});
+    if(!firebaseReady || !announcementId || !adminMode || !firebaseAuth?.currentUser) return () => {};
+    let employees=[];
+    let receipts=[];
+    const emit=()=>callback({employees,receipts});
+    const unsubscribeEmployees=firebaseFns.onSnapshot(
+      firebaseFns.collection(firestoreDb,'employees'),
+      snapshot => {
+        employees=snapshot.docs.map(item=>({id:item.id,...item.data()}))
+          .filter(item=>item.active===true)
+          .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ko'));
+        emit();
+      }
+    );
+    const unsubscribeReceipts=firebaseFns.onSnapshot(
+      firebaseFns.collection(firestoreDb,'announcements',announcementId,'receipts'),
+      snapshot => {
+        receipts=snapshot.docs.map(item=>({id:item.id,...item.data()}));
+        emit();
+      }
+    );
+    return () => { unsubscribeEmployees(); unsubscribeReceipts(); };
   },
   async acknowledge(announcement) {
     if(!currentCounselor) throw new Error('로그인이 필요합니다.');
