@@ -314,6 +314,41 @@ function Comments({ announcementId, isAdmin }) {
   </section>;
 }
 
+function Acknowledgement({ post }) {
+  const [counselor, setCounselor] = useState(() => window.announcementBridge.getCounselor());
+  const [receipt, setReceipt] = useState(null);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    const update = () => setCounselor(window.announcementBridge.getCounselor());
+    window.addEventListener('counselor-session-change', update);
+    return () => window.removeEventListener('counselor-session-change', update);
+  }, []);
+  useEffect(() => {
+    setReceipt(null);
+    if (!counselor?.employeeNo) return undefined;
+    return window.announcementBridge.subscribeReceipt(post.id, counselor.employeeNo, setReceipt);
+  }, [post.id, counselor?.employeeNo]);
+  if (!counselor) return null;
+  const confirmed = Number(receipt?.announcementVersion || 0) === Number(post.version || 1);
+  const acknowledge = async () => {
+    setSaving(true);
+    try {
+      await window.announcementBridge.acknowledge(post);
+    } catch (error) {
+      alert(`확인 처리하지 못했습니다: ${error.message || error}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+  return <section className={`an-acknowledgement ${confirmed ? 'confirmed' : ''}`}>
+    <div><strong>{confirmed ? '확인 및 숙지 완료' : '공지 내용을 확인해 주세요'}</strong>
+      <span>{confirmed ? `${counselor.name} 상담사님의 확인이 기록되었습니다.` : '내용을 모두 읽은 뒤 버튼을 눌러 주세요.'}</span></div>
+    <button type="button" disabled={confirmed || saving} onClick={acknowledge}>
+      {confirmed ? '✓ 확인 및 숙지 완료' : saving ? '처리 중…' : '확인 및 숙지'}
+    </button>
+  </section>;
+}
+
 function Workspace() {
   const [posts, setPosts] = useState([]);
   const [guides, setGuides] = useState([]);
@@ -385,6 +420,7 @@ function Workspace() {
           {!!selectedLinks.length && <div className="an-link-list">{selectedLinks.map((link, index) =>
             <a className="an-link-card" key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener">
               {link.name || 'KMS 가이드 열기'}</a>)}</div>}
+          <Acknowledgement post={selected} />
           {isAdmin && !!selected.history?.length && <details className="an-history"><summary>수정 이력 {selected.history.length}건</summary>
             {[...selected.history].reverse().map((entry, index) => <div key={`${entry.editedAt}-${index}`}>
               <strong>{entry.editedByName || '관리자'}</strong><time>{commentDateLabel(entry.editedAt)}</time>

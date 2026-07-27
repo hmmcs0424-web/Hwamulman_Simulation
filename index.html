@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=11" rel="stylesheet">
+<link href="/announcement-app.css?v=12" rel="stylesheet">
 <link href="/faq-app.css?v=9" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -38,7 +38,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .btn-admin-login.on{border-color:#FF5000;color:#FF5000;background:#1a0a00;}
 .btn-counselor-login.on{border-color:#65a5e8;color:#8cc5ed;background:#10253a;}
 .login-gate{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(12,12,14,.96);backdrop-filter:blur(8px)}
-.login-gate.hidden{display:none}.login-card{width:min(460px,100%);border:1px solid #39393f;border-radius:18px;background:#fff;padding:30px;box-shadow:0 24px 80px rgba(0,0,0,.5)}.login-brand{text-align:center;margin-bottom:22px}.login-brand strong{display:block;color:#1a1a1a;font-size:23px}.login-brand span{display:block;color:#777;font-size:13px;margin-top:6px}.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:10px;background:#f0f0f2;padding:4px;margin-bottom:22px}.login-tabs button{border:0;border-radius:7px;background:transparent;color:#777;padding:10px;font:700 13px inherit;cursor:pointer}.login-tabs button.active{background:#fff;color:#1a1a1a;box-shadow:0 1px 5px rgba(0,0,0,.12)}.login-pane{display:none}.login-pane.active{display:block}.login-pane h2{font-size:18px;margin:0 0 5px}.login-pane>p{font-size:12px;line-height:1.6;color:#777;margin:0 0 16px}.login-pane .btn-primary{width:100%;margin-top:5px;padding:11px}.login-error{color:#e33;font-size:12px;display:none;margin:4px 0 10px}
+.login-gate.hidden{display:none}.login-card{width:min(460px,100%);border:1px solid #39393f;border-radius:18px;background:#fff;padding:30px;box-shadow:0 24px 80px rgba(0,0,0,.5)}.login-brand{text-align:center;margin-bottom:22px}.login-brand strong{display:block;color:#1a1a1a;font-size:23px}.login-brand span{display:block;color:#777;font-size:13px;margin-top:6px}.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:10px;background:#f0f0f2;padding:4px;margin-bottom:22px}.login-tabs button{border:0;border-radius:7px;background:transparent;color:#777;padding:10px;font:700 13px inherit;cursor:pointer}.login-tabs button.active{background:#fff;color:#1a1a1a;box-shadow:0 1px 5px rgba(0,0,0,.12)}.login-pane{display:none}.login-pane.active{display:block}.login-pane h2{font-size:18px;margin:0 0 5px}.login-pane>p{font-size:12px;line-height:1.6;color:#777;margin:0 0 16px}.remember-check{display:flex;align-items:center;gap:7px;color:#555;font-size:12px;margin:4px 0 12px;cursor:pointer}.remember-check input{accent-color:#FFB800}.login-pane .btn-primary{width:100%;margin-top:5px;padding:11px}.login-error{color:#e33;font-size:12px;display:none;margin:4px 0 10px}
 
 /* ── MAIN LAYOUT ── */
 .main-layout{
@@ -940,8 +940,9 @@ textarea.form-input{resize:vertical;}
     </div>
     <section class="login-pane active" id="counselorLoginPane">
       <h2>상담사 로그인</h2><p>등록된 이름과 사번을 입력해 주세요.</p>
-      <div class="form-row"><input type="text" class="form-input" id="counselorName" placeholder="이름" autocomplete="name" maxlength="30"></div>
-      <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" placeholder="사번" autocomplete="username" maxlength="30"></div>
+      <div class="form-row"><input type="text" class="form-input" id="counselorName" name="counselor_display_name" placeholder="이름" autocomplete="off" maxlength="30"></div>
+      <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" name="counselor_employee_number" placeholder="사번" autocomplete="one-time-code" inputmode="numeric" maxlength="30"></div>
+      <label class="remember-check"><input type="checkbox" id="rememberCounselorName"> 상담사 이름 기억하기</label>
       <p class="login-error" id="counselorLoginErr">로그인 정보를 확인해 주세요.</p>
       <button class="btn btn-primary" id="counselorLoginSubmit" onclick="submitCounselorLogin()">로그인</button>
     </section>
@@ -949,6 +950,7 @@ textarea.form-input{resize:vertical;}
       <h2>관리자 로그인</h2><p>Firebase에 등록된 관리자 계정으로 로그인해 주세요.</p>
       <div class="form-row"><input type="email" class="form-input" id="adminEmail" placeholder="관리자 이메일" autocomplete="username"></div>
       <div class="form-row"><input type="password" class="form-input" id="pwInput" placeholder="비밀번호" autocomplete="current-password"></div>
+      <label class="remember-check"><input type="checkbox" id="rememberAdminEmail"> 이메일주소 기억하기</label>
       <p class="login-error" id="pwErr">로그인 정보를 확인해 주세요.</p>
       <button class="btn btn-primary" id="adminLoginSubmit" onclick="submitPw()">로그인</button>
     </section>
@@ -1082,7 +1084,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=11"></script>
+<script type="module" src="/vendor/announcement-app.js?v=12"></script>
 <script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -1129,6 +1131,8 @@ let noticeQuery = '';
 let selectedNoticeId = null;
 let currentCounselor = null;
 const COUNSELOR_SESSION_KEY = 'hmm-counselor-session-v1';
+const COUNSELOR_NAME_KEY = 'hmm-remembered-counselor-name';
+const ADMIN_EMAIL_KEY = 'hmm-remembered-admin-email';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1473,6 +1477,12 @@ async function boot() {
   document.getElementById('pwInput').onkeydown = e => { if(e.key==='Enter') submitPw(); };
   document.getElementById('counselorName').onkeydown = e => { if(e.key==='Enter') document.getElementById('counselorEmployeeNo').focus(); };
   document.getElementById('counselorEmployeeNo').onkeydown = e => { if(e.key==='Enter') submitCounselorLogin(); };
+  const rememberedCounselorName=localStorage.getItem(COUNSELOR_NAME_KEY)||'';
+  const rememberedAdminEmail=localStorage.getItem(ADMIN_EMAIL_KEY)||'';
+  document.getElementById('counselorName').value=rememberedCounselorName;
+  document.getElementById('rememberCounselorName').checked=!!rememberedCounselorName;
+  document.getElementById('adminEmail').value=rememberedAdminEmail;
+  document.getElementById('rememberAdminEmail').checked=!!rememberedAdminEmail;
   document.getElementById('btnDraw').onclick = startDraw;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
@@ -1968,6 +1978,8 @@ async function submitPw() {
     const result = await firebaseFns.signInWithEmailAndPassword(firebaseAuth, email, password);
     const adminSnap = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'admins', result.user.uid));
     if(!adminSnap.exists() || adminSnap.data().admin !== true || adminSnap.data().active === false) throw new Error('관리자 권한이 등록되지 않은 계정입니다.');
+    if(document.getElementById('rememberAdminEmail').checked) localStorage.setItem(ADMIN_EMAIL_KEY,email);
+    else localStorage.removeItem(ADMIN_EMAIL_KEY);
     document.getElementById('pwInput').value = '';
     enterAdmin({uid:result.user.uid,email:result.user.email||'',name:String(adminSnap.data().name||result.user.email||'관리자')});
   } catch(e) {
@@ -2022,7 +2034,9 @@ async function submitCounselorLogin() {
   btn.disabled=true; btn.textContent='확인 중...';
   try {
     currentCounselor=await verifyCounselor(name,employeeNo);
-    document.getElementById('counselorName').value='';
+    if(document.getElementById('rememberCounselorName').checked) localStorage.setItem(COUNSELOR_NAME_KEY,name);
+    else localStorage.removeItem(COUNSELOR_NAME_KEY);
+    document.getElementById('counselorName').value=document.getElementById('rememberCounselorName').checked ? name : '';
     document.getElementById('counselorEmployeeNo').value='';
     syncCounselorUI();
   } catch(e) {
@@ -2470,6 +2484,7 @@ window.announcementBridge = {
       author:authorName,
       authorId:existing.authorId||firebaseAuth.currentUser.uid,
       authorName,
+      version:post.id ? Number(existing.version||1)+1 : 1,
       updatedById:firebaseAuth.currentUser.uid,
       updatedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
       history,
@@ -2494,6 +2509,31 @@ window.announcementBridge = {
     }, error => {
       if(error?.code!=='permission-denied') console.warn('댓글 실시간 연결 실패:',error);
     });
+  },
+  subscribeReceipt(announcementId, employeeNo, callback) {
+    callback(null);
+    if(!firebaseReady || !announcementId || !employeeNo) return () => {};
+    return firebaseFns.onSnapshot(
+      firebaseFns.doc(firestoreDb,'announcements',announcementId,'receipts',employeeNo),
+      snapshot => callback(snapshot.exists()?{id:snapshot.id,...snapshot.data()}:null),
+      error => {
+        if(error?.code!=='permission-denied') console.warn('수신 확인 연결 실패:',error);
+      }
+    );
+  },
+  async acknowledge(announcement) {
+    if(!currentCounselor) throw new Error('상담사 로그인이 필요합니다.');
+    await firebaseFns.setDoc(
+      firebaseFns.doc(firestoreDb,'announcements',announcement.id,'receipts',currentCounselor.employeeNo),
+      {
+        employeeNo:currentCounselor.employeeNo,
+        name:currentCounselor.name,
+        team:currentCounselor.team||'',
+        announcementVersion:Number(announcement.version||1),
+        confirmedAt:firebaseFns.serverTimestamp()
+      },
+      {merge:true}
+    );
   },
   async addComment(announcementId, comment) {
     if(!currentCounselor && (!adminMode || !firebaseAuth?.currentUser)) throw new Error('로그인이 필요합니다.');

@@ -43,6 +43,20 @@ service cloud.firestore {
         allow update: if false;
         allow delete: if isAdmin();
       }
+
+      match /receipts/{employeeNo} {
+        allow read: if true;
+        allow create, update: if request.resource.data.keys().hasOnly([
+            'employeeNo', 'name', 'team', 'announcementVersion', 'confirmedAt'
+          ])
+          && request.resource.data.employeeNo == employeeNo
+          && request.resource.data.name is string
+          && request.resource.data.team is string
+          && request.resource.data.announcementVersion is int
+          && request.resource.data.confirmedAt == request.time
+          && isValidEmployee(employeeNo, request.resource.data.name);
+        allow delete: if isAdmin();
+      }
     }
 
     match /employees/{employeeNo} {
