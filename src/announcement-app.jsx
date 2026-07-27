@@ -24,8 +24,10 @@ function categoryColor(category, colors) {
 
 function authorLabel(post, adminProfile) {
   const raw = String(post?.authorName || post?.author || '').trim();
-  if (raw && !raw.includes('@')) return raw;
-  if (post?.authorId && adminProfile?.uid === post.authorId && adminProfile.name) return adminProfile.name;
+  if (raw && raw !== '관리자' && !raw.includes('@')) return raw;
+  const updatedByName = String(post?.updatedByName || '').trim();
+  if (updatedByName && updatedByName !== '관리자' && !updatedByName.includes('@')) return updatedByName;
+  if (adminProfile?.name && (!post?.authorId || adminProfile.uid === post.authorId)) return adminProfile.name;
   return '관리자';
 }
 

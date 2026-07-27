@@ -27,6 +27,14 @@ const categoryColor = (category, colors) => {
   for (const char of String(category || '')) seed = (seed + char.charCodeAt(0)) % CATEGORY_PALETTE.length;
   return CATEGORY_PALETTE[seed];
 };
+const authorLabel = (group, adminProfile) => {
+  const raw = String(group?.authorName || '').trim();
+  if (raw && raw !== '관리자' && !raw.includes('@')) return raw;
+  const updatedByName = String(group?.updatedByName || '').trim();
+  if (updatedByName && updatedByName !== '관리자' && !updatedByName.includes('@')) return updatedByName;
+  if (adminProfile?.name && (!group?.authorId || adminProfile.uid === group.authorId)) return adminProfile.name;
+  return '관리자';
+};
 const RECENT_KEY = 'hmm-announcement-recent-searches';
 const dateLabel = value => {
   if (value?.toDate) return value.toDate().toISOString().slice(0, 10);
@@ -389,7 +397,7 @@ function CategoryManager({ categories, colors, onClose, onSaved }) {
   </section></div>;
 }
 
-function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
+function FaqDetail({ group, isAdmin, adminProfile, onBack, onEdit, onDelete, onPublish }) {
   const kmsLinks = Array.isArray(group.kmsLinks) && group.kmsLinks.length
     ? group.kmsLinks : group.kmsUrl ? [{ name: 'KMS 가이드 열기', url: group.kmsUrl }] : [];
   const [openItems, setOpenItems] = useState(new Set(group.items?.[0]?.id ? [group.items[0].id] : []));
@@ -406,7 +414,7 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
   return <article className="faq-document">
     <button className="faq-back" onClick={onBack}>← FAQ 목록</button>
     <div className="faq-breadcrumb">{group.category || '일반'} &gt; {group.title}</div>
-    <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개 · 작성자 {group.authorName || group.updatedBy || '관리자'}</p></div>
+    <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개 · 작성자 {authorLabel(group, adminProfile)}</p></div>
       <span className={group.isPublished === false ? 'hidden' : ''}>{group.isPublished === false ? '숨김' : '게시 중'}</span></div>
     <div className="faq-detail-items">
       {(group.items || []).map((item, index) => {
@@ -450,6 +458,7 @@ function FaqApp() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(!!window.faqBridge.isAdmin());
   const [dark, setDark] = useState(() => localStorage.getItem('hmm-faq-theme') === 'dark');
+  const adminProfile = window.faqBridge.getAdmin?.();
 
   useEffect(() => window.faqBridge.subscribe(setGroups), []);
   useEffect(() => window.announcementBridge.subscribe(setSearchPosts), []);
@@ -512,7 +521,7 @@ function FaqApp() {
         {isAdmin && <button className="faq-manage-categories" onClick={() => setCategoryEditor(true)}>⚙ 카테고리 편집</button>}
       </aside>
       <main className="faq-content">
-        {selected ? <FaqDetail group={selected} isAdmin={isAdmin} onBack={() => setSelectedId('')} onEdit={() => setEditor(selected)}
+        {selected ? <FaqDetail group={selected} isAdmin={isAdmin} adminProfile={adminProfile} onBack={() => setSelectedId('')} onEdit={() => setEditor(selected)}
           onDelete={() => remove(selected)} onPublish={() => togglePublish(selected)} /> : <section className="faq-index">
           <header><p>QUICK ANSWERS</p><h1>{category}</h1><span>상담 중 필요한 답을 게시글과 질문 단위로 빠르게 찾아보세요.</span></header>
           <div className="faq-list-summary"><b>{query ? `검색 결과 ${visibleGroups.length}건` : `FAQ 게시글 ${visibleGroups.length}건`}</b><span>게시글 하나에 여러 FAQ가 포함됩니다.</span></div>

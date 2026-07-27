@@ -1091,8 +1091,8 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=17"></script>
-<script type="module" src="/vendor/faq-app.js?v=13"></script>
+<script type="module" src="/vendor/announcement-app.js?v=18"></script>
+<script type="module" src="/vendor/faq-app.js?v=14"></script>
 <script src="/vendor/signup-guide.js?v=3"></script>
 <script src="/vendor/membership-guide.js?v=1"></script>
 <script src="/vendor/profile-guide.js?v=1"></script>
@@ -2597,7 +2597,7 @@ window.announcementBridge = {
       if(snapshot.exists()) existing=snapshot.data();
     }
     const previousAuthor=String(existing.authorName||existing.author||'').trim();
-    const authorName=previousAuthor && !previousAuthor.includes('@')
+    const authorName=previousAuthor && previousAuthor!=='관리자' && !previousAuthor.includes('@')
       ? previousAuthor
       : currentAdminProfile?.name||'관리자';
     const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
@@ -2776,7 +2776,7 @@ window.faqBridge = {
       if(snapshot.exists()) existing=snapshot.data();
     }
     const previousAuthor=String(existing.authorName||existing.author||'').trim();
-    const authorName=previousAuthor && !previousAuthor.includes('@')
+    const authorName=previousAuthor && previousAuthor!=='관리자' && !previousAuthor.includes('@')
       ? previousAuthor
       : currentAdminProfile?.name||'관리자';
     const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
