@@ -8,6 +8,13 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.admin == true;
     }
 
+    function isValidEmployee(employeeNo, employeeName) {
+      return employeeNo is string
+        && exists(/databases/$(database)/documents/employees/$(employeeNo))
+        && get(/databases/$(database)/documents/employees/$(employeeNo)).data.active == true
+        && get(/databases/$(database)/documents/employees/$(employeeNo)).data.name == employeeName;
+    }
+
     match /guides/{guideId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
@@ -22,6 +29,20 @@ service cloud.firestore {
       allow read: if true;
       allow create, update, delete: if isAdmin();
 
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if request.resource.data.keys().hasOnly(['author', 'employeeNo', 'content', 'createdAt'])
+          && request.resource.data.author is string
+          && request.resource.data.author.size() > 0
+          && request.resource.data.author.size() <= 30
+          && request.resource.data.content is string
+          && request.resource.data.content.size() > 0
+          && request.resource.data.content.size() <= 500
+          && request.resource.data.createdAt == request.time
+          && (isAdmin() || isValidEmployee(request.resource.data.employeeNo, request.resource.data.author));
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
     }
 
     match /employees/{employeeNo} {

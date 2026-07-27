@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>화물맨 업무 가이드</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<link href="/announcement-app.css?v=10" rel="stylesheet">
-<link href="/faq-app.css?v=7" rel="stylesheet">
+<link href="/announcement-app.css?v=11" rel="stylesheet">
+<link href="/faq-app.css?v=9" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1082,8 +1082,8 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=10"></script>
-<script type="module" src="/vendor/faq-app.js?v=8"></script>
+<script type="module" src="/vendor/announcement-app.js?v=11"></script>
+<script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -1121,6 +1121,7 @@ let firebaseAuth = null;
 let firestoreDb = null;
 let firebaseFns = null;
 let firebaseReady = false;
+let currentAdminProfile = null;
 let managedAssets = [];
 let assetManageSec = '차주앱';
 let noticePosts = [];
@@ -1168,8 +1169,12 @@ async function initFirebase() {
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
+    localStorage.removeItem(COUNSELOR_SESSION_KEY);
+    currentCounselor=null;
+    syncCounselorUI();
+    await firebaseAuth.authStateReady();
+    if(firebaseAuth.currentUser) await authSdk.signOut(firebaseAuth);
     authSdk.onAuthStateChanged(firebaseAuth, applyFirebaseUser);
-    await restoreCounselorSession();
     await loadGuidePagesFromFirestore();
   } catch(e) {
     console.error('Firebase 초기화 실패:', e);
@@ -1193,7 +1198,9 @@ async function applyFirebaseUser(user) {
   if(!user || !firebaseReady) { exitAdmin(); return; }
   try {
     const adminSnap = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'admins', user.uid));
-    if(adminSnap.exists() && adminSnap.data().admin === true) enterAdmin();
+    if(adminSnap.exists() && adminSnap.data().admin === true && adminSnap.data().active !== false) {
+      enterAdmin({uid:user.uid,email:user.email||'',name:String(adminSnap.data().name||user.email||'관리자')});
+    }
     else {
       await firebaseFns.signOut(firebaseAuth);
       exitAdmin();
@@ -1960,9 +1967,9 @@ async function submitPw() {
   try {
     const result = await firebaseFns.signInWithEmailAndPassword(firebaseAuth, email, password);
     const adminSnap = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'admins', result.user.uid));
-    if(!adminSnap.exists() || adminSnap.data().admin !== true) throw new Error('관리자 권한이 등록되지 않은 계정입니다.');
+    if(!adminSnap.exists() || adminSnap.data().admin !== true || adminSnap.data().active === false) throw new Error('관리자 권한이 등록되지 않은 계정입니다.');
     document.getElementById('pwInput').value = '';
-    enterAdmin();
+    enterAdmin({uid:result.user.uid,email:result.user.email||'',name:String(adminSnap.data().name||result.user.email||'관리자')});
   } catch(e) {
     err.textContent = e.message.includes('관리자 권한') ? e.message : '이메일 또는 비밀번호가 올바르지 않습니다.';
     err.style.display = 'block';
@@ -2015,7 +2022,6 @@ async function submitCounselorLogin() {
   btn.disabled=true; btn.textContent='확인 중...';
   try {
     currentCounselor=await verifyCounselor(name,employeeNo);
-    localStorage.setItem(COUNSELOR_SESSION_KEY,JSON.stringify(currentCounselor));
     document.getElementById('counselorName').value='';
     document.getElementById('counselorEmployeeNo').value='';
     syncCounselorUI();
@@ -2056,7 +2062,8 @@ async function firebaseSignOut() {
   exitAdmin();
 }
 
-function enterAdmin() {
+function enterAdmin(profile=currentAdminProfile) {
+  currentAdminProfile=profile;
   adminMode = true;
   syncAdminUI();
   syncAccessGate();
@@ -2065,6 +2072,7 @@ function enterAdmin() {
 function exitAdmin() {
   if(drawing) cancelDraw();
   adminMode = false;
+  currentAdminProfile=null;
   syncAdminUI();
   syncAccessGate();
 }
@@ -2344,6 +2352,7 @@ function legacyNoticeToAnnouncement(post) {
 window.announcementBridge = {
   isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
   getCounselor:() => currentCounselor ? {...currentCounselor} : null,
+  getAdmin:() => currentAdminProfile ? {...currentAdminProfile} : null,
   subscribe(callback) {
     if(!firebaseReady) {
       callback(noticePosts.map(legacyNoticeToAnnouncement));
@@ -2431,7 +2440,21 @@ window.announcementBridge = {
   async save(post) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     const id=post.id||`announcement-${Date.now()}`;
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'announcements',id),{
+    const ref=firebaseFns.doc(firestoreDb,'announcements',id);
+    let existing={};
+    if(post.id) {
+      const snapshot=await firebaseFns.getDoc(ref);
+      if(snapshot.exists()) existing=snapshot.data();
+    }
+    const authorName=existing.authorName||currentAdminProfile?.name||firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid;
+    const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
+    if(post.id && existing.title) history.push({
+      editedAt:new Date().toISOString(),
+      editedById:firebaseAuth.currentUser.uid,
+      editedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
+      previous:{title:existing.title||'',content:existing.content||'',category:existing.category||'',tags:existing.tags||[],links:existing.links||[]}
+    });
+    await firebaseFns.setDoc(ref,{
       title:post.title,
       content:post.content,
       category:post.category||'일반',
@@ -2444,43 +2467,49 @@ window.announcementBridge = {
         url:String(item.url||'').trim()
       })).filter(item=>item.url),
       images:Array.isArray(post.images)?post.images:[],
-      author:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid,
+      author:authorName,
+      authorId:existing.authorId||firebaseAuth.currentUser.uid,
+      authorName,
+      updatedById:firebaseAuth.currentUser.uid,
+      updatedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
+      history,
       updatedAt:firebaseFns.serverTimestamp()
     },{merge:true});
     return id;
   },
   async remove(id) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'announcements',id));
+    const comments=await firebaseFns.getDocs(firebaseFns.collection(firestoreDb,'announcements',id,'comments'));
+    const batch=firebaseFns.writeBatch(firestoreDb);
+    comments.forEach(item=>batch.delete(item.ref));
+    batch.delete(firebaseFns.doc(firestoreDb,'announcements',id));
+    await batch.commit();
   },
   subscribeComments(announcementId, callback) {
     callback([]);
     if(!firebaseReady || !announcementId) return () => {};
-    return firebaseFns.onSnapshot(firebaseFns.doc(firestoreDb,'announcements',announcementId), snapshot => {
-      callback((Array.isArray(snapshot.data()?.comments)?snapshot.data().comments:[]).slice().sort((a,b)=>
-        String(a.createdAt||'').localeCompare(String(b.createdAt||''))));
+    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'announcements',announcementId,'comments'), snapshot => {
+      callback(snapshot.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>
+        Number(a.createdAt?.seconds||0)-Number(b.createdAt?.seconds||0)));
     }, error => {
       if(error?.code!=='permission-denied') console.warn('댓글 실시간 연결 실패:',error);
     });
   },
   async addComment(announcementId, comment) {
-    if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    if(!currentCounselor && (!adminMode || !firebaseAuth?.currentUser)) throw new Error('로그인이 필요합니다.');
     const author=String(comment.author||'').trim();
     const content=String(comment.content||'').trim();
     if(!author || author.length>30 || !content || content.length>500) throw new Error('댓글 입력 내용을 확인해 주세요.');
-    await firebaseFns.updateDoc(firebaseFns.doc(firestoreDb,'announcements',announcementId),{
-      comments:firebaseFns.arrayUnion({id:`comment-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,
-        author,content,createdAt:new Date().toISOString()})
+    await firebaseFns.addDoc(firebaseFns.collection(firestoreDb,'announcements',announcementId,'comments'),{
+      author,
+      employeeNo:currentCounselor?.employeeNo||'',
+      content,
+      createdAt:firebaseFns.serverTimestamp()
     });
   },
   async removeComment(announcementId, commentId) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    const ref=firebaseFns.doc(firestoreDb,'announcements',announcementId);
-    await firebaseFns.runTransaction(firestoreDb,async transaction=>{
-      const snapshot=await transaction.get(ref);
-      transaction.update(ref,{comments:(Array.isArray(snapshot.data()?.comments)?snapshot.data().comments:[])
-        .filter(item=>item.id!==commentId)});
-    });
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'announcements',announcementId,'comments',commentId));
   },
   async uploadImage(file) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
@@ -2500,6 +2529,7 @@ window.announcementBridge = {
 
 window.faqBridge = {
   isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
+  getAdmin:() => currentAdminProfile ? {...currentAdminProfile} : null,
   subscribe(callback) {
     callback([]);
     if(!firebaseReady) return () => {};
@@ -2531,6 +2561,20 @@ window.faqBridge = {
   async saveGroup(group) {
     if(!adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     const id=group.id||`faq-group-${Date.now()}`;
+    const ref=firebaseFns.doc(firestoreDb,'guides',id);
+    let existing={};
+    if(group.id) {
+      const snapshot=await firebaseFns.getDoc(ref);
+      if(snapshot.exists()) existing=snapshot.data();
+    }
+    const authorName=existing.authorName||currentAdminProfile?.name||firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid;
+    const history=Array.isArray(existing.history)?existing.history.slice(-19):[];
+    if(group.id && existing.title) history.push({
+      editedAt:new Date().toISOString(),
+      editedById:firebaseAuth.currentUser.uid,
+      editedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
+      previous:{title:existing.title||'',category:existing.category||'',kmsUrl:existing.kmsUrl||'',isPublished:existing.isPublished!==false,items:existing.items||[]}
+    });
     const payload={
       type:'faqGroup',
       title:group.title,
@@ -2538,11 +2582,16 @@ window.faqBridge = {
       kmsUrl:group.kmsUrl||'',
       isPublished:group.isPublished!==false,
       items:Array.isArray(group.items)?group.items:[],
+      authorId:existing.authorId||firebaseAuth.currentUser.uid,
+      authorName,
+      updatedById:firebaseAuth.currentUser.uid,
+      updatedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
+      history,
       updatedAt:firebaseFns.serverTimestamp(),
       updatedBy:firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
     };
     if(!group.id) payload.createdAt=firebaseFns.serverTimestamp();
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides',id),payload,{merge:true});
+    await firebaseFns.setDoc(ref,payload,{merge:true});
     return id;
   },
   async removeGroup(id) {

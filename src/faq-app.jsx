@@ -21,6 +21,10 @@ const dateLabel = value => {
   if (value?.seconds) return new Date(value.seconds * 1000).toISOString().slice(0, 10);
   return '';
 };
+const dateTimeLabel = value => {
+  const date = value?.toDate ? value.toDate() : value?.seconds ? new Date(value.seconds * 1000) : new Date(value || '');
+  return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('ko-KR');
+};
 
 function parseBulkFaq(source) {
   const lines = String(source || '').replace(/\r\n?/g, '\n').split('\n');
@@ -336,7 +340,7 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
   return <article className="faq-document">
     <button className="faq-back" onClick={onBack}>← FAQ 목록</button>
     <div className="faq-breadcrumb">{group.category || '일반'} &gt; {group.title}</div>
-    <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개</p></div>
+    <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개 · 작성자 {group.authorName || group.updatedBy || '관리자'}</p></div>
       <span className={group.isPublished === false ? 'hidden' : ''}>{group.isPublished === false ? '숨김' : '게시 중'}</span></div>
     <div className="faq-detail-items">
       {(group.items || []).map((item, index) => {
@@ -353,6 +357,10 @@ function FaqDetail({ group, isAdmin, onBack, onEdit, onDelete, onPublish }) {
       })}
     </div>
     {group.kmsUrl && <a className="faq-kms-link" href={group.kmsUrl} target="_blank" rel="noopener">KMS 가이드 열기</a>}
+    {isAdmin && !!group.history?.length && <details className="faq-history"><summary>수정 이력 {group.history.length}건</summary>
+      {[...group.history].reverse().map((entry, index) => <div key={`${entry.editedAt}-${index}`}>
+        <strong>{entry.editedByName || '관리자'}</strong><time>{dateTimeLabel(entry.editedAt)}</time>
+        <span>{entry.previous?.title || '이전 게시글'}</span></div>)}</details>}
     {isAdmin && <div className="faq-document-admin">
       <button onClick={onPublish}>{group.isPublished === false ? '게시하기' : '숨기기'}</button>
       <button onClick={onEdit}>수정</button><button className="danger" onClick={onDelete}>삭제</button>

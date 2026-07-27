@@ -267,19 +267,27 @@ function CategoryManager({ categories, onClose, onSaved }) {
 
 function Comments({ announcementId, isAdmin }) {
   const [comments, setComments] = useState([]);
-  const [author, setAuthor] = useState(() => localStorage.getItem('hmm-comment-author') || '');
+  const [identity, setIdentity] = useState(() => window.announcementBridge.getCounselor() || window.announcementBridge.getAdmin());
   const [content, setContent] = useState('');
   const [saving, setSaving] = useState(false);
   useEffect(() => window.announcementBridge.subscribeComments(announcementId, setComments), [announcementId]);
+  useEffect(() => {
+    const update = () => setIdentity(window.announcementBridge.getCounselor() || window.announcementBridge.getAdmin());
+    window.addEventListener('counselor-session-change', update);
+    window.addEventListener('announcement-admin-change', update);
+    return () => {
+      window.removeEventListener('counselor-session-change', update);
+      window.removeEventListener('announcement-admin-change', update);
+    };
+  }, []);
   const submit = async event => {
     event.preventDefault();
-    const nextAuthor = author.trim();
+    const nextAuthor = String(identity?.name || '').trim();
     const nextContent = content.trim();
-    if (!nextAuthor || !nextContent) return alert('이름과 댓글 내용을 입력해 주세요.');
+    if (!nextAuthor || !nextContent) return alert('댓글 내용을 입력해 주세요.');
     setSaving(true);
     try {
       await window.announcementBridge.addComment(announcementId, { author: nextAuthor, content: nextContent });
-      localStorage.setItem('hmm-comment-author', nextAuthor);
       setContent('');
     } catch (error) { alert(`댓글을 등록하지 못했습니다: ${error.message || error}`); }
     finally { setSaving(false); }
@@ -291,8 +299,8 @@ function Comments({ announcementId, isAdmin }) {
   };
   return <section className="an-comments">
     <header><h2>댓글 <span>{comments.length}</span></h2></header>
-    {isAdmin && <form className="an-comment-form" onSubmit={submit}>
-      <input aria-label="댓글 작성자" maxLength="30" value={author} onChange={event => setAuthor(event.target.value)} placeholder="이름" />
+    {!!identity && <form className="an-comment-form" onSubmit={submit}>
+      <div className="an-comment-author">작성자 <strong>{identity.name}</strong></div>
       <textarea aria-label="댓글 내용" maxLength="500" value={content} onChange={event => setContent(event.target.value)}
         placeholder="댓글을 입력해 주세요." />
       <footer><span>{content.length}/500</span><button type="submit" disabled={saving}>{saving ? '등록 중…' : '댓글 등록'}</button></footer>
@@ -369,13 +377,18 @@ function Workspace() {
         {selected ? <article className="an-document">
           <button className="an-back" onClick={() => navigate('/')}>← {selected.category || '공지사항'}</button>
           <div className="an-document-meta"><span className="an-category-badge">{selected.category || '일반'}</span>
-            {selected.isPinned && <span className="an-priority">중요</span>}<time>{dateLabel(selected.createdAt)}</time></div>
+            {selected.isPinned && <span className="an-priority">중요</span>}<time>{dateLabel(selected.createdAt)}</time>
+            <span>작성자 {selected.authorName || selected.author || '관리자'}</span></div>
           <h1>{selected.title}</h1>
           <div className="an-tags">{(selected.tags || []).map(tag => <span key={tag}>#{tag}</span>)}</div>
           <div className="an-markdown" dangerouslySetInnerHTML={renderMarkdown(selected.content)} />
           {!!selectedLinks.length && <div className="an-link-list">{selectedLinks.map((link, index) =>
             <a className="an-link-card" key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener">
               {link.name || 'KMS 가이드 열기'}</a>)}</div>}
+          {isAdmin && !!selected.history?.length && <details className="an-history"><summary>수정 이력 {selected.history.length}건</summary>
+            {[...selected.history].reverse().map((entry, index) => <div key={`${entry.editedAt}-${index}`}>
+              <strong>{entry.editedByName || '관리자'}</strong><time>{commentDateLabel(entry.editedAt)}</time>
+              <span>{entry.previous?.title || '이전 게시글'}</span></div>)}</details>}
           {isAdmin && <div className="an-admin-actions"><button onClick={() => setEditor({ mode: 'edit', post: selected })}>수정</button><button onClick={() => remove(selected)}>삭제</button></div>}
           <Comments announcementId={selected.id} isAdmin={isAdmin} />
         </article> : <section className="an-index">
