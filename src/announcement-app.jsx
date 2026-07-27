@@ -342,7 +342,7 @@ function Acknowledgement({ post }) {
   };
   return <section className={`an-acknowledgement ${confirmed ? 'confirmed' : ''}`}>
     <div><strong>{confirmed ? '확인 및 숙지 완료' : '공지 내용을 확인해 주세요'}</strong>
-      <span>{confirmed ? `${counselor.name} 상담사님의 확인이 기록되었습니다.` : '내용을 모두 읽은 뒤 버튼을 눌러 주세요.'}</span></div>
+      <span>{confirmed ? `${counselor.name}님의 확인이 기록되었습니다.` : '내용을 모두 읽은 뒤 버튼을 눌러 주세요.'}</span></div>
     <button type="button" disabled={confirmed || saving} onClick={acknowledge}>
       {confirmed ? '✓ 확인 및 숙지 완료' : saving ? '처리 중…' : '확인 및 숙지'}
     </button>

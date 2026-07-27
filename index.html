@@ -512,7 +512,7 @@ textarea.form-input{resize:vertical;}
   <div class="topnav-right">
     <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
     <button class="btn-admin-login" id="btnAssetManager" style="display:none">🖼 이미지 관리</button>
-    <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 상담사 로그인</button>
+    <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 로그인</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
   </div>
 </nav>
@@ -935,14 +935,14 @@ textarea.form-input{resize:vertical;}
   <div class="login-card">
     <div class="login-brand"><strong>화물맨 업무 가이드</strong><span>업무 가이드를 이용하려면 로그인해 주세요.</span></div>
     <div class="login-tabs">
-      <button type="button" id="counselorLoginTab" class="active" onclick="switchLoginTab('counselor')">상담사</button>
+      <button type="button" id="counselorLoginTab" class="active" onclick="switchLoginTab('counselor')">로그인</button>
       <button type="button" id="adminLoginTab" onclick="switchLoginTab('admin')">관리자</button>
     </div>
     <section class="login-pane active" id="counselorLoginPane">
-      <h2>상담사 로그인</h2><p>등록된 이름과 사번을 입력해 주세요.</p>
+      <h2>로그인</h2><p>등록된 이름과 사번을 입력해 주세요.</p>
       <div class="form-row"><input type="text" class="form-input" id="counselorName" name="counselor_display_name" placeholder="이름" autocomplete="off" maxlength="30"></div>
       <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" name="counselor_employee_number" placeholder="사번" autocomplete="one-time-code" inputmode="numeric" maxlength="30"></div>
-      <label class="remember-check"><input type="checkbox" id="rememberCounselorName"> 상담사 이름 기억하기</label>
+      <label class="remember-check"><input type="checkbox" id="rememberCounselorName"> 이름 기억하기</label>
       <p class="login-error" id="counselorLoginErr">로그인 정보를 확인해 주세요.</p>
       <button class="btn btn-primary" id="counselorLoginSubmit" onclick="submitCounselorLogin()">로그인</button>
     </section>
@@ -1084,7 +1084,7 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
-<script type="module" src="/vendor/announcement-app.js?v=12"></script>
+<script type="module" src="/vendor/announcement-app.js?v=13"></script>
 <script type="module" src="/vendor/faq-app.js?v=9"></script>
 <script>
 // ═══════════════════════════════════════════
@@ -2003,7 +2003,7 @@ function syncCounselorUI() {
   const btn=document.getElementById('topCounselorBtn');
   if(!btn) return;
   btn.classList.toggle('on',!!currentCounselor);
-  btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 상담사 로그인';
+  btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 로그인';
   window.dispatchEvent(new CustomEvent('counselor-session-change',{detail:{counselor:currentCounselor}}));
   syncAccessGate();
 }
@@ -2041,7 +2041,7 @@ async function submitCounselorLogin() {
     syncCounselorUI();
   } catch(e) {
     err.textContent=e?.code==='permission-denied'
-      ? '상담사 로그인 권한 설정이 필요합니다. 관리자에게 문의해 주세요.'
+      ? '로그인 권한 설정이 필요합니다. 관리자에게 문의해 주세요.'
       : e.message||'로그인 정보를 확인해 주세요.';
     err.style.display='block';
   } finally { btn.disabled=false; btn.textContent='로그인'; }
@@ -2522,7 +2522,7 @@ window.announcementBridge = {
     );
   },
   async acknowledge(announcement) {
-    if(!currentCounselor) throw new Error('상담사 로그인이 필요합니다.');
+    if(!currentCounselor) throw new Error('로그인이 필요합니다.');
     await firebaseFns.setDoc(
       firebaseFns.doc(firestoreDb,'announcements',announcement.id,'receipts',currentCounselor.employeeNo),
       {
