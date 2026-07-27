@@ -6,6 +6,7 @@
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="/announcement-app.css?v=17" rel="stylesheet">
 <link href="/faq-app.css?v=13" rel="stylesheet">
+<link href="/signup-guide.css?v=1" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -1086,6 +1087,7 @@ textarea.form-input{resize:vertical;}
 
 <script type="module" src="/vendor/announcement-app.js?v=17"></script>
 <script type="module" src="/vendor/faq-app.js?v=13"></script>
+<script src="/vendor/signup-guide.js?v=2"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -1172,6 +1174,7 @@ async function initFirebase() {
     firestoreDb = firestoreSdk.getFirestore(app);
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
+    window.signupGuideBridge?.connect?.();
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
     localStorage.removeItem(COUNSELOR_SESSION_KEY);
     currentCounselor=null;
@@ -1243,7 +1246,18 @@ function renderGuidePage() {
   document.getElementById('guidePageTitle').textContent = page.title;
   document.getElementById('guidePageDesc').textContent = page.desc;
   const editBtn = document.getElementById('guideEditBtn');
+  editBtn.style.display = '';
   editBtn.textContent = activePage === 'notice' ? '＋ 공지 작성' : '✎ 내용 수정';
+  if(activePage === 'signup') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="signupGuideRoot"></div>';
+    window.mountSignupGuide?.(document.getElementById('signupGuideRoot'));
+    document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
   if(activePage === 'notice') {
     editingGuidePage = false;
     document.getElementById('guideEditorBox').style.display = 'none';
@@ -1418,7 +1432,7 @@ async function boot() {
   tick(); setInterval(tick, 1000);
   loadGuidePages();
   await loadDefaultNotices();
-  await initFirebase();
+  initFirebase();
 
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
@@ -2362,6 +2376,43 @@ function legacyNoticeToAnnouncement(post) {
     author:post.author||''
   };
 }
+
+const signupGuideListeners = new Set();
+let signupGuideCache = null;
+let signupGuideUnsubscribe = null;
+window.signupGuideBridge = {
+  isAdmin: () => adminMode && !!firebaseAuth?.currentUser,
+  getAdmin: () => currentAdminProfile,
+  subscribe(callback) {
+    signupGuideListeners.add(callback);
+    if(signupGuideCache) callback(signupGuideCache);
+    this.connect();
+    return () => signupGuideListeners.delete(callback);
+  },
+  connect() {
+    if(!firebaseReady || !firestoreDb || signupGuideUnsubscribe) return;
+    signupGuideUnsubscribe = firebaseFns.onSnapshot(
+      firebaseFns.doc(firestoreDb, 'guideFlows', 'signup'),
+      snapshot => {
+        const remoteSteps = snapshot.exists() ? snapshot.data().steps : null;
+        if(!Array.isArray(remoteSteps) || !remoteSteps.length) return;
+        signupGuideCache = remoteSteps;
+        signupGuideListeners.forEach(callback => callback(remoteSteps));
+      },
+      error => console.error('신규가입 가이드 구독 실패:', error)
+    );
+  },
+  async save(steps) {
+    if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    if(!Array.isArray(steps) || !steps.length) throw new Error('저장할 단계가 없습니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guideFlows', 'signup'), {
+      steps,
+      updatedAt: firebaseFns.serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
+      updatedByName: currentAdminProfile?.name || '관리자'
+    }, {merge:true});
+  }
+};
 
 window.announcementBridge = {
   isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
