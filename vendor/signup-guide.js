@@ -352,7 +352,7 @@
     root.addEventListener('change', handleChange);
     root.innerHTML = '<div class="sg-loading">신규가입 가이드를 불러오는 중입니다…</div>';
     try {
-      const response = await fetch('/가입_정지_변경/hwamulman_guide_data.json');
+      const response = await fetch('/signup-guide-data.json?v=1');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       steps = await response.json();
       currentId = byId('시작') ? '시작' : steps[0]?.id;
