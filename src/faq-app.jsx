@@ -423,6 +423,7 @@ function FaqApp() {
   const [categoryEditor, setCategoryEditor] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(!!window.faqBridge.isAdmin());
+  const [dark, setDark] = useState(() => localStorage.getItem('hmm-faq-theme') === 'dark');
 
   useEffect(() => window.faqBridge.subscribe(setGroups), []);
   useEffect(() => window.announcementBridge.subscribe(setSearchPosts), []);
@@ -466,10 +467,16 @@ function FaqApp() {
     catch (error) { alert(`게시 상태를 변경하지 못했습니다. ${error.message || error}`); }
   };
 
-  return <div className="faq-app">
+  return <div className="faq-app" data-theme={dark ? 'dark' : 'light'}>
     <div className="faq-toolbar">
       <button className="an-search-trigger faq-search-trigger" onClick={() => setSearchOpen(true)}><span>⌕</span><span>통합 검색</span><kbd>Ctrl K</kbd></button>
-      {isAdmin && <button className="faq-new" onClick={() => setEditor({})}>＋ 새 FAQ 게시글</button>}
+      <div className="faq-toolbar-actions">
+        <button className="faq-theme-toggle" title={dark ? '라이트모드' : '다크모드'} onClick={() => {
+          setDark(!dark);
+          localStorage.setItem('hmm-faq-theme', !dark ? 'dark' : 'light');
+        }}>{dark ? '☀' : '◐'}</button>
+        {isAdmin && <button className="faq-new" onClick={() => setEditor({})}>＋ 새 FAQ 게시글</button>}
+      </div>
     </div>
     <div className="faq-layout">
       <aside className="faq-sidebar">
