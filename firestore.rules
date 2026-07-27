@@ -24,6 +24,11 @@ service cloud.firestore {
 
     }
 
+    match /employees/{employeeNo} {
+      allow get: if true;
+      allow list, create, update, delete: if false;
+    }
+
     match /admins/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;

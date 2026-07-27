@@ -36,6 +36,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 }
 .btn-admin-login:hover{border-color:#FFB800;color:#FFB800;}
 .btn-admin-login.on{border-color:#FF5000;color:#FF5000;background:#1a0a00;}
+.btn-counselor-login.on{border-color:#65a5e8;color:#8cc5ed;background:#10253a;}
 
 /* ── MAIN LAYOUT ── */
 .main-layout{
@@ -509,6 +510,7 @@ textarea.form-input{resize:vertical;}
   <div class="topnav-right">
     <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
     <button class="btn-admin-login" id="btnAssetManager" style="display:none">🖼 이미지 관리</button>
+    <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 상담사 로그인</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
   </div>
 </nav>
@@ -926,6 +928,21 @@ textarea.form-input{resize:vertical;}
 
 </div><!-- /main-layout -->
 
+<!-- 상담사 로그인 모달 -->
+<div class="modal-bg" id="counselorLoginModal">
+  <div class="modal">
+    <div class="modal-title">👤 상담사 로그인</div>
+    <p style="font-size:12px;line-height:1.6;color:#777;margin-bottom:14px">등록된 이름과 사번을 입력해 주세요.</p>
+    <div class="form-row"><input type="text" class="form-input" id="counselorName" placeholder="이름" autocomplete="name" maxlength="30"></div>
+    <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" placeholder="사번" autocomplete="username" maxlength="30"></div>
+    <p id="counselorLoginErr" style="color:#f44;font-size:13px;display:none">로그인 정보를 확인해 주세요.</p>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('counselorLoginModal')">취소</button>
+      <button class="btn btn-primary" id="counselorLoginSubmit" onclick="submitCounselorLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
 <!-- Firebase 관리자 로그인 모달 -->
 <div class="modal-bg" id="pwModal">
   <div class="modal">
@@ -1111,6 +1128,8 @@ let assetManageSec = '차주앱';
 let noticePosts = [];
 let noticeQuery = '';
 let selectedNoticeId = null;
+let currentCounselor = null;
+const COUNSELOR_SESSION_KEY = 'hmm-counselor-session-v1';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1152,6 +1171,7 @@ async function initFirebase() {
     firebaseReady = true;
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
     authSdk.onAuthStateChanged(firebaseAuth, applyFirebaseUser);
+    await restoreCounselorSession();
     await loadGuidePagesFromFirestore();
   } catch(e) {
     console.error('Firebase 초기화 실패:', e);
@@ -1440,8 +1460,17 @@ async function boot() {
     if(adminMode) firebaseSignOut();
     else { openModal('pwModal'); setTimeout(()=>document.getElementById('adminEmail').focus(), 60); }
   });
+  document.getElementById('topCounselorBtn').addEventListener('click', () => {
+    if(currentCounselor) counselorSignOut();
+    else {
+      openModal('counselorLoginModal');
+      setTimeout(()=>document.getElementById('counselorName').focus(),60);
+    }
+  });
 
   document.getElementById('pwInput').onkeydown = e => { if(e.key==='Enter') submitPw(); };
+  document.getElementById('counselorName').onkeydown = e => { if(e.key==='Enter') document.getElementById('counselorEmployeeNo').focus(); };
+  document.getElementById('counselorEmployeeNo').onkeydown = e => { if(e.key==='Enter') submitCounselorLogin(); };
   document.getElementById('btnDraw').onclick = startDraw;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
@@ -1928,6 +1957,86 @@ async function submitPw() {
   } finally { btn.disabled = false; btn.textContent = '로그인'; }
 }
 
+function counselorRecord(data, employeeNo) {
+  return {
+    employeeNo,
+    name:String(data.name||'').trim(),
+    team:String(data.team||'').trim(),
+    expiresAt:Date.now()+(12*60*60*1000)
+  };
+}
+
+function syncCounselorUI() {
+  const btn=document.getElementById('topCounselorBtn');
+  if(!btn) return;
+  btn.classList.toggle('on',!!currentCounselor);
+  btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 상담사 로그인';
+  window.dispatchEvent(new CustomEvent('counselor-session-change',{detail:{counselor:currentCounselor}}));
+}
+
+async function verifyCounselor(name, employeeNo) {
+  if(!firebaseReady) throw new Error('Firebase 연결을 준비 중입니다. 잠시 후 다시 시도해 주세요.');
+  const snapshot=await firebaseFns.getDoc(firebaseFns.doc(firestoreDb,'employees',employeeNo));
+  if(!snapshot.exists()) throw new Error('이름 또는 사번이 올바르지 않습니다.');
+  const data=snapshot.data();
+  if(data.active!==true) throw new Error('현재 로그인할 수 없는 계정입니다. 관리자에게 문의해 주세요.');
+  if(String(data.employeeNo||employeeNo).trim()!==employeeNo || String(data.name||'').trim()!==name) {
+    throw new Error('이름 또는 사번이 올바르지 않습니다.');
+  }
+  return counselorRecord(data,employeeNo);
+}
+
+async function submitCounselorLogin() {
+  const name=document.getElementById('counselorName').value.trim();
+  const employeeNo=document.getElementById('counselorEmployeeNo').value.trim();
+  const err=document.getElementById('counselorLoginErr');
+  const btn=document.getElementById('counselorLoginSubmit');
+  err.style.display='none';
+  if(!name || !employeeNo) {
+    err.textContent='이름과 사번을 모두 입력해 주세요.';
+    err.style.display='block';
+    return;
+  }
+  btn.disabled=true; btn.textContent='확인 중...';
+  try {
+    currentCounselor=await verifyCounselor(name,employeeNo);
+    localStorage.setItem(COUNSELOR_SESSION_KEY,JSON.stringify(currentCounselor));
+    document.getElementById('counselorName').value='';
+    document.getElementById('counselorEmployeeNo').value='';
+    closeModal('counselorLoginModal');
+    syncCounselorUI();
+  } catch(e) {
+    err.textContent=e?.code==='permission-denied'
+      ? '상담사 로그인 권한 설정이 필요합니다. 관리자에게 문의해 주세요.'
+      : e.message||'로그인 정보를 확인해 주세요.';
+    err.style.display='block';
+  } finally { btn.disabled=false; btn.textContent='로그인'; }
+}
+
+async function restoreCounselorSession() {
+  try {
+    const saved=JSON.parse(localStorage.getItem(COUNSELOR_SESSION_KEY)||'null');
+    if(!saved?.name || !saved?.employeeNo || Number(saved.expiresAt)<=Date.now()) {
+      localStorage.removeItem(COUNSELOR_SESSION_KEY);
+      currentCounselor=null;
+      syncCounselorUI();
+      return;
+    }
+    currentCounselor=await verifyCounselor(saved.name,saved.employeeNo);
+    localStorage.setItem(COUNSELOR_SESSION_KEY,JSON.stringify(currentCounselor));
+  } catch(e) {
+    localStorage.removeItem(COUNSELOR_SESSION_KEY);
+    currentCounselor=null;
+  }
+  syncCounselorUI();
+}
+
+function counselorSignOut() {
+  localStorage.removeItem(COUNSELOR_SESSION_KEY);
+  currentCounselor=null;
+  syncCounselorUI();
+}
+
 async function firebaseSignOut() {
   if(firebaseAuth) await firebaseFns.signOut(firebaseAuth);
   exitAdmin();
@@ -2218,6 +2327,7 @@ function legacyNoticeToAnnouncement(post) {
 
 window.announcementBridge = {
   isAdmin:() => adminMode && !!firebaseAuth?.currentUser,
+  getCounselor:() => currentCounselor ? {...currentCounselor} : null,
   subscribe(callback) {
     if(!firebaseReady) {
       callback(noticePosts.map(legacyNoticeToAnnouncement));
@@ -2980,6 +3090,7 @@ function quickReg(filename) {
 function openModal(id) {
   document.getElementById(id).classList.add('active');
   if(id==='pwModal') document.getElementById('pwErr').style.display='none';
+  if(id==='counselorLoginModal') document.getElementById('counselorLoginErr').style.display='none';
 }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
