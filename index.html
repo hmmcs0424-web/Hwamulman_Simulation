@@ -1094,6 +1094,7 @@ textarea.form-input{resize:vertical;}
 <script type="module" src="/vendor/announcement-app.js?v=17"></script>
 <script type="module" src="/vendor/faq-app.js?v=13"></script>
 <script src="/vendor/signup-guide.js?v=3"></script>
+<script src="/vendor/membership-guide.js?v=1"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECTION CONFIG
@@ -1181,6 +1182,7 @@ async function initFirebase() {
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
     window.signupGuideBridge?.connect?.();
+    window.membershipGuideBridge?.connect?.();
     analyticsSdk.isSupported().then(ok => { if(ok) analyticsSdk.getAnalytics(app); }).catch(()=>{});
     localStorage.removeItem(COUNSELOR_SESSION_KEY);
     currentCounselor=null;
@@ -1261,6 +1263,16 @@ function renderGuidePage() {
     document.getElementById('guideContent').style.display = '';
     document.getElementById('guideContent').innerHTML = '<div id="signupGuideRoot"></div>';
     window.mountSignupGuide?.(document.getElementById('signupGuideRoot'));
+    document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
+  if(activePage === 'membership') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="membershipGuideRoot"></div>';
+    window.mountMembershipGuide?.(document.getElementById('membershipGuideRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
     return;
   }
@@ -2412,6 +2424,43 @@ window.signupGuideBridge = {
     if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
     if(!Array.isArray(steps) || !steps.length) throw new Error('저장할 단계가 없습니다.');
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guideFlows', 'signup'), {
+      steps,
+      updatedAt: firebaseFns.serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
+      updatedByName: currentAdminProfile?.name || '관리자'
+    }, {merge:true});
+  }
+};
+
+const membershipGuideListeners = new Set();
+let membershipGuideCache = null;
+let membershipGuideUnsubscribe = null;
+window.membershipGuideBridge = {
+  isAdmin: () => adminMode && !!firebaseAuth?.currentUser,
+  getAdmin: () => currentAdminProfile,
+  subscribe(callback) {
+    membershipGuideListeners.add(callback);
+    if(membershipGuideCache) callback(membershipGuideCache);
+    this.connect();
+    return () => membershipGuideListeners.delete(callback);
+  },
+  connect() {
+    if(!firebaseReady || !firestoreDb || membershipGuideUnsubscribe) return;
+    membershipGuideUnsubscribe = firebaseFns.onSnapshot(
+      firebaseFns.doc(firestoreDb, 'guideFlows', 'membership'),
+      snapshot => {
+        const remoteSteps = snapshot.exists() ? snapshot.data().steps : null;
+        if(!Array.isArray(remoteSteps) || !remoteSteps.length) return;
+        membershipGuideCache = remoteSteps;
+        membershipGuideListeners.forEach(callback => callback(remoteSteps));
+      },
+      error => console.error('일시정지/복구/탈퇴 가이드 구독 실패:', error)
+    );
+  },
+  async save(steps) {
+    if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    if(!Array.isArray(steps) || !steps.length) throw new Error('저장할 단계가 없습니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guideFlows', 'membership'), {
       steps,
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
