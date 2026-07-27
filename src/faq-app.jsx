@@ -214,10 +214,24 @@ function BatchEditor({ group, categories, onClose }) {
   const [bulkText, setBulkText] = useState('');
   const [bulkMessage, setBulkMessage] = useState('');
   const [showItems, setShowItems] = useState(!!group);
+  const detailRefs = useRef([]);
   const updateItem = (index, field, value) => setForm(current => ({
     ...current,
     items: current.items.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: value } : item),
   }));
+  const formatDetail = (index, before, after = before) => {
+    const textarea = detailRefs.current[index];
+    if (!textarea) return;
+    const content = form.items[index]?.content || '';
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = content.slice(start, end) || '텍스트';
+    updateItem(index, 'content', `${content.slice(0, start)}${before}${selected}${after}${content.slice(end)}`);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
+    }, 0);
+  };
   const importBulk = () => {
     const parsed = parseBulkFaq(bulkText);
     if (!parsed.items.length) {
@@ -310,7 +324,16 @@ A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
           <div className="faq-item-number"><b>FAQ {index + 1}</b>{form.items.length > 1 && <button onClick={() => setForm({ ...form, items: form.items.filter((_, itemIndex) => itemIndex !== index) })}>삭제</button>}</div>
           <label><span>질문</span><input value={item.question} onChange={event => updateItem(index, 'question', event.target.value)} placeholder="상담사가 실제로 검색할 질문" /></label>
           <label><span>한 줄 답변</span><textarea value={item.shortAnswer} onChange={event => updateItem(index, 'shortAnswer', event.target.value)} placeholder="가장 먼저 전달할 결론" /></label>
-          <label><span>상세 안내</span><textarea className="detail" value={item.content} onChange={event => updateItem(index, 'content', event.target.value)} placeholder="처리 순서, 확인 사항, 주의 사항 등을 Markdown으로 입력" /></label>
+          <label><span>상세 안내</span>
+            <div className="faq-format-toolbar">
+              <button type="button" onClick={() => formatDetail(index, '**')}>B</button>
+              <select defaultValue="" onChange={event => { if (event.target.value) formatDetail(index, `<span style="font-size:${event.target.value}">`, '</span>'); event.target.value = ''; }}>
+                <option value="">글자 크기</option><option value="13px">작게</option><option value="16px">보통</option><option value="20px">크게</option><option value="24px">아주 크게</option>
+              </select>
+              <div className="faq-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatDetail(index, `<span style="color:${event.target.value}">`, '</span>')} /></div>
+              <small>텍스트 선택 후 적용</small>
+            </div>
+            <textarea ref={element => { detailRefs.current[index] = element; }} className="detail" value={item.content} onChange={event => updateItem(index, 'content', event.target.value)} placeholder="처리 순서, 확인 사항, 주의 사항 등을 Markdown으로 입력" /></label>
           <div className="faq-two-fields">
             <label><span>태그</span><input value={item.tags} onChange={event => updateItem(index, 'tags', event.target.value)} placeholder="복구, 정지, 미결제" /></label>
             <label><span>유사 검색어</span><input value={item.synonyms} onChange={event => updateItem(index, 'synonyms', event.target.value)} placeholder="해지, 재가입, 회원삭제" /></label>

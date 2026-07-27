@@ -176,6 +176,19 @@ function Editor({ post, categories, onClose }) {
     ...current,
     links: current.links.map((link, linkIndex) => linkIndex === index ? { ...link, [key]: value } : link),
   }));
+  const formatSelection = (before, after = before) => {
+    const textarea = contentRef.current;
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = form.content.slice(start, end) || '텍스트';
+    const next = `${form.content.slice(0, start)}${before}${selected}${after}${form.content.slice(end)}`;
+    update('content', next);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
+    }, 0);
+  };
   const addImage = async file => {
     if (!file?.type?.startsWith('image/')) return;
     setUploading(true);
@@ -224,7 +237,13 @@ function Editor({ post, categories, onClose }) {
             placeholder={`KMS URL ${index + 1}`} /></div>)}</div>
       </div>
       <label className="an-pin-check"><input type="checkbox" checked={form.isPinned} onChange={event => update('isPinned', event.target.checked)} /> 중요 공지로 고정</label>
-      <div className="an-editor-toolbar"><strong>본문 · Markdown</strong><span>굵게 **텍스트** · 목록 - 항목 · 링크 [이름](URL)</span>
+      <div className="an-editor-toolbar"><strong>본문 서식</strong><div className="an-format-tools">
+        <button type="button" onClick={() => formatSelection('**')}>B</button>
+        <select defaultValue="" onChange={event => { if (event.target.value) formatSelection(`<span style="font-size:${event.target.value}">`, '</span>'); event.target.value = ''; }}>
+          <option value="">글자 크기</option><option value="13px">작게</option><option value="16px">보통</option><option value="20px">크게</option><option value="24px">아주 크게</option>
+        </select>
+        <label className="an-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatSelection(`<span style="color:${event.target.value}">`, '</span>')} /></label>
+      </div><span>텍스트를 먼저 선택한 뒤 서식을 적용하세요.</span>
         <label className="an-image-button">＋ 이미지<input type="file" accept="image/*" hidden onChange={event => addImage(event.target.files[0])} /></label>
       </div>
       <div className="an-compose">
