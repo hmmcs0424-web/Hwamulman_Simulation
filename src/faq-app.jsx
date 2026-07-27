@@ -47,7 +47,7 @@ const dateTimeLabel = value => {
 };
 const renderFaqMarkdown = value => DOMPurify.sanitize(
   marked.parse(String(value || '').replace(/~~/g, '\\~\\~')),
-  { ADD_ATTR: ['style'] },
+  { ADD_ATTR: ['style', 'color', 'size'] },
 );
 const timestamp = value => {
   if (value?.toMillis) return value.toMillis();
@@ -221,6 +221,7 @@ function BatchEditor({ group, categories, onClose }) {
     isPublished: group?.isPublished !== false,
     items: (group?.items?.length ? group.items : [emptyItem()]).map(item => ({
       ...item,
+      content: item.content ? renderFaqMarkdown(item.content) : '',
       tags: Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || '',
       synonyms: Array.isArray(item.synonyms) ? item.synonyms.join(', ') : item.synonyms || '',
     })),
@@ -235,18 +236,11 @@ function BatchEditor({ group, categories, onClose }) {
     ...current,
     items: current.items.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: value } : item),
   }));
-  const formatDetail = (index, before, after = before) => {
-    const textarea = detailRefs.current[index];
-    if (!textarea) return;
-    const content = form.items[index]?.content || '';
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = content.slice(start, end) || '텍스트';
-    updateItem(index, 'content', `${content.slice(0, start)}${before}${selected}${after}${content.slice(end)}`);
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
-    }, 0);
+  const formatDetail = (index, command, value = null) => {
+    const editor = detailRefs.current[index];
+    editor?.focus();
+    document.execCommand(command, false, value);
+    updateItem(index, 'content', editor?.innerHTML || '');
   };
   const importBulk = () => {
     const parsed = parseBulkFaq(bulkText);
@@ -263,7 +257,7 @@ function BatchEditor({ group, categories, onClose }) {
       kmsLinks: parsed.meta.kmsUrl
         ? current.kmsLinks.map((link, index) => index === 0 ? { name: link.name || 'KMS 가이드 열기', url: parsed.meta.kmsUrl } : link)
         : current.kmsLinks,
-      items: parsed.items,
+      items: parsed.items.map(item => ({ ...item, content: renderFaqMarkdown(item.content) })),
     }));
     setBulkMessage(`${parsed.items.length}개 FAQ로 나눴습니다. 아래 입력칸에서 내용을 확인하고 저장해 주세요.`);
     setBulkOpen(false);
@@ -342,14 +336,16 @@ A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
           <label><span>한 줄 답변</span><textarea value={item.shortAnswer} onChange={event => updateItem(index, 'shortAnswer', event.target.value)} placeholder="가장 먼저 전달할 결론" /></label>
           <label><span>상세 안내</span>
             <div className="faq-format-toolbar">
-              <button type="button" onClick={() => formatDetail(index, '**')}>B</button>
-              <select defaultValue="" onChange={event => { if (event.target.value) formatDetail(index, `<span style="font-size:${event.target.value}">`, '</span>'); event.target.value = ''; }}>
-                <option value="">글자 크기</option><option value="13px">작게</option><option value="16px">보통</option><option value="20px">크게</option><option value="24px">아주 크게</option>
+              <button type="button" onMouseDown={event => event.preventDefault()} onClick={() => formatDetail(index, 'bold')}>B</button>
+              <select defaultValue="" onChange={event => { if (event.target.value) formatDetail(index, 'fontSize', event.target.value); event.target.value = ''; }}>
+                <option value="">글자 크기</option><option value="2">작게</option><option value="3">보통</option><option value="5">크게</option><option value="6">아주 크게</option>
               </select>
-              <div className="faq-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatDetail(index, `<span style="color:${event.target.value}">`, '</span>')} /></div>
+              <div className="faq-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatDetail(index, 'foreColor', event.target.value)} /></div>
               <small>텍스트 선택 후 적용</small>
             </div>
-            <textarea ref={element => { detailRefs.current[index] = element; }} className="detail" value={item.content} onChange={event => updateItem(index, 'content', event.target.value)} placeholder="처리 순서, 확인 사항, 주의 사항 등을 Markdown으로 입력" /></label>
+            <div ref={element => { detailRefs.current[index] = element; }} className="detail faq-rich-editor" contentEditable suppressContentEditableWarning
+              dangerouslySetInnerHTML={{ __html: item.content }} onInput={event => updateItem(index, 'content', event.currentTarget.innerHTML)}
+              data-placeholder="처리 순서, 확인 사항, 주의 사항 등을 입력하세요." /></label>
           <div className="faq-two-fields">
             <label><span>태그</span><input value={item.tags} onChange={event => updateItem(index, 'tags', event.target.value)} placeholder="복구, 정지, 미결제" /></label>
             <label><span>유사 검색어</span><input value={item.synonyms} onChange={event => updateItem(index, 'synonyms', event.target.value)} placeholder="해지, 재가입, 회원삭제" /></label>
