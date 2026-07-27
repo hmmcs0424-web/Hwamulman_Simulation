@@ -37,6 +37,8 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .btn-admin-login:hover{border-color:#FFB800;color:#FFB800;}
 .btn-admin-login.on{border-color:#FF5000;color:#FF5000;background:#1a0a00;}
 .btn-counselor-login.on{border-color:#65a5e8;color:#8cc5ed;background:#10253a;}
+.login-gate{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(12,12,14,.96);backdrop-filter:blur(8px)}
+.login-gate.hidden{display:none}.login-card{width:min(460px,100%);border:1px solid #39393f;border-radius:18px;background:#fff;padding:30px;box-shadow:0 24px 80px rgba(0,0,0,.5)}.login-brand{text-align:center;margin-bottom:22px}.login-brand strong{display:block;color:#1a1a1a;font-size:23px}.login-brand span{display:block;color:#777;font-size:13px;margin-top:6px}.login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:10px;background:#f0f0f2;padding:4px;margin-bottom:22px}.login-tabs button{border:0;border-radius:7px;background:transparent;color:#777;padding:10px;font:700 13px inherit;cursor:pointer}.login-tabs button.active{background:#fff;color:#1a1a1a;box-shadow:0 1px 5px rgba(0,0,0,.12)}.login-pane{display:none}.login-pane.active{display:block}.login-pane h2{font-size:18px;margin:0 0 5px}.login-pane>p{font-size:12px;line-height:1.6;color:#777;margin:0 0 16px}.login-pane .btn-primary{width:100%;margin-top:5px;padding:11px}.login-error{color:#e33;font-size:12px;display:none;margin:4px 0 10px}
 
 /* ── MAIN LAYOUT ── */
 .main-layout{
@@ -928,32 +930,28 @@ textarea.form-input{resize:vertical;}
 
 </div><!-- /main-layout -->
 
-<!-- 상담사 로그인 모달 -->
-<div class="modal-bg" id="counselorLoginModal">
-  <div class="modal">
-    <div class="modal-title">👤 상담사 로그인</div>
-    <p style="font-size:12px;line-height:1.6;color:#777;margin-bottom:14px">등록된 이름과 사번을 입력해 주세요.</p>
-    <div class="form-row"><input type="text" class="form-input" id="counselorName" placeholder="이름" autocomplete="name" maxlength="30"></div>
-    <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" placeholder="사번" autocomplete="username" maxlength="30"></div>
-    <p id="counselorLoginErr" style="color:#f44;font-size:13px;display:none">로그인 정보를 확인해 주세요.</p>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('counselorLoginModal')">취소</button>
+<!-- 필수 통합 로그인 -->
+<div class="login-gate" id="loginGate">
+  <div class="login-card">
+    <div class="login-brand"><strong>화물맨 업무 가이드</strong><span>업무 가이드를 이용하려면 로그인해 주세요.</span></div>
+    <div class="login-tabs">
+      <button type="button" id="counselorLoginTab" class="active" onclick="switchLoginTab('counselor')">상담사</button>
+      <button type="button" id="adminLoginTab" onclick="switchLoginTab('admin')">관리자</button>
+    </div>
+    <section class="login-pane active" id="counselorLoginPane">
+      <h2>상담사 로그인</h2><p>등록된 이름과 사번을 입력해 주세요.</p>
+      <div class="form-row"><input type="text" class="form-input" id="counselorName" placeholder="이름" autocomplete="name" maxlength="30"></div>
+      <div class="form-row"><input type="text" class="form-input" id="counselorEmployeeNo" placeholder="사번" autocomplete="username" maxlength="30"></div>
+      <p class="login-error" id="counselorLoginErr">로그인 정보를 확인해 주세요.</p>
       <button class="btn btn-primary" id="counselorLoginSubmit" onclick="submitCounselorLogin()">로그인</button>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase 관리자 로그인 모달 -->
-<div class="modal-bg" id="pwModal">
-  <div class="modal">
-    <div class="modal-title">🔐 관리자 로그인</div>
-    <div class="form-row"><input type="email" class="form-input" id="adminEmail" placeholder="관리자 이메일" autocomplete="username"></div>
-    <div class="form-row"><input type="password" class="form-input" id="pwInput" placeholder="비밀번호"></div>
-    <p id="pwErr" style="color:#f44;font-size:13px;display:none">로그인 정보를 확인해 주세요.</p>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('pwModal')">취소</button>
+    </section>
+    <section class="login-pane" id="adminLoginPane">
+      <h2>관리자 로그인</h2><p>Firebase에 등록된 관리자 계정으로 로그인해 주세요.</p>
+      <div class="form-row"><input type="email" class="form-input" id="adminEmail" placeholder="관리자 이메일" autocomplete="username"></div>
+      <div class="form-row"><input type="password" class="form-input" id="pwInput" placeholder="비밀번호" autocomplete="current-password"></div>
+      <p class="login-error" id="pwErr">로그인 정보를 확인해 주세요.</p>
       <button class="btn btn-primary" id="adminLoginSubmit" onclick="submitPw()">로그인</button>
-    </div>
+    </section>
   </div>
 </div>
 
@@ -1458,14 +1456,11 @@ async function boot() {
   // Admin button
   document.getElementById('topAdminBtn').addEventListener('click', () => {
     if(adminMode) firebaseSignOut();
-    else { openModal('pwModal'); setTimeout(()=>document.getElementById('adminEmail').focus(), 60); }
+    else showLoginGate('admin');
   });
   document.getElementById('topCounselorBtn').addEventListener('click', () => {
     if(currentCounselor) counselorSignOut();
-    else {
-      openModal('counselorLoginModal');
-      setTimeout(()=>document.getElementById('counselorName').focus(),60);
-    }
+    else showLoginGate('counselor');
   });
 
   document.getElementById('pwInput').onkeydown = e => { if(e.key==='Enter') submitPw(); };
@@ -1934,6 +1929,26 @@ function tick() {
 // ═══════════════════════════════════════════
 // ADMIN
 // ═══════════════════════════════════════════
+function switchLoginTab(tab) {
+  const counselor=tab!=='admin';
+  document.getElementById('counselorLoginTab').classList.toggle('active',counselor);
+  document.getElementById('adminLoginTab').classList.toggle('active',!counselor);
+  document.getElementById('counselorLoginPane').classList.toggle('active',counselor);
+  document.getElementById('adminLoginPane').classList.toggle('active',!counselor);
+  document.getElementById('counselorLoginErr').style.display='none';
+  document.getElementById('pwErr').style.display='none';
+  setTimeout(()=>document.getElementById(counselor?'counselorName':'adminEmail').focus(),50);
+}
+
+function showLoginGate(tab='counselor') {
+  document.getElementById('loginGate').classList.remove('hidden');
+  switchLoginTab(tab);
+}
+
+function syncAccessGate() {
+  document.getElementById('loginGate').classList.toggle('hidden',!!currentCounselor||adminMode);
+}
+
 async function submitPw() {
   const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('pwInput').value;
@@ -1947,7 +1962,6 @@ async function submitPw() {
     const adminSnap = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'admins', result.user.uid));
     if(!adminSnap.exists() || adminSnap.data().admin !== true) throw new Error('관리자 권한이 등록되지 않은 계정입니다.');
     document.getElementById('pwInput').value = '';
-    closeModal('pwModal');
     enterAdmin();
   } catch(e) {
     err.textContent = e.message.includes('관리자 권한') ? e.message : '이메일 또는 비밀번호가 올바르지 않습니다.';
@@ -1972,6 +1986,7 @@ function syncCounselorUI() {
   btn.classList.toggle('on',!!currentCounselor);
   btn.textContent=currentCounselor ? `👤 ${currentCounselor.name} · 로그아웃` : '👤 상담사 로그인';
   window.dispatchEvent(new CustomEvent('counselor-session-change',{detail:{counselor:currentCounselor}}));
+  syncAccessGate();
 }
 
 async function verifyCounselor(name, employeeNo) {
@@ -2003,7 +2018,6 @@ async function submitCounselorLogin() {
     localStorage.setItem(COUNSELOR_SESSION_KEY,JSON.stringify(currentCounselor));
     document.getElementById('counselorName').value='';
     document.getElementById('counselorEmployeeNo').value='';
-    closeModal('counselorLoginModal');
     syncCounselorUI();
   } catch(e) {
     err.textContent=e?.code==='permission-denied'
@@ -2045,12 +2059,14 @@ async function firebaseSignOut() {
 function enterAdmin() {
   adminMode = true;
   syncAdminUI();
+  syncAccessGate();
 }
 
 function exitAdmin() {
   if(drawing) cancelDraw();
   adminMode = false;
   syncAdminUI();
+  syncAccessGate();
 }
 
 // 현재 섹션 + adminMode 상태에 맞춰 관리자 UI를 동기화.
@@ -3089,8 +3105,6 @@ function quickReg(filename) {
 // ═══════════════════════════════════════════
 function openModal(id) {
   document.getElementById(id).classList.add('active');
-  if(id==='pwModal') document.getElementById('pwErr').style.display='none';
-  if(id==='counselorLoginModal') document.getElementById('counselorLoginErr').style.display='none';
 }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
