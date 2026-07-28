@@ -382,7 +382,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 select.form-input{background:#fff;}
 textarea.form-input{resize:vertical;}
 .hs-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f7f7f7;border-radius:8px;margin-bottom:5px;font-size:13px;}
-.unreg-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#FFF8E0;border-radius:8px;margin-bottom:5px;font-size:13px;cursor:pointer;}
+.unreg-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;background:#FFF8E0;border-radius:8px;margin-bottom:5px;font-size:13px;cursor:pointer;}
+.unreg-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+.unreg-item small{flex:0 0 auto;white-space:nowrap;}
 .unreg-item:hover{background:#FFEDB0;}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;}
 .modal-bg.active{display:flex;}
@@ -3030,8 +3032,16 @@ function setupDrawEvents(overlayId, rectId) {
     };
     const sel = document.getElementById('hsGoto');
     const st = cache[activeSec];
-    sel.innerHTML = Object.entries(st.flow.screens)
-      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`).join('');
+    const screens = Object.entries(st.flow.screens)
+      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`);
+    const usedImages = new Set(Object.values(st.flow.screens).map(screen => screen.image));
+    const uploadedImages = (st.flow.imageManifest || [])
+      .filter(image => !usedImages.has(image))
+      .map(image => `<option value="__image__:${esc(image)}">새 이미지 · ${esc(assetDisplayName(image))}</option>`);
+    sel.innerHTML = [
+      screens.length ? '<optgroup label="등록된 화면">' + screens.join('') + '</optgroup>' : '',
+      uploadedImages.length ? '<optgroup label="업로드 이미지 (선택 시 화면 자동 등록)">' + uploadedImages.join('') + '</optgroup>' : ''
+    ].join('');
     document.getElementById('hsLabelInput').value = '';
     openModal('hsModal');
   });
@@ -3056,9 +3066,21 @@ function cancelDraw() {
 
 function confirmHs() {
   if(!pendingHs) return;
-  const goto = document.getElementById('hsGoto').value;
-  const label = document.getElementById('hsLabelInput').value.trim() || goto;
+  let goto = document.getElementById('hsGoto').value;
   const st = cache[activeSec];
+  if(goto.startsWith('__image__:')) {
+    const image = goto.slice('__image__:'.length);
+    const imageLabel = assetDisplayName(image).replace(/\.(jpg|jpeg|png|webp|gif)$/i,'');
+    const idBase = `${activeSec}_${imageLabel}`.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'').slice(0,30) || 'screen';
+    let screenId = idBase, suffix = 2;
+    while(st.flow.screens[screenId]) screenId = `${idBase}_${suffix++}`;
+    st.flow.screens[screenId] = { label:imageLabel, image, type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
+    goto = screenId;
+    renderList();
+    detectUnreg();
+  }
+  if(!goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
+  const label = document.getElementById('hsLabelInput').value.trim() || st.flow.screens[goto]?.label || goto;
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto });
   pendingHs = null;
@@ -3421,14 +3443,24 @@ function detectUnreg() {
   if(!unreg.length) { card.style.display='none'; return; }
   card.style.display = 'block';
   document.getElementById('unregList').innerHTML = unreg.map(f => `
-    <div class="unreg-item" onclick="quickReg('${esc(f)}')">
-      <span>${esc(f)}</span><small style="color:#888">클릭하여 등록</small>
+    <div class="unreg-item" onclick="quickReg(decodeURIComponent('${encodeURIComponent(f)}'))">
+      <span title="${esc(f)}">${esc(assetDisplayName(f))}</span><small style="color:#888">클릭하여 등록</small>
     </div>`).join('');
+}
+
+function assetDisplayName(value) {
+  const raw = String(value || '').split('?')[0];
+  try {
+    const pathname = /^https?:\/\//i.test(raw) ? new URL(raw).pathname : raw;
+    return decodeURIComponent(pathname.split('/').filter(Boolean).pop() || raw);
+  } catch(e) {
+    return raw.split('/').filter(Boolean).pop() || raw;
+  }
 }
 
 function quickReg(filename) {
   if(!adminMode) { alert('관리자 모드에서 등록할 수 있습니다.'); return; }
-  const label = filename.replace(/^[^/]+\//,'').replace(/\.(jpg|jpeg|png|webp)$/i,'').replace(/_/g,' ');
+  const label = assetDisplayName(filename).replace(/\.(jpg|jpeg|png|webp)$/i,'').replace(/_/g,' ');
   const id = activeSec.replace(' ','') + '_' + label.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'').slice(0,20);
   document.getElementById('newImage').value = filename;
   document.getElementById('newLabel').value = label;
