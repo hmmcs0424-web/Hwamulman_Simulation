@@ -395,6 +395,7 @@ textarea.form-input{resize:vertical;}
 .route-picker-item{width:100%;display:flex;align-items:center;gap:8px;border:0;border-bottom:1px solid #eee;background:#fff;padding:10px 11px;text-align:left;font:13px inherit;cursor:pointer}
 .route-picker-item:last-child{border-bottom:0}.route-picker-item:hover,.route-picker-item.active{background:#fff6d8}
 .route-picker-item span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.route-picker-new{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ff4d32;color:#fff;font:800 11px inherit}
+.route-picker-used{margin-left:auto;flex:0 0 auto;color:#777;background:#eee;border-radius:99px;padding:3px 7px;font-size:10px;font-weight:700}.route-picker-used+.route-picker-new{margin-left:0}
 .advanced-screen-add>summary{cursor:pointer;color:#777;font-size:12px;font-weight:700;padding:4px 0 8px}.advanced-screen-add[open]>summary{color:#333}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
@@ -3155,23 +3156,26 @@ function setupDrawEvents(overlayId, rectId) {
     };
     const st = cache[activeSec];
     const screens = Object.entries(st.flow.screens);
-    const usedImages = new Set(Object.values(st.flow.screens).map(screen => assetIdentity(screen.image)));
     renderHsTargetList(screens, [], true);
     document.getElementById('hsLabelInput').value = '';
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
-    const uploadedImages = availableImages
-      .filter(image => !usedImages.has(assetIdentity(image)));
-    renderHsTargetList(screens, uploadedImages, false);
+    renderHsTargetList(screens, availableImages, false);
   });
 }
 
 function renderHsTargetList(screens, images, loading=false) {
   const target = document.getElementById('hsGoto');
   const list = document.getElementById('hsGotoList');
+  const screenByImage = new Map();
+  screens.forEach(([id,screen]) => {
+    const identity = assetIdentity(screen.image);
+    if(identity && !screenByImage.has(identity)) screenByImage.set(identity,id);
+  });
+  const imageValue = image => screenByImage.get(assetIdentity(image)) || `__image__:${image}`;
   const values = [
     ...screens.map(([id]) => id),
-    ...images.map(image => `__image__:${image}`)
+    ...images.map(imageValue)
   ];
   const selected = values.includes(target.value) ? target.value : (values[0] || '');
   target.value = selected;
@@ -3180,11 +3184,12 @@ function renderHsTargetList(screens, images, loading=false) {
     return `<button type="button" class="route-picker-item ${selected===id?'active':''}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(screen.label)} (${esc(id)})</span></button>`;
   }).join('');
   const imageRows = images.map(image => {
-    const value = `__image__:${image}`;
-    return `<button type="button" class="route-picker-item ${selected===value?'active':''}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
+    const existingScreenId = screenByImage.get(assetIdentity(image));
+    const value = imageValue(image);
+    return `<button type="button" class="route-picker-item ${selected===value?'active':''}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${existingScreenId?'<small class="route-picker-used">등록됨</small>':''}${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
   }).join('');
   list.innerHTML = (screenRows ? `<div class="route-picker-heading">등록된 화면</div>${screenRows}` : '')
-    + (imageRows ? `<div class="route-picker-heading">업로드 이미지 · 선택하면 화면 자동 등록</div>${imageRows}` : '')
+    + (imageRows ? `<div class="route-picker-heading">전체 이미지 · 사용 중인 이미지도 재선택 가능</div>${imageRows}` : '')
     + (loading ? '<div style="padding:14px;color:#888;font-size:12px">업로드 이미지 목록을 불러오는 중...</div>' : '')
     || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
 }
@@ -3217,15 +3222,20 @@ function confirmHs() {
   let createdNewScreen = false;
   if(goto.startsWith('__image__:')) {
     const image = goto.slice('__image__:'.length);
-    const imageLabel = assetDisplayName(image).replace(/\.(jpg|jpeg|png|webp|gif)$/i,'');
-    const idBase = `${activeSec}_${imageLabel}`.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'').slice(0,30) || 'screen';
-    let screenId = idBase, suffix = 2;
-    while(st.flow.screens[screenId]) screenId = `${idBase}_${suffix++}`;
-    st.flow.screens[screenId] = { label:imageLabel, image, type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
-    goto = screenId;
-    createdNewScreen = true;
-    renderList();
-    detectUnreg();
+    const existing = Object.entries(st.flow.screens).find(([,screen]) => assetIdentity(screen.image)===assetIdentity(image));
+    if(existing) {
+      goto = existing[0];
+    } else {
+      const imageLabel = assetDisplayName(image).replace(/\.(jpg|jpeg|png|webp|gif)$/i,'');
+      const idBase = `${activeSec}_${imageLabel}`.toLowerCase().replace(/\s+/g,'_').replace(/[^\w가-힣]/g,'').slice(0,30) || 'screen';
+      let screenId = idBase, suffix = 2;
+      while(st.flow.screens[screenId]) screenId = `${idBase}_${suffix++}`;
+      st.flow.screens[screenId] = { label:imageLabel, image, type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
+      goto = screenId;
+      createdNewScreen = true;
+      renderList();
+      detectUnreg();
+    }
   }
   if(!goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim() || st.flow.screens[goto]?.label || goto;
