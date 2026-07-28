@@ -117,7 +117,8 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .status-time{font-size:15px;font-weight:700;color:#000;}
 .status-icons{display:flex;gap:5px;align-items:center;}
 .content-area{flex:1;overflow:hidden;position:relative;}
-.content-area.scroll-mode{overflow-y:auto;}
+.content-area.scroll-mode{overflow-y:auto;cursor:grab;touch-action:pan-y;overscroll-behavior:contain;}
+.content-area.scroll-mode.dragging{cursor:grabbing;user-select:none;}
 .content-area.scroll-mode::-webkit-scrollbar{display:none;}
 .image-wrapper{position:relative;width:100%;}
 .screen-image{width:100%;display:block;user-select:none;-webkit-user-drag:none;}
@@ -1603,6 +1604,7 @@ async function boot() {
 
   setupDrawEvents('drawOverlay', 'drawRect');
   setupDrawEvents('pcDrawOverlay', 'pcDrawRect');
+  setupPhoneImageScroll();
 
   // Load first section
   await loadSiteImageManifest();
@@ -1804,13 +1806,42 @@ function renderPhoneScreen(scr) {
   const nb = document.getElementById('cssNavbar');
 
   ca.classList.toggle('scroll-mode', scr.type==='scroll');
+  ca.classList.remove('dragging');
   ca.scrollTop = 0;
   img.src = '';
-  img.onload = () => renderHotspots('hotspotLayer', scr.hotspots||[], false);
+  img.onload = () => {
+    const isLongImage = img.getBoundingClientRect().height > ca.clientHeight + 1;
+    ca.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage);
+    renderHotspots('hotspotLayer', scr.hotspots||[], false);
+  };
   img.onerror = () => console.warn('이미지 로드 실패:', scr.image);
   img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
   if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function setupPhoneImageScroll() {
+  const area = document.getElementById('contentArea');
+  let drag = null;
+  area.addEventListener('pointerdown', event => {
+    if(event.pointerType!=='mouse' || !area.classList.contains('scroll-mode')) return;
+    if(event.target.closest('.hotspot,.draw-overlay')) return;
+    drag = { pointerId:event.pointerId, startY:event.clientY, startScroll:area.scrollTop };
+    area.classList.add('dragging');
+    area.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+  area.addEventListener('pointermove', event => {
+    if(!drag || event.pointerId!==drag.pointerId) return;
+    area.scrollTop = drag.startScroll + drag.startY - event.clientY;
+  });
+  const finish = event => {
+    if(!drag || event.pointerId!==drag.pointerId) return;
+    drag = null;
+    area.classList.remove('dragging');
+  };
+  area.addEventListener('pointerup', finish);
+  area.addEventListener('pointercancel', finish);
 }
 
 function renderPcScreen(scr) {
