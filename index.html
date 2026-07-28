@@ -2629,7 +2629,9 @@ window.announcementBridge = {
   },
   openGuide(id) {
     if(String(id).startsWith('faq:')) {
+      const [,groupId,itemId]=String(id).split(':');
       setWorkspacePage('faq');
+      setTimeout(()=>window.dispatchEvent(new CustomEvent('faq-open',{detail:{groupId,itemId}})),0);
       return;
     }
     if(!guidePages[id]) return;

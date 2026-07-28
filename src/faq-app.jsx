@@ -401,10 +401,20 @@ function CategoryManager({ categories, colors, onClose, onSaved }) {
   </section></div>;
 }
 
-function FaqDetail({ group, isAdmin, adminProfile, onBack, onEdit, onDelete, onPublish }) {
+function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, onEdit, onDelete, onPublish }) {
   const kmsLinks = Array.isArray(group.kmsLinks) && group.kmsLinks.length
     ? group.kmsLinks : group.kmsUrl ? [{ name: 'KMS 가이드 열기', url: group.kmsUrl }] : [];
-  const [openItems, setOpenItems] = useState(new Set(group.items?.[0]?.id ? [group.items[0].id] : []));
+  const [openItems, setOpenItems] = useState(new Set(
+    initialOpenItemId ? [initialOpenItemId] : group.items?.[0]?.id ? [group.items[0].id] : []
+  ));
+  useEffect(() => {
+    if (!initialOpenItemId) return;
+    setOpenItems(current => new Set(current).add(initialOpenItemId));
+    const timer = setTimeout(() => {
+      document.getElementById(`faq-answer-${initialOpenItemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [initialOpenItemId]);
   const toggle = id => setOpenItems(current => {
     const next = new Set(current);
     next.has(id) ? next.delete(id) : next.add(id);
@@ -457,6 +467,7 @@ function FaqApp() {
   const [category, setCategory] = useState('전체');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState('');
   const [editor, setEditor] = useState(null);
   const [categoryEditor, setCategoryEditor] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -485,6 +496,16 @@ function FaqApp() {
     };
     window.addEventListener('keydown', key);
     return () => window.removeEventListener('keydown', key);
+  }, []);
+  useEffect(() => {
+    const openFaq = event => {
+      const { groupId = '', itemId = '' } = event.detail || {};
+      if (!groupId) return;
+      setSelectedId(groupId);
+      setSelectedItemId(itemId);
+    };
+    window.addEventListener('faq-open', openFaq);
+    return () => window.removeEventListener('faq-open', openFaq);
   }, []);
 
   const availableGroups = groups.filter(group => isAdmin || group.isPublished !== false);
@@ -525,7 +546,7 @@ function FaqApp() {
         {isAdmin && <button className="faq-manage-categories" onClick={() => setCategoryEditor(true)}>⚙ 카테고리 편집</button>}
       </aside>
       <main className="faq-content">
-        {selected ? <FaqDetail group={selected} isAdmin={isAdmin} adminProfile={adminProfile} onBack={() => setSelectedId('')} onEdit={() => setEditor(selected)}
+        {selected ? <FaqDetail group={selected} initialOpenItemId={selectedItemId} isAdmin={isAdmin} adminProfile={adminProfile} onBack={() => { setSelectedId(''); setSelectedItemId(''); }} onEdit={() => setEditor(selected)}
           onDelete={() => remove(selected)} onPublish={() => togglePublish(selected)} /> : <section className="faq-index">
           <header><p>QUICK ANSWERS</p><h1>{category}</h1><span>상담 중 필요한 답을 게시글과 질문 단위로 빠르게 찾아보세요.</span></header>
           <div className="faq-list-summary"><b>{query ? `검색 결과 ${visibleGroups.length}건` : `FAQ 게시글 ${visibleGroups.length}건`}</b><span>게시글 하나에 여러 FAQ가 포함됩니다.</span></div>
@@ -544,8 +565,9 @@ function FaqApp() {
       onSaved={(values, colors) => { setCategories(values); setCategoryColors(colors); setCategoryEditor(false); }} />}
     <UnifiedSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} posts={searchPosts} guides={searchGuides} onSelect={item => {
       if (item.category === 'FAQ' && String(item.id).startsWith('faq:')) {
-        const [, groupId] = String(item.id).split(':');
+        const [, groupId, itemId] = String(item.id).split(':');
         setSelectedId(groupId);
+        setSelectedItemId(itemId || '');
       } else if (item.kind === 'announcement') window.announcementBridge.openAnnouncement(item.id);
       else window.announcementBridge.openGuide(item.id);
     }} />
