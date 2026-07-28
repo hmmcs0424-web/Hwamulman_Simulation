@@ -1718,6 +1718,7 @@ function goTo(id, init=false) {
   const st = cache[activeSec];
   const scr = st.flow.screens[id];
   if(!scr) return;
+  if(id===st.cur && scr.type!=='popup') return;
 
   if(scr.type==='popup' && !init) { showPopup(id); return; }
   if(!init && st.cur) st.hist.push(st.cur);
@@ -2045,7 +2046,7 @@ function renderList() {
     btn.className = 'screen-btn' + (id===st.cur?' active':'');
     btn.textContent = scr.label;
     btn.title = id;
-    btn.onclick = () => { cache[activeSec].hist=[]; goTo(id,true); };
+    btn.onclick = () => goTo(id);
     el.appendChild(btn);
   });
 }
@@ -3535,7 +3536,7 @@ function renderExceptions(screenId) {
   el.innerHTML = '<div class="exception-list">' + excs.map((ex) => {
     const target = st.flow.screens?.[ex.screenId];
     const sub = target ? target.label : ex.screenId;
-    return `<button class="exception-item" onclick="goTo('${esc(ex.screenId)}',true)">
+    return `<button class="exception-item" onclick="goTo('${esc(ex.screenId)}')">
       <span class="exception-item-icon">⚠️</span>
       <span class="exception-item-label">${esc(ex.label)}</span>
       <span class="exception-item-sub">→ ${esc(sub)}</span>
