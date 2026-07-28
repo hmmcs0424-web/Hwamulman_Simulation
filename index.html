@@ -389,6 +389,12 @@ textarea.form-input{resize:vertical;}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;}
 .modal-bg.active{display:flex;}
 .modal{background:#fff;border-radius:16px;padding:24px;min-width:300px;max-width:460px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.3);}
+.route-picker-list{max-height:360px;overflow:auto;border:1px solid #e2e2e2;border-radius:10px;background:#fff}
+.route-picker-heading{padding:9px 11px;background:#f5f5f6;color:#555;font-size:11px;font-weight:800;position:sticky;top:0}
+.route-picker-item{width:100%;display:flex;align-items:center;gap:8px;border:0;border-bottom:1px solid #eee;background:#fff;padding:10px 11px;text-align:left;font:13px inherit;cursor:pointer}
+.route-picker-item:last-child{border-bottom:0}.route-picker-item:hover,.route-picker-item.active{background:#fff6d8}
+.route-picker-item span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.route-picker-new{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ff4d32;color:#fff;font:800 11px inherit}
+.advanced-screen-add>summary{cursor:pointer;color:#777;font-size:12px;font-weight:700;padding:4px 0 8px}.advanced-screen-add[open]>summary{color:#333}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
 
@@ -711,7 +717,8 @@ textarea.form-input{resize:vertical;}
         <div id="guideEditor"></div>
       </div>
       <div class="admin-section">
-        <div class="section-title">화면 추가</div>
+        <details class="advanced-screen-add">
+        <summary>직접 화면 추가 (고급 설정)</summary>
         <div class="form-row">
           <div class="form-label">화면 ID</div>
           <input class="form-input" id="newId" placeholder="예: s001_detail">
@@ -740,6 +747,7 @@ textarea.form-input{resize:vertical;}
           <label for="newNavbar" style="font-size:13px">navbar 표시</label>
         </div>
         <button class="btn btn-primary" id="btnAddScreen">화면 추가</button>
+        </details>
       </div>
       <div class="admin-section" id="chatScrollAdminSection" style="display:none">
         <div class="section-title">↕ 채팅 스크롤 영역</div>
@@ -1043,7 +1051,8 @@ textarea.form-input{resize:vertical;}
     </div>
     <div class="form-row">
       <div class="form-label">이동할 화면</div>
-      <select class="form-input" id="hsGoto"></select>
+      <input type="hidden" id="hsGoto">
+      <div class="route-picker-list" id="hsGotoList"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="cancelDraw()">취소</button>
@@ -1151,6 +1160,7 @@ let firebaseFns = null;
 let firebaseReady = false;
 let currentAdminProfile = null;
 let managedAssets = [];
+const assetUploadDates = new Map();
 let assetManageSec = '차주앱';
 let noticePosts = [];
 let noticeQuery = '';
@@ -1860,6 +1870,12 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     el.appendChild(lbl);
     if(isAdmin) {
       el.style.cursor = 'move';
+      el.title = '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
+      el.addEventListener('dblclick', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if(hs.goto) goTo(hs.goto, true);
+      });
 
       // X 삭제 버튼
       const delBtn = document.createElement('button');
@@ -2347,7 +2363,10 @@ async function getSimulatorImages(sectionName=activeSec) {
   if(adminMode) {
     try {
       const result = await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(sectionName))}`);
-      candidates.push(...result.assets.map(asset => asset.url));
+      result.assets.forEach(asset => {
+        candidates.push(asset.url);
+        if(asset.uploadedAt) assetUploadDates.set(assetIdentity(asset.url), asset.uploadedAt);
+      });
     } catch(e) {
       console.warn(`${sectionName} 업로드 이미지 목록 로드 실패:`, e);
     }
@@ -2357,6 +2376,15 @@ async function getSimulatorImages(sectionName=activeSec) {
   const images = Array.from(byPath.values()).sort((a,b) => assetDisplayName(a).localeCompare(assetDisplayName(b),'ko'));
   if(flow) flow.imageManifest = images;
   return images;
+}
+function isUploadedToday(image) {
+  const value = assetUploadDates.get(assetIdentity(image));
+  if(!value) return false;
+  const uploaded = new Date(value);
+  const today = new Date();
+  return uploaded.getFullYear()===today.getFullYear()
+    && uploaded.getMonth()===today.getMonth()
+    && uploaded.getDate()===today.getDate();
 }
 async function refreshScreenImageOptions(selectedValue='') {
   const select = document.getElementById('newImage');
@@ -2981,6 +3009,7 @@ async function uploadAssets(fileList) {
           multipart:file.size>4*1024*1024
         });
         const url=`${uploaded.url}?v=${Date.now()}-${file.lastModified}`;
+        assetUploadDates.set(assetIdentity(url), new Date().toISOString());
         const flow = targetSec==='채널톡' ? null : cache[targetSec]?.flow;
         if(previous) {
           replaced++;
@@ -3093,24 +3122,44 @@ function setupDrawEvents(overlayId, rectId) {
       top: round1(t/b.height*100), left: round1(l/b.width*100),
       width: round1(w/b.width*100), height: round1(h/b.height*100),
     };
-    const sel = document.getElementById('hsGoto');
     const st = cache[activeSec];
-    const screens = Object.entries(st.flow.screens)
-      .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)} (${esc(id)})</option>`);
+    const screens = Object.entries(st.flow.screens);
     const usedImages = new Set(Object.values(st.flow.screens).map(screen => assetIdentity(screen.image)));
-    sel.innerHTML = (screens.length ? '<optgroup label="등록된 화면">' + screens.join('') + '</optgroup>' : '')
-      + '<option value="" disabled>업로드 이미지 목록을 불러오는 중...</option>';
+    renderHsTargetList(screens, [], true);
     document.getElementById('hsLabelInput').value = '';
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
     const uploadedImages = availableImages
-      .filter(image => !usedImages.has(assetIdentity(image)))
-      .map(image => `<option value="__image__:${esc(image)}">새 이미지 · ${esc(assetDisplayName(image))}</option>`);
-    sel.innerHTML = [
-      screens.length ? '<optgroup label="등록된 화면">' + screens.join('') + '</optgroup>' : '',
-      uploadedImages.length ? '<optgroup label="업로드 이미지 (선택 시 화면 자동 등록)">' + uploadedImages.join('') + '</optgroup>' : ''
-    ].join('') || '<option value="">등록된 화면 또는 이미지가 없습니다</option>';
+      .filter(image => !usedImages.has(assetIdentity(image)));
+    renderHsTargetList(screens, uploadedImages, false);
   });
+}
+
+function renderHsTargetList(screens, images, loading=false) {
+  const target = document.getElementById('hsGoto');
+  const list = document.getElementById('hsGotoList');
+  const values = [
+    ...screens.map(([id]) => id),
+    ...images.map(image => `__image__:${image}`)
+  ];
+  const selected = values.includes(target.value) ? target.value : (values[0] || '');
+  target.value = selected;
+  const screenRows = screens.map(([id,screen]) => {
+    const value = encodeURIComponent(id);
+    return `<button type="button" class="route-picker-item ${selected===id?'active':''}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(screen.label)} (${esc(id)})</span></button>`;
+  }).join('');
+  const imageRows = images.map(image => {
+    const value = `__image__:${image}`;
+    return `<button type="button" class="route-picker-item ${selected===value?'active':''}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
+  }).join('');
+  list.innerHTML = (screenRows ? `<div class="route-picker-heading">등록된 화면</div>${screenRows}` : '')
+    + (imageRows ? `<div class="route-picker-heading">업로드 이미지 · 선택하면 화면 자동 등록</div>${imageRows}` : '')
+    + (loading ? '<div style="padding:14px;color:#888;font-size:12px">업로드 이미지 목록을 불러오는 중...</div>' : '')
+    || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
+}
+function selectHsTarget(value, button) {
+  document.getElementById('hsGoto').value = value;
+  document.querySelectorAll('#hsGotoList .route-picker-item').forEach(item => item.classList.toggle('active', item===button));
 }
 
 function startDraw() {
@@ -3134,6 +3183,7 @@ function confirmHs() {
   if(!pendingHs) return;
   let goto = document.getElementById('hsGoto').value;
   const st = cache[activeSec];
+  let createdNewScreen = false;
   if(goto.startsWith('__image__:')) {
     const image = goto.slice('__image__:'.length);
     const imageLabel = assetDisplayName(image).replace(/\.(jpg|jpeg|png|webp|gif)$/i,'');
@@ -3142,6 +3192,7 @@ function confirmHs() {
     while(st.flow.screens[screenId]) screenId = `${idBase}_${suffix++}`;
     st.flow.screens[screenId] = { label:imageLabel, image, type:'normal', show_navbar:true, hotspots:[], guide:{points:[],caution:'',kms_link:''} };
     goto = screenId;
+    createdNewScreen = true;
     renderList();
     detectUnreg();
   }
@@ -3154,6 +3205,7 @@ function confirmHs() {
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
   renderHsList();
+  if(createdNewScreen) goTo(goto, true);
 }
 
 // ═══════════════════════════════════════════
@@ -3610,7 +3662,7 @@ const CTE_ALL_IMGS = [
   'https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4.png',
 ];
 function ctePanelForImg(img) {
-  const name = String(img||'').split('/').pop();
+  const name = assetDisplayName(img);
   return name.includes('차주앱') ? 'phone' : 'agent';
 }
 function cteNormalizeImg(img) {
@@ -3711,7 +3763,7 @@ function cteSyncImageLists() {
     if(scr.syncPhone) cteRememberImg('phone', scr.syncPhone);
   });
 }
-function cteOptList(list, cur){ return list.map(p=>`<option value="${esc(p)}" ${p===cur?'selected':''}>${esc(p.split('/').pop())}</option>`).join(''); }
+function cteOptList(list, cur){ return list.map(p=>`<option value="${esc(p)}" ${p===cur?'selected':''}>${esc(assetDisplayName(p))}</option>`).join(''); }
 function cteImgOpts(panel, cur, withEmpty){
   cur = cteNormalizeImg(cur);
   cteRememberImg(panel, cur);
