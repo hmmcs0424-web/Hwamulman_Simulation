@@ -1704,7 +1704,7 @@ function applySec(name) {
   renderOverlayAdminSection();
   renderChatScrollAdmin();
   detectUnreg();
-  if(adminMode && sec.type==='app') refreshScreenImageOptions();
+  if(adminMode && name!=='채널톡') refreshScreenImageOptions();
   syncAdminUI();
 }
 
@@ -1874,7 +1874,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
-        if(hs.goto) goTo(hs.goto, true);
+        if(hs.goto) goTo(hs.goto);
       });
 
       // X 삭제 버튼
@@ -2388,7 +2388,7 @@ function isUploadedToday(image) {
 }
 async function refreshScreenImageOptions(selectedValue='') {
   const select = document.getElementById('newImage');
-  if(!select || !adminMode || !cache[activeSec]?.flow || SECS[activeSec].type!=='app') return;
+  if(!select || !adminMode || !cache[activeSec]?.flow || activeSec==='채널톡') return;
   const requestedSec = activeSec;
   const current = selectedValue || select.value;
   select.disabled = true;
@@ -3205,7 +3205,7 @@ function confirmHs() {
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
   renderHsList();
-  if(createdNewScreen) goTo(goto, true);
+  if(createdNewScreen) goTo(goto);
 }
 
 // ═══════════════════════════════════════════
