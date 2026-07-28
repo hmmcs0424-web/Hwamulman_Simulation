@@ -507,6 +507,10 @@ function FaqApp() {
     window.addEventListener('faq-open', openFaq);
     return () => window.removeEventListener('faq-open', openFaq);
   }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.getElementById('guidePage')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [selectedId]);
 
   const availableGroups = groups.filter(group => isAdmin || group.isPublished !== false);
   const words = text(query).trim().split(/\s+/).filter(Boolean);

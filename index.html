@@ -1268,6 +1268,8 @@ async function saveGuidePageToFirestore(key) {
 
 function setWorkspacePage(page) {
   activePage = page;
+  window.scrollTo({top:0,left:0,behavior:'auto'});
+  document.getElementById('guidePage').scrollTo({top:0,left:0,behavior:'auto'});
   const isSimulator = page === 'simulator';
   document.getElementById('guidePage').classList.toggle('visible', !isSimulator);
   ['phoneArea','pcArea'].forEach(id => { if(!isSimulator) document.getElementById(id).style.display = 'none'; });

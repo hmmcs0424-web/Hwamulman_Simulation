@@ -47,7 +47,11 @@ function highlight(text, query) {
   );
 }
 function snippetFor(content, query) {
-  const plain = String(content || '').replace(/!\[[^\]]*\]\([^)]+\)/g, '🖼 이미지')
+  const source = String(content || '');
+  const decoded = /<\/?[a-z][\s\S]*?>|&[a-z0-9#]+;/i.test(source)
+    ? new DOMParser().parseFromString(source, 'text/html').body.textContent || ''
+    : source;
+  const plain = decoded.replace(/!\[[^\]]*\]\([^)]+\)/g, '🖼 이미지')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[#>*_`[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim();
   const words = query.trim().split(/\s+/).filter(Boolean);
   const found = words.map(word => plain.toLocaleLowerCase('ko-KR').indexOf(word.toLocaleLowerCase('ko-KR'))).filter(i => i >= 0);
@@ -483,6 +487,10 @@ function Workspace() {
     window.addEventListener('announcement-open', openAnnouncement);
     return () => window.removeEventListener('announcement-open', openAnnouncement);
   }, [navigate]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    document.getElementById('guidePage')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
   const filtered = posts.filter(post => category === '전체' || (category === '중요' ? post.isPinned : post.category === category))
     .sort((a, b) => timestamp(b.createdAt || b.updatedAt) - timestamp(a.createdAt || a.updatedAt));
   const selectedId = location.pathname.startsWith('/announcement/') ? decodeURIComponent(location.pathname.split('/').pop()) : '';
