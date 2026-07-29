@@ -1639,15 +1639,12 @@ function hasUnsavedFlow(sectionName) {
 }
 
 function shouldProtectFlowLeave(sectionName) {
-  return adminMode
-    && activePage==='simulator'
-    && FLOW_SAVE_GUARD_SECTIONS.has(sectionName)
-    && !!cache[sectionName]?.flow;
+  return activePage==='simulator' && hasUnsavedFlow(sectionName);
 }
 
 async function confirmFlowSavedBeforeLeave(sectionName) {
   if(!shouldProtectFlowLeave(sectionName)) return true;
-  const shouldSave=confirm(`${sectionName} 경로 설정을 저장하고 이동할까요?\n\n확인: 저장 후 이동\n취소: 현재 화면으로 돌아가기`);
+  const shouldSave=confirm(`${sectionName} 경로 설정에 저장되지 않은 변경사항이 있습니다.\n\n확인: 저장 후 이동\n취소: 현재 화면으로 돌아가기`);
   if(!shouldSave) return false;
   return await saveSimulatorFlow(sectionName);
 }
