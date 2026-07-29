@@ -397,6 +397,7 @@ textarea.form-input{resize:vertical;}
 .route-picker-item span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.route-picker-new{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ff4d32;color:#fff;font:800 11px inherit}
 .route-picker-used{margin-left:auto;flex:0 0 auto;color:#777;background:#eee;border-radius:99px;padding:3px 7px;font-size:10px;font-weight:700}.route-picker-used+.route-picker-new{margin-left:0}
 .hs-modal{max-width:1100px;width:min(94vw,1100px);max-height:92vh;display:flex;flex-direction:column}
+.hs-modal>.modal-title{cursor:grab;user-select:none}.hs-modal.dragging>.modal-title{cursor:grabbing}
 .hs-picker-layout{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:18px;min-height:0}
 .hs-picker-list-col{min-width:0}.hs-picker-list-col .route-picker-list{height:min(60vh,620px);max-height:none}
 .hs-preview-panel{min-width:0;height:min(60vh,620px);border:1px solid #e2e2e2;border-radius:12px;background:#f5f5f6;display:flex;flex-direction:column;overflow:hidden}
@@ -1633,6 +1634,7 @@ async function boot() {
   setupDrawEvents('drawOverlay', 'drawRect');
   setupDrawEvents('pcDrawOverlay', 'pcDrawRect');
   setupPhoneImageScroll();
+  setupDraggableHsModal();
 
   // Load first section
   await loadSiteImageManifest();
@@ -3752,6 +3754,44 @@ function openModal(id) {
   document.getElementById(id).classList.add('active');
 }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+function setupDraggableHsModal() {
+  const modal=document.querySelector('#hsModal .hs-modal');
+  const handle=modal?.querySelector('.modal-title');
+  if(!modal||!handle) return;
+  let dragging=false,startX=0,startY=0,startLeft=0,startTop=0;
+  handle.title='드래그해서 창 이동 · 더블클릭해서 중앙으로 복귀';
+  handle.addEventListener('pointerdown',e=>{
+    if(e.button!==0) return;
+    const rect=modal.getBoundingClientRect();
+    modal.style.position='fixed';
+    modal.style.left=rect.left+'px';
+    modal.style.top=rect.top+'px';
+    modal.style.width=rect.width+'px';
+    dragging=true;
+    startX=e.clientX; startY=e.clientY; startLeft=rect.left; startTop=rect.top;
+    modal.classList.add('dragging');
+    handle.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
+  });
+  handle.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    const margin=8;
+    const maxLeft=Math.max(margin,window.innerWidth-modal.offsetWidth-margin);
+    const maxTop=Math.max(margin,window.innerHeight-48);
+    modal.style.left=Math.max(margin,Math.min(maxLeft,startLeft+e.clientX-startX))+'px';
+    modal.style.top=Math.max(margin,Math.min(maxTop,startTop+e.clientY-startY))+'px';
+  });
+  const stopDrag=()=>{
+    dragging=false;
+    modal.classList.remove('dragging');
+  };
+  handle.addEventListener('pointerup',stopDrag);
+  handle.addEventListener('pointercancel',stopDrag);
+  handle.addEventListener('dblclick',()=>{
+    ['position','left','top','width'].forEach(prop=>modal.style.removeProperty(prop));
+  });
+}
 
 // ═══════════════════════════════════════════
 // UTILS
