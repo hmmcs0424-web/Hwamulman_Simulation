@@ -396,6 +396,15 @@ textarea.form-input{resize:vertical;}
 .route-picker-item:last-child{border-bottom:0}.route-picker-item:hover,.route-picker-item.active{background:#fff6d8}
 .route-picker-item span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.route-picker-new{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ff4d32;color:#fff;font:800 11px inherit}
 .route-picker-used{margin-left:auto;flex:0 0 auto;color:#777;background:#eee;border-radius:99px;padding:3px 7px;font-size:10px;font-weight:700}.route-picker-used+.route-picker-new{margin-left:0}
+.hs-modal{max-width:1100px;width:min(94vw,1100px);max-height:92vh;display:flex;flex-direction:column}
+.hs-picker-layout{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:18px;min-height:0}
+.hs-picker-list-col{min-width:0}.hs-picker-list-col .route-picker-list{height:min(60vh,620px);max-height:none}
+.hs-preview-panel{min-width:0;height:min(60vh,620px);border:1px solid #e2e2e2;border-radius:12px;background:#f5f5f6;display:flex;flex-direction:column;overflow:hidden}
+.hs-preview-title{padding:11px 14px;border-bottom:1px solid #e2e2e2;background:#fff;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-preview-stage{flex:1;min-height:0;padding:16px;display:flex;align-items:center;justify-content:center;overflow:auto}
+.hs-preview-stage img{display:none;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.14);background:#fff}
+.hs-preview-empty{max-width:320px;color:#888;font-size:13px;line-height:1.6;text-align:center}
+@media(max-width:760px){.hs-modal{max-height:96vh;padding:18px}.hs-picker-layout{grid-template-columns:1fr;overflow:auto}.hs-picker-list-col .route-picker-list{height:34vh}.hs-preview-panel{height:38vh;min-height:260px}}
 .advanced-screen-add>summary{cursor:pointer;color:#777;font-size:12px;font-weight:700;padding:4px 0 8px}.advanced-screen-add[open]>summary{color:#333}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
@@ -1045,16 +1054,28 @@ textarea.form-input{resize:vertical;}
 
 <!-- 핫스팟 모달 -->
 <div class="modal-bg" id="hsModal">
-  <div class="modal">
+  <div class="modal hs-modal">
     <div class="modal-title">핫스팟 설정</div>
     <div class="form-row">
       <div class="form-label">라벨</div>
       <input class="form-input" id="hsLabelInput" placeholder="예: 로그인 버튼">
     </div>
-    <div class="form-row">
-      <div class="form-label">이동할 화면</div>
-      <input type="hidden" id="hsGoto">
-      <div class="route-picker-list" id="hsGotoList"></div>
+    <div class="hs-picker-layout">
+      <div class="form-row hs-picker-list-col">
+        <div class="form-label">이동할 화면</div>
+        <input type="hidden" id="hsGoto">
+        <div class="route-picker-list" id="hsGotoList"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">이미지 미리보기</div>
+        <div class="hs-preview-panel">
+          <div class="hs-preview-title" id="hsPreviewTitle">항목을 선택해 주세요</div>
+          <div class="hs-preview-stage">
+            <img id="hsPreviewImage" alt="선택한 이동 화면 미리보기">
+            <div class="hs-preview-empty" id="hsPreviewEmpty">왼쪽 목록에서 화면이나 이미지를 선택하면 여기에 크게 표시됩니다.</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="cancelDraw()">취소</button>
@@ -3253,10 +3274,44 @@ function renderHsTargetList(screens, images, loading=false) {
     + (imageRows ? `<div class="route-picker-heading">전체 이미지 · 사용 중인 이미지도 재선택 가능</div>${imageRows}` : '')
     + (loading ? '<div style="padding:14px;color:#888;font-size:12px">업로드 이미지 목록을 불러오는 중...</div>' : '')
     || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
+  updateHsTargetPreview(selected);
 }
 function selectHsTarget(value, button) {
   document.getElementById('hsGoto').value = value;
   document.querySelectorAll('#hsGotoList .route-picker-item').forEach(item => item.classList.toggle('active', item===button));
+  updateHsTargetPreview(value);
+}
+function updateHsTargetPreview(value) {
+  const image=document.getElementById('hsPreviewImage');
+  const title=document.getElementById('hsPreviewTitle');
+  const empty=document.getElementById('hsPreviewEmpty');
+  if(!image||!title||!empty) return;
+  let src='', label='';
+  if(value===HOTSPOT_GO_BACK) {
+    label='직전 화면으로 돌아가기';
+    empty.textContent='이 동작은 고정된 이미지로 이동하지 않고 사용자가 진입했던 직전 화면으로 돌아갑니다.';
+  } else if(value?.startsWith('__image__:')) {
+    src=value.slice('__image__:'.length);
+    label=assetDisplayName(src);
+  } else {
+    const screen=cache[activeSec]?.flow?.screens?.[value];
+    src=screen?.image||'';
+    label=screen ? `${screen.label} (${value})` : '이미지 미리보기';
+  }
+  title.textContent=label||'항목을 선택해 주세요';
+  image.onload=()=>{ image.style.display='block'; empty.style.display='none'; };
+  image.onerror=()=>{ image.style.display='none'; empty.style.display='block'; empty.textContent='이미지를 불러오지 못했습니다. 이미지 경로 또는 업로드 상태를 확인해 주세요.'; };
+  if(src) {
+    image.style.display='none';
+    empty.style.display='block';
+    empty.textContent='이미지를 불러오는 중입니다...';
+    image.src=src;
+  } else {
+    image.removeAttribute('src');
+    image.style.display='none';
+    empty.style.display='block';
+    if(value!==HOTSPOT_GO_BACK) empty.textContent='왼쪽 목록에서 화면이나 이미지를 선택하면 여기에 크게 표시됩니다.';
+  }
 }
 
 function startDraw() {
