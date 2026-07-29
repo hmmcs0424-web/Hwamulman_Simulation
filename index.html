@@ -2887,18 +2887,18 @@ window.announcementBridge = {
       if(error?.code!=='permission-denied') console.warn('FAQ 검색 연결 실패:',error);
     });
   },
-  openGuide(id) {
+  async openGuide(id) {
     if(String(id).startsWith('faq:')) {
       const [,groupId,itemId]=String(id).split(':');
-      setWorkspacePage('faq');
+      if(!(await setWorkspacePage('faq'))) return;
       setTimeout(()=>window.dispatchEvent(new CustomEvent('faq-open',{detail:{groupId,itemId}})),0);
       return;
     }
     if(!guidePages[id]) return;
-    setWorkspacePage(id);
+    await setWorkspacePage(id);
   },
-  openAnnouncement(id) {
-    setWorkspacePage('notice');
+  async openAnnouncement(id) {
+    if(!(await setWorkspacePage('notice'))) return;
     setTimeout(() => window.dispatchEvent(new CustomEvent('announcement-open',{detail:{id}})),0);
   },
   subscribeCategories(callback) {

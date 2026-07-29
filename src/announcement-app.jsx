@@ -130,8 +130,8 @@ function SearchModal({ open, onClose, posts, guides, onSelect }) {
     const next = query.trim() ? [query.trim(), ...recent.filter(item => item !== query.trim())].slice(0, 3) : recent;
     setRecent(next);
     localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    onSelect(item);
     onClose();
+    requestAnimationFrame(() => onSelect(item));
   };
   const onKeyDown = event => {
     if (event.key === 'ArrowDown') { event.preventDefault(); setActive(i => Math.min(i + 1, results.length - 1)); }

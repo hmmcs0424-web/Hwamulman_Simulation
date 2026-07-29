@@ -178,8 +178,8 @@ function UnifiedSearchModal({ open, onClose, posts, guides, onSelect }) {
     const next = query.trim() ? [query.trim(), ...recent.filter(value => value !== query.trim())].slice(0, 3) : recent;
     setRecent(next);
     localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    onSelect(item);
     onClose();
+    requestAnimationFrame(() => onSelect(item));
   };
   const onKeyDown = event => {
     if (event.key === 'ArrowDown') { event.preventDefault(); setActive(index => Math.min(index + 1, results.length - 1)); }
