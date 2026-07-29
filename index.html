@@ -1137,6 +1137,8 @@ const SECS = {
 // Per-section state cache
 const cache = {};
 Object.keys(SECS).forEach(k => { cache[k] = { flow:null, cur:null, hist:[] }; });
+const FLOW_SAVE_GUARD_SECTIONS = new Set(['차주앱','빽통앱','빽통PC']);
+const savedFlowSnapshots = new Map();
 
 let activeSec = '차주앱';
 let adminMode = false;
@@ -1266,7 +1268,8 @@ async function saveGuidePageToFirestore(key) {
   }, { merge:true });
 }
 
-function setWorkspacePage(page) {
+async function setWorkspacePage(page) {
+  if(activePage==='simulator' && page!=='simulator' && !(await confirmFlowSavedBeforeLeave(activeSec))) return false;
   activePage = page;
   window.scrollTo({top:0,left:0,behavior:'auto'});
   document.getElementById('guidePage').scrollTo({top:0,left:0,behavior:'auto'});
@@ -1281,9 +1284,10 @@ function setWorkspacePage(page) {
     btn.classList.toggle('active', btn.dataset.page === page || (btn.dataset.page === 'signup' && isSignupPage));
   });
   document.querySelectorAll('[data-signup-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.signupPage === page));
-  if(isSimulator) { applySec(activeSec); return; }
+  if(isSimulator) { applySec(activeSec); return true; }
   editingGuidePage = false;
   renderGuidePage();
+  return true;
 }
 
 function renderGuidePage() {
@@ -1519,23 +1523,23 @@ async function boot() {
     toggle.title = isCollapsed ? '사이드바 펼치기' : '사이드바 접기';
     toggle.setAttribute('aria-label', toggle.title);
   });
-  document.querySelectorAll('.side-menu[data-page]').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.side-menu[data-page]').forEach(btn => btn.addEventListener('click', async () => {
     if(btn.dataset.page === 'simulator') {
       document.getElementById('simulatorGroup').classList.toggle('open');
-      setWorkspacePage('simulator');
+      await setWorkspacePage('simulator');
     } else if(btn.dataset.page === 'signup') {
+      if(!(await setWorkspacePage('signup'))) return;
       document.getElementById('signupGroup').classList.toggle('open');
-      setWorkspacePage('signup');
-    } else setWorkspacePage(btn.dataset.page);
+    } else await setWorkspacePage(btn.dataset.page);
   }));
   document.querySelectorAll('.side-submenu[data-sim]').forEach(btn => btn.addEventListener('click', async () => {
-    setWorkspacePage('simulator');
+    if(!(await setWorkspacePage('simulator'))) return;
+    if(!(await switchSec(btn.dataset.sim))) return;
     document.querySelectorAll('.side-submenu[data-sim]').forEach(b => b.classList.toggle('active', b === btn));
-    await switchSec(btn.dataset.sim);
   }));
-  document.querySelectorAll('.side-submenu[data-signup-page]').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.side-submenu[data-signup-page]').forEach(btn => btn.addEventListener('click', async () => {
+    if(!(await setWorkspacePage(btn.dataset.signupPage))) return;
     document.getElementById('signupGroup').classList.add('open');
-    setWorkspacePage(btn.dataset.signupPage);
   }));
   document.getElementById('guideEditBtn').addEventListener('click', () => {
     if(activePage === 'notice') { openNoticeEditor(); return; }
@@ -1558,7 +1562,7 @@ async function boot() {
 
   // Nav switching
   document.querySelectorAll('.nav-menu').forEach(btn => {
-    btn.addEventListener('click', () => switchSec(btn.dataset.sim));
+    btn.addEventListener('click', async () => { await switchSec(btn.dataset.sim); });
   });
 
   // Admin button
@@ -1583,7 +1587,7 @@ async function boot() {
   document.getElementById('btnDraw').onclick = startDraw;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
-  document.getElementById('btnSaveFlow').onclick = saveSimulatorFlow;
+  document.getElementById('btnSaveFlow').onclick = () => saveSimulatorFlow();
   document.getElementById('btnExport').onclick = exportFlow;
   document.getElementById('btnAssetManager').onclick = openAssetManager;
   document.getElementById('assetFiles').onchange = e => uploadAssets(e.target.files);
@@ -1618,8 +1622,39 @@ async function boot() {
 // ═══════════════════════════════════════════
 // SECTION SWITCHING
 // ═══════════════════════════════════════════
+function flowSnapshot(sectionName) {
+  const flow=cache[sectionName]?.flow;
+  return flow ? JSON.stringify({start:flow.start||null,screens:flow.screens||{}}) : '';
+}
+
+function rememberFlowSaved(sectionName) {
+  if(FLOW_SAVE_GUARD_SECTIONS.has(sectionName)) savedFlowSnapshots.set(sectionName,flowSnapshot(sectionName));
+}
+
+function hasUnsavedFlow(sectionName) {
+  return adminMode
+    && FLOW_SAVE_GUARD_SECTIONS.has(sectionName)
+    && savedFlowSnapshots.has(sectionName)
+    && savedFlowSnapshots.get(sectionName)!==flowSnapshot(sectionName);
+}
+
+function shouldProtectFlowLeave(sectionName) {
+  return adminMode
+    && activePage==='simulator'
+    && FLOW_SAVE_GUARD_SECTIONS.has(sectionName)
+    && !!cache[sectionName]?.flow;
+}
+
+async function confirmFlowSavedBeforeLeave(sectionName) {
+  if(!shouldProtectFlowLeave(sectionName)) return true;
+  const shouldSave=confirm(`${sectionName} 경로 설정을 저장하고 이동할까요?\n\n확인: 저장 후 이동\n취소: 현재 화면으로 돌아가기`);
+  if(!shouldSave) return false;
+  return await saveSimulatorFlow(sectionName);
+}
+
 async function switchSec(name) {
-  if(name === activeSec) return;
+  if(name === activeSec) return true;
+  if(!(await confirmFlowSavedBeforeLeave(activeSec))) return false;
   if(drawing) cancelDraw();
   clearTransientScreenState();
 
@@ -1628,6 +1663,7 @@ async function switchSec(name) {
 
   await loadSec(name);
   applySec(name);
+  return true;
 }
 
 async function loadSec(name) {
@@ -1644,6 +1680,7 @@ async function loadSec(name) {
         cache[name].flow = cloud.data().flow;
         mergeImageManifest(name, cache[name].flow);
         cache[name].cur = cache[name].flow.start;
+        rememberFlowSaved(name);
         return;
       }
     } catch(e) {
@@ -1660,6 +1697,7 @@ async function loadSec(name) {
     mergeImageManifest(name, cache[name].flow);
     console.warn('flow.json 로드 실패:', name, e);
   }
+  rememberFlowSaved(name);
 }
 
 function applySec(name) {
@@ -1716,6 +1754,16 @@ function applySec(name) {
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
+const HOTSPOT_GO_BACK = '__history_back__';
+
+function navigateHotspotTarget(target) {
+  if(target===HOTSPOT_GO_BACK) {
+    goBack();
+    return;
+  }
+  if(target) goTo(target);
+}
+
 function goTo(id, init=false) {
   const st = cache[activeSec];
   const scr = st.flow.screens[id];
@@ -1909,7 +1957,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
-        if(hs.goto) goTo(hs.goto);
+        navigateHotspotTarget(hs.goto);
       });
 
       // X 삭제 버튼
@@ -1976,7 +2024,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       });
       el.appendChild(handle);
     } else {
-      el.addEventListener('click', () => hs.goto && goTo(hs.goto));
+      el.addEventListener('click', () => navigateHotspotTarget(hs.goto));
     }
     layer.appendChild(el);
   });
@@ -2208,6 +2256,7 @@ function counselorSignOut() {
 }
 
 async function firebaseSignOut() {
+  if(!(await confirmFlowSavedBeforeLeave(activeSec))) return;
   if(firebaseAuth) await firebaseFns.signOut(firebaseAuth);
   exitAdmin();
 }
@@ -2287,7 +2336,7 @@ function renderHsList() {
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
   el.innerHTML = hs.map((h,i) => `
     <div class="hs-item">
-      <span>${esc(h.label||'(없음)')} → ${esc(h.goto)}</span>
+      <span>${esc(h.label||'(없음)')} → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}</span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -2359,18 +2408,24 @@ function simulatorDocId(name) {
   return ({'차주앱':'driverApp','빽통앱':'backtongApp','빽통PC':'backtongPC','채널톡':'channelTalk'})[name] || name;
 }
 
-async function saveSimulatorFlow() {
-  if(!adminMode || !firebaseReady || !firebaseAuth.currentUser) { alert('관리자 로그인이 필요합니다.'); return; }
+async function saveSimulatorFlow(sectionName=activeSec) {
+  if(!adminMode || !firebaseReady || !firebaseAuth.currentUser) { alert('관리자 로그인이 필요합니다.'); return false; }
   const status = document.getElementById('flowSaveStatus');
   status.textContent = '저장 중...';
   try {
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(activeSec)), {
-      flow: cache[activeSec].flow,
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(sectionName)), {
+      flow: cache[sectionName].flow,
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
     }, {merge:true});
+    rememberFlowSaved(sectionName);
     status.textContent = '✓ Firestore에 저장됨 · ' + new Date().toLocaleTimeString('ko-KR');
-  } catch(e) { status.textContent = '저장 실패'; alert('경로 설정 저장 실패: ' + (e.message||e)); }
+    return true;
+  } catch(e) {
+    status.textContent = '저장 실패';
+    alert('경로 설정 저장 실패: ' + (e.message||e));
+    return false;
+  }
 }
 
 function assetFolderName(sectionName=assetManageSec) { return simulatorDocId(sectionName); }
@@ -2391,9 +2446,7 @@ async function getSimulatorImages(sectionName=activeSec) {
   await loadSiteImageManifest();
   const flow = cache[sectionName]?.flow;
   const candidates = [
-    ...((flow?.imageManifest)||[]),
-    ...((siteImageManifest?.[sectionName])||[]),
-    ...Object.values(flow?.screens||{}).map(screen => screen.image)
+    ...((siteImageManifest?.[sectionName])||[])
   ];
   if(adminMode) {
     try {
@@ -2404,6 +2457,7 @@ async function getSimulatorImages(sectionName=activeSec) {
       });
     } catch(e) {
       console.warn(`${sectionName} 업로드 이미지 목록 로드 실패:`, e);
+      candidates.push(...((flow?.imageManifest)||[]));
     }
   }
   const byPath = new Map();
@@ -3104,6 +3158,10 @@ async function deleteSelectedAssets() {
     const flow=cache[assetManageSec]?.flow;
     if(flow) flow.imageManifest=(flow.imageManifest||[]).filter(url=>!removedPaths.has(assetBlobPath(url)));
     await refreshAssetList();
+    if(document.getElementById('hsModal')?.classList.contains('active') && assetManageSec===activeSec) {
+      const screens=Object.entries(flow?.screens||{});
+      renderHsTargetList(screens,await getSimulatorImages(activeSec),false);
+    }
   } catch(e){ alert('이미지 삭제 실패: '+(e.message||e)); }
   finally { setTimeout(()=>bar.style.width='0',800); }
 }
@@ -3177,6 +3235,7 @@ function renderHsTargetList(screens, images, loading=false) {
   });
   const imageValue = image => screenByImage.get(assetIdentity(image)) || `__image__:${image}`;
   const values = [
+    HOTSPOT_GO_BACK,
     ...screens.map(([id]) => id),
     ...images.map(imageValue)
   ];
@@ -3186,12 +3245,14 @@ function renderHsTargetList(screens, images, loading=false) {
     const value = encodeURIComponent(id);
     return `<button type="button" class="route-picker-item ${selected===id?'active':''}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(screen.label)} (${esc(id)})</span></button>`;
   }).join('');
+  const backRow = `<button type="button" class="route-picker-item ${selected===HOTSPOT_GO_BACK?'active':''}" onclick="selectHsTarget('${HOTSPOT_GO_BACK}',this)"><span>↩ 직전 화면으로 돌아가기</span></button>`;
   const imageRows = images.map(image => {
     const existingScreenId = screenByImage.get(assetIdentity(image));
     const value = imageValue(image);
     return `<button type="button" class="route-picker-item ${selected===value?'active':''}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${existingScreenId?'<small class="route-picker-used">등록됨</small>':''}${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
   }).join('');
-  list.innerHTML = (screenRows ? `<div class="route-picker-heading">등록된 화면</div>${screenRows}` : '')
+  list.innerHTML = `<div class="route-picker-heading">이동 동작</div>${backRow}`
+    + (screenRows ? `<div class="route-picker-heading">등록된 화면</div>${screenRows}` : '')
     + (imageRows ? `<div class="route-picker-heading">전체 이미지 · 사용 중인 이미지도 재선택 가능</div>${imageRows}` : '')
     + (loading ? '<div style="padding:14px;color:#888;font-size:12px">업로드 이미지 목록을 불러오는 중...</div>' : '')
     || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
@@ -3241,7 +3302,9 @@ function confirmHs() {
     }
   }
   if(!goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
-  const label = document.getElementById('hsLabelInput').value.trim() || st.flow.screens[goto]?.label || goto;
+  const label = document.getElementById('hsLabelInput').value.trim()
+    || (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)
+    || goto;
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto });
   pendingHs = null;
@@ -4900,6 +4963,12 @@ function cteExportConfig() {
   cteSetSaveStatus('✓ JSON 백업 파일을 저장했습니다. · ' + new Date().toLocaleTimeString('ko-KR'), '#86efac');
 }
 
+window.addEventListener('beforeunload', e => {
+  if(!shouldProtectFlowLeave(activeSec)) return;
+  e.preventDefault();
+  e.returnValue = true;
+  return true;
+});
 
 boot();
 </script>
