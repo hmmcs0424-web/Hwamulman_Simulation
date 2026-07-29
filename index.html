@@ -409,6 +409,7 @@ textarea.form-input{resize:vertical;}
 .advanced-screen-add>summary{cursor:pointer;color:#777;font-size:12px;font-weight:700;padding:4px 0 8px}.advanced-screen-add[open]>summary{color:#333}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:14px;}
 .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+.flow-leave-modal{max-width:480px}.flow-leave-message{font-size:14px;line-height:1.7;color:#444}.flow-leave-message strong{color:#d33}.flow-leave-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px}
 
 /* ═══════════════════ 채널톡 교육 (cte-) ═══════════════════ */
 :root{--cte:#6366f1;}
@@ -1085,6 +1086,19 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<!-- 경로 설정 저장 확인 모달 -->
+<div class="modal-bg" id="flowLeaveModal">
+  <div class="modal flow-leave-modal">
+    <div class="modal-title">저장되지 않은 경로 설정</div>
+    <div class="flow-leave-message" id="flowLeaveMessage"></div>
+    <div class="flow-leave-actions">
+      <button class="btn btn-secondary" type="button" id="flowLeaveStay">계속 편집</button>
+      <button class="btn btn-danger" type="button" id="flowLeaveDiscard">저장 안 함</button>
+      <button class="btn btn-primary" type="button" id="flowLeaveSave">저장 후 이동</button>
+    </div>
+  </div>
+</div>
+
 <!-- 채널톡 화면 선택: 파일명 직접 입력 없이 기존 이미지 목록에서 선택 -->
 <div class="modal-bg" id="cteScreenPickModal">
   <div class="modal" style="max-width:440px;">
@@ -1628,6 +1642,7 @@ async function boot() {
   });
   document.getElementById('popupOverlay').onclick = function(e) { if(e.target===this) closePopup(); };
   document.querySelectorAll('.modal-bg').forEach(el => {
+    if(el.id==='flowLeaveModal') return;
     el.addEventListener('click', e => { if(e.target===el) closeModal(el.id); });
   });
 
@@ -1665,10 +1680,56 @@ function shouldProtectFlowLeave(sectionName) {
   return activePage==='simulator' && hasUnsavedFlow(sectionName);
 }
 
+let pendingFlowLeaveDialog=null;
+function askFlowLeaveAction(sectionName) {
+  if(pendingFlowLeaveDialog) return pendingFlowLeaveDialog;
+  const modal=document.getElementById('flowLeaveModal');
+  const message=document.getElementById('flowLeaveMessage');
+  const stay=document.getElementById('flowLeaveStay');
+  const discard=document.getElementById('flowLeaveDiscard');
+  const save=document.getElementById('flowLeaveSave');
+  message.innerHTML=`<strong>${esc(sectionName)}</strong> 경로 설정에 저장되지 않은 변경사항이 있습니다.<br>저장하지 않으면 마지막 저장 상태로 되돌아갑니다.`;
+  modal.classList.add('active');
+  pendingFlowLeaveDialog=new Promise(resolve=>{
+    const finish=choice=>{
+      modal.classList.remove('active');
+      modal.onclick=null;
+      stay.onclick=null; discard.onclick=null; save.onclick=null;
+      window.removeEventListener('keydown',onKeyDown);
+      pendingFlowLeaveDialog=null;
+      resolve(choice);
+    };
+    const onKeyDown=e=>{ if(e.key==='Escape') finish('stay'); };
+    stay.onclick=()=>finish('stay');
+    discard.onclick=()=>finish('discard');
+    save.onclick=()=>finish('save');
+    modal.onclick=e=>{ if(e.target===modal) finish('stay'); };
+    window.addEventListener('keydown',onKeyDown);
+  });
+  return pendingFlowLeaveDialog;
+}
+
+function discardUnsavedFlow(sectionName) {
+  const snapshot=savedFlowSnapshots.get(sectionName);
+  const flow=cache[sectionName]?.flow;
+  if(!snapshot||!flow) return;
+  const saved=JSON.parse(snapshot);
+  flow.start=saved.start;
+  flow.screens=saved.screens;
+  if(!flow.screens?.[cache[sectionName].cur]) cache[sectionName].cur=flow.start;
+  cache[sectionName].hist=(cache[sectionName].hist||[]).filter(id=>flow.screens?.[id]);
+  rememberFlowSaved(sectionName);
+  if(sectionName===activeSec && activePage==='simulator') applySec(sectionName);
+}
+
 async function confirmFlowSavedBeforeLeave(sectionName) {
   if(!shouldProtectFlowLeave(sectionName)) return true;
-  const shouldSave=confirm(`${sectionName} 경로 설정에 저장되지 않은 변경사항이 있습니다.\n\n확인: 저장 후 이동\n취소: 현재 화면으로 돌아가기`);
-  if(!shouldSave) return false;
+  const action=await askFlowLeaveAction(sectionName);
+  if(action==='stay') return false;
+  if(action==='discard') {
+    discardUnsavedFlow(sectionName);
+    return true;
+  }
   return await saveSimulatorFlow(sectionName);
 }
 
