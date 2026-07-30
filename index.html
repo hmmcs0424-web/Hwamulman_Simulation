@@ -279,7 +279,12 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .screen-scroll{max-height:200px;overflow-y:auto;}
 .screen-scroll::-webkit-scrollbar{width:4px;}
 .screen-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px;}
-.screen-btn{display:block;width:100%;text-align:left;padding:6px 10px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;color:#333;transition:background .1s;}
+.screen-group{margin:2px 0 7px;}
+.screen-group-title{display:flex;align-items:center;justify-content:space-between;padding:7px 10px 4px;color:#8a6a00;font-size:11px;font-weight:800;border-bottom:1px solid #f0e7c7;}
+.screen-group.current-flow{padding:4px;border:1px solid #f0df9f;border-radius:9px;background:#fffdf5}.screen-group.current-flow .screen-group-title{padding-top:4px}
+.screen-group-count{color:#aaa;font-size:10px;font-weight:600;}
+.screen-btn{display:flex;align-items:center;gap:7px;width:100%;text-align:left;padding:6px 10px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;color:#333;transition:background .1s;}
+.screen-btn-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.screen-relation{margin-left:auto;flex:0 0 auto;padding:2px 6px;border-radius:99px;background:#eee;color:#777;font-size:9px;font-weight:800}.screen-relation.current{background:#ffe8a3;color:#755300}.screen-list-empty{padding:18px 10px;color:#999;font-size:12px;text-align:center}
 .screen-btn:hover{background:#f5f5f5;}
 .screen-btn.active{background:#FFF8E0;color:#7a5600;font-weight:700;}
 .guide-points{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
@@ -1204,6 +1209,7 @@ let firebaseReady = false;
 let currentAdminProfile = null;
 let managedAssets = [];
 const assetUploadDates = new Map();
+const availableSimulatorImageIds = new Map();
 let assetManageSec = '차주앱';
 let noticePosts = [];
 let noticeQuery = '';
@@ -2169,20 +2175,70 @@ function renderBreadcrumb() {
 // SCREEN LIST
 // ═══════════════════════════════════════════
 function renderList() {
-  const q = document.getElementById('searchBox').value.toLowerCase();
+  const q = document.getElementById('searchBox').value.trim().toLocaleLowerCase('ko-KR');
   const el = document.getElementById('screenList');
   const st = cache[activeSec];
   el.innerHTML = '';
   if(!st.flow.screens) return;
-  Object.entries(st.flow.screens).forEach(([id, scr]) => {
-    if(q && !scr.label.toLowerCase().includes(q) && !id.includes(q)) return;
-    const btn = document.createElement('button');
-    btn.className = 'screen-btn' + (id===st.cur?' active':'');
-    btn.textContent = scr.label;
-    btn.title = id;
-    btn.onclick = () => goTo(id);
-    el.appendChild(btn);
+  const availableImages = availableSimulatorImageIds.get(activeSec);
+  const allEntries = Object.entries(st.flow.screens)
+    .filter(([,scr]) => !availableImages || availableImages.has(assetIdentity(scr.image)));
+  const entryById = new Map(allEntries);
+  const matchesQuery = ([id,scr]) => {
+    const label = String(scr.label||'').toLocaleLowerCase('ko-KR');
+    const imageName = assetDisplayName(scr.image).toLocaleLowerCase('ko-KR');
+    return !q || label.includes(q) || imageName.includes(q) || id.toLocaleLowerCase('ko-KR').includes(q);
+  };
+  const sortEntries = items => items.sort(([,a],[,b]) =>
+    String(a.label||'').localeCompare(String(b.label||''),'ko',{numeric:true,sensitivity:'base'}));
+  const appendGroup = (groupName,items,{currentFlow=false,relations=new Map()}={}) => {
+    if(!items.length) return;
+    const group = document.createElement('div');
+    group.className = 'screen-group' + (currentFlow?' current-flow':'');
+    const heading = document.createElement('div');
+    heading.className = 'screen-group-title';
+    heading.innerHTML = `<span>${esc(groupName)}</span><span class="screen-group-count">${items.length}</span>`;
+    group.appendChild(heading);
+    items.forEach(([id,scr]) => {
+      const btn = document.createElement('button');
+      const relation = relations.get(id)||'';
+      btn.className = 'screen-btn' + (id===st.cur?' active':'');
+      btn.innerHTML = `<span class="screen-btn-name">${esc(scr.label||id)}</span>`
+        + (relation ? `<small class="screen-relation ${id===st.cur?'current':''}">${esc(relation)}</small>` : '');
+      btn.title = `${scr.label||id} (${id})`;
+      btn.onclick = () => goTo(id);
+      group.appendChild(btn);
+    });
+    el.appendChild(group);
+  };
+
+  const relations = new Map();
+  if(entryById.has(st.cur)) relations.set(st.cur,'현재');
+  (st.flow.screens[st.cur]?.hotspots||[]).forEach(hotspot => {
+    if(entryById.has(hotspot.goto) && hotspot.goto!==st.cur) relations.set(hotspot.goto,'이동');
   });
+  allEntries.forEach(([id,scr]) => {
+    if(id!==st.cur && (scr.hotspots||[]).some(hotspot=>hotspot.goto===st.cur)) {
+      relations.set(id,relations.has(id)?'이동·진입':'진입');
+    }
+  });
+  const relatedEntries = sortEntries([...relations.keys()].map(id=>[id,entryById.get(id)]).filter(matchesQuery));
+  appendGroup('현재 화면과 연결된 화면',relatedEntries,{currentFlow:true,relations});
+
+  const relatedIds = new Set(relations.keys());
+  const entries = sortEntries(allEntries.filter(entry=>!relatedIds.has(entry[0]) && matchesQuery(entry)));
+  const groups = new Map();
+  entries.forEach(entry => {
+    const label = String(entry[1].label||'').trim();
+    const separatorIndex = label.search(/[_\-\s]/);
+    const groupName = separatorIndex > 0 ? label.slice(0,separatorIndex) : '기타 화면';
+    if(!groups.has(groupName)) groups.set(groupName,[]);
+    groups.get(groupName).push(entry);
+  });
+  [...groups.entries()]
+    .sort(([a],[b]) => a==='기타 화면' ? 1 : b==='기타 화면' ? -1 : a.localeCompare(b,'ko',{numeric:true,sensitivity:'base'}))
+    .forEach(([groupName,items]) => appendGroup(groupName,items));
+  if(!el.children.length) el.innerHTML='<div class="screen-list-empty">일치하는 화면이 없습니다.</div>';
 }
 
 // ═══════════════════════════════════════════
@@ -2547,6 +2603,7 @@ async function getSimulatorImages(sectionName=activeSec) {
   const byPath = new Map();
   candidates.filter(Boolean).forEach(image => byPath.set(assetIdentity(image), image));
   const images = Array.from(byPath.values()).sort((a,b) => assetDisplayName(a).localeCompare(assetDisplayName(b),'ko'));
+  availableSimulatorImageIds.set(sectionName,new Set(images.map(assetIdentity)));
   if(flow) flow.imageManifest = images;
   return images;
 }
@@ -2568,6 +2625,7 @@ async function refreshScreenImageOptions(selectedValue='') {
   select.innerHTML = '<option value="">등록된 이미지를 불러오는 중...</option>';
   const images = await getSimulatorImages(requestedSec);
   if(requestedSec!==activeSec) return;
+  renderList();
   const used = new Set(Object.values(cache[requestedSec].flow.screens||{}).map(screen => assetIdentity(screen.image)));
   const unusedOptions = images.filter(image => !used.has(assetIdentity(image)))
     .map(image => `<option value="${esc(image)}">${esc(assetDisplayName(image))}</option>`).join('');
@@ -3244,7 +3302,13 @@ async function renameAssetAt(index) {
     });
     const flow=cache[targetSec]?.flow;
     const beforeFlow=flow ? JSON.stringify(flow) : '';
-    if(flow) replaceAssetPath(flow,asset.pathname,renamed.url);
+    if(flow) {
+      const newLabel=String(renamed.name||newName).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'');
+      Object.values(flow.screens||{}).forEach(screen => {
+        if(assetBlobPath(screen.image)===asset.pathname) screen.label=newLabel;
+      });
+      replaceAssetPath(flow,asset.pathname,renamed.url);
+    }
     assetUploadDates.set(assetIdentity(renamed.url),new Date().toISOString());
 
     if(targetSec==='채널톡') {
@@ -3290,9 +3354,11 @@ async function deleteSelectedAssets() {
     const flow=cache[assetManageSec]?.flow;
     if(flow) flow.imageManifest=(flow.imageManifest||[]).filter(url=>!removedPaths.has(assetBlobPath(url)));
     await refreshAssetList();
+    const availableImages=assetManageSec==='채널톡' ? [] : await getSimulatorImages(assetManageSec);
+    if(assetManageSec===activeSec && assetManageSec!=='채널톡') renderList();
     if(document.getElementById('hsModal')?.classList.contains('active') && assetManageSec===activeSec) {
       const screens=Object.entries(flow?.screens||{});
-      renderHsTargetList(screens,await getSimulatorImages(activeSec),false);
+      renderHsTargetList(screens,availableImages,false);
     }
   } catch(e){ alert('이미지 삭제 실패: '+(e.message||e)); }
   finally { setTimeout(()=>bar.style.width='0',800); }
@@ -3361,6 +3427,8 @@ function setupDrawEvents(overlayId, rectId) {
 function renderHsTargetList(screens, images, loading=false) {
   const target = document.getElementById('hsGoto');
   const list = document.getElementById('hsGotoList');
+  const availableIds = new Set(images.map(assetIdentity));
+  screens = loading ? screens : screens.filter(([,screen]) => availableIds.has(assetIdentity(screen.image)));
   const screenByImage = new Map();
   screens.forEach(([id,screen]) => {
     const identity = assetIdentity(screen.image);
@@ -3376,7 +3444,8 @@ function renderHsTargetList(screens, images, loading=false) {
   target.value = selected;
   const screenRows = screens.map(([id,screen]) => {
     const value = encodeURIComponent(id);
-    return `<button type="button" class="route-picker-item ${selected===id?'active':''}" data-hs-group="screen" data-hs-search="${esc(`${screen.label} ${id}`.toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(screen.label)} (${esc(id)})</span></button>`;
+    const imageName = assetDisplayName(screen.image).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'');
+    return `<button type="button" class="route-picker-item ${selected===id?'active':''}" data-hs-group="screen" data-hs-search="${esc(`${imageName} ${screen.label} ${id}`.toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(imageName||screen.label)} (${esc(id)})</span></button>`;
   }).join('');
   const backRow = `<button type="button" class="route-picker-item ${selected===HOTSPOT_GO_BACK?'active':''}" onclick="selectHsTarget('${HOTSPOT_GO_BACK}',this)"><span>↩ 직전 화면으로 돌아가기</span></button>`;
   const imageRows = images.map(image => {
