@@ -2932,8 +2932,14 @@ window.announcementBridge = {
   subscribeGuides(callback) {
     callback([]);
     if(!firebaseReady) return () => {};
-    return firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
-      const faqResults=snapshot.docs.filter(groupDoc=>groupDoc.data().type==='faqGroup' && (adminMode || groupDoc.data().isPublished!==false)).flatMap(groupDoc => {
+    let latestDocs=[];
+    let expiryTimer=null;
+    const emit=()=>{
+      const faqResults=latestDocs.filter(groupDoc=>{
+        const group=groupDoc.data();
+        const hideAt=group.hideAt?.toDate ? group.hideAt.toDate().getTime() : new Date(group.hideAt||0).getTime();
+        return group.type==='faqGroup' && (adminMode || (group.isPublished!==false && (!hideAt || hideAt>Date.now())));
+      }).flatMap(groupDoc => {
         const group=groupDoc.data();
         return (Array.isArray(group.items)?group.items:[]).map(item=>({
           id:`faq:${groupDoc.id}:${item.id}`,
@@ -2944,9 +2950,24 @@ window.announcementBridge = {
         }));
       });
       callback(faqResults);
+      clearTimeout(expiryTimer);
+      if(!adminMode) {
+        const nextExpiry=latestDocs.map(item=>item.data()).filter(group=>group.type==='faqGroup' && group.isPublished!==false)
+          .map(group=>group.hideAt?.toDate ? group.hideAt.toDate().getTime() : new Date(group.hideAt||0).getTime())
+          .filter(time=>time>Date.now()).sort((a,b)=>a-b)[0];
+        if(nextExpiry) expiryTimer=setTimeout(emit,Math.min(nextExpiry-Date.now()+50,2147483647));
+      }
+    };
+    const unsubscribe=firebaseFns.onSnapshot(firebaseFns.collection(firestoreDb,'guides'), snapshot => {
+      latestDocs=snapshot.docs;
+      emit();
     },error => {
       if(error?.code!=='permission-denied') console.warn('FAQ 검색 연결 실패:',error);
     });
+    return ()=>{
+      clearTimeout(expiryTimer);
+      unsubscribe();
+    };
   },
   async openGuide(id) {
     if(String(id).startsWith('faq:')) {
@@ -3177,7 +3198,7 @@ window.faqBridge = {
       editedAt:new Date().toISOString(),
       editedById:firebaseAuth.currentUser.uid,
       editedByName:currentAdminProfile?.name||firebaseAuth.currentUser.email||'관리자',
-      previous:{title:existing.title||'',category:existing.category||'',kmsUrl:existing.kmsUrl||'',kmsLinks:existing.kmsLinks||[],isPublished:existing.isPublished!==false,items:existing.items||[]}
+      previous:{title:existing.title||'',category:existing.category||'',kmsUrl:existing.kmsUrl||'',kmsLinks:existing.kmsLinks||[],isPublished:existing.isPublished!==false,hideAt:existing.hideAt||'',items:existing.items||[]}
     });
     const payload={
       type:'faqGroup',
@@ -3189,6 +3210,7 @@ window.faqBridge = {
         url:String(item.url||'').trim()
       })).filter(item=>item.url),
       isPublished:group.isPublished!==false,
+      hideAt:String(group.hideAt||''),
       items:Array.isArray(group.items)?group.items:[],
       authorId:existing.authorId||firebaseAuth.currentUser.uid,
       authorName,

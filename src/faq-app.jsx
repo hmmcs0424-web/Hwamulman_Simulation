@@ -56,6 +56,15 @@ const timestamp = value => {
   const parsed = new Date(value || 0).getTime();
   return Number.isNaN(parsed) ? 0 : parsed;
 };
+const dateTimeInputValue = value => {
+  const time = timestamp(value);
+  if (!time) return '';
+  const date = new Date(time);
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 16);
+};
+const isFaqVisible = (group, now = Date.now()) =>
+  group?.isPublished !== false && (!timestamp(group?.hideAt) || timestamp(group.hideAt) > now);
 
 function parseBulkFaq(source) {
   const lines = String(source || '').replace(/\r\n?/g, '\n').split('\n');
@@ -219,6 +228,7 @@ function BatchEditor({ group, categories, onClose }) {
       url: initialKmsLinks[index]?.url || '',
     })),
     isPublished: group?.isPublished !== false,
+    hideAt: dateTimeInputValue(group?.hideAt),
     items: (group?.items?.length ? group.items : [emptyItem()]).map(item => ({
       ...item,
       content: item.content ? renderFaqMarkdown(item.content) : '',
@@ -275,6 +285,7 @@ function BatchEditor({ group, categories, onClose }) {
         category: form.category.trim() || '일반',
         kmsLinks: form.kmsLinks.map(link => ({ name: link.name.trim(), url: link.url.trim() })).filter(link => link.url),
         isPublished: form.isPublished,
+        hideAt: form.hideAt ? new Date(form.hideAt).toISOString() : '',
         items: validItems.map(item => ({
           ...item,
           question: item.question.trim(),
@@ -302,7 +313,12 @@ function BatchEditor({ group, categories, onClose }) {
             onChange={event => setForm({ ...form, kmsLinks: form.kmsLinks.map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value } : item) })} />
           <input value={link.url} type="url" placeholder={`KMS URL ${index + 1}`}
             onChange={event => setForm({ ...form, kmsLinks: form.kmsLinks.map((item, itemIndex) => itemIndex === index ? { ...item, url: event.target.value } : item) })} /></div>)}</div>
-        <label className="wide faq-publish-check"><input type="checkbox" checked={form.isPublished} onChange={event => setForm({ ...form, isPublished: event.target.checked })} /><span>저장 후 바로 게시</span></label>
+        <div className="wide faq-publish-settings">
+          <label className="faq-publish-check"><input type="checkbox" checked={form.isPublished} onChange={event => setForm({ ...form, isPublished: event.target.checked })} /><span>저장 후 바로 게시</span></label>
+          <label className="faq-hide-date"><span>예약 숨김 일시</span><input type="datetime-local" value={form.hideAt}
+            onChange={event => setForm({ ...form, hideAt: event.target.value })} min={dateTimeInputValue(Date.now())} /></label>
+          {form.hideAt && <button type="button" className="faq-clear-hide-date" onClick={() => setForm({ ...form, hideAt: '' })}>예약 해제</button>}
+        </div>
       </div>
       <section className={`faq-bulk-import ${bulkOpen ? 'open' : ''}`}>
         <button className="faq-bulk-toggle" onClick={() => setBulkOpen(!bulkOpen)}>▣ FAQ 전체 텍스트 붙여넣기 <span>{bulkOpen ? '접기' : '열기'}</span></button>
@@ -343,8 +359,14 @@ A: 입금 여부를 먼저 확인해야 합니다.`}</pre>
               <div className="faq-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatDetail(index, 'foreColor', event.target.value)} /></div>
               <small>텍스트 선택 후 적용</small>
             </div>
-            <div ref={element => { detailRefs.current[index] = element; }} className="detail faq-rich-editor" contentEditable suppressContentEditableWarning
-              dangerouslySetInnerHTML={{ __html: item.content }} onInput={event => updateItem(index, 'content', event.currentTarget.innerHTML)}
+            <div ref={element => {
+              detailRefs.current[index] = element;
+              if (element && element.dataset.faqItemId !== item.id) {
+                element.innerHTML = item.content;
+                element.dataset.faqItemId = item.id;
+              }
+            }} className="detail faq-rich-editor" contentEditable suppressContentEditableWarning
+              onInput={event => updateItem(index, 'content', event.currentTarget.innerHTML)}
               data-placeholder="처리 순서, 확인 사항, 주의 사항 등을 입력하세요." /></label>
           <div className="faq-two-fields">
             <label><span>태그</span><input value={item.tags} onChange={event => updateItem(index, 'tags', event.target.value)} placeholder="복구, 정지, 미결제" /></label>
@@ -429,7 +451,7 @@ function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, on
     <button className="faq-back" onClick={onBack}>← FAQ 목록</button>
     <div className="faq-breadcrumb">{group.category || '일반'} &gt; {group.title}</div>
     <div className="faq-document-title"><div><h1>{group.title}</h1><p>한 가이드에 포함된 FAQ {group.items?.length || 0}개 · 작성자 {authorLabel(group, adminProfile)}</p></div>
-      <span className={group.isPublished === false ? 'hidden' : ''}>{group.isPublished === false ? '숨김' : '게시 중'}</span></div>
+      <span className={!isFaqVisible(group) ? 'hidden' : ''}>{group.isPublished === false ? '숨김' : timestamp(group.hideAt) <= Date.now() && timestamp(group.hideAt) ? '예약 만료' : group.hideAt ? `${dateTimeLabel(group.hideAt)} 숨김 예정` : '게시 중'}</span></div>
     <div className="faq-detail-items">
       {(group.items || []).map((item, index) => {
         const opened = openItems.has(item.id);
@@ -452,7 +474,7 @@ function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, on
         <strong>{entry.editedByName || '관리자'}</strong><time>{dateTimeLabel(entry.editedAt)}</time>
         <span>{entry.previous?.title || '이전 게시글'}</span></div>)}</details>}
     {isAdmin && <div className="faq-document-admin">
-      <button onClick={onPublish}>{group.isPublished === false ? '게시하기' : '숨기기'}</button>
+      <button onClick={onPublish}>{isFaqVisible(group) ? '숨기기' : '게시하기'}</button>
       <button onClick={onEdit}>수정</button><button className="danger" onClick={onDelete}>삭제</button>
     </div>}
   </article>;
@@ -473,6 +495,7 @@ function FaqApp() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(!!window.faqBridge.isAdmin());
   const [dark, setDark] = useState(() => localStorage.getItem('hmm-faq-theme') === 'dark');
+  const [now, setNow] = useState(Date.now());
   const adminProfile = window.faqBridge.getAdmin?.();
 
   useEffect(() => window.faqBridge.subscribe(setGroups), []);
@@ -511,8 +534,12 @@ function FaqApp() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     document.getElementById('guidePage')?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [selectedId]);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const availableGroups = groups.filter(group => isAdmin || group.isPublished !== false);
+  const availableGroups = groups.filter(group => isAdmin || isFaqVisible(group, now));
   const words = text(query).trim().split(/\s+/).filter(Boolean);
   const visibleGroups = availableGroups.filter(group => {
     if (category !== '전체' && group.category !== category) return false;
@@ -527,7 +554,7 @@ function FaqApp() {
     catch (error) { alert(`삭제하지 못했습니다. ${error.message || error}`); }
   };
   const togglePublish = async group => {
-    try { await window.faqBridge.saveGroup({ ...group, isPublished: group.isPublished === false }); }
+    try { await window.faqBridge.saveGroup({ ...group, isPublished: !isFaqVisible(group, now), hideAt: '' }); }
     catch (error) { alert(`게시 상태를 변경하지 못했습니다. ${error.message || error}`); }
   };
 
@@ -557,7 +584,7 @@ function FaqApp() {
           <div className="faq-post-list">{visibleGroups.map(group => <button key={group.id} className="faq-post-row" onClick={() => setSelectedId(group.id)}>
             <span className="faq-post-category" style={{ backgroundColor: categoryColor(group.category || '일반', categoryColors), color: '#fff' }}>{group.category || '일반'}</span>
             <span className="faq-post-copy"><strong>{highlight(group.title, query)}</strong><small>{highlight(group.items?.[0]?.shortAnswer || group.items?.[0]?.question || '', query)}</small>
-              <span><b>FAQ {group.items?.length || 0}개</b>{group.isPublished === false && <i>숨김</i>}</span></span>
+              <span><b>FAQ {group.items?.length || 0}개</b>{!isFaqVisible(group, now) && <i>숨김</i>}{isFaqVisible(group, now) && group.hideAt && <i>예약 {dateTimeLabel(group.hideAt)}</i>}</span></span>
             <time>{dateLabel(group.updatedAt)}</time>
           </button>)}
           {!visibleGroups.length && <div className="faq-empty">{query ? '일치하는 FAQ 게시글이 없습니다.' : '등록된 FAQ 게시글이 없습니다.'}</div>}</div>
