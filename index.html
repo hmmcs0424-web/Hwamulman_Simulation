@@ -2601,8 +2601,17 @@ function assetIdentity(value) {
 function normalizeAssetGroupPath(value) {
   return String(value||'').split(/[/>]+/).map(part=>part.trim()).filter(Boolean).join(' / ');
 }
+const ASSET_GROUP_UNGROUPED='__ungrouped__';
+function inferAssetGroupFromName(image) {
+  const name=assetDisplayName(image).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'').trim();
+  const separatorIndex=name.search(/[_\-\s]/);
+  return separatorIndex>0 ? normalizeAssetGroupPath(name.slice(0,separatorIndex)) : '';
+}
 function getAssetGroupPath(flow,image) {
-  return normalizeAssetGroupPath(flow?.imageGroups?.[assetIdentity(image)]||'');
+  const key=assetIdentity(image);
+  const assigned=flow?.imageGroups?.[key];
+  if(assigned===ASSET_GROUP_UNGROUPED) return '';
+  return normalizeAssetGroupPath(assigned||inferAssetGroupFromName(image));
 }
 async function getSimulatorImages(sectionName=activeSec) {
   await loadSiteImageManifest();
@@ -3296,8 +3305,9 @@ function renderAssetList() {
 }
 function getAssetGroupCategories(flow=cache[assetManageSec]?.flow) {
   const saved=Array.isArray(flow?.imageGroupCategories)?flow.imageGroupCategories:[];
-  const assigned=Object.values(flow?.imageGroups||{});
-  return [...new Set([...saved,...assigned].map(normalizeAssetGroupPath).filter(Boolean))];
+  const assigned=Object.values(flow?.imageGroups||{}).filter(value=>value!==ASSET_GROUP_UNGROUPED);
+  const inferred=managedAssets.map(asset=>getAssetGroupPath(flow,asset.url));
+  return [...new Set([...saved,...assigned,...inferred].map(normalizeAssetGroupPath).filter(Boolean))];
 }
 function setAssetSearch(value){ assetSearchQuery=value||''; renderAssetList(); }
 function setAssetGroupFilter(value){ assetGroupFilter=value; renderAssetList(); }
@@ -3341,9 +3351,11 @@ async function editAssetGroup(index) {
   if(action===null) return;
   const previousGroups={...(flow.imageGroups||{})};
   const previousCategories=[...(flow.imageGroupCategories||[])];
+  flow.imageGroups={...(flow.imageGroups||{})};
   if(action.trim()==='삭제') {
     if(!confirm(`"${current}" 묶음을 삭제할까요?\\n소속 이미지는 미분류로 이동합니다.`)) return;
-    Object.keys(flow.imageGroups||{}).forEach(key=>{ if(normalizeAssetGroupPath(flow.imageGroups[key])===current) delete flow.imageGroups[key]; });
+    managedAssets.filter(asset=>getAssetGroupPath(flow,asset.url)===current)
+      .forEach(asset=>{ flow.imageGroups[assetIdentity(asset.url)]=ASSET_GROUP_UNGROUPED; });
     flow.imageGroupCategories=categories.filter(name=>name!==current);
     if(assetGroupFilter===current) assetGroupFilter='ungrouped';
     if(await saveAssetGroupChanges(previousGroups,previousCategories)) document.getElementById('assetStatus').textContent=`묶음 삭제 완료 · ${current}`;
@@ -3352,7 +3364,8 @@ async function editAssetGroup(index) {
   const next=normalizeAssetGroupPath(action);
   if(!next) return alert('묶음 이름을 입력해 주세요.');
   if(next!==current && categories.includes(next)) return alert('이미 같은 이름의 묶음이 있습니다.');
-  Object.keys(flow.imageGroups||{}).forEach(key=>{ if(normalizeAssetGroupPath(flow.imageGroups[key])===current) flow.imageGroups[key]=next; });
+  managedAssets.filter(asset=>getAssetGroupPath(flow,asset.url)===current)
+    .forEach(asset=>{ flow.imageGroups[assetIdentity(asset.url)]=next; });
   flow.imageGroupCategories=categories.map(name=>name===current?next:name);
   if(assetGroupFilter===current) assetGroupFilter=next;
   if(await saveAssetGroupChanges(previousGroups,previousCategories)) document.getElementById('assetStatus').textContent=`묶음 이름 변경 완료 · ${current} → ${next}`;
@@ -3389,7 +3402,7 @@ async function uploadAssets(fileList) {
             const oldGroupKey=assetIdentity(previous.url);
             const oldGroupPath=flow.imageGroups?.[oldGroupKey];
             replaceAssetPath(flow,previous.path,url);
-            if(oldGroupPath) {
+            if(oldGroupPath!==undefined) {
               delete flow.imageGroups[oldGroupKey];
               flow.imageGroups[assetIdentity(url)]=oldGroupPath;
             }
@@ -3438,7 +3451,7 @@ async function assignSelectedAssetsToGroup() {
   selected.forEach(asset=>{
     const key=assetIdentity(asset.url);
     if(path) flow.imageGroups[key]=path;
-    else delete flow.imageGroups[key];
+    else flow.imageGroups[key]=ASSET_GROUP_UNGROUPED;
   });
   if(await saveAssetGroupChanges(previousGroups,previousCategories)) {
     document.getElementById('assetStatus').textContent=`${selected.length}개 이미지 이동 완료 · ${path||'미분류'}`;
@@ -3479,7 +3492,7 @@ async function renameAssetAt(index) {
         if(assetBlobPath(screen.image)===asset.pathname) screen.label=newLabel;
       });
       replaceAssetPath(flow,asset.pathname,renamed.url);
-      if(oldGroupPath) {
+      if(oldGroupPath!==undefined) {
         delete flow.imageGroups[oldGroupKey];
         flow.imageGroups[assetIdentity(renamed.url)]=oldGroupPath;
       }
