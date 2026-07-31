@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 정보 변경 가이드</title>
+  <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.10/babel.min.js"></script>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    
+    .card-shadow { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.8); }
+    .animate-in { animation: fadeInUp 0.4s ease-out forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .check-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .check-item:hover { transform: translateY(-2px); }
+    .check-item.selected { transform: scale(1.02); }
+    
+    .guide-content b, .guide-content strong { font-weight: 700; color: #dc2626; }
+    
+    .option-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+    .option-btn:hover { transform: translateX(4px); }
+    
+    .result-item { animation: slideIn 0.3s ease-out forwards; animation-delay: calc(var(--index) * 0.1s); opacity: 0; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    
+    .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
+    
+    .admin-sidebar-item { transition: all 0.15s ease; }
+    /* 사이드바 아이템 hover 시 컨트롤 버튼 표시 */
+    .admin-sidebar-item .control-btns { opacity: 0; transition: opacity 0.2s; }
+    .admin-sidebar-item:hover .control-btns { opacity: 1; }
+    
+    .subtask-card { transition: all 0.2s ease; }
+    .subtask-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    
+    .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // 기본 데이터
+    const DEFAULT_STEPS = [
+        { 
+          id: '시작', 
+          title: '정보 변경 가이드', 
+          theme: 'blue', 
+          type: 'menu',
+          script: '<p><b>정보 변경</b>을 요청하신 회원 유형을 선택해 주세요.</p>', 
+          options: [
+            { label: '차주(개인) 정보 변경', next: '차주_본인확인', icon: 'truck' }, 
+            { label: '회원사(기업) 정보 변경', next: '회원사_유형선택', icon: 'building2' }
+          ]
+        },
+        { 
+          id: '차주_본인확인', 
+          title: '차주 본인 확인', 
+          theme: 'orange', 
+          type: 'menu',
+          script: `<p>정보 변경 시에는 반드시 <b>본인만</b> 변경할 수 있습니다.</p>
+<p style="margin-top:12px;"><b>■ 본인 확인 질문</b></p>
+<p>전화주신 회원님 <b>○○○회원님 본인</b> 맞으실까요?</p>
+<p style="margin-top:8px; color:#3b82f6;">→ YES : <b>생년월일</b> 확인 부탁드립니다.</p>
+<p style="color:#ef4444;">→ NO : 정보 변경은 본인만 가능하여 등록되어있는 연락처로 연락드려 진행하도록 하겠습니다.</p>`, 
+          options: [
+            { label: '본인 확인 완료 → 변경 항목 선택', next: '차주_항목선택', icon: 'checkCircle' }
+          ]
+        },
+        { 
+          id: '차주_항목선택', 
+          title: '차주 변경 항목 선택', 
+          theme: 'orange', 
+          type: 'multi-select',
+          script: '<p><b>변경할 항목을 모두 선택</b>해 주세요. (중복 선택 가능)</p>', 
+          subTasks: [
+            { id: 'c1', label: '차량등록증 변경', cases: '차량 번호 변경, 차량 톤수 변경, 차량 종류 변경', docs: ['변경된 차량 등록증'], notes: '※ 차량 변경 시 요금제 변경 여부 확인 필수' },
+            { id: 'c2', label: '사업자등록증 변경', cases: '주소 변경, 업종 변경, 사업자 번호 변경', docs: ['변경된 사업자 등록증'], notes: '주소, 업종, 사업자 번호 등 변경 시' },
+            { id: 'c3', label: '명의변경 (가족만 가능)', cases: '', docs: ['가족관계증명서', '양도양수 신청서', '신규 가입 서류 일체'], notes: '※ 가족 간 명의변경만 가능' },
+            
+            // CMS 계좌 변경 (분기 설정 적용)
+            { id: 'c4', label: 'CMS 계좌 변경', branch: 'cms_step1_owner_check', cases: '선택 시 명의 확인 및 간편서명 여부 확인', docs: [], notes: '질문에 따라 필요 서류가 달라집니다.' },
+            
+            // [숨겨진 항목] 분기 로직에 의해 자동 추가될 항목들
+            { id: 'cms_doc_manual', label: 'CMS 계좌 변경 (서류 접수)', isHidden: true, docs: ['통장 사본', '예금주 신분증'], notes: '서면 접수 필요' },
+            { id: 'cms_doc_corp', label: 'CMS 계좌 변경 (법인)', isHidden: true, docs: ['사업자등록증', '통장 사본', '법인 인감증명서'], notes: '법인 계좌 변경' },
+
+           { 
+  id: 'c5', 
+  label: '예치금 계좌 변경', 
+  cases: 'CMS 계좌와 다른 계좌로 변경하는 경우', 
+  docs: ['본인 명의 통장 사본'], 
+  notes: '상세 안내는 <a data-popup-image="https://lh3.googleusercontent.com/d/16jPt2neK-SljVJJ4fWVVOC3IEDC7lHmR" style="color: #3b82f6; text-decoration: underline; cursor: pointer;">📷 변경 이력 확인 방법</a>을 참고하세요.' 
+},
+{ 
+  id: 'c5_same_cms', 
+  label: '예치금 계좌 변경 - CMS 동일 계좌', 
+  cases: 'CMS와 동일한 계좌로 예치금 계좌를 변경하는 경우', 
+  docs: [], 
+  notes: '강화 본인확인 진행 후 변경 가능 / 별도 서류 필요 없음' 
+},
+            { id: 'c6', label: '예치금 수동 출금 요청', cases: '', docs: [], notes: '서류 불필요 / 타인 요청 시 계정주에게 반드시 확인 후 처리, 10일 소요 안내 (파트장 접수)' },
+            { id: 'c7', label: '개명', cases: '', docs: ['주민등록 초본'], notes: '초본 불가 시 신분증 (이전/이후 모두) 또는 등본' },
+            { id: 'c8', label: '기사 변경', cases: '', docs: ['위치활용 동의서', '변경할 기사의 화물운송자격증'], notes: '' },
+            { id: 'c9', label: '주소/연락처 변경', cases: '자택주소, 우편물 수령주소, 휴대폰, 이메일', docs: [], notes: '서류 불필요 (시스템 즉시 변경)' }
+          ],
+          options: [{ label: '선택 완료 → 필요 서류 확인', next: '차주_결과', icon: 'clipboardList' }]
+        },
+        
+        // --- [CMS 계좌 변경 시나리오] 시작 ---
+        
+        // 1. CMS 계좌 명의 확인
+        {
+          id: 'cms_step1_owner_check',
+          title: 'CMS 계좌 명의 확인',
+          theme: 'purple',
+          type: 'menu',
+          script: '<p>변경하시려는 계좌의 <b>명의</b>를 확인해 주세요.</p>',
+          options: [
+            { label: '본인명의 계좌', next: 'cms_step2_sign_check', icon: 'checkCircle' },
+            { label: '타인명의 계좌', next: 'cms_step2_sign_check', icon: 'checkCircle' },
+            { label: '법인 계좌', next: '차주_결과', addTasks: ['cms_doc_corp'], icon: 'building2' }
+          ]
+        },
+
+        // 2. CMS 간편 서명 신규 여부
+        {
+          id: 'cms_step2_sign_check',
+          title: 'CMS 간편 서명 신규 여부',
+          theme: 'purple',
+          type: 'menu',
+          script: '<p><b>간편 서명</b> 진행 여부를 선택해 주세요.</p>',
+          options: [
+            { label: '최초 등록', next: 'cms_step3_simple_sign', icon: 'mobile' },
+            { label: '서류 접수 필요', next: '차주_결과', addTasks: ['cms_doc_manual'], icon: 'document' }
+          ]
+        },
+
+        // 3. CMS 간편 서명 안내 (결과 화면 성격)
+        {
+          id: 'cms_step3_simple_sign',
+          title: 'CMS 간편 서명 안내',
+          theme: 'blue',
+          type: 'result',
+          script: '<p><b>알림톡</b>으로 간편 서명 링크가 발송됩니다.</p><p style="margin-top:10px;">회원님께 링크를 통해 서명을 진행해달라고 안내해 주세요.</p><p style="margin-top:10px; color:#64748b; font-size:14px;">※ 본인 명의 휴대폰으로만 진행 가능합니다.</p>',
+          options: [
+            { label: '처음으로 돌아가기', next: '시작', icon: 'home' }
+          ]
+        },
+        
+        // --- [CMS 계좌 변경 시나리오] 끝 ---
+
+        { 
+          id: '차주_결과', 
+          title: '차주 정보 변경 - 필요 서류 안내', 
+          theme: 'orange', 
+          type: 'result',
+          script: '<p>선택하신 변경 항목에 따른 <b>필요 서류</b>를 안내해 드립니다.</p>', 
+          options: [{ label: '처음으로 돌아가기', next: '시작', icon: 'home' }]
+        },
+        // ... (나머지 부분은 기존 유지) ...
+        { 
+          id: '회원사_유형선택', 
+          title: '회원사 유형 선택', 
+          theme: 'emerald', 
+          type: 'menu',
+          script: `<p><b>■ 대표자 본인 확인</b></p>
+<p>정보 확인 후 안내해 드리겠습니다.</p>
+<p><b>대표자님 성함</b>과 <b>사업자 번호</b> 확인 부탁드립니다.</p>
+<p style="margin-top:12px;">전화주신 회원님 <b>대표자님 본인</b> 맞으실까요?</p>
+<p style="margin-top:16px; color:#64748b; font-size:14px;">※ 등록된 대표자 번호로 인입된 경우 대표자 이름과 사업자 번호만 확인 후 바로 처리</p>
+<p style="color:#64748b; font-size:14px;">※ 아닌 경우 대표자에게 OB하여 처리</p>`, 
+          options: [
+            { label: '주선사', next: '회원사_주선사', icon: 'network' },
+            { label: '운수/운송사', next: '회원사_운수사', icon: 'truck' },
+            { label: '일반 화주', next: '회원사_일반화주', icon: 'package' }
+          ]
+        },
+        { 
+          id: '회원사_주선사', 
+          title: '주선사 변경 항목 선택', 
+          theme: 'emerald', 
+          type: 'multi-select',
+          script: '<p><b>주선사</b> 정보 변경 항목을 모두 선택해 주세요.</p>', 
+          subTasks: [
+            { id: 'm1', label: '사업자등록증/주선허가증 갱신', cases: '', docs: ['변경된 사업자 등록증', '주선허가증 사본'], notes: '' },
+            { id: 'm2', label: '대표자 변경', cases: '', docs: ['대표자 신분증 사본', '변경된 사업자 등록증'], notes: '' },
+            { id: 'm3', label: '명의변경 (양도양수)', cases: '', docs: ['양도양수 계약서', '양도인/양수인 신분증', '신규 가입 서류 일체'], notes: '탈퇴 후 재가입 안내' },
+            { id: 'm4_1', label: 'CMS 계좌 등록 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송, 아이디 숫자로 변경' },
+            { id: 'm4_2', label: 'CMS 계좌 등록 (예금주 동일-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '아이디 숫자로 변경' },
+            { id: 'm4_3', label: 'CMS 계좌 등록 (예금주 상이-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '아이디 숫자로 변경' },
+            { id: 'm5_1', label: 'CMS 계좌 변경 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송' },
+            { id: 'm5_2', label: 'CMS 계좌 변경 (예금주 동일)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '' },
+            { id: 'm5_3', label: 'CMS 계좌 변경 (예금주 상이)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 'm6_1', label: '예치금 계좌 등록/변경 (대표자 개인/사업자 계좌)', cases: '', docs: ['통장 사본', '신분증'], notes: '' },
+            { id: 'm6_2', label: '예치금 계좌 등록/변경 (예금주 동일-법인)', cases: '', docs: ['통장 사본', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서'], notes: '동의서 있는 경우 통장 사본만 필요' },
+            { id: 'm6_3', label: '예치금 계좌 등록/변경 (예금주 상이-법인)', cases: '', docs: ['통장 사본', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 'm7', label: '정회원 → 일반회원 전환', cases: '', docs: [], notes: '서류 불필요 / 공유화물 서비스 중단' },
+            { id: 'm8', label: '주소/연락처 변경', cases: '', docs: [], notes: '서류 불필요 - 자택주소, 우편물 수령주소, 휴대폰, 이메일' }
+          ],
+          options: [{ label: '선택 완료 → 필요 서류 확인', next: '회원사_결과', icon: 'clipboardList' }]
+        },
+        { 
+          id: '회원사_운수사', 
+          title: '운수/운송사 변경 항목 선택', 
+          theme: 'emerald', 
+          type: 'multi-select',
+          script: '<p><b>운수/운송사</b> 정보 변경 항목을 모두 선택해 주세요.</p>', 
+          subTasks: [
+            { id: 't1', label: '사업자등록증/주선허가증 갱신', cases: '', docs: ['변경된 사업자 등록증', '주선허가증 사본'], notes: '' },
+            { id: 't2', label: '대표자 변경', cases: '', docs: ['대표자 신분증 사본', '변경된 사업자 등록증'], notes: '' },
+            { id: 't3', label: '명의변경 (양도양수)', cases: '', docs: ['양도양수 계약서', '양도인/양수인 신분증', '신규 가입 서류 일체'], notes: '탈퇴 후 재가입 안내' },
+            { id: 't4_1', label: 'CMS 계좌 등록 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송, 아이디 숫자로 변경' },
+            { id: 't4_2', label: 'CMS 계좌 등록 (예금주 동일-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '아이디 숫자로 변경' },
+            { id: 't4_3', label: 'CMS 계좌 등록 (예금주 상이-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '아이디 숫자로 변경' },
+            { id: 't5_1', label: 'CMS 계좌 변경 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송' },
+            { id: 't5_2', label: 'CMS 계좌 변경 (예금주 동일)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '' },
+            { id: 't5_3', label: 'CMS 계좌 변경 (예금주 상이)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 't6_1', label: '예치금 계좌 등록 (대표자 개인/사업자 계좌)', cases: '', docs: ['통장 사본', '신분증', '주선허가증', '사업자등록증'], notes: '※ 주선 면허 취득 여부 확인 필요' },
+            { id: 't6_2', label: '예치금 계좌 등록 (예금주 동일-법인)', cases: '', docs: ['통장 사본', '주선허가증', '사업자등록증', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서'], notes: '' },
+            { id: 't6_3', label: '예치금 계좌 등록 (예금주 상이-법인)', cases: '', docs: ['통장 사본', '주선허가증', '사업자등록증', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 't7', label: '정회원 → 일반회원 전환', cases: '', docs: [], notes: '서류 불필요 / 공유화물 서비스 중단' },
+            { id: 't8', label: '주소/연락처 변경', cases: '', docs: [], notes: '서류 불필요 - 자택주소, 우편물 수령주소, 휴대폰, 이메일' }
+          ],
+          options: [{ label: '선택 완료 → 필요 서류 확인', next: '회원사_결과', icon: 'clipboardList' }]
+        },
+        { 
+          id: '회원사_일반화주', 
+          title: '일반 화주 변경 항목 선택', 
+          theme: 'emerald', 
+          type: 'multi-select',
+          script: '<p><b>일반 화주</b> 정보 변경 항목을 모두 선택해 주세요.</p>', 
+          subTasks: [
+            { id: 'g1', label: '사업자등록증/주선허가증 갱신', cases: '', docs: ['변경된 사업자 등록증', '주선허가증 사본'], notes: '' },
+            { id: 'g2', label: '대표자 변경', cases: '', docs: ['대표자 신분증 사본', '변경된 사업자 등록증'], notes: '' },
+            { id: 'g3', label: '명의변경 (양도양수)', cases: '', docs: ['양도양수 계약서', '양도인/양수인 신분증', '신규 가입 서류 일체'], notes: '탈퇴 후 재가입 안내' },
+            { id: 'g4_1', label: 'CMS 계좌 등록 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송, 아이디 숫자로 변경' },
+            { id: 'g4_2', label: 'CMS 계좌 등록 (예금주 동일-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '아이디 숫자로 변경' },
+            { id: 'g4_3', label: 'CMS 계좌 등록 (예금주 상이-법인)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '아이디 숫자로 변경' },
+            { id: 'g5_1', label: 'CMS 계좌 변경 (대표자 개인/사업자 계좌)', cases: '', docs: [], notes: '서류 불필요 / 간편 서명 링크 발송' },
+            { id: 'g5_2', label: 'CMS 계좌 변경 (예금주 동일)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증'], notes: '' },
+            { id: 'g5_3', label: 'CMS 계좌 변경 (예금주 상이)', cases: '', docs: ['CMS 출금 계좌 등록 신청서', '신분증 사본', '통장 사본', '사업자 등록증', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 'g6_1', label: '예치금 계좌 등록 (대표자 개인/사업자 계좌)', cases: '', docs: ['통장 사본', '신분증', '주선허가증', '사업자등록증'], notes: '※ 주선 면허 취득 여부 확인 필요' },
+            { id: 'g6_2', label: '예치금 계좌 등록 (예금주 동일-법인)', cases: '', docs: ['통장 사본', '주선허가증', '사업자등록증', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서'], notes: '' },
+            { id: 'g6_3', label: '예치금 계좌 등록 (예금주 상이-법인)', cases: '', docs: ['통장 사본', '주선허가증', '사업자등록증', '수수료 입출금 계좌 등록 신청서', '선착불 자동 정산 처리 규정 동의서', '예금주 인감증명서', '예금주 신분증'], notes: '' },
+            { id: 'g7', label: '정회원 → 일반회원 전환', cases: '', docs: [], notes: '서류 불필요 / 공유화물 서비스 중단' },
+            { id: 'g8', label: '주소/연락처 변경', cases: '', docs: [], notes: '서류 불필요 - 자택주소, 우편물 수령주소, 휴대폰, 이메일' }
+          ],
+          options: [{ label: '선택 완료 → 필요 서류 확인', next: '회원사_결과', icon: 'clipboardList' }]
+        },
+        { 
+          id: '회원사_결과', 
+          title: '회원사 정보 변경 - 필요 서류 안내', 
+          theme: 'emerald', 
+          type: 'result',
+          script: '<p>선택하신 변경 항목에 따른 <b>필요 서류</b>를 안내해 드립니다.</p>', 
+          options: [{ label: '처음으로 돌아가기', next: '시작', icon: 'home' }]
+        }
+      ];
+
+    const App = () => {
+      const [currentKey, setCurrentKey] = useState('시작');
+      const [history, setHistory] = useState([]); // history items will now be objects: { id: string, tasks: string[] }
+      const [selectedTasks, setSelectedTasks] = useState([]);
+      const [viewMode, setViewMode] = useState('USER');
+      const [isAdmin, setIsAdmin] = useState(false);
+      const [showLoginModal, setShowLoginModal] = useState(false);
+      const [passwordInput, setPasswordInput] = useState("");
+      const [editingId, setEditingId] = useState(null);
+      const [saveStatus, setSaveStatus] = useState("");
+      const [steps, setSteps] = useState(DEFAULT_STEPS);
+      const [isDataLoaded, setIsDataLoaded] = useState(false);
+      const [popupImage, setPopupImage] = useState(null);
+
+      // ====== Google Drive에서 데이터 로드 ======
+      useEffect(() => {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler((serverData) => {
+              if (serverData) {
+                try {
+                  const parsedData = JSON.parse(serverData);
+                  setSteps(parsedData);
+                } catch (e) { console.error("데이터 파싱 실패", e); }
+              }
+              setIsDataLoaded(true);
+            })
+            .withFailureHandler((err) => {
+              console.error("데이터 로드 실패", err);
+              setIsDataLoaded(true);
+            })
+            .loadStoredData();
+        } else {
+          setIsDataLoaded(true);
+        }
+      }, []);
+      
+      const currentStep = useMemo(() => steps.find(s => s.id === currentKey) || steps[0], [steps, currentKey]);
+      const editingStep = useMemo(() => steps.find(s => s.id === editingId), [steps, editingId]);
+
+      // ... (기존 테마 설정 및 로그인 로직 유지) ...
+      const themeConfig = {
+        blue: { bg: 'bg-blue-600', light: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-400', hex: '#2563eb', gradient: 'from-blue-600 to-blue-800' },
+        emerald: { bg: 'bg-emerald-600', light: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-400', hex: '#10b981', gradient: 'from-emerald-600 to-emerald-800' },
+        orange: { bg: 'bg-orange-500', light: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-400', hex: '#f97316', gradient: 'from-orange-500 to-orange-700' },
+        purple: { bg: 'bg-purple-600', light: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-400', hex: '#9333ea', gradient: 'from-purple-600 to-purple-800' },
+      };
+
+      const getTheme = (t) => themeConfig[t] || themeConfig.blue;
+
+      const handleAdminToggle = () => { 
+        if (isAdmin) setViewMode(viewMode === 'USER' ? 'ADMIN' : 'USER'); 
+        else setShowLoginModal(true); 
+      };
+      
+      const login = () => { 
+        if (passwordInput === "hmm0424") { 
+          setIsAdmin(true); 
+          setViewMode('ADMIN'); 
+          setShowLoginModal(false); 
+          setPasswordInput(""); 
+        } else alert("암호 오류"); 
+      };
+
+      // ====== 편집 기능들 ======
+      const deleteStep = (stepId) => {
+        if (stepId === '시작') { alert("시작 단계는 삭제할 수 없습니다."); return; }
+        if (confirm(`"${steps.find(s => s.id === stepId)?.title}" 단계를 삭제하시겠습니까?`)) {
+          setSteps(steps.filter(s => s.id !== stepId));
+          if (editingId === stepId) setEditingId(null);
+        }
+      };
+
+      // 단계 복제 함수 (추가됨)
+      const duplicateStep = (stepId) => {
+        const stepToClone = steps.find(s => s.id === stepId);
+        if (!stepToClone) return;
+
+        const newId = `step_${Date.now()}`;
+        const newStep = JSON.parse(JSON.stringify(stepToClone)); // Deep copy
+        newStep.id = newId;
+        newStep.title = `${newStep.title} (복사본)`;
+        
+        // 서브 항목 ID도 새로 생성하여 충돌 방지
+        if (newStep.subTasks) {
+            newStep.subTasks = newStep.subTasks.map(st => ({
+                ...st,
+                id: `st_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+            }));
+        }
+
+        const index = steps.findIndex(s => s.id === stepId);
+        const newSteps = [...steps];
+        newSteps.splice(index + 1, 0, newStep);
+        setSteps(newSteps);
+        setEditingId(newId);
+      };
+
+      // 순서 변경 함수
+      const moveStep = (stepId, direction) => {
+        if (stepId === '시작') return; 
+
+        const index = steps.findIndex(s => s.id === stepId);
+        if (index < 0) return;
+
+        const newSteps = [...steps];
+        if (direction === 'up' && index > 1) { 
+           [newSteps[index], newSteps[index - 1]] = [newSteps[index - 1], newSteps[index]];
+        } else if (direction === 'down' && index < newSteps.length - 1) {
+           [newSteps[index], newSteps[index + 1]] = [newSteps[index + 1], newSteps[index]];
+        }
+        setSteps(newSteps);
+      };
+
+      const addNewStep = () => {
+        const newId = `step_${Date.now()}`;
+        const newStep = {
+          id: newId,
+          title: '새 단계',
+          theme: 'blue',
+          type: 'multi-select', 
+          script: '<p>안내 내용을 입력하세요.</p>',
+          options: [],
+          subTasks: [
+             { id: `st_${Date.now()}`, label: '새 항목', cases: '', docs: [], notes: '' }
+          ]
+        };
+        setSteps([...steps, newStep]);
+        setEditingId(newId);
+      };
+
+      const updateStep = (field, value) => setSteps(steps.map(s => s.id === editingId ? { ...s, [field]: value } : s));
+
+      // subTask 관련 함수들
+      const addSubTask = () => {
+        const newSubTask = { id: `st_${Date.now()}`, label: '새 항목', docs: [], notes: '' };
+        const currentSubTasks = editingStep?.subTasks || [];
+        updateStep('subTasks', [...currentSubTasks, newSubTask]);
+      };
+
+      const updateSubTask = (taskId, field, value) => {
+        const updatedSubTasks = (editingStep?.subTasks || []).map(st => st.id === taskId ? { ...st, [field]: value } : st);
+        updateStep('subTasks', updatedSubTasks);
+      };
+
+      const deleteSubTask = (taskId) => {
+        if (confirm("이 항목을 삭제하시겠습니까?")) {
+          const updatedSubTasks = (editingStep?.subTasks || []).filter(st => st.id !== taskId);
+          updateStep('subTasks', updatedSubTasks);
+        }
+      };
+
+      // 서브 항목 순서 변경 함수 (추가됨)
+      const moveSubTask = (taskId, direction) => {
+          const subTasks = editingStep.subTasks || [];
+          const index = subTasks.findIndex(t => t.id === taskId);
+          if (index < 0) return;
+
+          const newSubTasks = [...subTasks];
+          if (direction === 'up' && index > 0) {
+              [newSubTasks[index], newSubTasks[index - 1]] = [newSubTasks[index - 1], newSubTasks[index]];
+          } else if (direction === 'down' && index < newSubTasks.length - 1) {
+              [newSubTasks[index], newSubTasks[index + 1]] = [newSubTasks[index + 1], newSubTasks[index]];
+          }
+          updateStep('subTasks', newSubTasks);
+      };
+
+      const addDocToSubTask = (taskId) => {
+        const task = (editingStep?.subTasks || []).find(st => st.id === taskId);
+        if (task) updateSubTask(taskId, 'docs', [...task.docs, '새 서류']);
+      };
+
+      const updateDocInSubTask = (taskId, docIndex, value) => {
+        const task = (editingStep?.subTasks || []).find(st => st.id === taskId);
+        if (task) {
+          const newDocs = [...task.docs];
+          newDocs[docIndex] = value;
+          updateSubTask(taskId, 'docs', newDocs);
+        }
+      };
+
+      const deleteDocFromSubTask = (taskId, docIndex) => {
+        const task = (editingStep?.subTasks || []).find(st => st.id === taskId);
+        if (task) {
+          const newDocs = task.docs.filter((_, idx) => idx !== docIndex);
+          updateSubTask(taskId, 'docs', newDocs);
+        }
+      };
+
+      // 옵션 관련 함수들
+      const addOption = () => {
+        const newOption = { label: '새 버튼', next: '시작', icon: 'chevronRight' };
+        updateStep('options', [...(editingStep?.options || []), newOption]);
+      };
+
+      const updateOption = (index, field, value) => {
+        let finalValue = value;
+        if (field === 'addTasks') {
+           finalValue = value ? value.split(',').map(v => v.trim()) : [];
+        }
+
+        const updatedOptions = (editingStep?.options || []).map((opt, idx) => 
+          idx === index ? { ...opt, [field]: finalValue } : opt
+        );
+        updateStep('options', updatedOptions);
+      };
+
+      const deleteOption = (index) => {
+        const updatedOptions = (editingStep?.options || []).filter((_, idx) => idx !== index);
+        updateStep('options', updatedOptions);
+      };
+
+      // ====== 클라우드 저장 ======
+      const saveToCloud = () => {
+        const pw = prompt("저장을 위해 보안 암호를 입력하세요.");
+        if (!pw) return;
+        setSaveStatus("저장 중...");
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler((result) => {
+              if (result === "SUCCESS") setSaveStatus("저장 완료!");
+              else { setSaveStatus("저장 실패"); alert("저장 실패"); }
+              setTimeout(() => setSaveStatus(""), 2000);
+            })
+            .withFailureHandler((error) => {
+              setSaveStatus("에러 발생");
+              alert("저장 실패: " + error.message);
+              setTimeout(() => setSaveStatus(""), 2000);
+            })
+            .saveStoredData(JSON.stringify(steps), pw);
+        } else {
+          if (pw === "hmm0424") {
+            console.log("로컬 저장 시뮬레이션:", JSON.stringify(steps));
+            setSaveStatus("로컬 저장 완료");
+            setTimeout(() => setSaveStatus(""), 2000);
+          } else { alert("암호 오류"); setSaveStatus(""); }
+        }
+      };
+
+      // ====== 핵심 로직 변경 부분 (분기 & 추가 항목 & 상태 복구) ======
+      const handleNext = (opt) => {
+        if (opt.next === '시작') {
+          setHistory([]);
+          setSelectedTasks([]);
+          setCurrentKey('시작');
+          return;
+        }
+
+        // 1. 현재 상태 스냅샷 저장 (이동 전의 선택 항목 상태)
+        const snapshot = {
+          id: currentKey,
+          tasks: [...selectedTasks]
+        };
+
+        // 2. 추가 항목 처리 (로컬 변수로 계산)
+        let nextSelectedTasks = [...selectedTasks];
+        if (opt.addTasks && opt.addTasks.length > 0) {
+          opt.addTasks.forEach(taskId => {
+            if (!nextSelectedTasks.includes(taskId)) nextSelectedTasks.push(taskId);
+          });
+          // 실제 상태 업데이트
+          setSelectedTasks(nextSelectedTasks);
+        }
+
+        // 3. 분기 처리 및 이동
+        if (currentStep.type === 'multi-select' && opt.next) {
+          if (opt.next.includes('결과')) {
+             if (selectedTasks.length === 0) {
+                alert("변경 항목을 최소 하나 이상 선택해 주세요.");
+                return;
+             }
+          }
+          
+          const branchTask = steps
+            .flatMap(s => s.subTasks || [])
+            // 주의: 분기 체크 시점의 사용자 선택은 selectedTasks 기준이 맞지만
+            // addTasks로 인해 추가된 항목도 고려하려면 nextSelectedTasks를 사용해도 됨
+            // 여기서는 사용자 선택 항목 기준(selectedTasks)이 안전함
+            .find(t => t.branch && selectedTasks.includes(t.id));
+            
+          if (branchTask) {
+             if (currentKey !== branchTask.branch) {
+                setHistory([...history, snapshot]);
+                setCurrentKey(branchTask.branch);
+                return;
+             }
+          }
+        }
+        
+        // 일반 이동
+        setHistory([...history, snapshot]); 
+        setCurrentKey(opt.next); 
+      };
+      
+      const goBack = () => { 
+        if (history.length === 0) return;
+
+        const newHistory = [...history];
+        const prevState = newHistory.pop(); // { id: '...', tasks: [...] }
+        
+        setHistory(newHistory);
+        setCurrentKey(prevState.id);
+        
+        // 중요: 이전 단계의 선택 항목 상태로 복구
+        // 이렇게 하면 '법인' 버튼을 눌러 추가되었던 항목이, 뒤로가기 시 사라집니다.
+        if (prevState.tasks) {
+          setSelectedTasks(prevState.tasks);
+        }
+      };
+      
+      const goHome = () => { 
+        setHistory([]); 
+        setSelectedTasks([]); 
+        setCurrentKey('시작'); 
+      };
+
+      const toggleTask = (taskId) => {
+        setSelectedTasks(prev => 
+          prev.includes(taskId) 
+            ? prev.filter(t => t !== taskId) 
+            : [...prev, taskId]
+        );
+      };
+
+      const handleContentClick = (e) => {
+        const link = e.target.closest('a[data-popup-image]');
+        if (link) {
+          e.preventDefault();
+          const imageUrl = link.getAttribute('data-popup-image');
+          if (imageUrl) setPopupImage(imageUrl);
+        }
+      };
+
+      const { finalDocs, finalNotes, selectedDetails } = useMemo(() => {
+        const docs = new Set();
+        const notes = [];
+        const details = [];
+        
+        selectedTasks.forEach(tid => {
+          const task = steps.flatMap(s => s.subTasks || []).find(t => t.id === tid);
+          if (task) {
+            details.push(task);
+            if (task.docs) task.docs.forEach(d => docs.add(d.trim()));
+            if (task.notes && task.notes.trim()) notes.push({ label: task.label, note: task.notes });
+          }
+        });
+        
+        return { 
+          finalDocs: Array.from(docs), 
+          finalNotes: notes,
+          selectedDetails: details
+        };
+      }, [selectedTasks, steps]);
+
+      const renderScript = (text) => ({ __html: text || "" });
+
+      if (!isDataLoaded) return <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-50 gap-4"><div className="loader"></div><p className="text-slate-500 font-bold text-sm">데이터 불러오는 중...</p></div>;
+
+      return (
+        <div className="w-full min-h-screen flex flex-col items-center">
+          {/* Navbar */}
+          <nav className="w-full bg-slate-900 px-6 py-3 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-2 rounded-xl text-white shadow-lg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </div>
+              <div>
+                <h1 className="font-bold text-white text-sm tracking-tight">회원 정보 변경 가이드</h1>
+                <p className="text-slate-400 text-[10px]">Hwamulman CSR Support System</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {isAdmin && viewMode === 'ADMIN' && (
+                <button onClick={saveToCloud} className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                  {saveStatus ? <span>{saveStatus}</span> : <>Drive 저장</>}
+                </button>
+              )}
+              <button onClick={handleAdminToggle} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${viewMode === 'ADMIN' ? 'bg-orange-500 text-white' : 'bg-slate-700 text-slate-300 hover:text-white'}`}>
+                {viewMode === 'USER' ? '편집 모드' : '상담 모드'}
+              </button>
+            </div>
+          </nav>
+
+          <main className="w-full flex-1 p-4 md:p-6">
+            {viewMode === 'ADMIN' ? (
+              /* ===== 관리자 모드 ===== */
+              <div className="w-full flex gap-4 h-[calc(100vh-120px)]">
+                {/* 좌측 사이드바 */}
+                <div className="w-64 bg-white p-3 rounded-2xl border shadow-sm overflow-y-auto custom-scrollbar flex flex-col">
+                  <div className="flex justify-between items-center mb-3 px-2">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">단계 목록</p>
+                    <button onClick={addNewStep} className="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-all">+ 추가</button>
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    {steps.map((s, idx) => (
+                      <div key={s.id} className={`admin-sidebar-item group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold cursor-pointer ${editingId === s.id ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'}`}>
+                        <span className="flex-1 truncate" onClick={() => setEditingId(s.id)}>{s.title}</span>
+                        {s.id !== '시작' && (
+                          <div className="flex items-center gap-1 control-btns">
+                            <button onClick={(e) => { e.stopPropagation(); moveStep(s.id, 'up'); }} disabled={idx <= 1} className={`p-1 rounded hover:bg-slate-200 ${idx <= 1 ? 'opacity-30 cursor-not-allowed' : 'text-slate-500'}`}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); moveStep(s.id, 'down'); }} disabled={idx >= steps.length - 1} className={`p-1 rounded hover:bg-slate-200 ${idx >= steps.length - 1 ? 'opacity-30 cursor-not-allowed' : 'text-slate-500'}`}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            {/* 복제 버튼 추가 */}
+                            <button onClick={(e) => { e.stopPropagation(); duplicateStep(s.id); }} className="p-1 rounded hover:bg-blue-100 text-blue-400 hover:text-blue-600">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); deleteStep(s.id); }} className={`delete-btn p-1 rounded hover:bg-red-100 ${editingId === s.id ? 'text-red-300' : 'text-red-400'}`}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 우측 편집 영역 (생략 없이 유지) */}
+                <div className="flex-1 bg-white p-6 rounded-2xl border shadow-sm overflow-y-auto custom-scrollbar">
+                  {editingStep ? (
+                    <div className="max-w-4xl space-y-6 animate-in">
+                      {/* 헤더 & 기본정보 */}
+                      <div className="flex justify-between items-center pb-4 border-b">
+                        <h2 className="font-bold text-lg">{editingStep.title}</h2>
+                        <span className="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">ID: {editingId}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 mb-2">단계 제목</label>
+                          <input className="w-full p-3 bg-slate-50 border rounded-xl font-medium text-sm outline-none focus:ring-2 focus:ring-blue-500" value={editingStep.title} onChange={(e) => updateStep('title', e.target.value)} />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 mb-2">단계 유형</label>
+                          <select className="w-full p-3 bg-slate-50 border rounded-xl font-medium text-sm outline-none focus:ring-2 focus:ring-blue-500" value={editingStep.type || 'menu'} onChange={(e) => updateStep('type', e.target.value)}>
+                            <option value="menu">일반 메뉴</option>
+                            <option value="multi-select">체크박스 선택</option>
+                            <option value="result">결과 화면</option>
+                          </select>
+                        </div>
+                      </div>
+                      {/* 테마 & 스크립트 */}
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 mb-2">테마 색상</label>
+                        <div className="flex gap-3">
+                          {Object.keys(themeConfig).map(c => (
+                            <button key={c} onClick={() => updateStep('theme', c)} className={`w-10 h-10 rounded-xl border-2 transition-all ${editingStep.theme === c ? 'border-slate-900 scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'} ${getTheme(c).bg}`} />
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 mb-2">안내 스크립트 (HTML)</label>
+                        <textarea className="w-full p-3 bg-slate-50 border rounded-xl font-medium text-sm h-32 outline-none resize-none focus:ring-2 focus:ring-blue-500" value={editingStep.script} onChange={(e) => updateStep('script', e.target.value)} />
+                      </div>
+
+                      {/* 체크박스 항목 편집 */}
+                      {editingStep.type === 'multi-select' && (
+                        <div className="border-t pt-6">
+                          <div className="flex justify-between items-center mb-4">
+                            <label className="text-sm font-bold text-slate-700">📋 선택 항목 관리</label>
+                            <button onClick={addSubTask} className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all">+ 항목 추가</button>
+                          </div>
+                          <div className="space-y-4">
+                            {(editingStep.subTasks || []).map((task, tIdx) => (
+                              <div key={task.id} className="subtask-card bg-slate-50 rounded-xl p-4 border relative group">
+                                <div className="absolute top-2 right-2 flex gap-1 opacity-50 group-hover:opacity-100 transition-opacity">
+                                    <button onClick={() => moveSubTask(task.id, 'up')} disabled={tIdx === 0} className={`p-1 rounded hover:bg-slate-200 ${tIdx === 0 ? 'opacity-30 cursor-not-allowed' : 'text-slate-500'}`}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
+                                    </button>
+                                    <button onClick={() => moveSubTask(task.id, 'down')} disabled={tIdx === (editingStep.subTasks || []).length - 1} className={`p-1 rounded hover:bg-slate-200 ${tIdx === (editingStep.subTasks || []).length - 1 ? 'opacity-30 cursor-not-allowed' : 'text-slate-500'}`}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </button>
+                                </div>
+                                <div className="flex items-start gap-3 mb-3 pt-2">
+                                  <span className="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded">{tIdx + 1}</span>
+                                  <div className="flex-1">
+                                    {/* ID 표시 부분 추가 */}
+                                    <div className="text-[10px] text-slate-400 font-mono mb-1 flex items-center gap-2">
+                                      <span className="font-bold">ID:</span>
+                                      <span className="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded select-all cursor-text" title="클릭 후 복사하세요">{task.id}</span>
+                                    </div>
+                                    <input className="w-full p-2 bg-white border rounded-lg font-semibold text-sm outline-none focus:ring-2 focus:ring-orange-500" value={task.label} onChange={(e) => updateSubTask(task.id, 'label', e.target.value)} placeholder="항목명" />
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <label className="text-xs flex items-center gap-1 cursor-pointer">
+                                      <input type="checkbox" checked={task.isHidden || false} onChange={(e) => updateSubTask(task.id, 'isHidden', e.target.checked)} />
+                                      <span className="text-slate-500">숨김(자동추가용)</span>
+                                    </label>
+                                    <button onClick={() => deleteSubTask(task.id)} className="text-red-400 hover:text-red-600 p-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                  </div>
+                                </div>
+                                <div className="ml-8 mb-3">
+                                  <span className="text-xs font-bold text-slate-500 block mb-2">💡 해당 케이스</span>
+                                  <input className="w-full p-2 bg-white border rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500" value={task.cases || ''} onChange={(e) => updateSubTask(task.id, 'cases', e.target.value)} placeholder="예: 차량 번호 변경" />
+                                </div>
+                                <div className="ml-8 mb-3">
+                                  <span className="text-xs font-bold text-slate-500 block mb-2">🔀 분기 (이동할 단계 ID)</span>
+                                  <div className="flex items-center gap-2">
+                                    <input className="flex-1 p-2 bg-white border rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500" value={task.branch || ''} onChange={(e) => updateSubTask(task.id, 'branch', e.target.value)} placeholder="ID 입력 (비워두면 결과로)" />
+                                    {task.branch && <span className="text-[10px] text-blue-500 font-bold px-2 py-1 bg-blue-50 rounded">연결됨</span>}
+                                  </div>
+                                </div>
+                                <div className="ml-8 mb-3">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-bold text-slate-500">📄 필요 서류</span>
+                                    <button onClick={() => addDocToSubTask(task.id)} className="text-blue-600 hover:text-blue-700 text-xs font-bold">+ 서류 추가</button>
+                                  </div>
+                                  <div className="space-y-2">
+                                    {task.docs.map((doc, dIdx) => (
+                                      <div key={dIdx} className="flex items-center gap-2">
+                                        <input className="flex-1 p-2 bg-white border rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500" value={doc} onChange={(e) => updateDocInSubTask(task.id, dIdx, e.target.value)} />
+                                        <button onClick={() => deleteDocFromSubTask(task.id, dIdx)} className="text-red-400 hover:text-red-600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className="ml-8">
+                                  <span className="text-xs font-bold text-slate-500 block mb-2">📝 비고/안내사항</span>
+                                  <textarea className="w-full p-2 bg-white border rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500 min-h-[60px]" value={task.notes} onChange={(e) => updateSubTask(task.id, 'notes', e.target.value)} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 하단 버튼 편집 */}
+                      <div className="border-t pt-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <label className="text-sm font-bold text-slate-700">🔗 하단 연결 버튼</label>
+                          <button onClick={addOption} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all">+ 버튼 추가</button>
+                        </div>
+                        <div className="space-y-3">
+                          {(editingStep.options || []).map((opt, idx) => (
+                            <div key={idx} className="bg-slate-50 p-3 rounded-xl space-y-2">
+                              <div className="flex items-center gap-3">
+                                <input className="flex-1 p-2 bg-white border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500" value={opt.label} onChange={(e) => updateOption(idx, 'label', e.target.value)} placeholder="버튼 텍스트" />
+                                <select className="p-2 bg-white border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500" value={opt.next} onChange={(e) => updateOption(idx, 'next', e.target.value)}>
+                                  {steps.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
+                                </select>
+                                <button onClick={() => deleteOption(idx)} className="text-red-400 hover:text-red-600 p-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                              </div>
+                              <div className="flex items-center gap-2 pl-1">
+                                <span className="text-[10px] font-bold text-slate-400">➕ 추가할 항목 ID (쉼표로 구분):</span>
+                                <input className="flex-1 p-1.5 bg-white border rounded text-xs" value={(opt.addTasks || []).join(', ')} onChange={(e) => updateOption(idx, 'addTasks', e.target.value)} placeholder="예: c4_other" />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-slate-300 text-sm">
+                      <div className="text-center">
+                        <svg className="mx-auto mb-3 opacity-30" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        <p>좌측에서 편집할 단계를 선택하세요</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* ===== 사용자 모드 ===== */
+              <div className="w-full max-w-4xl mx-auto animate-in">
+                <div className="bg-white rounded-3xl card-shadow overflow-hidden">
+                  {/* Header */}
+                  <div className={`bg-gradient-to-r ${getTheme(currentStep.theme).gradient} p-6 md:p-8 text-white relative overflow-hidden`}>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+                    <div className="relative z-10 flex justify-between items-start">
+                      <div>
+                        <p className="text-white/70 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">Information Change Guide</p>
+                        <h2 className="text-xl md:text-2xl font-bold">{currentStep.title}</h2>
+                      </div>
+                      <button onClick={goHome} className="bg-white/20 hover:bg-white/30 backdrop-blur px-4 py-2 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                        처음으로
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                      {history.length > 0 && (
+                        <button onClick={goBack} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition-all">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
+                          이전 단계
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Guide Script (여기 onClick 추가) */}
+                    <div className="rounded-2xl border-2 overflow-hidden mb-8" style={{ borderColor: getTheme(currentStep.theme).hex + '40' }}>
+                      <div className="px-5 py-3 text-white font-bold text-sm flex items-center gap-2" style={{ backgroundColor: getTheme(currentStep.theme).hex }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        확인 및 안내
+                      </div>
+                      <div 
+                        className="bg-white p-5 md:p-6"
+                        onClick={handleContentClick}
+                      >
+                        <div className="guide-content text-slate-700 leading-relaxed text-[15px]" dangerouslySetInnerHTML={renderScript(currentStep.script)} />
+                      </div>
+                    </div>
+
+                    {/* Multi-Select */}
+                    {currentStep.type === 'multi-select' && (
+                      <div className="mb-8">
+                        <div className="flex items-center justify-between mb-4">
+                          <p className="text-sm font-bold text-slate-600">
+                            <span className="text-orange-500">{selectedTasks.filter(tid => {
+                              // 숨겨진 항목은 카운트에서 제외
+                              const t = steps.flatMap(s => s.subTasks || []).find(sub => sub.id === tid);
+                              return t && !t.isHidden;
+                            }).length}개</span> 항목 선택됨
+                          </p>
+                          {selectedTasks.length > 0 && <button onClick={() => setSelectedTasks([])} className="text-xs text-slate-400 hover:text-slate-600 underline">선택 초기화</button>}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {(currentStep.subTasks || []).filter(task => !task.isHidden).map(task => (
+                            <div key={task.id} onClick={() => toggleTask(task.id)} className={`check-item p-4 rounded-2xl border-2 cursor-pointer flex items-center gap-4 ${selectedTasks.includes(task.id) ? 'border-orange-500 bg-orange-50 selected shadow-lg' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}>
+                              <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all ${selectedTasks.includes(task.id) ? 'bg-orange-500 text-white' : 'bg-slate-100 text-transparent'}`}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              </div>
+                              <div className="flex-1">
+                                <span className={`font-semibold text-sm block ${selectedTasks.includes(task.id) ? 'text-slate-800' : 'text-slate-600'}`}>{task.label}</span>
+                                {task.cases && <span className={`text-xs block mt-1 ${selectedTasks.includes(task.id) ? 'text-slate-600' : 'text-slate-400'}`}>{task.cases}</span>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Result */}
+                    {currentStep.type === 'result' && (
+                      <div className="space-y-6 mb-8">
+                        {/* 필요 서류 안내 (순서 변경: 위로 이동) */}
+                        <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 md:p-8 rounded-3xl shadow-xl">
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-orange-500 p-2.5 rounded-xl"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                            <div><p className="text-orange-400 text-xs font-bold uppercase tracking-wider">Required Documents</p><h3 className="text-xl font-bold">필요 서류 안내</h3></div>
+                          </div>
+                          {finalDocs.length > 0 ? (
+                            <div className="space-y-3">
+                              {finalDocs.map((doc, idx) => (
+                                <div key={idx} className="result-item flex items-center gap-4 bg-white/10 backdrop-blur p-4 rounded-xl" style={{'--index': idx}}>
+                                  <div className="bg-orange-500 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                                  <span className="font-semibold text-base">{doc}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-center py-8 text-white/60">
+                              <svg className="mx-auto mb-3 opacity-50" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                              <p className="font-semibold">서류 불필요</p>
+                              <p className="text-sm mt-1">선택하신 항목은 별도 서류 없이 처리 가능합니다.</p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 추가 안내사항 */}
+                        {finalNotes.length > 0 && (
+                          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 md:p-6">
+                            <div className="flex items-center gap-2 mb-4">
+                              <svg className="text-amber-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                              <p className="font-bold text-amber-800">추가 안내사항</p>
+                            </div>
+                            <div className="space-y-3">
+                              {finalNotes.map((item, idx) => (
+                                <div key={idx} className="bg-white rounded-xl p-4 border border-amber-200">
+                                  <p className="text-xs font-bold text-amber-600 mb-1">{item.label}</p>
+                                  <div 
+                                    className="text-sm text-amber-900 leading-relaxed" 
+                                    dangerouslySetInnerHTML={{ __html: item.note }} 
+                                    onClick={handleContentClick}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 선택된 변경 항목 (순서 변경: 맨 아래로 이동) */}
+                        <div className="bg-slate-100 rounded-2xl p-5">
+                          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">선택된 변경 항목</p>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedDetails.map((task, idx) => (
+                              <span key={idx} className="bg-white px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-700 border">{task.label}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-3">
+                      {(currentStep.options || []).map((opt, i) => (
+                        <button key={i} onClick={() => handleNext(opt)} className={`option-btn w-full text-left bg-white border-2 border-slate-200 hover:border-slate-300 rounded-2xl px-5 py-4 flex items-center gap-4 shadow-sm hover:shadow-md`} style={{ borderLeftWidth: '4px', borderLeftColor: getTheme(currentStep.theme).hex }}>
+                          <div className={`w-10 h-10 rounded-xl ${getTheme(currentStep.theme).light} flex items-center justify-center ${getTheme(currentStep.theme).text}`}>
+                            {opt.icon === 'truck' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>}
+                            {opt.icon === 'building2' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>}
+                            {opt.icon === 'checkCircle' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>}
+                            {opt.icon === 'clipboardList' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>}
+                            {opt.icon === 'network' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="2" width="6" height="6"/><rect x="16" y="16" width="6" height="6"/><rect x="2" y="16" width="6" height="6"/><path d="M5 16v-4h14v4"/><path d="M12 12V8"/></svg>}
+                            {opt.icon === 'package' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>}
+                            {opt.icon === 'home' && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>}
+                            {!['truck','building2','checkCircle','clipboardList','network','package','home'].includes(opt.icon) && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>}
+                          </div>
+                          <span className="flex-1 font-bold text-slate-800">{opt.label}</span>
+                          <svg className="text-slate-400" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 text-center">
+                  <button onClick={goHome} className="text-sm text-slate-400 hover:text-slate-600 font-semibold flex items-center gap-2 mx-auto transition-all">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                    처음부터 다시 시작
+                  </button>
+                </div>
+              </div>
+            )}
+          </main>
+
+          {showLoginModal && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+              <div className="glass rounded-3xl p-8 shadow-2xl w-full max-w-sm border">
+                <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <h2 className="text-xl font-bold text-center mb-6">관리자 인증</h2>
+                <input type="password" autoFocus className="w-full p-4 bg-slate-100 border-0 rounded-xl mb-4 text-center text-lg font-bold outline-none focus:ring-2 focus:ring-orange-500" placeholder="암호 입력" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && login()} />
+                <div className="flex gap-3">
+                  <button onClick={() => setShowLoginModal(false)} className="flex-1 py-3 bg-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-300 transition-all">취소</button>
+                  <button onClick={login} className="flex-1 py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all shadow-lg">로그인</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 이미지 팝업 모달 */}
+          {popupImage && (
+            <div 
+              className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+              onClick={() => setPopupImage(null)}
+            >
+              <div className="relative max-w-4xl max-h-[90vh] w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
+                <img src={popupImage} alt="Popup" className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl" />
+                <button 
+                  onClick={() => setPopupImage(null)}
+                  className="absolute -top-10 right-0 md:-right-10 text-white hover:text-gray-300 p-2"
+                >
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+          )}
+
+          <footer className="w-full py-6 text-center text-slate-400 text-xs">
+            Hwamulman CSR Support System v2.0 | 정보 변경 전문 가이드
+          </footer>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

@@ -423,12 +423,15 @@ function CategoryManager({ categories, colors, onClose, onSaved }) {
   </section></div>;
 }
 
-function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, onEdit, onDelete, onPublish }) {
+function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, onEdit, onDelete, onPublish, onScheduleHide }) {
   const kmsLinks = Array.isArray(group.kmsLinks) && group.kmsLinks.length
     ? group.kmsLinks : group.kmsUrl ? [{ name: 'KMS 가이드 열기', url: group.kmsUrl }] : [];
   const [openItems, setOpenItems] = useState(new Set(
     initialOpenItemId ? [initialOpenItemId] : group.items?.[0]?.id ? [group.items[0].id] : []
   ));
+  const [scheduledHideAt, setScheduledHideAt] = useState(dateTimeInputValue(group.hideAt));
+  const [savingSchedule, setSavingSchedule] = useState(false);
+  useEffect(() => setScheduledHideAt(dateTimeInputValue(group.hideAt)), [group.hideAt]);
   useEffect(() => {
     if (!initialOpenItemId) return;
     setOpenItems(current => new Set(current).add(initialOpenItemId));
@@ -446,6 +449,20 @@ function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, on
     const copyText = [item.shortAnswer, item.content].filter(Boolean).join('\n\n');
     await navigator.clipboard.writeText(copyText);
     alert('답변을 복사했습니다.');
+  };
+  const saveSchedule = async () => {
+    if (!scheduledHideAt) return alert('숨길 날짜와 시간을 선택해 주세요.');
+    if (new Date(scheduledHideAt).getTime() <= Date.now()) return alert('현재보다 이후 날짜와 시간을 선택해 주세요.');
+    setSavingSchedule(true);
+    try { await onScheduleHide(new Date(scheduledHideAt).toISOString()); }
+    catch (error) { alert(`예약 숨김 일시를 저장하지 못했습니다. ${error.message || error}`); }
+    finally { setSavingSchedule(false); }
+  };
+  const clearSchedule = async () => {
+    setSavingSchedule(true);
+    try { await onScheduleHide(''); setScheduledHideAt(''); }
+    catch (error) { alert(`예약 숨김을 해제하지 못했습니다. ${error.message || error}`); }
+    finally { setSavingSchedule(false); }
   };
   return <article className="faq-document">
     <button className="faq-back" onClick={onBack}>← FAQ 목록</button>
@@ -474,6 +491,12 @@ function FaqDetail({ group, initialOpenItemId, isAdmin, adminProfile, onBack, on
         <strong>{entry.editedByName || '관리자'}</strong><time>{dateTimeLabel(entry.editedAt)}</time>
         <span>{entry.previous?.title || '이전 게시글'}</span></div>)}</details>}
     {isAdmin && <div className="faq-document-admin">
+      <div className="faq-detail-schedule">
+        <label><span>예약 숨김 일시</span><input type="datetime-local" value={scheduledHideAt}
+          onChange={event => setScheduledHideAt(event.target.value)} min={dateTimeInputValue(Date.now())} /></label>
+        <button disabled={savingSchedule} onClick={saveSchedule}>{savingSchedule ? '저장 중' : '예약 숨기기'}</button>
+        {!!group.hideAt && <button disabled={savingSchedule} onClick={clearSchedule}>예약 해제</button>}
+      </div>
       <button onClick={onPublish}>{isFaqVisible(group) ? '숨기기' : '게시하기'}</button>
       <button onClick={onEdit}>수정</button><button className="danger" onClick={onDelete}>삭제</button>
     </div>}
@@ -557,6 +580,9 @@ function FaqApp() {
     try { await window.faqBridge.saveGroup({ ...group, isPublished: !isFaqVisible(group, now), hideAt: '' }); }
     catch (error) { alert(`게시 상태를 변경하지 못했습니다. ${error.message || error}`); }
   };
+  const scheduleHide = group => async hideAt => {
+    await window.faqBridge.saveGroup({ ...group, isPublished: true, hideAt });
+  };
 
   return <div className="faq-app" data-theme={dark ? 'dark' : 'light'}>
     <div className="faq-toolbar">
@@ -578,7 +604,7 @@ function FaqApp() {
       </aside>
       <main className="faq-content">
         {selected ? <FaqDetail group={selected} initialOpenItemId={selectedItemId} isAdmin={isAdmin} adminProfile={adminProfile} onBack={() => { setSelectedId(''); setSelectedItemId(''); }} onEdit={() => setEditor(selected)}
-          onDelete={() => remove(selected)} onPublish={() => togglePublish(selected)} /> : <section className="faq-index">
+          onDelete={() => remove(selected)} onPublish={() => togglePublish(selected)} onScheduleHide={scheduleHide(selected)} /> : <section className="faq-index">
           <header><p>QUICK ANSWERS</p><h1>{category}</h1><span>상담 중 필요한 답을 게시글과 질문 단위로 빠르게 찾아보세요.</span></header>
           <div className="faq-list-summary"><b>{query ? `검색 결과 ${visibleGroups.length}건` : `FAQ 게시글 ${visibleGroups.length}건`}</b><span>게시글 하나에 여러 FAQ가 포함됩니다.</span></div>
           <div className="faq-post-list">{visibleGroups.map(group => <button key={group.id} className="faq-post-row" onClick={() => setSelectedId(group.id)}>
