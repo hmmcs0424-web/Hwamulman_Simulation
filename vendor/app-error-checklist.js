@@ -1,0 +1,51 @@
+(() => {
+  'use strict';
+  const CHECK_KEY='hmm-app-error-checklist-v3';
+  const FORM_KEY='hmm-app-error-report-v2';
+  const clone=value=>JSON.parse(JSON.stringify(value));
+  const esc=value=>String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const defaults={
+    channel:{title:'채널톡에서 확인',path:'채널톡 → 고객 상담방 → 우측 고객 프로필 → 세션 정보',description:'고객이 채널톡으로 문의한 경우 고객 프로필의 세션 정보에서 기기명, 운영체제 버전, 앱 버전을 확인합니다. 표시된 정보가 최신 접속 정보인지 함께 확인해 주세요.',image:''},
+    phone:{title:'휴대폰에서 확인',path:'기기명·OS: 설정 → 휴대전화 정보 → 소프트웨어 정보\n앱 버전: 앱 실행 → 환경설정(톱니바퀴) → 버전',description:'채널톡에서 정보를 확인할 수 없거나 전화로 문의한 경우 고객 휴대폰에서 직접 확인합니다. 휴대폰 기종에 따라 메뉴명과 위치가 다를 수 있습니다.',image:''}
+  };
+  const items=[
+    ['user','사용자 고유번호','회원 조회 후 사용자 고유번호를 확인하여 접수 양식에 기재해 주세요.'],
+    ['device','기기명','채널톡 고객 프로필 또는 휴대전화 정보에서 제품명·모델명을 확인해 주세요.'],
+    ['os','안드로이드 버전','채널톡 세션 정보 또는 휴대전화 소프트웨어 정보에서 확인해 주세요.'],
+    ['app','앱 버전','채널톡 세션 정보 또는 앱 환경설정의 버전 항목에서 확인해 주세요.'],
+    ['developer','개발자 옵션 사용 여부','채널톡에서 확인할 수 없으므로 고객에게 직접 확인해 주세요.'],
+    ['detail','오류 내용과 발생 경로','어느 화면에서 어떤 조작 후 발생했는지 오류 문구와 함께 상세히 확인해 주세요.'],
+    ['reproduce','상담원 재현 여부','고객과 동일한 경로로 접속하여 증상 재현 여부를 확인해 주세요.']
+  ];
+  const template='사용자 고유번호:\n기기명:\n안드로이드 버전:\n앱 버전:\n개발자 옵션 체크 여부:\n접수 내용 (상세):\n상담사 증상 발현 여부:';
+  let root,unsubscribe=null,checked=new Set(),report={template,extra:''},guide=clone(defaults),draft=null,editing=false;
+  const isAdmin=()=>!!window.appErrorChecklistBridge?.isAdmin?.();
+  function load(){try{checked=new Set(JSON.parse(sessionStorage.getItem(CHECK_KEY)||'[]'));}catch{checked=new Set()}try{report={...report,...JSON.parse(sessionStorage.getItem(FORM_KEY)||'{}')};}catch{}}
+  function saveLocal(){sessionStorage.setItem(CHECK_KEY,JSON.stringify([...checked]));sessionStorage.setItem(FORM_KEY,JSON.stringify(report));}
+  function imageView(key,data){
+    if(data.image)return `<div class="aec-guide-image"><img src="${data.image}" alt="${esc(data.title)} 참고 이미지"></div>`;
+    return `<div class="aec-guide-empty"><span>이미지 준비 중</span><small>관리자 모드에서 캡처 이미지를 붙여넣을 수 있습니다.</small></div>`;
+  }
+  function guideCard(key,data){return `<article class="aec-guide-card"><header><h4>${esc(data.title)}</h4></header><div class="aec-guide-body"><div class="aec-path"><b>확인 경로</b><p>${esc(data.path)}</p></div><div class="aec-explain"><b>확인 방법</b><p>${esc(data.description)}</p></div>${imageView(key,data)}</div></article>`}
+  function editCard(key,data){return `<article class="aec-guide-card aec-edit-card"><header><h4>${esc(data.title)}</h4></header><div class="aec-guide-body"><label>확인 경로<textarea data-edit="${key}:path">${esc(data.path)}</textarea></label><label>확인 방법 설명<textarea data-edit="${key}:description">${esc(data.description)}</textarea></label><div class="aec-paste-zone" tabindex="0" data-paste="${key}">${data.image?`<img src="${data.image}" alt="${esc(data.title)} 편집 이미지">`:'<span>이 영역을 클릭한 뒤 캡처 이미지를 Ctrl+V로 붙여넣으세요.</span>'}</div><div class="aec-image-actions"><label>이미지 선택<input type="file" accept="image/*" data-file="${key}"></label>${data.image?`<button type="button" data-remove-image="${key}">이미지 삭제</button>`:''}</div></div></article>`}
+  function render(){
+    const done=items.filter(([id])=>checked.has(id)).length,rate=Math.round(done/items.length*100);
+    root.innerHTML=`<section class="aec"><header class="aec-hero"><div><p class="aec-kicker">APP ERROR CHECKLIST</p><h2>앱 오류 문의 접수 체크리스트</h2><p>필수 정보를 빠짐없이 확인하고 담당 부서에 전달할 접수 내용을 작성하세요.</p></div><button class="aec-reset" data-action="reset">체크 초기화</button></header>
+    <div class="aec-channel-note"><strong>채널톡 문의 시</strong> 기기명·안드로이드 버전·앱 버전은 채널톡에서 확인할 수 있습니다. 나머지 항목도 아래 체크리스트에 따라 확인해 주세요.</div>
+    <div class="aec-progress"><span><strong>${done}</strong> / ${items.length} 확인</span><span class="aec-bar"><i style="width:${rate}%"></i></span><b>${rate}%</b></div>
+    <section class="aec-checklist"><div class="aec-list-head"><strong>체크 항목</strong><strong>상담 안내 문구</strong></div>${items.map(([id,label,text])=>`<label class="aec-row ${checked.has(id)?'checked':''}"><span class="aec-row-check"><input type="checkbox" data-check="${id}" ${checked.has(id)?'checked':''}><strong>${label}</strong></span><span class="aec-row-guide">${text}</span></label>`).join('')}</section>
+    <section class="aec-report"><header><div><h3>담당 부서 접수 양식</h3><p>왼쪽 템플릿에 내용을 기재하고, 필요한 추가 사항은 오른쪽에 작성하세요.</p></div><button type="button" data-action="copy">전체 내용 복사</button></header><div class="aec-report-grid"><label><span>필수 접수 템플릿</span><textarea data-report="template">${esc(report.template)}</textarea></label><label><span>추가 작성 내용</span><textarea data-report="extra" placeholder="추가 오류 설명, 고객 요청 사항, 특이사항 등을 작성하세요.">${esc(report.extra)}</textarea></label></div></section>
+    <div class="aec-bottom"><article class="aec-decision crash"><h3>앱이 계속 비정상 종료됨</h3><p>정상 실행이 어려우면 <strong>앱 삭제 후 재설치</strong>를 안내합니다.</p></article><article class="aec-decision other"><h3>그 외 오류</h3><p>원인 확인을 위해 <strong>앱 데이터 삭제 또는 앱 삭제를 먼저 안내하지 않습니다.</strong></p></article></div>
+    <section class="aec-version"><header><div><h3>버전 및 기기 정보 확인 방법</h3><p>확인 경로와 화면 예시를 참고하여 고객 정보를 확인하세요.</p></div>${isAdmin()?`<button type="button" data-action="${editing?'save-guide':'edit-guide'}">${editing?'저장':'내용 수정'}</button>${editing?'<button type="button" class="secondary" data-action="cancel-guide">취소</button>':''}`:''}</header><div class="aec-version-grid">${editing?editCard('channel',draft.channel)+editCard('phone',draft.phone):guideCard('channel',guide.channel)+guideCard('phone',guide.phone)}</div></section></section>`;
+  }
+  function toast(message){const el=document.createElement('div');el.className='aec-toast';el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}
+  function copyText(text){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();return ok?Promise.resolve():Promise.reject()}
+  function combinedReport(){return `${report.template.trim()}${report.extra.trim()?`\n\n[추가 내용]\n${report.extra.trim()}`:''}`}
+  function readImage(file,key){if(!file||!isAdmin()||!editing)return;const reader=new FileReader();reader.onload=()=>compressImage(reader.result).then(data=>{draft[key].image=data;render()});reader.readAsDataURL(file)}
+  function compressImage(src){return new Promise(resolve=>{const image=new Image();image.onload=()=>{const max=1200,scale=Math.min(1,max/image.width,max/image.height),canvas=document.createElement('canvas');canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.76))};image.src=src})}
+  async function click(e){const button=e.target.closest('button');if(!button)return;const action=button.dataset.action;if(action==='reset'){checked.clear();saveLocal();render()}if(action==='copy')copyText(combinedReport()).then(()=>toast('접수 내용을 복사했습니다.')).catch(()=>toast('복사할 수 없습니다.'));if(action==='edit-guide'&&isAdmin()){draft=clone(guide);editing=true;render()}if(action==='cancel-guide'){draft=null;editing=false;render()}if(action==='save-guide'&&isAdmin()){button.disabled=true;button.textContent='저장 중…';try{await window.appErrorChecklistBridge.save(clone(draft));guide=clone(draft);editing=false;draft=null;render();toast('확인 방법을 저장했습니다.')}catch(error){button.disabled=false;button.textContent='저장';alert('저장하지 못했습니다. '+(error.message||error))}}if(button.dataset.removeImage&&editing&&isAdmin()){draft[button.dataset.removeImage].image='';render()}}
+  function input(e){if(e.target.dataset.report){report[e.target.dataset.report]=e.target.value;saveLocal()}if(e.target.dataset.edit&&editing&&isAdmin()){const[key,field]=e.target.dataset.edit.split(':');draft[key][field]=e.target.value}}
+  function change(e){if(e.target.dataset.check){e.target.checked?checked.add(e.target.dataset.check):checked.delete(e.target.dataset.check);saveLocal();render()}if(e.target.dataset.file)readImage(e.target.files?.[0],e.target.dataset.file)}
+  function paste(e){const zone=e.target.closest('[data-paste]');if(!zone||!editing||!isAdmin())return;const file=[...(e.clipboardData?.items||[])].find(item=>item.type.startsWith('image/'))?.getAsFile();if(file){e.preventDefault();readImage(file,zone.dataset.paste)}}
+  window.mountAppErrorChecklist=element=>{if(root&&root!==element)unsubscribe?.();root=element;load();root.onclick=click;root.oninput=input;root.onchange=change;root.onpaste=paste;unsubscribe=window.appErrorChecklistBridge?.subscribe?.(remote=>{guide={...clone(defaults),...clone(remote)};if(!editing)render()})||null;render()};
+})();

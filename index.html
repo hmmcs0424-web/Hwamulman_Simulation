@@ -8,6 +8,7 @@
 <link href="/faq-app.css?v=14" rel="stylesheet">
 <link href="/signup-guide.css?v=3" rel="stylesheet">
 <link href="/signup-checklist.css?v=1" rel="stylesheet">
+<link href="./app-error-checklist.css?v=5" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
@@ -67,9 +68,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .side-menu[data-page="simulator"],.side-menu[data-page="simulator"]:hover{color:#a78bfa}
 .side-menu[data-page="simulator"].active{color:#c4b5fd;background:#2e2550}
 .side-group .side-submenu:hover,.side-group .side-submenu.active{color:#a78bfa}
-.side-menu[data-page="signup"],.side-menu[data-page="membership"],.side-menu[data-page="profile"],
-.side-menu[data-page="signup"]:hover,.side-menu[data-page="membership"]:hover,.side-menu[data-page="profile"]:hover{color:#60a5fa}
-.side-menu[data-page="signup"].active,.side-menu[data-page="membership"].active,.side-menu[data-page="profile"].active{color:#93c5fd;background:#172d4d}
+.side-menu[data-page="signup"],.side-menu[data-page="membership"],.side-menu[data-page="profile"],.side-menu[data-page="appErrorChecklist"],
+.side-menu[data-page="signup"]:hover,.side-menu[data-page="membership"]:hover,.side-menu[data-page="profile"]:hover,.side-menu[data-page="appErrorChecklist"]:hover{color:#60a5fa}
+.side-menu[data-page="signup"].active,.side-menu[data-page="membership"].active,.side-menu[data-page="profile"].active,.side-menu[data-page="appErrorChecklist"].active{color:#93c5fd;background:#172d4d}
 #signupGroup .side-submenu:hover,#signupGroup .side-submenu.active{color:#60a5fa;background:#172d4d}
 .side-menu[data-page="notice"],.side-menu[data-page="notice"]:hover{color:#f87171}
 .side-menu[data-page="notice"].active{color:#fca5a5;background:#491f25}
@@ -586,6 +587,7 @@ textarea.form-input{resize:vertical;}
       </div>
       <button class="side-menu" type="button" data-page="membership"><span class="side-icon">Ⅱ</span><span class="side-label">일시정지/복구/탈퇴</span></button>
       <button class="side-menu" type="button" data-page="profile"><span class="side-icon">✎</span><span class="side-label">정보변경</span></button>
+      <button class="side-menu" type="button" data-page="appErrorChecklist"><span class="side-icon">⚠</span><span class="side-label">APP 오류 체크리스트</span></button>
       <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
       <button class="side-menu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
     </div>
@@ -1176,6 +1178,7 @@ textarea.form-input{resize:vertical;}
 <script type="module" src="/vendor/faq-app.js?v=16"></script>
 <script src="/vendor/signup-guide.js?v=3"></script>
 <script src="/vendor/signup-checklist.js?v=1"></script>
+<script src="./vendor/app-error-checklist.js?v=5"></script>
 <script src="/vendor/membership-guide.js?v=1"></script>
 <script src="/vendor/profile-guide.js?v=1"></script>
 <script>
@@ -1234,6 +1237,7 @@ const ADMIN_EMAIL_KEY = 'hmm-remembered-admin-email';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   signupChecklist: { title:'상담 체크리스트', desc:'신규가입 상담 중 안내 사항을 확인하며 체크할 수 있습니다.', html:'' },
+  appErrorChecklist: { title:'APP 오류 체크리스트', desc:'앱 오류 접수에 필요한 정보와 재현 결과를 순서대로 확인합니다.', html:'' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   profile: { title:'정보변경', desc:'회원 및 차량 정보 변경 절차를 정리하는 공간입니다.', html:'<h2>정보변경 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   notice: { title:'공지사항', desc:'업무 변경사항과 중요한 안내를 확인하는 공간입니다.', html:'<h2>공지사항</h2><p>등록된 공지사항이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1374,6 +1378,26 @@ function renderGuidePage() {
     document.getElementById('guideContent').innerHTML = '<div id="signupChecklistRoot"></div>';
     window.mountSignupChecklist?.(document.getElementById('signupChecklistRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
+  if(activePage === 'appErrorChecklist') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<div id="appErrorChecklistRoot"></div>';
+    const checklistRoot = document.getElementById('appErrorChecklistRoot');
+    if(window.mountAppErrorChecklist) {
+      window.mountAppErrorChecklist(checklistRoot);
+    } else {
+      checklistRoot.innerHTML = '<div style="padding:28px;border:1px solid #bfdbfe;border-radius:14px;background:#eff6ff;color:#1e40af;font-weight:700">체크리스트를 불러오는 중입니다…</div>';
+      const retryScript = document.createElement('script');
+      retryScript.src = './vendor/app-error-checklist.js?v=5-retry';
+      retryScript.onload = () => window.mountAppErrorChecklist?.(checklistRoot);
+      retryScript.onerror = () => { checklistRoot.innerHTML = '<div style="padding:28px;border:1px solid #fecaca;border-radius:14px;background:#fff1f2;color:#b91c1c"><strong>체크리스트 파일을 불러오지 못했습니다.</strong><br><span style="font-size:13px">Ctrl+F5로 새로고침한 후 다시 확인해 주세요.</span></div>'; };
+      document.head.appendChild(retryScript);
+    }
+    document.getElementById('guidePage').classList.remove('admin-editable');
     return;
   }
   if(activePage === 'membership') {
@@ -2872,6 +2896,42 @@ window.signupChecklistBridge = {
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'signupChecklist'), {
       title: data.title || '신규가입 안내 체크리스트',
       sections: data.sections,
+      updatedAt: firebaseFns.serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
+      updatedByName: currentAdminProfile?.name || '관리자'
+    }, {merge:true});
+  }
+};
+
+const appErrorChecklistListeners = new Set();
+let appErrorChecklistCache = null;
+let appErrorChecklistUnsubscribe = null;
+window.appErrorChecklistBridge = {
+  isAdmin: () => adminMode && !!firebaseAuth?.currentUser,
+  subscribe(callback) {
+    appErrorChecklistListeners.add(callback);
+    if(appErrorChecklistCache) callback(appErrorChecklistCache);
+    this.connect();
+    return () => appErrorChecklistListeners.delete(callback);
+  },
+  connect() {
+    if(!firebaseReady || !firestoreDb || appErrorChecklistUnsubscribe) return;
+    appErrorChecklistUnsubscribe = firebaseFns.onSnapshot(
+      firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'),
+      snapshot => {
+        const data = snapshot.exists() ? snapshot.data() : null;
+        if(!data?.channel || !data?.phone) return;
+        appErrorChecklistCache = {channel:data.channel, phone:data.phone};
+        appErrorChecklistListeners.forEach(callback => callback(appErrorChecklistCache));
+      },
+      error => console.error('APP 오류 체크리스트 구독 실패:', error)
+    );
+  },
+  async save(data) {
+    if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'), {
+      channel: data.channel,
+      phone: data.phone,
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
       updatedByName: currentAdminProfile?.name || '관리자'
