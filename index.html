@@ -8,9 +8,10 @@
 <link href="/faq-app.css?v=14" rel="stylesheet">
 <link href="/signup-guide.css?v=3" rel="stylesheet">
 <link href="/signup-checklist.css?v=2" rel="stylesheet">
-<link href="./app-error-checklist.css?v=5" rel="stylesheet">
+<link href="./app-error-checklist.css?v=6" rel="stylesheet">
 <style>
 .aec-list-head{position:relative}.aec-list-actions{position:absolute;right:10px;top:7px;display:flex;gap:6px}.aec-list-actions button{border:1px solid rgba(255,255,255,.55);border-radius:7px;padding:6px 10px;background:rgba(255,255,255,.16);color:#fff;font:700 12px inherit;cursor:pointer}.aec-list-actions button.secondary{background:#fff;color:#285fae}.aec-row-guide-edit{width:auto;min-height:76px;border:1px solid #93c5fd;resize:vertical;outline:none}.aec-row-guide-edit:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#fff}
+.aec-row-edit{cursor:default}.aec-item-label{width:100%;border:1px solid #93c5fd;border-radius:8px;padding:10px;font:700 14px inherit;outline:none}.aec-item-editor{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding-right:12px}.aec-item-editor button{border:1px solid #fecaca;border-radius:8px;padding:8px 10px;background:#fff1f2;color:#b91c1c;font:800 12px inherit;cursor:pointer}.aec-add-item{width:calc(100% - 24px);margin:12px;border:1px dashed #3b82f6;border-radius:9px;padding:11px;background:#eff6ff;color:#1d4ed8;font:800 13px inherit;cursor:pointer}
 @media(max-width:820px){.aec-list-actions{position:static;justify-content:flex-end;padding:8px 10px}.aec-row-guide-edit{width:calc(100% - 24px)}}
 </style>
 <style>
@@ -1182,7 +1183,7 @@ textarea.form-input{resize:vertical;}
 <script type="module" src="/vendor/faq-app.js?v=16"></script>
 <script src="/vendor/signup-guide.js?v=3"></script>
 <script src="/vendor/signup-checklist.js?v=2"></script>
-<script src="./vendor/app-error-checklist.js?v=5"></script>
+<script src="./vendor/app-error-checklist.js?v=6"></script>
 <script src="/vendor/membership-guide.js?v=1"></script>
 <script src="/vendor/profile-guide.js?v=1"></script>
 <script>
@@ -1396,7 +1397,7 @@ function renderGuidePage() {
     } else {
       checklistRoot.innerHTML = '<div style="padding:28px;border:1px solid #bfdbfe;border-radius:14px;background:#eff6ff;color:#1e40af;font-weight:700">체크리스트를 불러오는 중입니다…</div>';
       const retryScript = document.createElement('script');
-      retryScript.src = './vendor/app-error-checklist.js?v=5-retry';
+      retryScript.src = './vendor/app-error-checklist.js?v=6-retry';
       retryScript.onload = () => window.mountAppErrorChecklist?.(checklistRoot);
       retryScript.onerror = () => { checklistRoot.innerHTML = '<div style="padding:28px;border:1px solid #fecaca;border-radius:14px;background:#fff1f2;color:#b91c1c"><strong>체크리스트 파일을 불러오지 못했습니다.</strong><br><span style="font-size:13px">Ctrl+F5로 새로고침한 후 다시 확인해 주세요.</span></div>'; };
       document.head.appendChild(retryScript);
