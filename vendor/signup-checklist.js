@@ -112,7 +112,7 @@
   function renderEditor() {
     return `<section class="sc-wrap sc-admin">
       <header class="sc-admin-top">
-        <div><p>CHECKLIST EDITOR</p><h2>상담 체크리스트 관리</h2></div>
+        <div><p>CHECKLIST EDITOR</p><h2>상담 체크리스트 관리</h2><span>체크 항목과 상담 안내 문구를 수정하고, 항목을 추가·삭제할 수 있습니다.</span></div>
         <div><button type="button" data-action="cancel">취소</button><button class="primary" type="button" data-action="save">Firebase에 저장</button></div>
       </header>
       <label class="sc-title-field">체크리스트 제목<input data-title value="${esc(draft.title)}"></label>
