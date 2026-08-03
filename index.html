@@ -10,6 +10,10 @@
 <link href="/signup-checklist.css?v=1" rel="stylesheet">
 <link href="./app-error-checklist.css?v=5" rel="stylesheet">
 <style>
+.aec-list-head{position:relative}.aec-list-actions{position:absolute;right:10px;top:7px;display:flex;gap:6px}.aec-list-actions button{border:1px solid rgba(255,255,255,.55);border-radius:7px;padding:6px 10px;background:rgba(255,255,255,.16);color:#fff;font:700 12px inherit;cursor:pointer}.aec-list-actions button.secondary{background:#fff;color:#285fae}.aec-row-guide-edit{width:auto;min-height:76px;border:1px solid #93c5fd;resize:vertical;outline:none}.aec-row-guide-edit:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#fff}
+@media(max-width:820px){.aec-list-actions{position:static;justify-content:flex-end;padding:8px 10px}.aec-row-guide-edit{width:calc(100% - 24px)}}
+</style>
+<style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#FFB800;--bg:#111;--topnav-h:54px;--sidebar-w:228px;}
 
@@ -2920,8 +2924,8 @@ window.appErrorChecklistBridge = {
       firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'),
       snapshot => {
         const data = snapshot.exists() ? snapshot.data() : null;
-        if(!data?.channel || !data?.phone) return;
-        appErrorChecklistCache = {channel:data.channel, phone:data.phone};
+        if(!data) return;
+        appErrorChecklistCache = {channel:data.channel, phone:data.phone, items:data.items};
         appErrorChecklistListeners.forEach(callback => callback(appErrorChecklistCache));
       },
       error => console.error('APP 오류 체크리스트 구독 실패:', error)
@@ -2929,13 +2933,15 @@ window.appErrorChecklistBridge = {
   },
   async save(data) {
     if(!firebaseReady || !adminMode || !firebaseAuth?.currentUser) throw new Error('관리자 로그인이 필요합니다.');
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'), {
-      channel: data.channel,
-      phone: data.phone,
+    const payload = {
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid,
       updatedByName: currentAdminProfile?.name || '관리자'
-    }, {merge:true});
+    };
+    if(data.channel) payload.channel = data.channel;
+    if(data.phone) payload.phone = data.phone;
+    if(Array.isArray(data.items)) payload.items = data.items;
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'), payload, {merge:true});
   }
 };
 
