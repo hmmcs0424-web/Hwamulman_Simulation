@@ -2926,7 +2926,13 @@ window.appErrorChecklistBridge = {
       snapshot => {
         const data = snapshot.exists() ? snapshot.data() : null;
         if(!data) return;
-        appErrorChecklistCache = {channel:data.channel, phone:data.phone, items:data.items};
+        const items = Array.isArray(data.items)
+          ? data.items.map(item => Array.isArray(item)
+              ? item
+              : [String(item?.id || ''), String(item?.label || ''), String(item?.text || item?.script || '')])
+            .filter(([id, label]) => id && label)
+          : undefined;
+        appErrorChecklistCache = {channel:data.channel, phone:data.phone, items};
         appErrorChecklistListeners.forEach(callback => callback(appErrorChecklistCache));
       },
       error => console.error('APP 오류 체크리스트 구독 실패:', error)
@@ -2941,7 +2947,13 @@ window.appErrorChecklistBridge = {
     };
     if(data.channel) payload.channel = data.channel;
     if(data.phone) payload.phone = data.phone;
-    if(Array.isArray(data.items)) payload.items = data.items;
+    if(Array.isArray(data.items)) {
+      payload.items = data.items.map(([id, label, text]) => ({
+        id: String(id || ''),
+        label: String(label || ''),
+        text: String(text || '')
+      }));
+    }
     await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'guides', 'appErrorChecklist'), payload, {merge:true});
   }
 };
