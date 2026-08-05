@@ -2556,7 +2556,7 @@ function renderGuideEditor() {
   `;
 }
 
-function saveGuide() {
+async function saveGuide() {
   const st = cache[activeSec];
   st.flow.screens[st.cur].guide = {
     points: document.getElementById('editPoints').value.split('\n').map(s=>s.trim()).filter(Boolean),
@@ -2565,8 +2565,14 @@ function saveGuide() {
   };
   renderGuide(st.flow.screens[st.cur].guide);
   const btn = document.querySelector('#guideEditor .btn');
-  btn.textContent = '✓ 저장됨!';
-  setTimeout(()=>btn.textContent='저장', 1500);
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+  const saved = await saveSimulatorFlow(activeSec);
+  btn.disabled = false;
+  btn.textContent = saved ? '✓ 저장됨!' : '저장 실패';
+  setTimeout(() => {
+    if(btn.isConnected) btn.textContent = '저장';
+  }, 1500);
 }
 
 function addScreen() {
