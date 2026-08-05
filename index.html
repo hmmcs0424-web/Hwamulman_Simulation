@@ -83,6 +83,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .side-menu[data-page="notice"].active{color:#fca5a5;background:#491f25}
 .side-menu[data-page="faq"],.side-menu[data-page="faq"]:hover{color:#facc15}
 .side-menu[data-page="faq"].active{color:#fde047;background:#403610}
+.side-menu[data-page="contacts"],.side-menu[data-page="contacts"]:hover{color:#34d399}
+.side-menu[data-page="contacts"].active{color:#6ee7b7;background:#123c32}
+.admin-only-menu{display:none}.admin-only-menu.visible{display:flex}
 .sidebar.collapsed .sidebar-title,.sidebar.collapsed .side-label,.sidebar.collapsed .side-arrow,.sidebar.collapsed .side-submenus{display:none}
 .sidebar.collapsed .sidebar-head{justify-content:center;padding:0}.sidebar.collapsed .side-menu{justify-content:center;padding:0}
 .sidebar.collapsed .sidebar-nav{padding-left:10px;padding-right:10px}
@@ -97,6 +100,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .guide-content{font-size:15px;line-height:1.8;color:#333}.guide-content h2{font-size:20px;margin-bottom:12px}.guide-content p{margin-bottom:12px}.guide-content ul{padding-left:22px}
 .guide-editor{display:none}.guide-editor textarea{width:100%;min-height:280px;border:1px solid #ddd;border-radius:10px;padding:14px;font:14px/1.6 inherit;resize:vertical;outline:none}.guide-editor textarea:focus{border-color:var(--brand)}
 .guide-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.guide-save-note{font-size:12px;color:#888;margin-top:10px;text-align:right}
+.contacts-toolbar{display:flex;gap:10px;margin-bottom:16px}.contacts-search{flex:1;min-width:0;border:1px solid #d8d8df;border-radius:10px;padding:10px 12px;font:14px inherit;outline:none}.contacts-search:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.12)}
+.contacts-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.8fr);gap:18px}.contacts-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;align-content:start}.contact-card{border:1px solid #e3e5e8;border-radius:14px;background:#fff;padding:15px;box-shadow:0 2px 9px rgba(0,0,0,.04)}.contact-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.contact-company{font-size:12px;font-weight:800;color:#059669;margin-bottom:4px}.contact-name{font-size:17px;font-weight:800;color:#222}.contact-position{font-size:12px;color:#888;margin-left:5px}.contact-info{display:grid;gap:6px;margin-top:12px;font-size:13px}.contact-info a{color:#2563eb;text-decoration:none;word-break:break-all}.contact-memo{margin-top:11px;padding:9px;border-radius:8px;background:#f7f7f8;color:#666;font-size:12px;line-height:1.55;white-space:pre-wrap}.contact-card-image{width:100%;max-height:170px;object-fit:contain;margin-top:11px;border:1px solid #eee;border-radius:9px;background:#fafafa;cursor:zoom-in}.contact-actions{display:flex;gap:6px;margin-top:12px}.contact-editor{position:sticky;top:0;align-self:start;border:1px solid #dfe3e6;border-radius:14px;padding:17px;background:#f9fafb}.contact-editor h3{font-size:16px;margin:0 0 13px}.contact-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.contact-editor .form-row{margin:0 0 9px}.contact-editor-actions{display:flex;gap:7px;margin-top:12px}.contact-image-preview{display:none;width:100%;max-height:180px;object-fit:contain;border:1px solid #ddd;border-radius:9px;background:#fff;margin-top:8px}.contacts-empty{grid-column:1/-1;padding:50px 20px;text-align:center;color:#999;border:1px dashed #d7dadd;border-radius:13px}
+@media(max-width:960px){.contacts-layout{grid-template-columns:1fr}.contact-editor{position:static}}@media(max-width:600px){.contacts-toolbar{flex-direction:column}.contacts-list{grid-template-columns:1fr}.contact-editor-grid{grid-template-columns:1fr}}
 @media(max-width:760px){
   .guide-page{padding:14px 10px}
   .guide-page-header{flex-direction:column;gap:12px;margin-bottom:16px}
@@ -605,6 +611,7 @@ textarea.form-input{resize:vertical;}
       <button class="side-menu" type="button" data-page="appErrorChecklist"><span class="side-icon">⚠</span><span class="side-label">APP 오류 체크리스트</span></button>
       <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
       <button class="side-menu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
+      <button class="side-menu admin-only-menu" id="contactsMenu" type="button" data-page="contacts"><span class="side-icon">☎</span><span class="side-label">업무 연락처</span></button>
     </div>
   </aside>
 
@@ -1306,8 +1313,12 @@ const guidePages = {
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   profile: { title:'정보변경', desc:'회원 및 차량 정보 변경 절차를 정리하는 공간입니다.', html:'<h2>정보변경 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   notice: { title:'공지사항', desc:'업무 변경사항과 중요한 안내를 확인하는 공간입니다.', html:'<h2>공지사항</h2><p>등록된 공지사항이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
-  faq: { title:'FAQ', desc:'자주 묻는 질문과 답변을 정리하는 공간입니다.', html:'<h2>자주 묻는 질문</h2><p>등록된 질문과 답변이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' }
+  faq: { title:'FAQ', desc:'자주 묻는 질문과 답변을 정리하는 공간입니다.', html:'<h2>자주 묻는 질문</h2><p>등록된 질문과 답변이 없습니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
+  contacts: { title:'업무 연락처', desc:'업체 담당자 연락처와 명함을 관리자끼리 공유하는 공간입니다.', html:'' }
 };
+let businessContacts = [];
+let editingContactId = '';
+let unsubscribeBusinessContacts = null;
 
 function loadGuidePages() {
   try {
@@ -1494,6 +1505,15 @@ function renderGuidePage() {
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
     return;
   }
+  if(activePage === 'contacts') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    renderContactsPage();
+    document.getElementById('guidePage').classList.remove('admin-editable');
+    return;
+  }
   if(activePage === 'faq') {
     editingGuidePage = false;
     document.getElementById('guideEditorBox').style.display = 'none';
@@ -1508,6 +1528,165 @@ function renderGuidePage() {
   document.getElementById('guideEditorBox').style.display = editingGuidePage ? 'block' : 'none';
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
   if(editingGuidePage) document.getElementById('guideEditorInput').value = page.html;
+}
+
+function renderContactsPage() {
+  const content = document.getElementById('guideContent');
+  if(!adminMode) {
+    content.innerHTML = '<div class="contacts-empty">관리자 로그인이 필요한 메뉴입니다.</div>';
+    return;
+  }
+  content.innerHTML = `
+    <div class="contacts-toolbar">
+      <input class="contacts-search" id="contactsSearch" type="search" placeholder="업체명, 담당자, 전화번호 검색..." oninput="renderContactsList()">
+      <button class="btn btn-primary" type="button" onclick="resetContactEditor()">＋ 연락처 추가</button>
+    </div>
+    <div class="contacts-layout">
+      <div class="contacts-list" id="contactsList"><div class="contacts-empty">연락처를 불러오는 중입니다…</div></div>
+      <div class="contact-editor">
+        <h3 id="contactEditorTitle">새 연락처 추가</h3>
+        <div class="contact-editor-grid">
+          <div class="form-row"><div class="form-label">업체명 *</div><input class="form-input" id="contactCompany" maxlength="80"></div>
+          <div class="form-row"><div class="form-label">담당자 이름 *</div><input class="form-input" id="contactName" maxlength="40"></div>
+          <div class="form-row"><div class="form-label">직책/부서</div><input class="form-input" id="contactPosition" maxlength="60"></div>
+          <div class="form-row"><div class="form-label">전화번호</div><input class="form-input" id="contactPhone" type="tel" maxlength="30"></div>
+          <div class="form-row"><div class="form-label">이메일</div><input class="form-input" id="contactEmail" type="email" maxlength="120"></div>
+          <div class="form-row"><div class="form-label">업체 대표번호</div><input class="form-input" id="contactOfficePhone" type="tel" maxlength="30"></div>
+        </div>
+        <div class="form-row"><div class="form-label">메모</div><textarea class="form-input" id="contactMemo" rows="4" maxlength="1000"></textarea></div>
+        <div class="form-row"><div class="form-label">명함 사진</div><input class="form-input" id="contactCardFile" type="file" accept="image/*" onchange="previewContactCard(this.files?.[0])"><img class="contact-image-preview" id="contactImagePreview" alt="명함 미리보기"></div>
+        <div class="contact-editor-actions">
+          <button class="btn btn-primary" id="contactSaveBtn" type="button" onclick="saveBusinessContact()">저장</button>
+          <button class="btn btn-secondary" type="button" onclick="resetContactEditor()">입력 초기화</button>
+        </div>
+      </div>
+    </div>`;
+  editingContactId = '';
+  subscribeBusinessContacts();
+}
+
+function subscribeBusinessContacts() {
+  if(!firebaseReady || !adminMode) return;
+  if(unsubscribeBusinessContacts) unsubscribeBusinessContacts();
+  unsubscribeBusinessContacts = firebaseFns.onSnapshot(
+    firebaseFns.collection(firestoreDb,'businessContacts'),
+    snapshot => {
+      businessContacts = snapshot.docs.map(item=>({id:item.id,...item.data()}))
+        .sort((a,b)=>`${a.company||''} ${a.name||''}`.localeCompare(`${b.company||''} ${b.name||''}`,'ko'));
+      renderContactsList();
+    },
+    error => {
+      console.error('업무 연락처 로드 실패:',error);
+      const list=document.getElementById('contactsList');
+      if(list) list.innerHTML='<div class="contacts-empty">연락처를 불러오지 못했습니다. Firestore 권한과 연결 상태를 확인해 주세요.</div>';
+    }
+  );
+}
+
+function renderContactsList() {
+  const list = document.getElementById('contactsList');
+  if(!list) return;
+  const query = (document.getElementById('contactsSearch')?.value||'').trim().toLocaleLowerCase('ko-KR');
+  const contacts = businessContacts.filter(item => !query || `${item.company||''} ${item.name||''} ${item.position||''} ${item.phone||''} ${item.officePhone||''} ${item.email||''}`.toLocaleLowerCase('ko-KR').includes(query));
+  if(!contacts.length) {
+    list.innerHTML = `<div class="contacts-empty">${query?'검색 결과가 없습니다.':'등록된 업무 연락처가 없습니다.'}</div>`;
+    return;
+  }
+  list.innerHTML = contacts.map(item => {
+    const phoneHref=String(item.phone||'').replace(/[^+\d]/g,'');
+    const officeHref=String(item.officePhone||'').replace(/[^+\d]/g,'');
+    return `<article class="contact-card">
+      <div class="contact-card-head"><div><div class="contact-company">${esc(item.company||'')}</div><div class="contact-name">${esc(item.name||'')}<span class="contact-position">${esc(item.position||'')}</span></div></div></div>
+      <div class="contact-info">
+        ${item.phone?`<div>📱 <a href="tel:${esc(phoneHref)}">${esc(item.phone)}</a></div>`:''}
+        ${item.officePhone?`<div>☎ <a href="tel:${esc(officeHref)}">${esc(item.officePhone)}</a></div>`:''}
+        ${item.email?`<div>✉ <a href="mailto:${esc(item.email)}">${esc(item.email)}</a></div>`:''}
+      </div>
+      ${item.memo?`<div class="contact-memo">${esc(item.memo)}</div>`:''}
+      ${item.cardImageUrl?`<img class="contact-card-image" src="${esc(item.cardImageUrl)}" alt="${esc(item.company||'')} ${esc(item.name||'')} 명함" onclick="window.open(this.src,'_blank','noopener')">`:''}
+      <div class="contact-actions"><button class="btn btn-secondary btn-sm" onclick="editBusinessContact('${encodeURIComponent(item.id)}')">수정</button><button class="btn btn-danger btn-sm" onclick="deleteBusinessContact('${encodeURIComponent(item.id)}')">삭제</button></div>
+    </article>`;
+  }).join('');
+}
+
+function resetContactEditor() {
+  editingContactId='';
+  document.getElementById('contactEditorTitle').textContent='새 연락처 추가';
+  ['contactCompany','contactName','contactPosition','contactPhone','contactEmail','contactOfficePhone','contactMemo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('contactCardFile').value='';
+  const preview=document.getElementById('contactImagePreview');
+  preview.removeAttribute('src'); preview.style.display='none';
+  document.getElementById('contactCompany').focus();
+}
+
+function editBusinessContact(encodedId) {
+  const id=decodeURIComponent(encodedId);
+  const item=businessContacts.find(contact=>contact.id===id);
+  if(!item) return;
+  editingContactId=id;
+  document.getElementById('contactEditorTitle').textContent='연락처 수정';
+  const values={contactCompany:item.company,contactName:item.name,contactPosition:item.position,contactPhone:item.phone,contactEmail:item.email,contactOfficePhone:item.officePhone,contactMemo:item.memo};
+  Object.entries(values).forEach(([field,value])=>document.getElementById(field).value=value||'');
+  document.getElementById('contactCardFile').value='';
+  const preview=document.getElementById('contactImagePreview');
+  if(item.cardImageUrl){preview.src=item.cardImageUrl;preview.style.display='block'}else{preview.removeAttribute('src');preview.style.display='none'}
+  document.querySelector('.contact-editor')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function previewContactCard(file) {
+  const preview=document.getElementById('contactImagePreview');
+  if(!file){preview.style.display='none';return}
+  const url=URL.createObjectURL(file);
+  preview.onload=()=>URL.revokeObjectURL(url);
+  preview.src=url; preview.style.display='block';
+}
+
+async function uploadContactCard(file) {
+  const authorization=await assetAuthHeader();
+  const {upload}=await import('/vendor/vercel-blob-client.js');
+  const safeName=String(file.name||`card-${Date.now()}.png`).normalize('NFC').replace(/[\\/:*?"<>|]+/g,'_');
+  const result=await upload(`contact-card-images/${Date.now()}-${safeName}`,file,{access:'public',handleUploadUrl:'/api/assets/upload',headers:{authorization},multipart:file.size>4*1024*1024});
+  return result.url;
+}
+
+async function saveBusinessContact() {
+  if(!adminMode || !firebaseReady || !firebaseAuth?.currentUser) return alert('관리자 로그인이 필요합니다.');
+  const company=document.getElementById('contactCompany').value.trim();
+  const name=document.getElementById('contactName').value.trim();
+  if(!company||!name) return alert('업체명과 담당자 이름을 입력해 주세요.');
+  const button=document.getElementById('contactSaveBtn');
+  button.disabled=true;button.textContent='저장 중...';
+  try {
+    const existing=businessContacts.find(item=>item.id===editingContactId)||{};
+    const file=document.getElementById('contactCardFile').files?.[0];
+    const cardImageUrl=file ? await uploadContactCard(file) : (existing.cardImageUrl||'');
+    const id=editingContactId||`contact-${Date.now()}`;
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'businessContacts',id),{
+      company,name,
+      position:document.getElementById('contactPosition').value.trim(),
+      phone:document.getElementById('contactPhone').value.trim(),
+      email:document.getElementById('contactEmail').value.trim(),
+      officePhone:document.getElementById('contactOfficePhone').value.trim(),
+      memo:document.getElementById('contactMemo').value.trim(),
+      cardImageUrl,
+      createdAt:existing.createdAt||firebaseFns.serverTimestamp(),
+      updatedAt:firebaseFns.serverTimestamp(),
+      updatedBy:currentAdminProfile?.name||firebaseAuth.currentUser.email||firebaseAuth.currentUser.uid
+    },{merge:true});
+    resetContactEditor();
+  } catch(error) { alert('연락처를 저장하지 못했습니다: '+(error.message||error)); }
+  finally {button.disabled=false;button.textContent='저장'}
+}
+
+async function deleteBusinessContact(encodedId) {
+  if(!adminMode || !firebaseAuth?.currentUser) return;
+  const id=decodeURIComponent(encodedId);
+  const item=businessContacts.find(contact=>contact.id===id);
+  if(!item || !confirm(`${item.company} ${item.name} 연락처를 삭제할까요?`)) return;
+  try {
+    await firebaseFns.deleteDoc(firebaseFns.doc(firestoreDb,'businessContacts',id));
+    if(editingContactId===id) resetContactEditor();
+  } catch(error) { alert('연락처를 삭제하지 못했습니다: '+(error.message||error)); }
 }
 
 function noticeSearchText(post) {
@@ -2645,6 +2824,17 @@ function syncAdminUI() {
   const btn = document.getElementById('topAdminBtn');
   const counselorBtn = document.getElementById('topCounselorBtn');
   const unregCard = document.getElementById('unregCard');
+  const contactsMenu = document.getElementById('contactsMenu');
+  contactsMenu?.classList.toggle('visible',adminMode);
+  if(!adminMode && unsubscribeBusinessContacts) {
+    unsubscribeBusinessContacts();
+    unsubscribeBusinessContacts=null;
+    businessContacts=[];
+  }
+  if(!adminMode && activePage==='contacts') {
+    setWorkspacePage('simulator');
+    return;
+  }
   btn.classList.toggle('on', adminMode);
   btn.textContent = adminMode
     ? `🔓 ${currentAdminProfile?.name || '관리자'} · 로그아웃`

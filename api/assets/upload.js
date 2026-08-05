@@ -8,13 +8,14 @@ function validatePathname(pathname) {
   const normalized = String(pathname || '').replace(/\\/g, '/');
   const parts = normalized.split('/').filter(Boolean);
   const isAnnouncement = parts.length >= 2 && parts[0] === 'announcement-images';
+  const isContactCard = parts.length >= 2 && parts[0] === 'contact-card-images';
   const isSimulator = (
     parts.length >= 3 &&
     parts[0] === 'simulator-images' &&
     ALLOWED_PREFIXES.has(parts[1])
   );
   if (
-    (!isAnnouncement && !isSimulator) ||
+    (!isAnnouncement && !isContactCard && !isSimulator) ||
     parts.some(part => part === '.' || part === '..')
   ) {
     throw new HttpError(400, '허용되지 않은 이미지 경로입니다.');
