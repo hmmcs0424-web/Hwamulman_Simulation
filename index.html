@@ -725,7 +725,7 @@ textarea.form-input{resize:vertical;}
     </div>
     <div class="panel-card">
       <div class="card-title">상담 가이드</div>
-      <div id="guideContent"></div>
+      <div id="simulatorGuideContent"></div>
     </div>
     <div class="panel-card" id="adminPanel" style="display:none">
       <div class="admin-badge">🔧 관리자 모드</div>
@@ -2292,7 +2292,7 @@ function renderList() {
 // GUIDE
 // ═══════════════════════════════════════════
 function renderGuide(g) {
-  const el = document.getElementById('guideContent');
+  const el = document.getElementById('simulatorGuideContent');
   if(!g) { el.innerHTML = '<div class="guide-empty">가이드 없음</div>'; return; }
   let html = '';
   if(g.points?.length) html += '<ul class="guide-points">' + g.points.map(p=>`<li>${esc(p)}</li>`).join('') + '</ul>';
