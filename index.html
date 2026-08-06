@@ -161,6 +161,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .layout-draw-overlay{display:none;position:absolute;inset:0;z-index:24;cursor:crosshair;background:rgba(255,255,255,.08);touch-action:none}
 .layout-draw-overlay.active{display:block}.layout-draw-rect{display:none;position:absolute;border:2px solid #f59e0b;background:rgba(245,158,11,.22);pointer-events:none}
 .layout-draw-help{position:absolute;z-index:2;left:50%;top:10px;transform:translateX(-50%);padding:6px 10px;border-radius:999px;background:rgba(17,24,39,.88);color:#fff;font-size:11px;font-weight:700;white-space:nowrap;pointer-events:none}
+.layout-saved-region{display:none;position:absolute;z-index:23;left:0;right:0;pointer-events:none;border:2px dashed #f59e0b;background:rgba(245,158,11,.16);box-sizing:border-box}
+.layout-saved-region.visible{display:block}.layout-saved-region::after{position:absolute;left:5px;top:5px;padding:3px 6px;border-radius:4px;background:#f59e0b;color:#fff;font-size:10px;font-weight:800;white-space:nowrap}
+.layout-saved-region.fixed-top::after{content:'상단 고정 영역'}.layout-saved-region.fixed-bottom::after{content:'하단 고정 영역';top:auto;bottom:5px}.layout-saved-region.ad-region::after{content:'광고 영역'}
 .layout-choice-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.layout-choice-row .btn.active{outline:2px solid #1d4ed8;outline-offset:1px}
 .layout-selection-status{min-height:34px;padding:8px 10px;border-radius:7px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:11px;line-height:1.5}
 .popup-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:30;cursor:pointer;}
@@ -650,12 +653,14 @@ textarea.form-input{resize:vertical;}
       </div>
     </div>
     <div class="content-area" id="contentArea">
-      <div class="phone-fixed-header" id="phoneFixedHeader"><img id="phoneFixedHeaderImg" alt="고정 화면"><div class="hotspot-layer" id="phoneFixedHotspotLayer"></div></div>
+      <div class="phone-fixed-header" id="phoneFixedHeader"><img id="phoneFixedHeaderImg" alt="상단 고정 화면"><div class="hotspot-layer" id="phoneFixedHotspotLayer"></div></div>
+      <div class="phone-fixed-header" id="phoneFixedFooter"><img id="phoneFixedFooterImg" alt="하단 고정 화면"><div class="hotspot-layer" id="phoneFixedFooterHotspotLayer"></div></div>
       <div class="phone-scroll-viewport" id="phoneScrollViewport">
         <div class="image-wrapper" id="imageWrapper">
           <img class="screen-image" id="screenImg" alt="화면">
           <div class="hotspot-layer" id="hotspotLayer"></div>
           <div class="draw-overlay" id="drawOverlay"><div class="draw-rect" id="drawRect"></div></div>
+          <div class="layout-saved-region fixed-top" id="phoneSavedFixedTop"></div><div class="layout-saved-region fixed-bottom" id="phoneSavedFixedBottom"></div><div class="layout-saved-region ad-region" id="phoneSavedAd"></div>
           <div class="layout-draw-overlay" id="phoneLayoutDrawOverlay"><div class="layout-draw-help" id="phoneLayoutDrawHelp"></div><div class="layout-draw-rect"></div></div>
         </div>
       </div>
@@ -721,6 +726,7 @@ textarea.form-input{resize:vertical;}
           <div class="chat-scroll-layer" id="chatScrollLayer" style="display:none"></div>
           <div class="chat-overlay-layer" id="chatOverlayLayer"></div>
           <div class="draw-overlay" id="pcDrawOverlay"><div class="draw-rect" id="pcDrawRect"></div></div>
+          <div class="layout-saved-region fixed-top" id="pcSavedFixedTop"></div><div class="layout-saved-region fixed-bottom" id="pcSavedFixedBottom"></div><div class="layout-saved-region ad-region" id="pcSavedAd"></div>
           <div class="layout-draw-overlay" id="pcLayoutDrawOverlay"><div class="layout-draw-help" id="pcLayoutDrawHelp"></div><div class="layout-draw-rect"></div></div>
         </div>
         <button class="chat-replay-btn" id="chatReplayBtn" onclick="replayOverlays()">▶ 다시 재생</button>
@@ -782,7 +788,7 @@ textarea.form-input{resize:vertical;}
         </div>
         <div class="layout-selection-status" id="phoneLayoutSelectionStatus"></div>
         <div style="display:none">
-          <input id="phoneFixedTop" type="number"><input id="phoneFixedEdge" value="top">
+          <input id="phoneFixedTop" type="number"><input id="phoneFixedBottom" type="number">
           <input class="form-input" id="phoneAdTop" type="number" min="0" max="100" step="0.1" placeholder="top">
           <input class="form-input" id="phoneAdLeft" type="number" min="0" max="100" step="0.1" placeholder="left">
           <input class="form-input" id="phoneAdWidth" type="number" min="1" max="100" step="0.1" placeholder="width">
@@ -2263,27 +2269,27 @@ function renderPhoneScreen(scr) {
   viewport.dataset.minScroll = '0';
   viewport.scrollTop = 0;
   document.getElementById('phoneFixedHeader').classList.remove('active');
+  document.getElementById('phoneFixedFooter').classList.remove('active');
   clearPhoneAdCarousel();
   img.src = '';
   img.onload = () => {
-    const fixedPercent = Math.max(0, Math.min(80, Number(scr.phoneLayout?.fixedPercent ?? scr.phoneLayout?.fixedTopPercent)||0));
-    const fixedEdge = scr.phoneLayout?.fixedEdge === 'bottom' ? 'bottom' : 'top';
-    const fixedHeight = Math.round(ca.clientHeight * fixedPercent / 100);
-    const fixedHeader = document.getElementById('phoneFixedHeader');
-    const fixedImg = document.getElementById('phoneFixedHeaderImg');
-    fixedHeader.classList.toggle('active', fixedHeight>0);
-    fixedHeader.style.height = fixedHeight + 'px';
-    fixedHeader.style.top = fixedEdge === 'top' ? '0' : 'auto';
-    fixedHeader.style.bottom = fixedEdge === 'bottom' ? '0' : 'auto';
-    fixedImg.src = scr.image;
-    fixedImg.style.transform = fixedEdge === 'bottom' ? `translateY(calc(${fixedHeight}px - 100%))` : '';
-    renderPhoneFixedHotspots(scr.hotspots||[], img.getBoundingClientRect().height, fixedHeight, fixedEdge);
-    viewport.style.top = fixedEdge === 'top' ? fixedHeight + 'px' : '0px';
-    viewport.style.bottom = fixedEdge === 'bottom' ? fixedHeight + 'px' : '0px';
-    viewport.scrollTop = fixedEdge === 'top' ? fixedHeight : 0;
-    viewport.dataset.minScroll = String(fixedEdge === 'top' ? fixedHeight : 0);
-    const isLongImage = img.getBoundingClientRect().height > viewport.clientHeight + fixedHeight + 1;
-    viewport.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage || fixedHeight>0);
+    const layout = scr.phoneLayout || {};
+    const legacyPercent = Number(layout.fixedPercent)||0;
+    const topPercent = Math.max(0,Math.min(100,Number(layout.fixedTopPercent ?? (layout.fixedEdge!=='bottom'?legacyPercent:0))||0));
+    const bottomPercent = Math.max(0,Math.min(100,Number(layout.fixedBottomPercent ?? (layout.fixedEdge==='bottom'?legacyPercent:0))||0));
+    const imageHeight = img.getBoundingClientRect().height;
+    let topHeight = Math.round(imageHeight*topPercent/100);
+    let bottomHeight = Math.round(imageHeight*bottomPercent/100);
+    const maxFixedTotal = Math.max(0,ca.clientHeight-60);
+    if(topHeight+bottomHeight>maxFixedTotal && topHeight+bottomHeight){const ratio=maxFixedTotal/(topHeight+bottomHeight);topHeight=Math.round(topHeight*ratio);bottomHeight=Math.round(bottomHeight*ratio);}
+    configurePhoneFixedRegion('top',scr,topHeight,imageHeight);
+    configurePhoneFixedRegion('bottom',scr,bottomHeight,imageHeight);
+    viewport.style.top = topHeight + 'px';
+    viewport.style.bottom = bottomHeight + 'px';
+    viewport.scrollTop = topHeight;
+    viewport.dataset.minScroll = String(topHeight);
+    const isLongImage = imageHeight > viewport.clientHeight + topHeight + bottomHeight + 1;
+    viewport.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage || topHeight>0 || bottomHeight>0);
     renderHotspots('hotspotLayer', scr.hotspots||[], false);
     renderPhoneAdCarousel(scr);
   };
@@ -2291,6 +2297,15 @@ function renderPhoneScreen(scr) {
   img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
   if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function configurePhoneFixedRegion(edge,scr,fixedHeight,imageHeight) {
+  const top = edge==='top', region=document.getElementById(top?'phoneFixedHeader':'phoneFixedFooter');
+  const fixedImg=document.getElementById(top?'phoneFixedHeaderImg':'phoneFixedFooterImg');
+  region.classList.toggle('active',fixedHeight>0);
+  region.style.height=fixedHeight+'px'; region.style.top=top?'0':'auto'; region.style.bottom=top?'auto':'0';
+  fixedImg.src=scr.image; fixedImg.style.transform=top?'':`translateY(${fixedHeight-imageHeight}px)`;
+  renderPhoneFixedHotspots(scr.hotspots||[],imageHeight,fixedHeight,edge,top?'phoneFixedHotspotLayer':'phoneFixedFooterHotspotLayer');
 }
 
 function setupPhoneImageScroll() {
@@ -2325,8 +2340,8 @@ function clearPhoneAdCarousel() {
   document.getElementById('phoneAdCarousel')?.remove();
 }
 
-function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='top') {
-  const layer = document.getElementById('phoneFixedHotspotLayer');
+function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='top',layerId='phoneFixedHotspotLayer') {
+  const layer = document.getElementById(layerId);
   layer.innerHTML = '';
   layer.style.height = imageHeight + 'px';
   layer.style.transform = fixedEdge === 'bottom' ? `translateY(${fixedHeight-imageHeight}px)` : '';
@@ -2567,8 +2582,9 @@ function refreshHotspotLayer() {
   renderHotspots(layerId, scr.hotspots || [], false);
   if(SECS[activeSec].type==='app') {
     const img=document.getElementById('screenImg');
-    const fixed=document.getElementById('phoneFixedHeader');
-    renderPhoneFixedHotspots(scr.hotspots||[],img.getBoundingClientRect().height,fixed.classList.contains('active')?fixed.clientHeight:0);
+    const imageHeight=img.getBoundingClientRect().height, top=document.getElementById('phoneFixedHeader'), bottom=document.getElementById('phoneFixedFooter');
+    renderPhoneFixedHotspots(scr.hotspots||[],imageHeight,top.classList.contains('active')?top.clientHeight:0,'top','phoneFixedHotspotLayer');
+    renderPhoneFixedHotspots(scr.hotspots||[],imageHeight,bottom.classList.contains('active')?bottom.clientHeight:0,'bottom','phoneFixedFooterHotspotLayer');
   }
   // 팝업 레이어도 갱신
   if(document.getElementById('popupOverlay').classList.contains('active')) {
@@ -2849,6 +2865,7 @@ function exitAdmin() {
   adminMode = false;
   currentAdminProfile=null;
   syncAdminUI();
+  document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
   syncAccessGate();
 }
 
@@ -2983,8 +3000,9 @@ function renderPhoneLayoutEditor() {
   if(!show) return;
   const layout = cache[activeSec].flow.screens?.[cache[activeSec].cur]?.phoneLayout || {};
   const ad = layout.adCarousel || {};
-  document.getElementById('phoneFixedTop').value = Number(layout.fixedPercent ?? layout.fixedTopPercent)||'';
-  document.getElementById('phoneFixedEdge').value = layout.fixedEdge === 'bottom' ? 'bottom' : 'top';
+  const legacyPercent=Number(layout.fixedPercent)||0;
+  document.getElementById('phoneFixedTop').value = Number(layout.fixedTopPercent ?? (layout.fixedEdge!=='bottom'?legacyPercent:0))||'';
+  document.getElementById('phoneFixedBottom').value = Number(layout.fixedBottomPercent ?? (layout.fixedEdge==='bottom'?legacyPercent:0))||'';
   document.getElementById('phoneAdTop').value = Number(ad.top)||'';
   document.getElementById('phoneAdLeft').value = Number(ad.left)||'';
   document.getElementById('phoneAdWidth').value = Number(ad.width)||'';
@@ -3022,14 +3040,25 @@ function setupLayoutDrawing() {
     const rect=overlay.querySelector('.layout-draw-rect');
     overlay.addEventListener('pointerdown',e=>{ if(!layoutDrawing) return; const b=overlay.getBoundingClientRect(); layoutDrawing.start={x:Math.max(0,Math.min(b.width,e.clientX-b.left)),y:Math.max(0,Math.min(b.height,e.clientY-b.top))}; overlay.setPointerCapture(e.pointerId); e.preventDefault(); });
     overlay.addEventListener('pointermove',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)); const mode=layoutDrawing.mode; let l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(mode==='fixed-top'){l=0;t=0;w=b.width;h=Math.max(layoutDrawing.start.y,y)} if(mode==='fixed-bottom'){l=0;t=Math.min(layoutDrawing.start.y,y);w=b.width;h=b.height-t} rect.style.cssText=`display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px`; });
-    overlay.addEventListener('pointerup',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)), mode=layoutDrawing.mode; if(mode==='ad'){ const l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(w>5&&h>5){document.getElementById('phoneAdLeft').value=(l/b.width*100).toFixed(1);document.getElementById('phoneAdTop').value=(t/b.height*100).toFixed(1);document.getElementById('phoneAdWidth').value=(w/b.width*100).toFixed(1);document.getElementById('phoneAdHeight').value=(h/b.height*100).toFixed(1);}} else { const h=mode==='fixed-top'?Math.max(layoutDrawing.start.y,y):b.height-Math.min(layoutDrawing.start.y,y); document.getElementById('phoneFixedTop').value=(h/b.height*100).toFixed(1);document.getElementById('phoneFixedEdge').value=mode==='fixed-bottom'?'bottom':'top'; } cancelLayoutDraw(); updateLayoutSelectionStatus(); });
+    overlay.addEventListener('pointerup',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)), mode=layoutDrawing.mode; if(mode==='ad'){ const l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(w>5&&h>5){document.getElementById('phoneAdLeft').value=(l/b.width*100).toFixed(1);document.getElementById('phoneAdTop').value=(t/b.height*100).toFixed(1);document.getElementById('phoneAdWidth').value=(w/b.width*100).toFixed(1);document.getElementById('phoneAdHeight').value=(h/b.height*100).toFixed(1);}} else { const h=mode==='fixed-top'?Math.max(layoutDrawing.start.y,y):b.height-Math.min(layoutDrawing.start.y,y); document.getElementById(mode==='fixed-bottom'?'phoneFixedBottom':'phoneFixedTop').value=(h/b.height*100).toFixed(1); } cancelLayoutDraw(); updateLayoutSelectionStatus(); });
   });
 }
 function updateLayoutSelectionStatus(){
   const el=document.getElementById('phoneLayoutSelectionStatus'); if(!el)return;
-  const fixed=Number(document.getElementById('phoneFixedTop').value)||0, edge=document.getElementById('phoneFixedEdge').value==='bottom'?'하단':'상단';
+  const fixedTop=Number(document.getElementById('phoneFixedTop').value)||0, fixedBottom=Number(document.getElementById('phoneFixedBottom').value)||0;
   const aw=Number(document.getElementById('phoneAdWidth').value)||0, ah=Number(document.getElementById('phoneAdHeight').value)||0;
-  el.textContent=`고정 영역: ${fixed?`${edge} ${fixed.toFixed(1)}%`:'선택 안 함'} · 광고 영역: ${aw&&ah?`${aw.toFixed(1)}% × ${ah.toFixed(1)}%`:'선택 안 함'}`;
+  el.textContent=`상단 고정: ${fixedTop?`${fixedTop.toFixed(1)}%`:'선택 안 함'} · 하단 고정: ${fixedBottom?`${fixedBottom.toFixed(1)}%`:'선택 안 함'} · 광고 영역: ${aw&&ah?`${aw.toFixed(1)}% × ${ah.toFixed(1)}%`:'선택 안 함'}`;
+  renderSavedLayoutRegions();
+}
+
+function renderSavedLayoutRegions(){
+  const pc=SECS[activeSec]?.type==='pc', prefix=pc?'pc':'phone';
+  const top=Number(document.getElementById('phoneFixedTop').value)||0, bottom=Number(document.getElementById('phoneFixedBottom').value)||0;
+  const adTop=Number(document.getElementById('phoneAdTop').value)||0, adLeft=Number(document.getElementById('phoneAdLeft').value)||0, adWidth=Number(document.getElementById('phoneAdWidth').value)||0, adHeight=Number(document.getElementById('phoneAdHeight').value)||0;
+  const set=(id,show,css)=>{const el=document.getElementById(id);if(!el)return;el.classList.toggle('visible',adminMode&&show);if(show)Object.assign(el.style,css)};
+  set(prefix+'SavedFixedTop',top>0,{top:'0',bottom:'auto',height:top+'%'});
+  set(prefix+'SavedFixedBottom',bottom>0,{top:'auto',bottom:'0',height:bottom+'%'});
+  set(prefix+'SavedAd',adWidth>0&&adHeight>0,{top:adTop+'%',left:adLeft+'%',right:'auto',bottom:'auto',width:adWidth+'%',height:adHeight+'%'});
 }
 
 function phoneLayoutNumber(id,min,max) {
@@ -3051,11 +3080,11 @@ async function savePhoneLayout() {
     images,
   };
   scr.phoneLayout = {
-    fixedPercent:phoneLayoutNumber('phoneFixedTop',0,80),
-    fixedEdge:document.getElementById('phoneFixedEdge').value === 'bottom' ? 'bottom' : 'top',
+    fixedTopPercent:phoneLayoutNumber('phoneFixedTop',0,100),
+    fixedBottomPercent:phoneLayoutNumber('phoneFixedBottom',0,100),
     adCarousel:images.length && adCarousel.width && adCarousel.height ? adCarousel : null,
   };
-  if(scr.phoneLayout.fixedPercent || scr.phoneLayout.adCarousel) scr.type = 'scroll';
+  if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel) scr.type = 'scroll';
   renderScreen(activeSec,st.cur);
   await saveSimulatorFlow(activeSec);
 }
