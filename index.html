@@ -166,7 +166,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .layout-saved-region.fixed-top::after{content:'상단 고정 영역'}.layout-saved-region.fixed-bottom::after{content:'하단 고정 영역';top:auto;bottom:5px}.layout-saved-region.ad-region::after{content:'광고 영역'}
 .layout-choice-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.layout-choice-row .btn.active{outline:2px solid #1d4ed8;outline-offset:1px}
 .layout-selection-status{min-height:34px;padding:8px 10px;border-radius:7px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:11px;line-height:1.5}
-.ad-image-picker{width:100%;min-height:92px;border:1px solid #ddd;border-radius:7px;padding:5px;background:#fff;font:11px inherit}.ad-slide-list{display:flex;flex-direction:column;gap:5px;margin-top:7px}.ad-slide-item{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #e5e7eb;border-radius:7px;background:#fafafa}.ad-slide-item img{width:42px;height:30px;object-fit:cover;border-radius:4px}.ad-slide-item span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.ad-slide-item button{border:0;border-radius:5px;padding:4px 7px;cursor:pointer}
+.ad-image-picker{width:100%;min-height:92px;border:1px solid #ddd;border-radius:7px;padding:5px;background:#fff;font:11px inherit}.ad-slide-list{display:flex;flex-direction:column;gap:5px;margin-top:7px}.ad-slide-item{display:grid;grid-template-columns:42px minmax(0,1fr) auto auto auto;align-items:center;gap:6px;padding:6px;border:1px solid #e5e7eb;border-radius:7px;background:#fafafa}.ad-slide-item img{width:42px;height:48px;object-fit:cover;border-radius:4px;grid-row:span 2}.ad-slide-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.ad-slide-item input{grid-column:2/-1;min-width:0;border:1px solid #d1d5db;border-radius:5px;padding:5px 7px;font:11px inherit}.ad-slide-item button{border:0;border-radius:5px;padding:4px 7px;cursor:pointer}
 .popup-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:30;cursor:pointer;}
 .popup-overlay.active{display:flex;align-items:flex-end;}
 .popup-image-wrap{width:100%;cursor:auto;position:relative;}
@@ -806,6 +806,7 @@ textarea.form-input{resize:vertical;}
           <div class="layout-choice-row"><button class="btn btn-secondary btn-sm" type="button" onclick="addSelectedAdImages()">선택 이미지 추가</button><button class="btn btn-secondary btn-sm" type="button" onclick="refreshAdImagePicker()">목록 새로고침</button><button class="btn btn-secondary btn-sm" type="button" onclick="openAssetManager()">이미지 보관함 열기</button></div>
           <div class="ad-slide-list" id="phoneAdSlideList"></div>
           <textarea id="phoneAdImages" style="display:none"></textarea>
+          <textarea id="phoneAdLinks" style="display:none"></textarea>
         </div>
         <div class="btn-row">
           <button class="btn btn-primary btn-sm" onclick="savePhoneLayout()">저장</button>
@@ -2376,6 +2377,7 @@ function renderPhoneAdCarousel(scr) {
   clearPhoneAdCarousel();
   const ad = scr?.phoneLayout?.adCarousel;
   const images = Array.isArray(ad?.images) ? ad.images.filter(Boolean) : [];
+  const links = Array.isArray(ad?.links) ? ad.links : [];
   if(!images.length || !(Number(ad.width)>0) || !(Number(ad.height)>0)) return;
   const wrapper = document.getElementById('imageWrapper');
   const carousel = document.createElement('div');
@@ -2384,9 +2386,10 @@ function renderPhoneAdCarousel(scr) {
   carousel.style.cssText += `top:${Number(ad.top)||0}%;left:${Number(ad.left)||0}%;width:${Number(ad.width)}%;height:${Number(ad.height)}%;`;
   const track = document.createElement('div');
   track.className = 'phone-ad-track';
-  images.forEach(src => {
+  images.forEach((src,index) => {
     const slide = document.createElement('div');
     slide.className = 'phone-ad-slide';
+    slide.dataset.link = links[index] || '';
     const slideImg = document.createElement('img');
     slideImg.src = src;
     slideImg.alt = '';
@@ -2417,6 +2420,7 @@ function renderPhoneAdCarousel(scr) {
     const dx = event.clientX-drag.x;
     const dy = event.clientY-drag.y;
     if(Math.abs(dx)>24 && Math.abs(dx)>Math.abs(dy)) show(current + (dx<0?1:-1));
+    else if(Math.abs(dx)<7 && Math.abs(dy)<7) openAdSlideLink(links[current]);
     drag = null;
     carousel.classList.remove('dragging');
   });
@@ -2424,6 +2428,16 @@ function renderPhoneAdCarousel(scr) {
   carousel.append(track,dots);
   wrapper.appendChild(carousel);
   show(0);
+}
+
+function openAdSlideLink(value) {
+  const link = String(value||'').trim();
+  if(!link) return;
+  try {
+    const url = new URL(link,location.href);
+    if(!['http:','https:'].includes(url.protocol)) return alert('광고 링크는 http 또는 https 주소만 사용할 수 있습니다.');
+    window.open(url.href,'_blank','noopener,noreferrer');
+  } catch { alert('광고 링크 주소를 확인해 주세요.'); }
 }
 
 function renderPcScreen(scr) {
@@ -3017,6 +3031,7 @@ function renderPhoneLayoutEditor() {
   document.getElementById('phoneAdWidth').value = Number(ad.width)||'';
   document.getElementById('phoneAdHeight').value = Number(ad.height)||'';
   document.getElementById('phoneAdImages').value = Array.isArray(ad.images) ? ad.images.join('\n') : '';
+  document.getElementById('phoneAdLinks').value = Array.isArray(ad.links) ? ad.links.join('\n') : '';
   renderAdSlideList();
   refreshAdImagePicker();
   updateLayoutSelectionStatus();
@@ -3030,7 +3045,9 @@ async function refreshAdImagePicker(){
   picker.innerHTML=images.length?images.map(url=>`<option value="${esc(url)}">${esc(assetDisplayName(url))}</option>`).join(''):'<option disabled>이미지 보관함에 이미지를 먼저 올려주세요</option>';
 }
 function adImageValues(){return document.getElementById('phoneAdImages').value.split('\n').map(v=>v.trim()).filter(Boolean)}
-function setAdImageValues(images){document.getElementById('phoneAdImages').value=Array.from(new Set(images)).join('\n');renderAdSlideList()}
+function adLinkValues(){return document.getElementById('phoneAdLinks').value.split('\n')}
+function setAdSlideValues(images,links=[]){document.getElementById('phoneAdImages').value=images.join('\n');document.getElementById('phoneAdLinks').value=images.map((_,i)=>links[i]||'').join('\n');renderAdSlideList()}
+function setAdImageValues(images){const current=adImageValues(),links=adLinkValues();const unique=Array.from(new Set(images));setAdSlideValues(unique,unique.map(image=>{const index=current.indexOf(image);return index>=0?links[index]||'':''}))}
 function addSelectedAdImages(){
   const picker=document.getElementById('phoneAdImagePicker');
   const selected=Array.from(picker.selectedOptions).map(option=>option.value).filter(Boolean);
@@ -3039,11 +3056,12 @@ function addSelectedAdImages(){
 }
 function renderAdSlideList(){
   const list=document.getElementById('phoneAdSlideList'); if(!list)return;
-  const images=adImageValues();
-  list.innerHTML=images.length?images.map((url,index)=>`<div class="ad-slide-item"><img src="${esc(url)}" alt=""><span>${index+1}. ${esc(assetDisplayName(url))}</span><button type="button" onclick="moveAdImage(${index},-1)" ${index===0?'disabled':''}>↑</button><button type="button" onclick="moveAdImage(${index},1)" ${index===images.length-1?'disabled':''}>↓</button><button type="button" onclick="removeAdImage(${index})">삭제</button></div>`).join(''):'<div style="color:#999;font-size:11px">추가된 광고 이미지가 없습니다.</div>';
+  const images=adImageValues(),links=adLinkValues();
+  list.innerHTML=images.length?images.map((url,index)=>`<div class="ad-slide-item"><img src="${esc(url)}" alt=""><span>${index+1}. ${esc(assetDisplayName(url))}</span><button type="button" onclick="moveAdImage(${index},-1)" ${index===0?'disabled':''}>↑</button><button type="button" onclick="moveAdImage(${index},1)" ${index===images.length-1?'disabled':''}>↓</button><button type="button" onclick="removeAdImage(${index})">삭제</button><input type="url" value="${esc(links[index]||'')}" placeholder="클릭 시 이동할 링크 (https://...)" oninput="setAdLink(${index},this.value)"></div>`).join(''):'<div style="color:#999;font-size:11px">추가된 광고 이미지가 없습니다.</div>';
 }
-function moveAdImage(index,direction){const images=adImageValues(),next=index+direction;if(next<0||next>=images.length)return;[images[index],images[next]]=[images[next],images[index]];setAdImageValues(images)}
-function removeAdImage(index){const images=adImageValues();images.splice(index,1);setAdImageValues(images)}
+function setAdLink(index,value){const images=adImageValues(),links=adLinkValues();links[index]=value.trim();document.getElementById('phoneAdLinks').value=images.map((_,i)=>links[i]||'').join('\n')}
+function moveAdImage(index,direction){const images=adImageValues(),links=adLinkValues(),next=index+direction;if(next<0||next>=images.length)return;[images[index],images[next]]=[images[next],images[index]];[links[index],links[next]]=[links[next]||'',links[index]||''];setAdSlideValues(images,links)}
+function removeAdImage(index){const images=adImageValues(),links=adLinkValues();images.splice(index,1);links.splice(index,1);setAdSlideValues(images,links)}
 
 async function clearPhoneLayoutPart(part){
   const names={top:'상단 고정 영역',bottom:'하단 고정 영역',ad:'광고 영역과 슬라이드 이미지'};
@@ -3051,7 +3069,7 @@ async function clearPhoneLayoutPart(part){
   if(part==='top')document.getElementById('phoneFixedTop').value='';
   if(part==='bottom')document.getElementById('phoneFixedBottom').value='';
   if(part==='ad'){
-    ['phoneAdTop','phoneAdLeft','phoneAdWidth','phoneAdHeight','phoneAdImages'].forEach(id=>document.getElementById(id).value='');
+    ['phoneAdTop','phoneAdLeft','phoneAdWidth','phoneAdHeight','phoneAdImages','phoneAdLinks'].forEach(id=>document.getElementById(id).value='');
     renderAdSlideList();
   }
   updateLayoutSelectionStatus();
@@ -3119,12 +3137,14 @@ async function savePhoneLayout() {
   if(!scr) return;
   const images = document.getElementById('phoneAdImages').value
     .split('\n').map(value=>value.trim()).filter(Boolean);
+  const links = adLinkValues().slice(0,images.length).map(value=>value.trim());
   const adCarousel = {
     top:phoneLayoutNumber('phoneAdTop',0,100),
     left:phoneLayoutNumber('phoneAdLeft',0,100),
     width:phoneLayoutNumber('phoneAdWidth',0,100),
     height:phoneLayoutNumber('phoneAdHeight',0,100),
     images,
+    links,
   };
   scr.phoneLayout = {
     fixedTopPercent:phoneLayoutNumber('phoneFixedTop',0,100),
