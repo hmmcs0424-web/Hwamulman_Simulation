@@ -2322,7 +2322,7 @@ function setupPhoneImageScroll() {
   let drag = null;
   area.addEventListener('pointerdown', event => {
     if(event.pointerType!=='mouse' || !area.classList.contains('scroll-mode')) return;
-    if(event.target.closest('.hotspot,.draw-overlay,.phone-ad-carousel')) return;
+    if(event.target.closest('.hotspot,.draw-overlay,.layout-draw-overlay,.phone-ad-carousel')) return;
     drag = { pointerId:event.pointerId, startY:event.clientY, startScroll:area.scrollTop };
     area.classList.add('dragging');
     area.setPointerCapture(event.pointerId);
@@ -3085,7 +3085,7 @@ function cancelLayoutDraw() {
 function setupLayoutDrawing() {
   document.querySelectorAll('.layout-draw-overlay').forEach(overlay => {
     const rect=overlay.querySelector('.layout-draw-rect');
-    overlay.addEventListener('pointerdown',e=>{ if(!layoutDrawing) return; const b=overlay.getBoundingClientRect(); layoutDrawing.start={x:Math.max(0,Math.min(b.width,e.clientX-b.left)),y:Math.max(0,Math.min(b.height,e.clientY-b.top))}; overlay.setPointerCapture(e.pointerId); e.preventDefault(); });
+    overlay.addEventListener('pointerdown',e=>{ if(!layoutDrawing) return; e.stopPropagation(); const b=overlay.getBoundingClientRect(); layoutDrawing.start={x:Math.max(0,Math.min(b.width,e.clientX-b.left)),y:Math.max(0,Math.min(b.height,e.clientY-b.top))}; overlay.setPointerCapture(e.pointerId); e.preventDefault(); });
     overlay.addEventListener('pointermove',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)); const mode=layoutDrawing.mode; let l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(mode==='fixed-top'){l=0;t=0;w=b.width;h=Math.max(layoutDrawing.start.y,y)} if(mode==='fixed-bottom'){l=0;t=Math.min(layoutDrawing.start.y,y);w=b.width;h=b.height-t} rect.style.cssText=`display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px`; });
     overlay.addEventListener('pointerup',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)), mode=layoutDrawing.mode; if(mode==='ad'){ const l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(w>5&&h>5){document.getElementById('phoneAdLeft').value=(l/b.width*100).toFixed(1);document.getElementById('phoneAdTop').value=(t/b.height*100).toFixed(1);document.getElementById('phoneAdWidth').value=(w/b.width*100).toFixed(1);document.getElementById('phoneAdHeight').value=(h/b.height*100).toFixed(1);}} else { const h=mode==='fixed-top'?Math.max(layoutDrawing.start.y,y):b.height-Math.min(layoutDrawing.start.y,y); document.getElementById(mode==='fixed-bottom'?'phoneFixedBottom':'phoneFixedTop').value=(h/b.height*100).toFixed(1); } cancelLayoutDraw(); updateLayoutSelectionStatus(); });
   });
