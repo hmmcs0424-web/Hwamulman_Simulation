@@ -152,6 +152,11 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .hotspot.show-mode{background:rgba(30,100,255,.08);outline:2px solid rgba(30,100,255,.55);outline-offset:-1px;border-radius:4px;}
 .hotspot.show-mode:hover{background:rgba(30,100,255,.2);outline-color:rgba(30,100,255,.9);}
 .hotspot.admin-mode{background:rgba(30,100,255,.15);border:2px dashed rgba(30,100,255,.75);border-radius:4px;}
+.hotspot.guide-overlay{display:flex;align-items:center;justify-content:center;padding:5px;pointer-events:auto;color:#172033;font-size:12px;font-weight:800;text-align:center;white-space:pre-wrap;line-height:1.35}
+.hotspot.guide-overlay.overlay-text{background:rgba(255,255,255,.9);border:1px solid rgba(37,99,235,.72);border-radius:5px;box-shadow:0 2px 7px rgba(15,23,42,.16)}
+.hotspot.guide-overlay.overlay-box{background:rgba(255,184,0,.14);border:2px solid #f59e0b;border-radius:5px}
+.hotspot.guide-overlay:hover{filter:brightness(.97);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
+.hotspot.guide-overlay.admin-mode{outline:2px dashed #2563eb;outline-offset:2px}
 .hotspot-label{display:none;position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.88);padding:1px 5px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .hotspot.admin-mode .hotspot-label{display:block;}
 .hotspot.show-mode .hotspot-label{display:block;}
@@ -770,6 +775,8 @@ textarea.form-input{resize:vertical;}
         <div class="section-title">핫스팟 편집</div>
         <div class="btn-row" style="margin-bottom:8px">
           <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
+          <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('text')">+ 텍스트 삽입</button>
+          <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('box')">+ 박스 삽입</button>
           <button class="btn btn-secondary" id="btnCancelDraw" style="display:none">취소</button>
         </div>
         <div id="hsList"></div>
@@ -1182,6 +1189,16 @@ textarea.form-input{resize:vertical;}
   </div>
 </div>
 
+<!-- 화면 텍스트·박스 모달 -->
+<div class="modal-bg" id="overlayGuideModal">
+  <div class="modal">
+    <div class="modal-title" id="overlayGuideModalTitle">텍스트 삽입</div>
+    <div class="form-row"><div class="form-label">화면에 표시할 텍스트</div><textarea class="form-input" id="overlayGuideLabel" rows="2" placeholder="예: 배차내역 확인"></textarea></div>
+    <div class="form-row"><div class="form-label">클릭 시 상담 가이드에 표시할 상세 내용</div><textarea class="form-input" id="overlayGuideDetail" rows="7" placeholder="상담사가 확인할 상세 안내를 입력하세요."></textarea></div>
+    <div class="modal-footer"><button class="btn btn-secondary" type="button" onclick="cancelDraw()">취소</button><button class="btn btn-primary" type="button" onclick="confirmGuideOverlay()">추가</button></div>
+  </div>
+</div>
+
 <!-- 경로 설정 저장 확인 모달 -->
 <div class="modal-bg" id="flowLeaveModal">
   <div class="modal flow-leave-modal">
@@ -1300,7 +1317,7 @@ const savedFlowSnapshots = new Map();
 let activeSec = '차주앱';
 let adminMode = false;
 let showHotspots = false;
-let drawing = false, drawStart = null, pendingHs = null;
+let drawing = false, drawStart = null, pendingHs = null, drawMode = 'hotspot';
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
 let siteImageManifest = null;
 let activePage = 'simulator';
@@ -2361,6 +2378,7 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
     if(fixedEdge === 'top' ? hotspotTop >= fixedHeight : hotspotTop + Number(hs.height)/100*imageHeight <= imageHeight-fixedHeight) return;
     const el = document.createElement('div');
     el.className = 'hotspot ' + (showHotspots ? 'show-mode' : 'normal-mode');
+    if(hs.kind==='text'||hs.kind==='box') el.className += ` guide-overlay overlay-${hs.kind}`;
     el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
     if(showHotspots) {
       const label = document.createElement('span');
@@ -2368,7 +2386,10 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
       label.textContent = hs.label||hs.goto;
       el.appendChild(label);
     }
-    el.addEventListener('click', () => navigateHotspotTarget(hs.goto));
+    if(hs.kind==='text'||hs.kind==='box') {
+      el.textContent = hs.label||'';
+      el.addEventListener('click', () => showOverlayGuide(hs));
+    } else el.addEventListener('click', () => navigateHotspotTarget(hs.goto));
     layer.appendChild(el);
   });
 }
@@ -2504,18 +2525,20 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
     el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : isShow ? 'show-mode' : 'normal-mode');
+    const isGuideOverlay = hs.kind==='text'||hs.kind==='box';
+    if(isGuideOverlay) el.className += ` guide-overlay overlay-${hs.kind}`;
     el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
     const lbl = document.createElement('span');
-    lbl.className = 'hotspot-label';
-    lbl.textContent = hs.label || hs.goto;
+    lbl.className = isGuideOverlay ? 'guide-overlay-copy' : 'hotspot-label';
+    lbl.textContent = hs.label || hs.goto || '';
     el.appendChild(lbl);
     if(isAdmin) {
       el.style.cursor = 'move';
-      el.title = '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
+      el.title = isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
-        navigateHotspotTarget(hs.goto);
+        if(isGuideOverlay) showOverlayGuide(hs); else navigateHotspotTarget(hs.goto);
       });
 
       // X 삭제 버튼
@@ -2582,10 +2605,17 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       });
       el.appendChild(handle);
     } else {
-      el.addEventListener('click', () => navigateHotspotTarget(hs.goto));
+      el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : navigateHotspotTarget(hs.goto));
     }
     layer.appendChild(el);
   });
+}
+
+function showOverlayGuide(item) {
+  const target=document.getElementById('simulatorGuideContent');
+  if(!target)return;
+  const detail=String(item?.detail||'').trim();
+  target.innerHTML=`<div class="guide-overlay-detail"><div class="form-label">선택한 화면 안내</div><h3 style="margin:4px 0 10px;font-size:15px">${esc(item?.label||'상세 가이드')}</h3><div style="white-space:pre-wrap;font-size:13px;line-height:1.65;color:#444">${esc(detail||'등록된 상세 안내가 없습니다.')}</div></div>`;
 }
 
 function toggleShowHotspots() {
@@ -2964,7 +2994,7 @@ function renderHsList() {
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
   el.innerHTML = hs.map((h,i) => `
     <div class="hs-item">
-      <span>${esc(h.label||'(없음)')} → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}</span>
+      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}`}</span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -4282,6 +4312,14 @@ function setupDrawEvents(overlayId, rectId) {
       top: round1(t/b.height*100), left: round1(l/b.width*100),
       width: round1(w/b.width*100), height: round1(h/b.height*100),
     };
+    if(drawMode==='text'||drawMode==='box') {
+      document.getElementById('overlayGuideModalTitle').textContent=drawMode==='text'?'텍스트 삽입':'박스 삽입';
+      document.getElementById('overlayGuideLabel').value='';
+      document.getElementById('overlayGuideDetail').value='';
+      openModal('overlayGuideModal');
+      setTimeout(()=>document.getElementById('overlayGuideLabel').focus(),50);
+      return;
+    }
     const st = cache[activeSec];
     const screens = Object.entries(st.flow.screens);
     document.getElementById('hsTargetSearch').value = '';
@@ -4390,6 +4428,16 @@ function updateHsTargetPreview(value) {
 }
 
 function startDraw() {
+  drawMode = 'hotspot';
+  beginScreenDraw();
+}
+
+function startOverlayDraw(kind) {
+  drawMode = kind;
+  beginScreenDraw();
+}
+
+function beginScreenDraw() {
   drawing = true;
   activeDrawOverlayId = SECS[activeSec].type==='pc' ? 'pcDrawOverlay' : 'drawOverlay';
   document.getElementById(activeDrawOverlayId).classList.add('active');
@@ -4398,12 +4446,28 @@ function startDraw() {
 }
 
 function cancelDraw() {
-  drawing = false; drawStart = null; pendingHs = null;
+  drawing = false; drawStart = null; pendingHs = null; drawMode = 'hotspot';
   ['drawOverlay','pcDrawOverlay'].forEach(id => document.getElementById(id).classList.remove('active'));
   ['drawRect','pcDrawRect'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('btnDraw').style.display = 'inline-block';
   document.getElementById('btnCancelDraw').style.display = 'none';
   closeModal('hsModal');
+  closeModal('overlayGuideModal');
+}
+
+function confirmGuideOverlay() {
+  if(!pendingHs) return;
+  const label=document.getElementById('overlayGuideLabel').value.trim();
+  const detail=document.getElementById('overlayGuideDetail').value.trim();
+  if(!label)return alert('화면에 표시할 텍스트를 입력해 주세요.');
+  const st=cache[activeSec];
+  if(!st.flow.screens[st.cur].hotspots)st.flow.screens[st.cur].hotspots=[];
+  st.flow.screens[st.cur].hotspots.push({kind:drawMode,label,detail,...pendingHs});
+  pendingHs=null;
+  cancelDraw();
+  const layerId=SECS[activeSec].type==='pc'?'pcHotspotLayer':'hotspotLayer';
+  renderHotspots(layerId,st.flow.screens[st.cur].hotspots,true);
+  renderHsList();
 }
 
 function confirmHs() {
