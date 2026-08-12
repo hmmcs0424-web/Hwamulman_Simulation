@@ -587,6 +587,7 @@ textarea.form-input{resize:vertical;}
   </div>
   <div class="topnav-right">
     <button class="btn-admin-login" id="btnShowHotspots" title="클릭 가능 영역 표시 (단축키: H)">👆 영역 보기</button>
+    <button class="btn-admin-login" id="btnExitCounselorPreview" style="display:none">← 관리자 편집으로</button>
     <button class="btn-admin-login" id="btnAssetManager" style="display:none">🖼 이미지 관리</button>
     <button class="btn-admin-login btn-counselor-login" id="topCounselorBtn">👤 직원 로그인</button>
     <button class="btn-admin-login" id="topAdminBtn">🔐 관리자 로그인</button>
@@ -943,6 +944,7 @@ textarea.form-input{resize:vertical;}
       <div class="admin-section">
         <div class="section-title">시뮬레이터 저장</div>
         <button class="btn btn-primary" id="btnSaveFlow" style="margin-bottom:8px">💾 경로 설정 저장</button>
+        <button class="btn btn-secondary" id="btnCounselorPreview" style="margin-bottom:8px">▶ 저장 후 상담사 미리보기</button>
         <button class="btn btn-primary" id="btnExport">📥 flow.json 다운로드</button>
         <div id="flowSaveStatus" style="font-size:12px;color:#888;margin-top:8px"></div>
       </div>
@@ -1327,6 +1329,7 @@ const savedFlowSnapshots = new Map();
 
 let activeSec = '차주앱';
 let adminMode = false;
+let counselorPreviewMode = false;
 let showHotspots = false;
 let drawing = false, drawStart = null, pendingHs = null, drawMode = 'hotspot';
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
@@ -1973,7 +1976,8 @@ async function boot() {
 
   // Admin button
   document.getElementById('topAdminBtn').addEventListener('click', () => {
-    if(adminMode) firebaseSignOut();
+    if(counselorPreviewMode) stopCounselorPreview();
+    else if(adminMode) firebaseSignOut();
     else showLoginGate('admin');
   });
   document.getElementById('topCounselorBtn').addEventListener('click', () => {
@@ -1994,6 +1998,8 @@ async function boot() {
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
   document.getElementById('btnSaveFlow').onclick = () => saveSimulatorFlow();
+  document.getElementById('btnCounselorPreview').onclick = startCounselorPreview;
+  document.getElementById('btnExitCounselorPreview').onclick = stopCounselorPreview;
   document.getElementById('btnExport').onclick = exportFlow;
   document.getElementById('btnAssetManager').onclick = openAssetManager;
   document.querySelectorAll('[data-asset-sec]').forEach(btn => btn.onclick = () => selectAssetSection(btn.dataset.assetSec));
@@ -2116,6 +2122,7 @@ async function confirmFlowSavedBeforeLeave(sectionName) {
 async function switchSec(name) {
   if(name === activeSec) return true;
   if(!(await confirmFlowSavedBeforeLeave(activeSec))) return false;
+  counselorPreviewMode=false;
   if(drawing) cancelDraw();
   clearTransientScreenState();
 
@@ -2220,7 +2227,7 @@ function applySec(name) {
   renderOverlayAdminSection();
   renderChatScrollAdmin();
   detectUnreg();
-  if(adminMode && name!=='채널톡') refreshScreenImageOptions();
+  if(adminMode && !counselorPreviewMode && name!=='채널톡') refreshScreenImageOptions();
   syncAdminUI();
   syncSimulatorDeepLink();
 }
@@ -2253,7 +2260,7 @@ function goTo(id, init=false) {
   renderGuide(scr.guide);
   renderExceptions(id);
   renderList();
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
+  if(adminMode && !counselorPreviewMode) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
   syncSimulatorDeepLink();
 }
 
@@ -2267,7 +2274,7 @@ function goBack() {
     renderGuide(st.flow.screens[st.cur]?.guide);
     renderExceptions(st.cur);
     renderList();
-    if(adminMode) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
+    if(adminMode && !counselorPreviewMode) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); renderExceptionEditor(); renderOverlayAdminSection(); renderChatScrollAdmin(); }
     syncSimulatorDeepLink();
   }
 }
@@ -2385,7 +2392,7 @@ function renderPhoneFixedIcons(scr) {
     if(!icon?.image)return;
     const button=document.createElement('button');
     button.type='button';
-    button.className='phone-fixed-icon'+(adminMode?' admin':'');
+    button.className='phone-fixed-icon'+(adminMode&&!counselorPreviewMode?' admin':'');
     button.style.cssText=`width:${Math.max(3,Math.min(50,Number(icon.width)||14))}%;right:${Math.max(0,Math.min(90,Number(icon.right)||0))}%;bottom:${Math.max(0,Math.min(90,Number(icon.bottom)||0))}%;`;
     button.title=icon.label||'고정 아이콘';
     const image=document.createElement('img');
@@ -2475,7 +2482,7 @@ function renderPhoneAdCarousel(scr) {
   const wrapper = document.getElementById('imageWrapper');
   const carousel = document.createElement('div');
   carousel.id = 'phoneAdCarousel';
-  carousel.className = 'phone-ad-carousel' + (adminMode ? ' phone-ad-admin' : '');
+  carousel.className = 'phone-ad-carousel' + (adminMode && !counselorPreviewMode ? ' phone-ad-admin' : '');
   carousel.style.cssText += `top:${Number(ad.top)||0}%;left:${Number(ad.left)||0}%;width:${Number(ad.width)}%;height:${Number(ad.height)}%;`;
   const track = document.createElement('div');
   track.className = 'phone-ad-track';
@@ -2592,7 +2599,7 @@ function showPcPlaceholder(show) {
 function renderHotspots(layerId, hotspots, forceAdmin) {
   const layer = document.getElementById(layerId);
   layer.innerHTML = '';
-  const isAdmin = forceAdmin || adminMode;
+  const isAdmin = forceAdmin || (adminMode && !counselorPreviewMode);
   const isShow  = !isAdmin && showHotspots;
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
@@ -2980,6 +2987,7 @@ async function firebaseSignOut() {
 function enterAdmin(profile=currentAdminProfile) {
   currentAdminProfile=profile;
   adminMode = true;
+  counselorPreviewMode = false;
   syncAdminUI();
   syncAccessGate();
 }
@@ -2987,10 +2995,35 @@ function enterAdmin(profile=currentAdminProfile) {
 function exitAdmin() {
   if(drawing) cancelDraw();
   adminMode = false;
+  counselorPreviewMode = false;
   currentAdminProfile=null;
   syncAdminUI();
   document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
   syncAccessGate();
+}
+
+async function startCounselorPreview() {
+  if(!adminMode || activeSec==='채널톡') return;
+  if(!(await saveSimulatorFlow(activeSec))) return;
+  if(drawing) cancelDraw();
+  counselorPreviewMode=true;
+  showHotspots=false;
+  const hotspotBtn=document.getElementById('btnShowHotspots');
+  hotspotBtn.classList.remove('on');
+  hotspotBtn.textContent='👆 영역 보기';
+  const st=cache[activeSec];
+  st.hist=[];
+  const start=st.flow?.start;
+  st.cur=null;
+  syncAdminUI();
+  if(start) goTo(start,true);
+}
+
+function stopCounselorPreview() {
+  counselorPreviewMode=false;
+  syncAdminUI();
+  const st=cache[activeSec];
+  if(st?.cur && st.flow?.screens?.[st.cur]) renderScreen(activeSec,st.cur);
 }
 
 // 현재 섹션 + adminMode 상태에 맞춰 관리자 UI를 동기화.
@@ -3000,6 +3033,7 @@ function syncAdminUI() {
   const counselorBtn = document.getElementById('topCounselorBtn');
   const unregCard = document.getElementById('unregCard');
   const contactsMenu = document.getElementById('contactsMenu');
+  const adminEditing = adminMode && !counselorPreviewMode;
   contactsMenu?.classList.toggle('visible',adminMode);
   if(!adminMode && unsubscribeBusinessContacts) {
     unsubscribeBusinessContacts();
@@ -3011,11 +3045,14 @@ function syncAdminUI() {
     return;
   }
   btn.classList.toggle('on', adminMode);
-  btn.textContent = adminMode
+  btn.textContent = counselorPreviewMode
+    ? `👁 상담사 미리보기 · ${currentAdminProfile?.name || '관리자'}`
+    : adminMode
     ? `🔓 ${currentAdminProfile?.name || '관리자'} · 로그아웃`
     : '🔐 관리자 로그인';
   if(counselorBtn) counselorBtn.style.display = adminMode ? 'none' : '';
-  document.getElementById('btnAssetManager').style.display = adminMode && activePage==='simulator' ? '' : 'none';
+  document.getElementById('btnAssetManager').style.display = adminEditing && activePage==='simulator' ? '' : 'none';
+  document.getElementById('btnExitCounselorPreview').style.display = counselorPreviewMode && activePage==='simulator' ? '' : 'none';
 
   document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
   window.dispatchEvent(new CustomEvent('announcement-admin-change',{detail:{adminMode}}));
@@ -3024,8 +3061,8 @@ function syncAdminUI() {
 
   const isCte = activeSec === '채널톡';
   // 일반(차주앱/빽통) 편집 패널은 채널톡이 아닐 때만 노출
-  document.getElementById('adminPanel').style.display = (adminMode && !isCte) ? 'block' : 'none';
-  document.getElementById('phoneLayoutAdminSection').style.display = (adminMode && !isCte) ? '' : 'none';
+  document.getElementById('adminPanel').style.display = (adminEditing && !isCte) ? 'block' : 'none';
+  document.getElementById('phoneLayoutAdminSection').style.display = (adminEditing && !isCte) ? '' : 'none';
 
   if(isCte) {
     unregCard.style.display = 'none';
@@ -3047,8 +3084,8 @@ function syncAdminUI() {
   const st = cache[activeSec];
   if(!st || !st.flow) return;
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
-  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], adminMode);
-  if(adminMode) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); }
+  renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], adminEditing);
+  if(adminEditing) { renderHsList(); renderGuideEditor(); renderPhoneLayoutEditor(); }
   renderExceptionEditor();
   renderOverlayAdminSection();
   renderChatScrollAdmin();
@@ -3119,7 +3156,7 @@ async function saveGuide() {
 
 function renderPhoneLayoutEditor() {
   const section = document.getElementById('phoneLayoutAdminSection');
-  const show = adminMode && activeSec!=='채널톡' && activePage==='simulator';
+  const show = adminMode && !counselorPreviewMode && activeSec!=='채널톡' && activePage==='simulator';
   section.style.display = show ? '' : 'none';
   if(!show) return;
   const layout = cache[activeSec].flow.screens?.[cache[activeSec].cur]?.phoneLayout || {};
@@ -3250,7 +3287,7 @@ function renderSavedLayoutRegions(){
   const pc=SECS[activeSec]?.type==='pc', prefix=pc?'pc':'phone';
   const top=Number(document.getElementById('phoneFixedTop').value)||0, bottom=Number(document.getElementById('phoneFixedBottom').value)||0;
   const adTop=Number(document.getElementById('phoneAdTop').value)||0, adLeft=Number(document.getElementById('phoneAdLeft').value)||0, adWidth=Number(document.getElementById('phoneAdWidth').value)||0, adHeight=Number(document.getElementById('phoneAdHeight').value)||0;
-  const set=(id,show,css)=>{const el=document.getElementById(id);if(!el)return;el.classList.toggle('visible',adminMode&&show);if(show)Object.assign(el.style,css)};
+  const set=(id,show,css)=>{const el=document.getElementById(id);if(!el)return;el.classList.toggle('visible',adminMode&&!counselorPreviewMode&&show);if(show)Object.assign(el.style,css)};
   set(prefix+'SavedFixedTop',top>0,{top:'0',bottom:'auto',height:top+'%'});
   set(prefix+'SavedFixedBottom',bottom>0,{top:'auto',bottom:'0',height:bottom+'%'});
   set(prefix+'SavedAd',adWidth>0&&adHeight>0,{top:adTop+'%',left:adLeft+'%',right:'auto',bottom:'auto',width:adWidth+'%',height:adHeight+'%'});
@@ -4651,10 +4688,10 @@ function renderChatScroll(scr) {
     width:${cs.width||50}%; height:${cs.height||92}%;
     position:absolute;
   `;
-  layer.classList.toggle('admin-highlight', adminMode);
+  layer.classList.toggle('admin-highlight', adminMode && !counselorPreviewMode);
 
   // 관리자 뱃지
-  if(adminMode) {
+  if(adminMode && !counselorPreviewMode) {
     const badge = document.createElement('div');
     badge.className = 'chat-scroll-admin-badge';
     badge.textContent = '↕ 채팅 스크롤 영역';
@@ -4924,7 +4961,7 @@ function renderExceptionEditor() {
   const scr = st.flow.screens?.[st.cur];
   const adminArea = document.getElementById('exceptionAdminArea');
   if(!adminArea) return;
-  if(!adminMode || !scr) { adminArea.style.display = 'none'; return; }
+  if(!adminMode || counselorPreviewMode || !scr) { adminArea.style.display = 'none'; return; }
 
   adminArea.style.display = 'block';
 
@@ -4970,7 +5007,7 @@ function delException(i) {
 // ═══════════════════════════════════════════
 function detectUnreg() {
   const card = document.getElementById('unregCard');
-  if(!adminMode || activePage!=='simulator' || activeSec==='채널톡') { card.style.display='none'; return; }
+  if(!adminMode || counselorPreviewMode || activePage!=='simulator' || activeSec==='채널톡') { card.style.display='none'; return; }
   const st = cache[activeSec];
   const manifest = st.flow.imageManifest || [];
   const used = new Set(Object.values(st.flow.screens||{}).map(s=>s.image));
