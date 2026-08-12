@@ -2749,9 +2749,8 @@ function renderList() {
   const st = cache[activeSec];
   el.innerHTML = '';
   if(!st.flow.screens) return;
-  const availableImages = availableSimulatorImageIds.get(activeSec);
-  const allEntries = Object.entries(st.flow.screens)
-    .filter(([,scr]) => !availableImages || availableImages.has(assetIdentity(scr.image)));
+  // 이미지 파일의 이전/누락 여부와 관계없이 기존 화면과 경로 설정은 항상 유지해서 보여준다.
+  const allEntries = Object.entries(st.flow.screens);
   const entryById = new Map(allEntries);
   const matchesQuery = ([id,scr]) => {
     const label = String(scr.label||'').toLocaleLowerCase('ko-KR');
@@ -3503,6 +3502,13 @@ async function refreshAssetList() {
     url:path,
     name:path.split('/').pop()
   }));
+  if(staticAssets.length) {
+    if(requestedSec!==assetManageSec) return;
+    managedAssets=staticAssets.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+    renderAssetList();
+    status.textContent=`${requestedSec} · GitHub 기본 이미지 ${staticAssets.length}개`;
+    return;
+  }
   try {
     const result=await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(requestedSec))}`);
     const blobAssets=result.assets.map(item=>({
@@ -4430,8 +4436,6 @@ function setupDrawEvents(overlayId, rectId) {
 function renderHsTargetList(screens, images, loading=false) {
   const target = document.getElementById('hsGoto');
   const list = document.getElementById('hsGotoList');
-  const availableIds = new Set(images.map(assetIdentity));
-  screens = loading ? screens : screens.filter(([,screen]) => availableIds.has(assetIdentity(screen.image)));
   const screenByImage = new Map();
   screens.forEach(([id,screen]) => {
     const identity = assetIdentity(screen.image);
