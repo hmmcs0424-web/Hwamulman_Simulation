@@ -1321,7 +1321,7 @@ function syncSimulatorDeepLink() {
 
 // Per-section state cache
 const cache = {};
-Object.keys(SECS).forEach(k => { cache[k] = { flow:null, cur:null, hist:[] }; });
+Object.keys(SECS).forEach(k => { cache[k] = { flow:null, cur:null, hist:[], flowSource:null }; });
 const FLOW_SAVE_GUARD_SECTIONS = new Set(['차주앱','빽통앱','빽통PC']);
 const savedFlowSnapshots = new Map();
 
@@ -1918,7 +1918,7 @@ async function boot() {
   tick(); setInterval(tick, 1000);
   loadGuidePages();
   await loadDefaultNotices();
-  initFirebase();
+  await initFirebase();
 
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
@@ -2134,11 +2134,23 @@ async function loadSec(name) {
     cache[name].flow = { imageManifest:[...(siteImageManifest?.[name]||[])], screens:{}, start:null };
     return;
   }
+  let bundledFlow=null;
+  try {
+    const response=await fetch(SECS[name].flowUrl + '?_=' + Date.now());
+    if(response.ok) bundledFlow=await response.json();
+  } catch(e) {
+    console.warn('flow.json 로드 실패:', name, e);
+  }
   if(firebaseReady) {
     try {
       const cloud = await firebaseFns.getDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(name)));
       if(cloud.exists() && cloud.data().flow?.screens) {
-        cache[name].flow = cloud.data().flow;
+        const cloudFlow=cloud.data().flow;
+        const cloudCount=Object.keys(cloudFlow.screens||{}).length;
+        const bundledCount=Object.keys(bundledFlow?.screens||{}).length;
+        const recoverBundled=name==='빽통앱' && bundledCount>cloudCount;
+        cache[name].flow = recoverBundled ? bundledFlow : cloudFlow;
+        cache[name].flowSource = recoverBundled ? 'bundled-recovery' : 'firestore';
         mergeImageManifest(name, cache[name].flow);
         cache[name].cur = cache[name].flow.start;
         rememberFlowSaved(name);
@@ -2148,15 +2160,15 @@ async function loadSec(name) {
       if(e?.code!=='permission-denied') console.warn('Firestore 시뮬레이터 로드 실패, JSON으로 대체:', name, e);
     }
   }
-  try {
-    const r = await fetch(SECS[name].flowUrl + '?_=' + Date.now());
-    cache[name].flow = await r.json();
+  if(bundledFlow) {
+    cache[name].flow = bundledFlow;
+    cache[name].flowSource = 'bundled';
     mergeImageManifest(name, cache[name].flow);
     if(!cache[name].cur) cache[name].cur = cache[name].flow.start;
-  } catch(e) {
+  } else {
     cache[name].flow = { imageManifest:[], screens:{}, start:null };
+    cache[name].flowSource = 'empty';
     mergeImageManifest(name, cache[name].flow);
-    console.warn('flow.json 로드 실패:', name, e);
   }
   rememberFlowSaved(name);
 }
@@ -2274,13 +2286,15 @@ function goHome() {
 }
 
 // 관리자: 현재 화면을 메인(홈)으로 지정 → goHome / 부팅 시작 화면
-function setMainScreen() {
+async function setMainScreen() {
   const st = cache[activeSec];
   if(!st.cur || !st.flow.screens?.[st.cur]) return;
   st.flow.start = st.cur;
   renderMainScreenStatus();
   const btn = document.querySelector('#mainScreenStatus + button');
-  if(btn){ const o=btn.textContent; btn.textContent='✓ 설정됨!'; setTimeout(()=>btn.textContent=o,1500); }
+  if(btn) btn.textContent='저장 중...';
+  const saved=await saveSimulatorFlow(activeSec);
+  if(btn){ btn.textContent=saved?'메인 화면 저장됨':'저장 실패'; setTimeout(()=>btn.textContent='이 화면을 메인으로 설정',1500); }
 }
 function renderMainScreenStatus() {
   const el = document.getElementById('mainScreenStatus');
@@ -3314,11 +3328,23 @@ async function saveSimulatorFlow(sectionName=activeSec) {
   const status = document.getElementById('flowSaveStatus');
   status.textContent = '저장 중...';
   try {
-    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(sectionName)), {
+    const ref=firebaseFns.doc(firestoreDb, 'simulatorFlows', simulatorDocId(sectionName));
+    const current=await firebaseFns.getDoc(ref);
+    const cloudCount=Object.keys(current.data()?.flow?.screens||{}).length;
+    const localCount=Object.keys(cache[sectionName].flow?.screens||{}).length;
+    if(cloudCount>localCount) {
+      throw new Error(`안전 저장 차단: 서버에는 화면 ${cloudCount}개가 있지만 현재 편집 데이터에는 ${localCount}개만 있습니다. 새로고침 후 다시 시도해 주세요.`);
+    }
+    if(cache[sectionName].flowSource==='bundled-recovery' && !confirm(`Git 백업에서 복구한 화면 ${localCount}개를 Firestore에 저장할까요?`)) {
+      status.textContent='저장 취소';
+      return false;
+    }
+    await firebaseFns.setDoc(ref, {
       flow: cache[sectionName].flow,
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
     }, {merge:true});
+    cache[sectionName].flowSource='firestore';
     rememberFlowSaved(sectionName);
     status.textContent = '✓ Firestore에 저장됨 · ' + new Date().toLocaleTimeString('ko-KR');
     return true;
