@@ -145,6 +145,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .phone-ad-slide{position:relative;flex:0 0 100%;height:100%;overflow:hidden}.phone-ad-slide img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .phone-ad-dots{position:absolute;right:5px;bottom:4px;z-index:3;padding:2px 6px;border-radius:99px;background:rgba(0,0,0,.58);color:#fff;font-size:9px;font-weight:800}
 .phone-ad-admin{outline:2px dashed #f59e0b;outline-offset:-2px}.phone-ad-admin::before{content:'↔ 광고 슬라이드';position:absolute;z-index:4;left:4px;top:4px;padding:2px 5px;border-radius:4px;background:#f59e0b;color:#fff;font-size:9px;font-weight:800}
+.phone-fixed-icon-layer{position:absolute;inset:0;z-index:19;pointer-events:none}.phone-fixed-icon{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}.phone-fixed-icon img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}.phone-fixed-icon.admin{outline:2px dashed #8b5cf6;outline-offset:2px;border-radius:5px}
 .hotspot-layer{position:absolute;inset:0;pointer-events:none;}
 .hotspot{position:absolute;cursor:pointer;pointer-events:auto;transition:background .12s,outline .12s;}
 .hotspot.normal-mode{background:transparent;border:none;}
@@ -172,6 +173,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .layout-choice-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.layout-choice-row .btn.active{outline:2px solid #1d4ed8;outline-offset:1px}
 .layout-selection-status{min-height:34px;padding:8px 10px;border-radius:7px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:11px;line-height:1.5}
 .ad-image-picker{width:100%;min-height:92px;border:1px solid #ddd;border-radius:7px;padding:5px;background:#fff;font:11px inherit}.ad-slide-list{display:flex;flex-direction:column;gap:5px;margin-top:7px}.ad-slide-item{display:grid;grid-template-columns:42px minmax(0,1fr) auto auto auto;align-items:center;gap:6px;padding:6px;border:1px solid #e5e7eb;border-radius:7px;background:#fafafa}.ad-slide-item img{width:42px;height:48px;object-fit:cover;border-radius:4px;grid-row:span 2}.ad-slide-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.ad-slide-item input{grid-column:2/-1;min-width:0;border:1px solid #d1d5db;border-radius:5px;padding:5px 7px;font:11px inherit}.ad-slide-item button{border:0;border-radius:5px;padding:4px 7px;cursor:pointer}
+.fixed-icon-editor{margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb}.fixed-icon-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:7px}.fixed-icon-fields .wide{grid-column:1/-1}.fixed-icon-list{display:grid;gap:5px;margin-top:7px}.fixed-icon-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px;border:1px solid #e5e7eb;border-radius:7px;background:#fafafa}.fixed-icon-item img{width:38px;height:38px;object-fit:contain}.fixed-icon-item span{min-width:0;font-size:11px;line-height:1.45}.fixed-icon-item button{border:0;border-radius:5px;padding:5px 7px;color:#dc2626;cursor:pointer}
 .popup-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:30;cursor:pointer;}
 .popup-overlay.active{display:flex;align-items:flex-end;}
 .popup-image-wrap{width:100%;cursor:auto;position:relative;}
@@ -670,6 +672,7 @@ textarea.form-input{resize:vertical;}
           <div class="layout-draw-overlay" id="phoneLayoutDrawOverlay"><div class="layout-draw-help" id="phoneLayoutDrawHelp"></div><div class="layout-draw-rect"></div></div>
         </div>
       </div>
+      <div class="phone-fixed-icon-layer" id="phoneFixedIconLayer"></div>
       <div class="popup-overlay" id="popupOverlay">
         <div class="popup-image-wrap" id="popupWrap">
           <img id="popupImg" alt="팝업">
@@ -814,6 +817,19 @@ textarea.form-input{resize:vertical;}
           <div class="ad-slide-list" id="phoneAdSlideList"></div>
           <textarea id="phoneAdImages" style="display:none"></textarea>
           <textarea id="phoneAdLinks" style="display:none"></textarea>
+        </div>
+        <div class="fixed-icon-editor">
+          <div class="form-label">📌 별도 고정 아이콘</div>
+          <div class="fixed-icon-fields">
+            <select class="form-input wide" id="phoneFixedIconImage"><option value="">아이콘 이미지 선택</option></select>
+            <select class="form-input wide" id="phoneFixedIconGoto"><option value="">이동할 화면 선택</option></select>
+            <label><span class="form-label">너비(%)</span><input class="form-input" id="phoneFixedIconWidth" type="number" min="3" max="50" step="0.5" value="14"></label>
+            <label><span class="form-label">오른쪽(%)</span><input class="form-input" id="phoneFixedIconRight" type="number" min="0" max="90" step="0.5" value="4"></label>
+            <label><span class="form-label">아래(%)</span><input class="form-input" id="phoneFixedIconBottom" type="number" min="0" max="90" step="0.5" value="4"></label>
+          </div>
+          <div class="layout-choice-row"><button class="btn btn-primary btn-sm" type="button" onclick="addPhoneFixedIcon()">고정 아이콘 추가</button><button class="btn btn-secondary btn-sm" type="button" onclick="openAssetManager()">아이콘 이미지 올리기</button></div>
+          <div class="fixed-icon-list" id="phoneFixedIconList"></div>
+          <textarea id="phoneFixedIcons" style="display:none"></textarea>
         </div>
         <div class="btn-row">
           <button class="btn btn-primary btn-sm" onclick="savePhoneLayout()">저장</button>
@@ -2298,6 +2314,7 @@ function renderPhoneScreen(scr) {
   document.getElementById('phoneFixedHeader').classList.remove('active');
   document.getElementById('phoneFixedFooter').classList.remove('active');
   clearPhoneAdCarousel();
+  document.getElementById('phoneFixedIconLayer').innerHTML='';
   img.src = '';
   img.onload = () => {
     const layout = scr.phoneLayout || {};
@@ -2319,11 +2336,34 @@ function renderPhoneScreen(scr) {
     viewport.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage || topHeight>0 || bottomHeight>0);
     renderHotspots('hotspotLayer', scr.hotspots||[], false);
     renderPhoneAdCarousel(scr);
+    renderPhoneFixedIcons(scr);
   };
   img.onerror = () => console.warn('이미지 로드 실패:', scr.image);
   img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
   if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function renderPhoneFixedIcons(scr) {
+  const layer=document.getElementById('phoneFixedIconLayer');
+  if(!layer)return;
+  layer.innerHTML='';
+  const icons=Array.isArray(scr?.phoneLayout?.fixedIcons)?scr.phoneLayout.fixedIcons:[];
+  icons.forEach(icon=>{
+    if(!icon?.image)return;
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='phone-fixed-icon'+(adminMode?' admin':'');
+    button.style.cssText=`width:${Math.max(3,Math.min(50,Number(icon.width)||14))}%;right:${Math.max(0,Math.min(90,Number(icon.right)||0))}%;bottom:${Math.max(0,Math.min(90,Number(icon.bottom)||0))}%;`;
+    button.title=icon.label||'고정 아이콘';
+    const image=document.createElement('img');
+    image.src=icon.image;
+    image.alt=icon.label||'고정 아이콘';
+    image.draggable=false;
+    button.appendChild(image);
+    button.addEventListener('click',()=>navigateHotspotTarget(icon.goto));
+    layer.appendChild(button);
+  });
 }
 
 function configurePhoneFixedRegion(edge,scr,fixedHeight,imageHeight) {
@@ -3062,10 +3102,39 @@ function renderPhoneLayoutEditor() {
   document.getElementById('phoneAdHeight').value = Number(ad.height)||'';
   document.getElementById('phoneAdImages').value = Array.isArray(ad.images) ? ad.images.join('\n') : '';
   document.getElementById('phoneAdLinks').value = Array.isArray(ad.links) ? ad.links.join('\n') : '';
+  document.getElementById('phoneFixedIcons').value = JSON.stringify(Array.isArray(layout.fixedIcons)?layout.fixedIcons:[]);
   renderAdSlideList();
   refreshAdImagePicker();
+  refreshPhoneFixedIconEditor();
   updateLayoutSelectionStatus();
 }
+
+function phoneFixedIconValues(){try{return JSON.parse(document.getElementById('phoneFixedIcons').value||'[]')}catch{return []}}
+async function refreshPhoneFixedIconEditor(){
+  const imagePicker=document.getElementById('phoneFixedIconImage'),gotoPicker=document.getElementById('phoneFixedIconGoto');
+  if(!imagePicker||!gotoPicker)return;
+  imagePicker.innerHTML='<option value="">이미지 목록을 불러오는 중...</option>';
+  const images=await getSimulatorImages(activeSec);
+  imagePicker.innerHTML='<option value="">아이콘 이미지 선택</option>'+images.map(url=>`<option value="${esc(url)}">${esc(assetDisplayName(url))}</option>`).join('');
+  const screens=Object.entries(cache[activeSec]?.flow?.screens||{});
+  gotoPicker.innerHTML='<option value="">이동할 화면 선택</option>'+screens.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)}</option>`).join('');
+  renderPhoneFixedIconList();
+}
+function renderPhoneFixedIconList(){
+  const list=document.getElementById('phoneFixedIconList');if(!list)return;
+  const icons=phoneFixedIconValues();
+  list.innerHTML=icons.length?icons.map((icon,index)=>`<div class="fixed-icon-item"><img src="${esc(icon.image)}" alt=""><span><b>${esc(icon.label||assetDisplayName(icon.image))}</b><br>→ ${esc(cache[activeSec]?.flow?.screens?.[icon.goto]?.label||icon.goto||'화면 미지정')}</span><button type="button" onclick="removePhoneFixedIcon(${index})">삭제</button></div>`).join(''):'<div style="color:#999;font-size:11px">추가된 고정 아이콘이 없습니다.</div>';
+}
+function addPhoneFixedIcon(){
+  const image=document.getElementById('phoneFixedIconImage').value,goto=document.getElementById('phoneFixedIconGoto').value;
+  if(!image)return alert('고정할 아이콘 이미지를 선택해 주세요.');
+  if(!goto)return alert('아이콘을 클릭했을 때 이동할 화면을 선택해 주세요.');
+  const icons=phoneFixedIconValues();
+  icons.push({image,goto,label:assetDisplayName(image),width:phoneLayoutNumber('phoneFixedIconWidth',3,50),right:phoneLayoutNumber('phoneFixedIconRight',0,90),bottom:phoneLayoutNumber('phoneFixedIconBottom',0,90)});
+  document.getElementById('phoneFixedIcons').value=JSON.stringify(icons);
+  renderPhoneFixedIconList();
+}
+function removePhoneFixedIcon(index){const icons=phoneFixedIconValues();icons.splice(index,1);document.getElementById('phoneFixedIcons').value=JSON.stringify(icons);renderPhoneFixedIconList()}
 
 async function refreshAdImagePicker(){
   const picker=document.getElementById('phoneAdImagePicker'); if(!picker||!adminMode||activeSec==='채널톡')return;
@@ -3168,6 +3237,7 @@ async function savePhoneLayout() {
   const images = document.getElementById('phoneAdImages').value
     .split('\n').map(value=>value.trim()).filter(Boolean);
   const links = adLinkValues().slice(0,images.length).map(value=>value.trim());
+  const fixedIcons = phoneFixedIconValues();
   const adCarousel = {
     top:phoneLayoutNumber('phoneAdTop',0,100),
     left:phoneLayoutNumber('phoneAdLeft',0,100),
@@ -3180,8 +3250,9 @@ async function savePhoneLayout() {
     fixedTopPercent:phoneLayoutNumber('phoneFixedTop',0,100),
     fixedBottomPercent:phoneLayoutNumber('phoneFixedBottom',0,100),
     adCarousel:images.length && adCarousel.width && adCarousel.height ? adCarousel : null,
+    fixedIcons,
   };
-  if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel) scr.type = 'scroll';
+  if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel || fixedIcons.length) scr.type = 'scroll';
   renderScreen(activeSec,st.cur);
   await saveSimulatorFlow(activeSec);
 }
