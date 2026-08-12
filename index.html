@@ -1867,8 +1867,33 @@ async function loadSiteImageManifest() {
 }
 function mergeImageManifest(sectionName, flow) {
   const fromSite = siteImageManifest?.[sectionName] || [];
+  localizeFlowImages(sectionName,flow,fromSite);
   const merged = new Set([...(flow.imageManifest||[]), ...fromSite]);
   flow.imageManifest = Array.from(merged);
+}
+function localImageMatchKey(value) {
+  const name=assetDisplayName(value).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'').toLocaleLowerCase('ko-KR');
+  return name.replace(/^(차주앱|빽통앱|빽통pc|채널톡)[.\-_\s]*/i,'').replace(/^\d+[.\-_\s]*/,'').replace(/[\s_\-.]+/g,'');
+}
+function localizeFlowImages(sectionName,flow,localImages=siteImageManifest?.[sectionName]||[]) {
+  if(!flow||!localImages.length)return flow;
+  const exact=new Map(), normalized=new Map(), duplicates=new Set();
+  localImages.forEach(path=>{
+    exact.set(assetDisplayName(path).toLocaleLowerCase('ko-KR'),path);
+    const key=localImageMatchKey(path);
+    if(normalized.has(key))duplicates.add(key);else normalized.set(key,path);
+  });
+  duplicates.forEach(key=>normalized.delete(key));
+  const resolve=value=>{
+    if(typeof value!=='string'||!value.includes('.blob.vercel-storage.com/'))return value;
+    return exact.get(assetDisplayName(value).toLocaleLowerCase('ko-KR'))||normalized.get(localImageMatchKey(value))||value;
+  };
+  const visit=value=>{
+    if(Array.isArray(value))return value.map(visit);
+    if(value&&typeof value==='object'){Object.keys(value).forEach(key=>value[key]=visit(value[key]));return value;}
+    return resolve(value);
+  };
+  return visit(flow);
 }
 function clearTransientScreenState() {
   closePopup();
@@ -3347,7 +3372,7 @@ async function getSimulatorImages(sectionName=activeSec) {
   const candidates = [
     ...((siteImageManifest?.[sectionName])||[])
   ];
-  if(adminMode) {
+  if(adminMode && !candidates.length) {
     try {
       const result = await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(sectionName))}`);
       result.assets.forEach(asset => {
