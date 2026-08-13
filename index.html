@@ -158,9 +158,12 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .hotspot.guide-overlay.overlay-box{background:rgba(255,184,0,.14);border:2px solid #f59e0b;border-radius:5px}
 .hotspot.guide-overlay:hover{filter:brightness(.97);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
 .hotspot.guide-overlay.admin-mode{outline:2px dashed #2563eb;outline-offset:2px}
-.hotspot-label{display:none;position:absolute;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.88);padding:1px 5px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.hotspot-label{display:none;position:absolute;z-index:2;top:2px;left:4px;font-size:10px;font-weight:700;color:rgba(20,80,220,.9);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.88);padding:1px 5px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .hotspot.admin-mode .hotspot-label{display:block;}
 .hotspot.show-mode .hotspot-label{display:block;}
+.hotspot-toggle-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;z-index:1}
+.sim-toast{display:none;position:absolute;z-index:60;left:12px;right:12px;bottom:12px;align-items:center;gap:10px;padding:13px 14px;border-radius:4px;background:rgba(31,31,36,.96);color:#fff;box-shadow:0 3px 12px rgba(0,0,0,.35);font-size:12px;line-height:1.45;transform:translateY(16px);opacity:0;transition:opacity .18s,transform .18s}
+.sim-toast.show{display:flex;transform:translateY(0);opacity:1}.sim-toast.top{top:12px;bottom:auto}.sim-toast-message{flex:1}.sim-toast-close{border:0;background:transparent;color:#4da3ff;font:inherit;font-weight:700;cursor:pointer;padding:3px}
 .draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;}
 .draw-overlay.active{display:block;}
 .draw-rect{display:none;position:absolute;background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);border-radius:4px;pointer-events:none;}
@@ -674,6 +677,7 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
       <div class="phone-fixed-icon-layer" id="phoneFixedIconLayer"></div>
+      <div class="sim-toast" id="simToast" role="status" aria-live="polite"><span class="sim-toast-message"></span><button type="button" class="sim-toast-close">확인</button></div>
       <div class="popup-overlay" id="popupOverlay">
         <div class="popup-image-wrap" id="popupWrap">
           <img id="popupImg" alt="팝업">
@@ -1177,6 +1181,33 @@ textarea.form-input{resize:vertical;}
       <div class="form-label">라벨</div>
       <input class="form-input" id="hsLabelInput" placeholder="예: 로그인 버튼">
     </div>
+    <div class="form-row">
+      <div class="form-label">영역 동작</div>
+      <select class="form-input" id="hsActionType" onchange="updateHsActionFields()">
+        <option value="navigate">일반 설정 (화면 이동)</option>
+        <option value="toggle">토글 설정</option>
+        <option value="toast">토스트 알림 설정</option>
+        <option value="navigate_toast">화면 이동 + 토스트 알림 설정</option>
+        <option value="toggle_toast">토글 + 토스트 알림 설정</option>
+      </select>
+    </div>
+    <div id="hsToggleFields" style="display:none">
+      <div class="form-row"><div class="form-label">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
+      <div class="form-row"><div class="form-label">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage"><option value="">이미지를 선택하세요</option></select></div>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택한 작은 이미지를 지정한 영역 크기에 맞춰 겹쳐 표시합니다.</div>
+    </div>
+    <div id="hsToastFields" style="display:none">
+      <div class="form-row" id="hsToastSingleRow"><div class="form-label">알림 문구</div><input class="form-input" id="hsToastMessage" placeholder="예: 이미지 저장이 완료되었습니다."></div>
+      <div id="hsToastToggleRows" style="display:none">
+        <div class="form-row"><div class="form-label">선택할 때 알림</div><input class="form-input" id="hsToastOnMessage" placeholder="예: 즐겨찾기 등록이 완료되었습니다."></div>
+        <div class="form-row"><div class="form-label">해제할 때 알림</div><input class="form-input" id="hsToastOffMessage" placeholder="예: 즐겨찾기가 해제되었습니다."></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="form-row"><div class="form-label">표시 시간</div><select class="form-input" id="hsToastDuration"><option value="2000">2초</option><option value="3000" selected>3초</option><option value="5000">5초</option></select></div>
+        <div class="form-row"><div class="form-label">표시 위치</div><select class="form-input" id="hsToastPosition"><option value="bottom">하단</option><option value="top">상단</option></select></div>
+      </div>
+      <label style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsToastConfirm" checked> 확인 버튼 표시</label>
+    </div>
     <div class="form-row" style="flex-direction:row;align-items:flex-start;gap:9px">
       <input type="checkbox" id="hsPreserveScroll" style="margin-top:3px">
       <label for="hsPreserveScroll" style="font-size:13px;line-height:1.5">
@@ -1184,7 +1215,7 @@ textarea.form-input{resize:vertical;}
         <span style="color:#777">긴 화면의 펼치기·접기처럼, 이동 후에도 클릭한 영역이 같은 높이에 보이도록 합니다.</span>
       </label>
     </div>
-    <div class="hs-picker-layout">
+    <div class="hs-picker-layout" id="hsNavigationFields">
       <div class="form-row hs-picker-list-col">
         <div class="form-label">이동할 화면</div>
         <input type="hidden" id="hsGoto">
@@ -2011,6 +2042,7 @@ async function boot() {
   document.getElementById('btnAssetManager').onclick = openAssetManager;
   document.querySelectorAll('[data-asset-sec]').forEach(btn => btn.onclick = () => selectAssetSection(btn.dataset.assetSec));
   document.getElementById('btnShowHotspots').onclick = toggleShowHotspots;
+  document.querySelector('#simToast .sim-toast-close').onclick = hideSimulatorToast;
   document.getElementById('searchBox').oninput = renderList;
 
   // 단축키 H: 핫스팟 보기 토글
@@ -2244,6 +2276,61 @@ function applySec(name) {
 // ═══════════════════════════════════════════
 const HOTSPOT_GO_BACK = '__history_back__';
 let pendingScrollTransition = null;
+const hotspotToggleStates = new Map();
+let simToastTimer = null;
+
+function hotspotStateKey(hotspot) {
+  return `${activeSec}:${cache[activeSec]?.cur}:${hotspot.id||hotspot.label||''}:${hotspot.top}:${hotspot.left}`;
+}
+
+function showSimulatorToast(message, options={}) {
+  const toast=document.getElementById('simToast');
+  if(!toast || !String(message||'').trim()) return;
+  clearTimeout(simToastTimer);
+  toast.querySelector('.sim-toast-message').textContent=String(message).trim();
+  toast.querySelector('.sim-toast-close').style.display=options.confirm===false?'none':'';
+  toast.classList.toggle('top',options.position==='top');
+  toast.style.display='flex';
+  requestAnimationFrame(()=>toast.classList.add('show'));
+  simToastTimer=setTimeout(hideSimulatorToast,Math.max(500,Number(options.duration)||3000));
+}
+
+function hideSimulatorToast() {
+  const toast=document.getElementById('simToast');
+  if(!toast) return;
+  clearTimeout(simToastTimer);
+  toast.classList.remove('show');
+  setTimeout(()=>{if(!toast.classList.contains('show'))toast.style.display='none';},190);
+}
+
+function handleHotspotAction(hotspot, element) {
+  const action=hotspot.actionType||'navigate';
+  let isOn=false;
+  if(action==='toggle'||action==='toggle_toast') {
+    const key=hotspotStateKey(hotspot);
+    isOn=!hotspotToggleStates.get(key);
+    hotspotToggleStates.set(key,isOn);
+    applyHotspotToggleImage(hotspot,element,isOn);
+  }
+  if(action==='navigate'||action==='navigate_toast') navigateHotspotTarget(hotspot.goto,hotspot,element);
+  if(action==='toast'||action==='navigate_toast'||action==='toggle_toast') {
+    const message=action==='toggle_toast' ? (isOn?hotspot.toastOnMessage:hotspot.toastOffMessage) : hotspot.toastMessage;
+    showSimulatorToast(message,{duration:hotspot.toastDuration,position:hotspot.toastPosition,confirm:hotspot.toastConfirm});
+  }
+}
+
+function applyHotspotToggleImage(hotspot, element, isOn) {
+  let image=element.querySelector('.hotspot-toggle-image');
+  const src=isOn?hotspot.toggleOnImage:hotspot.toggleOffImage;
+  if(!src) { image?.remove(); return; }
+  if(!image) {
+    image=document.createElement('img');
+    image.className='hotspot-toggle-image';
+    image.alt=''; image.draggable=false;
+    element.prepend(image);
+  }
+  image.src=src;
+}
 
 function navigateHotspotTarget(target, hotspot=null, sourceElement=null) {
   if(target===HOTSPOT_GO_BACK) {
@@ -2498,7 +2585,10 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
     if(hs.kind==='text'||hs.kind==='box') {
       el.textContent = hs.label||'';
       el.addEventListener('click', () => showOverlayGuide(hs));
-    } else el.addEventListener('click', () => navigateHotspotTarget(hs.goto,hs,el));
+    } else {
+      applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
+      el.addEventListener('click', () => handleHotspotAction(hs,el));
+    }
     layer.appendChild(el);
   });
 }
@@ -2641,13 +2731,14 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     lbl.className = isGuideOverlay ? 'guide-overlay-copy' : 'hotspot-label';
     lbl.textContent = hs.label || hs.goto || '';
     el.appendChild(lbl);
+    if(!isGuideOverlay) applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
     if(isAdmin) {
       el.style.cursor = 'move';
       el.title = isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
-        if(isGuideOverlay) showOverlayGuide(hs); else navigateHotspotTarget(hs.goto,hs,el);
+        if(isGuideOverlay) showOverlayGuide(hs); else handleHotspotAction(hs,el);
       });
 
       // X 삭제 버튼
@@ -2714,7 +2805,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       });
       el.appendChild(handle);
     } else {
-      el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : navigateHotspotTarget(hs.goto,hs,el));
+      el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : handleHotspotAction(hs,el));
     }
     layer.appendChild(el);
   });
@@ -3132,7 +3223,7 @@ function renderHsList() {
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
   el.innerHTML = hs.map((h,i) => `
     <div class="hs-item">
-      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`}</span>
+      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`}</span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -4514,9 +4605,16 @@ function setupDrawEvents(overlayId, rectId) {
     renderHsTargetList(screens, [], true);
     document.getElementById('hsLabelInput').value = '';
     document.getElementById('hsPreserveScroll').checked = false;
+    document.getElementById('hsActionType').value='navigate';
+    ['hsToastMessage','hsToastOnMessage','hsToastOffMessage'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('hsToastDuration').value='3000';
+    document.getElementById('hsToastPosition').value='bottom';
+    document.getElementById('hsToastConfirm').checked=true;
+    updateHsActionFields();
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
     renderHsTargetList(screens, availableImages, false);
+    populateHsToggleImages(availableImages);
   });
 }
 
@@ -4555,6 +4653,25 @@ function renderHsTargetList(screens, images, loading=false) {
     || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
   filterHsTargetList(document.getElementById('hsTargetSearch')?.value || '');
   updateHsTargetPreview(selected);
+}
+
+function updateHsActionFields() {
+  const action=document.getElementById('hsActionType').value;
+  const hasToggle=action==='toggle'||action==='toggle_toast';
+  const hasToast=action==='toast'||action==='navigate_toast'||action==='toggle_toast';
+  const hasNavigation=action==='navigate'||action==='navigate_toast';
+  document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
+  document.getElementById('hsToastFields').style.display=hasToast?'':'none';
+  document.getElementById('hsNavigationFields').style.display=hasNavigation?'grid':'none';
+  document.getElementById('hsToastSingleRow').style.display=(action==='toast'||action==='navigate_toast')?'':'none';
+  document.getElementById('hsToastToggleRows').style.display=action==='toggle_toast'?'':'none';
+  document.getElementById('hsPreserveScroll').closest('.form-row').style.display=hasNavigation?'flex':'none';
+}
+
+function populateHsToggleImages(images) {
+  const options=images.map(image=>`<option value="${esc(image)}">${esc(assetDisplayName(image))}</option>`).join('');
+  document.getElementById('hsToggleOffImage').innerHTML='<option value="">기존 화면 이미지 그대로</option>'+options;
+  document.getElementById('hsToggleOnImage').innerHTML='<option value="">이미지를 선택하세요</option>'+options;
 }
 function filterHsTargetList(value) {
   const list = document.getElementById('hsGotoList');
@@ -4659,10 +4776,12 @@ function confirmGuideOverlay() {
 
 function confirmHs() {
   if(!pendingHs) return;
+  const actionType=document.getElementById('hsActionType').value;
   let goto = document.getElementById('hsGoto').value;
   const st = cache[activeSec];
   let createdNewScreen = false;
-  if(goto.startsWith('__image__:')) {
+  const hasNavigation=actionType==='navigate'||actionType==='navigate_toast';
+  if(hasNavigation && goto.startsWith('__image__:')) {
     const image = goto.slice('__image__:'.length);
     const existing = Object.entries(st.flow.screens).find(([,screen]) => assetIdentity(screen.image)===assetIdentity(image));
     if(existing) {
@@ -4679,13 +4798,23 @@ function confirmHs() {
       detectUnreg();
     }
   }
-  if(!goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
+  if(hasNavigation && !goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
+  const toggleOnImage=document.getElementById('hsToggleOnImage').value;
+  if((actionType==='toggle'||actionType==='toggle_toast') && !toggleOnImage) { alert('선택 상태 이미지를 선택해 주세요.'); return; }
+  const toastMessage=document.getElementById('hsToastMessage').value.trim();
+  const toastOnMessage=document.getElementById('hsToastOnMessage').value.trim();
+  const toastOffMessage=document.getElementById('hsToastOffMessage').value.trim();
+  if((actionType==='toast'||actionType==='navigate_toast') && !toastMessage) { alert('알림 문구를 입력해 주세요.'); return; }
+  if(actionType==='toggle_toast' && (!toastOnMessage||!toastOffMessage)) { alert('선택 및 해제 알림 문구를 모두 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)
-    || goto;
+    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':'토글 및 토스트 알림');
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
-  st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto, ...(preserveScroll?{preserveScroll:true}:{}) });
+  const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
+  if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
+  if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
+  if(actionType==='toast'||actionType==='navigate_toast'||actionType==='toggle_toast') Object.assign(hotspot,{toastMessage,toastOnMessage,toastOffMessage,toastDuration:Number(document.getElementById('hsToastDuration').value)||3000,toastPosition:document.getElementById('hsToastPosition').value,toastConfirm:document.getElementById('hsToastConfirm').checked});
+  st.flow.screens[st.cur].hotspots.push(hotspot);
   pendingHs = null;
   cancelDraw();
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
