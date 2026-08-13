@@ -1177,6 +1177,13 @@ textarea.form-input{resize:vertical;}
       <div class="form-label">라벨</div>
       <input class="form-input" id="hsLabelInput" placeholder="예: 로그인 버튼">
     </div>
+    <div class="form-row" style="flex-direction:row;align-items:flex-start;gap:9px">
+      <input type="checkbox" id="hsPreserveScroll" style="margin-top:3px">
+      <label for="hsPreserveScroll" style="font-size:13px;line-height:1.5">
+        <b>스크롤 위치 유지형 화면 전환</b><br>
+        <span style="color:#777">긴 화면의 펼치기·접기처럼, 이동 후에도 클릭한 영역이 같은 높이에 보이도록 합니다.</span>
+      </label>
+    </div>
     <div class="hs-picker-layout">
       <div class="form-row hs-picker-list-col">
         <div class="form-label">이동할 화면</div>
@@ -2236,12 +2243,21 @@ function applySec(name) {
 // NAVIGATION
 // ═══════════════════════════════════════════
 const HOTSPOT_GO_BACK = '__history_back__';
+let pendingScrollTransition = null;
 
-function navigateHotspotTarget(target) {
+function navigateHotspotTarget(target, hotspot=null, sourceElement=null) {
   if(target===HOTSPOT_GO_BACK) {
     goBack();
     return;
   }
+  if(hotspot?.preserveScroll && SECS[activeSec]?.type==='app') {
+    const viewport=document.getElementById('phoneScrollViewport');
+    pendingScrollTransition={
+      sourceScreen:cache[activeSec]?.cur,
+      viewportOffset:(sourceElement?.getBoundingClientRect().top ?? viewport.getBoundingClientRect().top+viewport.clientHeight/2)-viewport.getBoundingClientRect().top,
+      sourceTop:Number(hotspot.top)||0
+    };
+  } else pendingScrollTransition=null;
   if(target) goTo(target);
 }
 
@@ -2374,6 +2390,7 @@ function renderPhoneScreen(scr) {
     const isLongImage = imageHeight > viewport.clientHeight + topHeight + bottomHeight + 1;
     viewport.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage || topHeight>0 || bottomHeight>0);
     renderHotspots('hotspotLayer', scr.hotspots||[], false);
+    restorePreservedScroll(scr,imageHeight,topHeight);
     renderPhoneAdCarousel(scr);
     renderPhoneFixedIcons(scr);
   };
@@ -2381,6 +2398,19 @@ function renderPhoneScreen(scr) {
   img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
   if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+}
+
+function restorePreservedScroll(scr,imageHeight,minScroll) {
+  const transition=pendingScrollTransition;
+  pendingScrollTransition=null;
+  if(!transition) return;
+  const matches=(scr.hotspots||[]).filter(hs=>hs.goto===transition.sourceScreen);
+  const anchor=matches.find(hs=>hs.preserveScroll)
+    || matches.find(hs=>/접기|펼치기/.test(String(hs.label||'')))
+    || matches[0];
+  const targetTop=imageHeight*((anchor ? Number(anchor.top) : transition.sourceTop)||0)/100;
+  const viewport=document.getElementById('phoneScrollViewport');
+  viewport.scrollTop=Math.max(Number(minScroll)||0,targetTop-transition.viewportOffset);
 }
 
 function renderPhoneFixedIcons(scr) {
@@ -2468,7 +2498,7 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
     if(hs.kind==='text'||hs.kind==='box') {
       el.textContent = hs.label||'';
       el.addEventListener('click', () => showOverlayGuide(hs));
-    } else el.addEventListener('click', () => navigateHotspotTarget(hs.goto));
+    } else el.addEventListener('click', () => navigateHotspotTarget(hs.goto,hs,el));
     layer.appendChild(el);
   });
 }
@@ -2617,7 +2647,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
-        if(isGuideOverlay) showOverlayGuide(hs); else navigateHotspotTarget(hs.goto);
+        if(isGuideOverlay) showOverlayGuide(hs); else navigateHotspotTarget(hs.goto,hs,el);
       });
 
       // X 삭제 버튼
@@ -2684,7 +2714,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       });
       el.appendChild(handle);
     } else {
-      el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : navigateHotspotTarget(hs.goto));
+      el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : navigateHotspotTarget(hs.goto,hs,el));
     }
     layer.appendChild(el);
   });
@@ -3102,7 +3132,7 @@ function renderHsList() {
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
   el.innerHTML = hs.map((h,i) => `
     <div class="hs-item">
-      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}`}</span>
+      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`}</span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -4483,6 +4513,7 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsTargetSearch').value = '';
     renderHsTargetList(screens, [], true);
     document.getElementById('hsLabelInput').value = '';
+    document.getElementById('hsPreserveScroll').checked = false;
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
     renderHsTargetList(screens, availableImages, false);
@@ -4653,7 +4684,8 @@ function confirmHs() {
     || (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)
     || goto;
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
-  st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto });
+  const preserveScroll=document.getElementById('hsPreserveScroll').checked;
+  st.flow.screens[st.cur].hotspots.push({ label, ...pendingHs, goto, ...(preserveScroll?{preserveScroll:true}:{}) });
   pendingHs = null;
   cancelDraw();
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
