@@ -4801,20 +4801,25 @@ function setupDrawEvents(overlayId, rectId) {
 function renderHsTargetList(screens, images, loading=false) {
   const target = document.getElementById('hsGoto');
   const list = document.getElementById('hsGotoList');
+  const availableImageIds = new Set(images.map(assetIdentity));
+  const visibleScreens = loading ? [] : screens.filter(([,screen]) => {
+    const identity = assetIdentity(screen.image);
+    return identity && availableImageIds.has(identity);
+  });
   const screenByImage = new Map();
-  screens.forEach(([id,screen]) => {
+  visibleScreens.forEach(([id,screen]) => {
     const identity = assetIdentity(screen.image);
     if(identity && !screenByImage.has(identity)) screenByImage.set(identity,id);
   });
   const imageValue = image => screenByImage.get(assetIdentity(image)) || `__image__:${image}`;
   const values = [
     HOTSPOT_GO_BACK,
-    ...screens.map(([id]) => id),
+    ...visibleScreens.map(([id]) => id),
     ...images.map(imageValue)
   ];
   const selected = values.includes(target.value) ? target.value : (values[0] || '');
   target.value = selected;
-  const screenRows = screens.map(([id,screen]) => {
+  const screenRows = visibleScreens.map(([id,screen]) => {
     const value = encodeURIComponent(id);
     const imageName = assetDisplayName(screen.image).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'');
     return `<button type="button" class="route-picker-item ${selected===id?'active':''}" data-hs-group="screen" data-hs-search="${esc(`${imageName} ${screen.label} ${id}`.toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(imageName||screen.label)} (${esc(id)})</span></button>`;
