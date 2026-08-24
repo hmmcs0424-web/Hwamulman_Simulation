@@ -6264,14 +6264,13 @@ function cteAdmColHtml(panel) {
         <label class="cte-adm-flbl">좌우 여백(px)
           <input class="cte-adm-inp" type="number" min="0" max="40" step="1" value="${st.hotspotPadXPx}" oninput="cteHotSizeSetting('${panel}','hotspotPadXPx',this.value)">
         </label>
-        <button class="cte-adm-mainbtn" style="height:27px;white-space:nowrap;" onclick="cteNormalizeHotspots('${panel}')" title="기존 이동 영역의 높이를 같은 값으로 맞춤">기존 높이 맞춤</button>
+        <button class="cte-adm-mainbtn" style="height:27px;white-space:nowrap;" onclick="cteApplyHotBatch('${panel}')" ${st.hotSelected.length?'':'disabled'}>선택 영역 적용</button>
       </div>
-      <div style="font-size:9px;color:#78716c;margin:-1px 0 5px;">드래그한 범위의 가운데를 기준으로 높이를 통일하고 좌우에 같은 여백을 더합니다.</div>
-      <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot"
-        onclick="cteItTool('${panel}','hotspot')"
-        style="width:100%;justify-content:center;font-size:11px;padding:4px 0;">
-        ${st.tool==='hotspot'?'✏ 이동 영역 그리기 모드 ON (이미지 위에서 드래그)':'🔗 이동 영역 설정 모드'}
-      </button>
+      <div style="font-size:9px;color:#78716c;margin:-1px 0 5px;">여러 영역 선택 후 값을 적용하거나, 선택 테두리 우하단 손잡이로 전체 크기를 조절하세요.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot" onclick="cteItTool('${panel}','hotspot')" style="justify-content:center;font-size:11px;padding:4px 0;">${st.tool==='hotspot'?'✏ 새 영역 그리기 ON':'＋ 새 영역'}</button>
+        <button class="cte-it-btn${st.tool==='hotspotBatch'?' on':''}" id="cte${px}Tool_hotspotBatch" onclick="cteItTool('${panel}','hotspotBatch')" style="justify-content:center;font-size:11px;padding:4px 0;">${st.tool==='hotspotBatch'?`☑ ${st.hotSelected.length}개 선택됨`:'▧ 여러 영역 선택'}</button>
+      </div>
       ${cteHotListHtml(panel, scr)}
     </div>
 
@@ -6417,6 +6416,7 @@ function cteGoHot(panel, idx) {
 function cteHotDel(panel, idx) {
   const scr = cteScr(panel, cteNav[panel].cur);
   scr.hotspots.splice(idx,1);
+  cteItSt[panel].hotSelected = [];
   cteItRedraw(panel);
   cteRenderAdmPanel();
 }
@@ -6556,8 +6556,8 @@ function cteRegionImg(panel, i, val) {
 // 인라인 편집 도구 (이미지 위 드래그)
 // ═══════════════════════════════════════════
 const cteItSt = {
-  phone: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
-  agent: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
+  phone: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, hotSelected:[], selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
+  agent: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, hotSelected:[], selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
 };
 function cteHotSizeSetting(panel, key, value) {
   const limits = key==='hotspotHeightPx' ? [8,120] : [0,40];
@@ -6576,16 +6576,48 @@ function cteNormalizeHotRect(panel, rect, addPadding=true) {
   const y = Math.max(0, Math.min(100-fixedH, centerY-fixedH/2));
   return { ...rect, x:round1(x), y:round1(y), w:round1(right-x), h:round1(fixedH) };
 }
-function cteNormalizeHotspots(panel) {
+function cteApplyHotBatch(panel) {
+  const st = cteItSt[panel];
   const scr = cteScr(panel, cteNav[panel].cur);
-  scr.hotspots = scr.hotspots.map(hs => cteNormalizeHotRect(panel, hs, false));
+  scr.hotspots = scr.hotspots.map((hs,i) => st.hotSelected.includes(i) ? cteNormalizeHotRect(panel, hs, true) : hs);
   cteItRedraw(panel);
   cteRenderAdmPanel();
+}
+function cteHotBatchStart(panel, ev) {
+  const st=cteItSt[panel], svg=document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  if(st.tool!=='hotspotBatch'||!svg) return false;
+  ev.preventDefault(); ev.stopPropagation();
+  st.drawing=true; st.start=cteItPct(svg,ev); st.temp=null;
+  return true;
+}
+function cteHotGroupBounds(panel) {
+  const st=cteItSt[panel], hs=cteScr(panel,cteNav[panel].cur).hotspots.filter((_,i)=>st.hotSelected.includes(i));
+  if(!hs.length) return null;
+  const x=Math.min(...hs.map(v=>v.x)), y=Math.min(...hs.map(v=>v.y));
+  const right=Math.max(...hs.map(v=>v.x+v.w)), bottom=Math.max(...hs.map(v=>v.y+v.h));
+  return {x,y,w:right-x,h:bottom-y};
+}
+function cteHotGroupResizeStart(panel, ev) {
+  const svg=document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg'), st=cteItSt[panel];
+  const bounds=cteHotGroupBounds(panel), scr=cteScr(panel,cteNav[panel].cur);
+  if(!svg||!bounds||!st.hotSelected.length) return;
+  ev.preventDefault(); ev.stopPropagation();
+  const start=cteItPct(svg,ev), originals=st.hotSelected.map(i=>({i,hs:{...scr.hotspots[i]}}));
+  const onMove=e=>{
+    const p=cteItPct(svg,e);
+    const sx=Math.max(.1,Math.min((100-bounds.x)/Math.max(.1,bounds.w),(bounds.w+p.x-start.x)/Math.max(.1,bounds.w)));
+    const sy=Math.max(.1,Math.min((100-bounds.y)/Math.max(.1,bounds.h),(bounds.h+p.y-start.y)/Math.max(.1,bounds.h)));
+    originals.forEach(({i,hs})=>{ const v=scr.hotspots[i]; v.x=round1(bounds.x+(hs.x-bounds.x)*sx); v.y=round1(bounds.y+(hs.y-bounds.y)*sy); v.w=round1(hs.w*sx); v.h=round1(hs.h*sy); });
+    cteItRedraw(panel);
+  };
+  const onUp=()=>{window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);cteRenderAdmPanel();};
+  window.addEventListener('mousemove',onMove); window.addEventListener('mouseup',onUp);
 }
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
   if(tool === 'text' && cteItSt[panel].color === '#ef4444') cteItSt[panel].color = '#000000';
-  ['hotspot','scroll','box','text','arrow'].forEach(t => {
+  if(tool==='hotspotBatch') cteItSt[panel].hotSelected=[];
+  ['hotspot','hotspotBatch','scroll','box','text','arrow'].forEach(t => {
     const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
     if(el) el.classList.toggle('on', t===tool);
   });
@@ -6663,6 +6695,10 @@ function cteItBindSvg() {
       const st = cteItSt[panel];
       const scr = cteScr(panel, cteNav[panel].cur);
       const p = cteItPct(svg, e);
+      if(st.tool==='hotspotBatch'){
+        st.drawing=true; st.start=p; st.temp=null; st.hotSelected=[];
+        cteItRedraw(panel); e.preventDefault(); return;
+      }
       if(st.tool==='text'){
         const hit = cteItHit(scr.annotations, p);
         if(hit<0) return; // 빈 곳 클릭은 onclick에서 새 텍스트 생성
@@ -6718,11 +6754,15 @@ function cteItBindSvg() {
       const scr = cteScr(panel, cteNav[panel].cur);
       if(st.temp){
         const r=st.temp;
+        if(st.tool==='hotspotBatch' && r.w!=null){
+          st.hotSelected=scr.hotspots.map((hs,i)=>({hs,i})).filter(({hs})=>hs.x<r.x+r.w&&hs.x+hs.w>r.x&&hs.y<r.y+r.h&&hs.y+hs.h>r.y).map(({i})=>i);
+          st.temp=null; cteItRedraw(panel); cteRenderAdmPanel(); return;
+        }
         if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
           // 영역 확정 → "이동할 이미지" 선택 모달
           st.temp=null;
           cteItRedraw(panel);
-          cteOpenHotPicker(panel, cteNormalizeHotRect(panel, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)}));
+          cteOpenHotPicker(panel, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)});
           return;
         }
         if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
@@ -6820,13 +6860,20 @@ function cteItRedraw(panel) {
     const bx = hs.x+hs.w, by = hs.y; // X버튼 우상단
     const rs = Math.min(hs.w, hs.h) * 0.18; // 버튼 반지름(%)
     const btnR = Math.max(1.2, Math.min(rs, 3));
+    const batch=st.tool==='hotspotBatch', picked=st.hotSelected.includes(i);
     h += `<g>
-      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:move" onmousedown="event.stopPropagation();cteHotDragStart('${panel}',${i},event)" ondblclick="event.stopPropagation();cteGo('${panel}','${esc(hs.goto||'')}')"/>
+      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:${batch?'crosshair':'move'};${picked?'stroke:#22d3ee;stroke-width:3':''}" onmousedown="${batch?`cteHotBatchStart('${panel}',event)`:`event.stopPropagation();cteHotDragStart('${panel}',${i},event)`}" ondblclick="event.stopPropagation();cteGo('${panel}','${esc(hs.goto||'')}')"/>
+      ${batch?'':`
       <circle cx="${bx}%" cy="${by}%" r="${btnR}%" fill="#ef4444" style="cursor:pointer" onclick="event.stopPropagation();cteHotDel('${panel}',${i})"/>
       <text x="${bx}%" y="${by}%" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="${btnR*1.4}%" font-weight="900" style="pointer-events:none">×</text>
-      <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>
+      <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>`}
     </g>`;
   });
+  const gb=st.tool==='hotspotBatch'?cteHotGroupBounds(panel):null;
+  if(gb){
+    h+=`<rect x="${gb.x}%" y="${gb.y}%" width="${gb.w}%" height="${gb.h}%" fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="5 3" pointer-events="none"/>
+      <rect x="${gb.x+gb.w-1.3}%" y="${gb.y+gb.h-1.3}%" width="2.6%" height="2.6%" rx=".4" fill="#22d3ee" stroke="white" stroke-width=".5" style="cursor:se-resize" onmousedown="cteHotGroupResizeStart('${panel}',event)"/>`;
+  }
   scr.annotations.forEach((a,i)=>{
     const sel = i===st.selected;
     const sw = sel?2.6:1.8;
