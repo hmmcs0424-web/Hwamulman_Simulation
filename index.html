@@ -1237,12 +1237,19 @@ textarea.form-input{resize:vertical;}
         <option value="color_picker">색상 선택기</option>
         <option value="font_size_slider">글자 크기 슬라이더</option>
         <option value="font_size_value">현재 글자 크기 값 표시</option>
+        <option value="group_toggle">그룹 토글</option>
+        <option value="conditional_image">조건부 이미지 표시</option>
       </select>
     </div>
     <div id="hsToggleFields" style="display:none">
       <div class="form-row"><div class="form-label">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
       <div class="form-row"><div class="form-label">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage"><option value="">이미지를 선택하세요</option></select></div>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택한 작은 이미지를 지정한 영역 크기에 맞춰 겹쳐 표시합니다.</div>
+    </div>
+    <div id="hsStateGroupFields" style="display:none">
+      <div class="form-row"><div class="form-label">상태 그룹</div><input class="form-input" id="hsStateGroup" placeholder="예: 상차지거리"></div>
+      <label id="hsGroupInitialRow" style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsGroupInitialOn"> 처음부터 ON 상태로 표시</label>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">동일한 그룹명의 토글과 조건부 이미지 영역이 화면 이동 없이 함께 변경됩니다.</div>
     </div>
     <div id="hsTextColorFields" style="display:none">
       <div class="form-row"><div class="form-label">표시할 문구</div><input class="form-input" id="hsTextColorText" placeholder="예: 경기 이천 장호원"></div>
@@ -2352,6 +2359,7 @@ function applySec(name) {
 const HOTSPOT_GO_BACK = '__history_back__';
 let pendingScrollTransition = null;
 const hotspotToggleStates = new Map();
+const hotspotGroupStates = new Map();
 const hotspotTextColorStates = new Map();
 const hotspotTextSizeStates = new Map();
 const selectedTextColorTargets = new Map();
@@ -2359,6 +2367,33 @@ let simToastTimer = null;
 
 function hotspotStateKey(hotspot) {
   return `${activeSec}:${cache[activeSec]?.cur}:${hotspot.id||hotspot.label||''}:${hotspot.top}:${hotspot.left}`;
+}
+
+function hotspotGroupStateKey(hotspot) {
+  return `${activeSec}:${cache[activeSec]?.cur}:${hotspot.stateGroup||''}`;
+}
+
+function ensureHotspotGroupState(hotspot) {
+  const key=hotspotGroupStateKey(hotspot);
+  if(!hotspotGroupStates.has(key)) {
+    const controller=(cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.hotspots||[])
+      .find(item=>item.actionType==='group_toggle'&&item.stateGroup===hotspot.stateGroup);
+    hotspotGroupStates.set(key,!!(controller?.groupInitialOn??hotspot.groupInitialOn));
+  }
+  return hotspotGroupStates.get(key);
+}
+
+function applyGroupedHotspotImage(hotspot, element) {
+  element.dataset.hotspotGroupKey=hotspotGroupStateKey(hotspot);
+  element._groupedHotspot=hotspot;
+  applyHotspotToggleImage(hotspot,element,ensureHotspotGroupState(hotspot));
+}
+
+function refreshHotspotGroup(groupKey) {
+  document.querySelectorAll('.hotspot[data-hotspot-group-key]').forEach(element=>{
+    if(element.dataset.hotspotGroupKey!==groupKey||!element._groupedHotspot)return;
+    applyHotspotToggleImage(element._groupedHotspot,element,!!hotspotGroupStates.get(groupKey));
+  });
 }
 
 function textColorGroupKey(hotspot) {
@@ -2480,6 +2515,12 @@ function handleHotspotAction(hotspot, element) {
   const action=hotspot.actionType||'navigate';
   let isOn=false;
   if(action==='text_color_target') selectTextColorTarget(hotspot,element);
+  if(action==='group_toggle') {
+    const key=hotspotGroupStateKey(hotspot);
+    isOn=!ensureHotspotGroupState(hotspot);
+    hotspotGroupStates.set(key,isOn);
+    refreshHotspotGroup(key);
+  }
   if(action==='toggle'||action==='toggle_toast') {
     const key=hotspotStateKey(hotspot);
     isOn=!hotspotToggleStates.get(key);
@@ -2794,6 +2835,7 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
   layer.style.height = imageHeight + 'px';
   layer.style.transform = fixedEdge === 'bottom' ? `translateY(${fixedHeight-imageHeight}px)` : '';
   if(!fixedHeight || !imageHeight) return;
+  hotspots.filter(hs=>hs.actionType==='group_toggle').forEach(ensureHotspotGroupState);
   hotspots.forEach(hs => {
     const hotspotTop = Number(hs.top)/100*imageHeight;
     if(fixedEdge === 'top' ? hotspotTop >= fixedHeight : hotspotTop + Number(hs.height)/100*imageHeight <= imageHeight-fixedHeight) return;
@@ -2811,8 +2853,10 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
       el.textContent = hs.label||'';
       el.addEventListener('click', () => showOverlayGuide(hs));
     } else {
-      applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
-      el.addEventListener('click', () => handleHotspotAction(hs,el));
+      if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
+      if(hs.actionType==='conditional_image')el.style.pointerEvents='none';
+      else el.addEventListener('click', () => handleHotspotAction(hs,el));
     }
     layer.appendChild(el);
   });
@@ -2971,6 +3015,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
   layer.innerHTML = '';
   const isAdmin = forceAdmin || (adminMode && !counselorPreviewMode);
   const isShow  = !isAdmin && showHotspots;
+  hotspots.filter(hs=>hs.actionType==='group_toggle').forEach(ensureHotspotGroupState);
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
     el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : isShow ? 'show-mode' : 'normal-mode');
@@ -3010,7 +3055,11 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       value.textContent='—';
       el.appendChild(value);
     }
-    if(!isGuideOverlay) applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
+    if(!isGuideOverlay) {
+      if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
+    }
+    if(!isAdmin&&hs.actionType==='conditional_image')el.style.pointerEvents='none';
     if(!isAdmin&&hs.actionType==='color_picker')bindColorPicker(hs,el);
     if(!isAdmin&&hs.actionType==='font_size_slider')bindFontSizeSlider(hs,el);
     if(isAdmin) {
@@ -3085,7 +3134,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
         window.addEventListener('mouseup', onUp);
       });
       el.appendChild(handle);
-    } else if(hs.actionType!=='color_picker'&&hs.actionType!=='font_size_slider') {
+    } else if(hs.actionType!=='color_picker'&&hs.actionType!=='font_size_slider'&&hs.actionType!=='conditional_image') {
       el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : handleHotspotAction(hs,el));
     }
     layer.appendChild(el);
@@ -4972,6 +5021,8 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsColorPickerGroup').value='글자색';
     document.getElementById('hsFontSizeSliderGroup').value='글자색';
     document.getElementById('hsFontSizeValueGroup').value='글자색';
+    document.getElementById('hsStateGroup').value='';
+    document.getElementById('hsGroupInitialOn').checked=false;
     updateHsActionFields();
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
@@ -5024,18 +5075,21 @@ function renderHsTargetList(screens, images, loading=false) {
 
 function updateHsActionFields() {
   const action=document.getElementById('hsActionType').value;
-  const hasToggle=action==='toggle'||action==='toggle_toast';
+  const hasToggle=action==='toggle'||action==='toggle_toast'||action==='group_toggle'||action==='conditional_image';
   const hasToast=action==='toast'||action==='navigate_toast'||action==='toggle_toast';
   const hasNavigation=action==='navigate'||action==='navigate_toast';
   const hasTextColor=action==='text_color_target';
   const hasColorPicker=action==='color_picker';
   const hasFontSizeSlider=action==='font_size_slider';
   const hasFontSizeValue=action==='font_size_value';
+  const hasStateGroup=action==='group_toggle'||action==='conditional_image';
   document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
   document.getElementById('hsTextColorFields').style.display=hasTextColor?'':'none';
   document.getElementById('hsColorPickerFields').style.display=hasColorPicker?'':'none';
   document.getElementById('hsFontSizeSliderFields').style.display=hasFontSizeSlider?'':'none';
   document.getElementById('hsFontSizeValueFields').style.display=hasFontSizeValue?'':'none';
+  document.getElementById('hsStateGroupFields').style.display=hasStateGroup?'':'none';
+  document.getElementById('hsGroupInitialRow').style.display=action==='group_toggle'?'flex':'none';
   document.getElementById('hsToastFields').style.display=hasToast?'':'none';
   document.getElementById('hsNavigationFields').style.display=hasNavigation?'grid':'none';
   document.getElementById('hsToastSingleRow').style.display=(action==='toast'||action==='navigate_toast')?'':'none';
@@ -5181,6 +5235,11 @@ function confirmHs() {
   if(hasNavigation && !goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
   const toggleOnImage=document.getElementById('hsToggleOnImage').value;
   if((actionType==='toggle'||actionType==='toggle_toast') && !toggleOnImage) { alert('선택 상태 이미지를 선택해 주세요.'); return; }
+  const stateGroup=document.getElementById('hsStateGroup').value.trim();
+  const toggleOffImage=document.getElementById('hsToggleOffImage').value;
+  if((actionType==='group_toggle'||actionType==='conditional_image')&&!stateGroup) { alert('상태 그룹을 입력해 주세요.'); return; }
+  if(actionType==='group_toggle'&&!toggleOnImage) { alert('그룹 토글의 선택 상태 이미지를 선택해 주세요.'); return; }
+  if(actionType==='conditional_image'&&!toggleOffImage&&!toggleOnImage) { alert('조건부로 표시할 해제 또는 선택 상태 이미지를 선택해 주세요.'); return; }
   const toastMessage=document.getElementById('hsToastMessage').value.trim();
   const toastOnMessage=document.getElementById('hsToastOnMessage').value.trim();
   const toastOffMessage=document.getElementById('hsToastOffMessage').value.trim();
@@ -5195,12 +5254,13 @@ function confirmHs() {
   const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
   if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':'토글 및 토스트 알림');
+    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:'토글 및 토스트 알림');
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
   if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
   if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
+  if(actionType==='group_toggle'||actionType==='conditional_image') Object.assign(hotspot,{stateGroup,toggleOffImage,toggleOnImage,...(actionType==='group_toggle'?{groupInitialOn:document.getElementById('hsGroupInitialOn').checked}:{})});
   if(actionType==='toast'||actionType==='navigate_toast'||actionType==='toggle_toast') Object.assign(hotspot,{toastMessage,toastOnMessage,toastOffMessage,toastDuration:Number(document.getElementById('hsToastDuration').value)||3000,toastPosition:document.getElementById('hsToastPosition').value,toastConfirm:document.getElementById('hsToastConfirm').checked});
   if(actionType==='text_color_target') Object.assign(hotspot,{textColorText,textColorGroup,textColorInitial:document.getElementById('hsTextColorInitial').value,textMinSize,textColorSize:textDefaultSize,textMaxSize,textColorWeight:document.getElementById('hsTextColorWeight').value,textColorAlign:document.getElementById('hsTextColorAlign').value,textColorBackground:document.getElementById('hsTextColorBackground').value,textColorMask:document.getElementById('hsTextColorMask').checked});
   if(actionType==='color_picker') Object.assign(hotspot,{textColorGroup});
