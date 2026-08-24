@@ -176,6 +176,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .hotspot-text-color.selected{outline:2px dashed #334155;outline-offset:-2px}
 .hotspot-color-picker{touch-action:none}
 .hotspot-color-picker.active{outline:2px solid #2563eb;outline-offset:-2px;border-radius:4px}
+.hotspot-font-size-slider{display:flex;align-items:center;padding:0 2px;touch-action:none}
+.hotspot-font-size-slider input{width:100%;margin:0;accent-color:#293047;cursor:pointer}
+.hotspot-font-size-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;color:#293047;font-weight:800;pointer-events:none}
 .sim-toast{display:none;position:absolute;z-index:60;left:12px;right:12px;bottom:12px;align-items:center;gap:10px;padding:13px 14px;border-radius:4px;background:rgba(31,31,36,.96);color:#fff;box-shadow:0 3px 12px rgba(0,0,0,.35);font-size:12px;line-height:1.45;transform:translateY(16px);opacity:0;transition:opacity .18s,transform .18s}
 .sim-toast.show{display:flex;transform:translateY(0);opacity:1}.sim-toast.top{top:12px;bottom:auto}.sim-toast-message{flex:1}.sim-toast-close{border:0;background:transparent;color:#4da3ff;font:inherit;font-weight:700;cursor:pointer;padding:3px}
 .draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;}
@@ -1230,8 +1233,10 @@ textarea.form-input{resize:vertical;}
         <option value="toast">토스트 알림 설정</option>
         <option value="navigate_toast">화면 이동 + 토스트 알림 설정</option>
         <option value="toggle_toast">토글 + 토스트 알림 설정</option>
-        <option value="text_color_target">텍스트 색상 변경 대상</option>
+        <option value="text_color_target">텍스트 스타일 변경 대상</option>
         <option value="color_picker">색상 선택기</option>
+        <option value="font_size_slider">글자 크기 슬라이더</option>
+        <option value="font_size_value">현재 글자 크기 값 표시</option>
       </select>
     </div>
     <div id="hsToggleFields" style="display:none">
@@ -1244,7 +1249,9 @@ textarea.form-input{resize:vertical;}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <div class="form-row"><div class="form-label">색상 그룹</div><input class="form-input" id="hsTextColorGroup" value="글자색" placeholder="예: 배차정보 글자색"></div>
         <div class="form-row"><div class="form-label">최초 색상</div><input class="form-input" id="hsTextColorInitial" type="color" value="#2563eb" style="height:38px;padding:4px"></div>
-        <div class="form-row"><div class="form-label">글자 크기(px)</div><input class="form-input" id="hsTextColorSize" type="number" min="8" max="72" value="18"></div>
+        <div class="form-row"><div class="form-label">최소 글자 크기(px)</div><input class="form-input" id="hsTextColorMinSize" type="number" min="1" max="72" value="10"></div>
+        <div class="form-row"><div class="form-label">기본 글자 크기(px)</div><input class="form-input" id="hsTextColorSize" type="number" min="1" max="72" value="18"></div>
+        <div class="form-row"><div class="form-label">최대 글자 크기(px)</div><input class="form-input" id="hsTextColorMaxSize" type="number" min="1" max="120" value="24"></div>
         <div class="form-row"><div class="form-label">글자 굵기</div><select class="form-input" id="hsTextColorWeight"><option value="400">보통</option><option value="600">약간 굵게</option><option value="700" selected>굵게</option><option value="800">매우 굵게</option></select></div>
         <div class="form-row"><div class="form-label">정렬</div><select class="form-input" id="hsTextColorAlign"><option value="left">왼쪽</option><option value="center">가운데</option><option value="right">오른쪽</option></select></div>
         <div class="form-row"><div class="form-label">원본 가림 배경</div><input class="form-input" id="hsTextColorBackground" type="color" value="#ffffff" style="height:38px;padding:4px"></div>
@@ -1255,6 +1262,14 @@ textarea.form-input{resize:vertical;}
     <div id="hsColorPickerFields" style="display:none">
       <div class="form-row"><div class="form-label">연결할 색상 그룹</div><input class="form-input" id="hsColorPickerGroup" value="글자색" placeholder="예: 배차정보 글자색"></div>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">지정한 영역을 원형 색상판으로 인식합니다. 누르거나 드래그한 위치의 색상을 현재 선택된 텍스트에 적용합니다.</div>
+    </div>
+    <div id="hsFontSizeSliderFields" style="display:none">
+      <div class="form-row"><div class="form-label">연결할 스타일 그룹</div><input class="form-input" id="hsFontSizeSliderGroup" value="글자색" placeholder="예: 배차정보 글자색"></div>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택된 텍스트의 최소·기본·최대 크기를 자동으로 불러옵니다. 텍스트를 바꾸면 슬라이더 범위와 위치도 함께 바뀝니다.</div>
+    </div>
+    <div id="hsFontSizeValueFields" style="display:none">
+      <div class="form-row"><div class="form-label">연결할 스타일 그룹</div><input class="form-input" id="hsFontSizeValueGroup" value="글자색" placeholder="예: 배차정보 글자색"></div>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">화면의 현재 크기 숫자 부분을 영역으로 지정하면 선택한 텍스트의 크기를 실시간으로 표시합니다.</div>
     </div>
     <div id="hsToastFields" style="display:none">
       <div class="form-row" id="hsToastSingleRow"><div class="form-label">알림 문구</div><input class="form-input" id="hsToastMessage" placeholder="예: 이미지 저장이 완료되었습니다."></div>
@@ -2338,6 +2353,7 @@ const HOTSPOT_GO_BACK = '__history_back__';
 let pendingScrollTransition = null;
 const hotspotToggleStates = new Map();
 const hotspotTextColorStates = new Map();
+const hotspotTextSizeStates = new Map();
 const selectedTextColorTargets = new Map();
 let simToastTimer = null;
 
@@ -2355,6 +2371,7 @@ function selectTextColorTarget(hotspot, element) {
   selectedTextColorTargets.set(groupKey,targetKey);
   document.querySelectorAll('.hotspot-text-color').forEach(node=>node.classList.toggle('selected',node.dataset.textColorKey===targetKey));
   element.querySelector('.hotspot-text-color')?.classList.add('selected');
+  syncFontSizeSliders(groupKey);
 }
 
 function hsvToHex(hue, saturation, value=1) {
@@ -2393,6 +2410,50 @@ function bindColorPicker(hotspot, element) {
   const finish=event=>{element.classList.remove('active');if(element.hasPointerCapture?.(event.pointerId))element.releasePointerCapture(event.pointerId);};
   element.addEventListener('pointerup',finish);
   element.addEventListener('pointercancel',finish);
+}
+
+function selectedTextStyleNode(groupKey) {
+  const targetKey=selectedTextColorTargets.get(groupKey);
+  return [...document.querySelectorAll('.hotspot-text-color')].find(node=>node.dataset.textColorKey===targetKey)||null;
+}
+
+function syncFontSizeSliders(groupKey) {
+  const target=selectedTextStyleNode(groupKey);
+  document.querySelectorAll('.hotspot-font-size-slider input').forEach(input=>{
+    if(input.dataset.styleGroupKey!==groupKey)return;
+    input.disabled=!target;
+    if(!target)return;
+    input.min=target.dataset.minSize;
+    input.max=target.dataset.maxSize;
+    input.value=target.dataset.currentSize;
+  });
+  document.querySelectorAll('.hotspot-font-size-value').forEach(value=>{
+    if(value.dataset.styleGroupKey===groupKey)value.textContent=target?target.dataset.currentSize:'—';
+  });
+}
+
+function applyFontSizeValue(groupKey, value) {
+  const target=selectedTextStyleNode(groupKey);
+  if(!target)return;
+  const min=Number(target.dataset.minSize)||10, max=Number(target.dataset.maxSize)||24;
+  const size=Math.max(min,Math.min(max,Number(value)||min));
+  target.dataset.currentSize=String(size);
+  target.style.fontSize=`${size}px`;
+  hotspotTextSizeStates.set(target.dataset.textColorKey,size);
+  syncFontSizeSliders(groupKey);
+}
+
+function bindFontSizeSlider(hotspot, element) {
+  const groupKey=textColorGroupKey(hotspot);
+  const input=document.createElement('input');
+  input.type='range';input.step='1';input.disabled=true;
+  input.dataset.styleGroupKey=groupKey;
+  input.setAttribute('aria-label','글자 크기');
+  input.addEventListener('input',event=>{event.stopPropagation();applyFontSizeValue(groupKey,input.value);});
+  input.addEventListener('click',event=>event.stopPropagation());
+  element.classList.add('hotspot-font-size-slider');
+  element.appendChild(input);
+  syncFontSizeSliders(groupKey);
 }
 
 function showSimulatorToast(message, options={}) {
@@ -2927,15 +2988,31 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
       text.dataset.textColorKey=targetKey;
       text.textContent=hs.textColorText||hs.label||'';
       text.style.color=hotspotTextColorStates.get(targetKey)||hs.textColorInitial||'#2563eb';
-      text.style.fontSize=`${Math.max(8,Number(hs.textColorSize)||18)}px`;
+      const minSize=Math.max(1,Number(hs.textMinSize)||10);
+      const maxSize=Math.max(minSize,Number(hs.textMaxSize)||Math.max(24,Number(hs.textColorSize)||18));
+      const defaultSize=Math.max(minSize,Math.min(maxSize,Number(hs.textColorSize)||18));
+      const currentSize=hotspotTextSizeStates.get(targetKey)||defaultSize;
+      text.dataset.minSize=String(minSize);
+      text.dataset.maxSize=String(maxSize);
+      text.dataset.defaultSize=String(defaultSize);
+      text.dataset.currentSize=String(currentSize);
+      text.style.fontSize=`${currentSize}px`;
       text.style.fontWeight=hs.textColorWeight||'700';
       text.style.justifyContent=hs.textColorAlign==='right'?'flex-end':hs.textColorAlign==='center'?'center':'flex-start';
       text.style.background=hs.textColorMask===false?'transparent':(hs.textColorBackground||'#ffffff');
       if(selectedTextColorTargets.get(textColorGroupKey(hs))===targetKey)text.classList.add('selected');
       el.appendChild(text);
     }
+    if(hs.actionType==='font_size_value') {
+      const value=document.createElement('span');
+      value.className='hotspot-font-size-value';
+      value.dataset.styleGroupKey=textColorGroupKey(hs);
+      value.textContent='—';
+      el.appendChild(value);
+    }
     if(!isGuideOverlay) applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
     if(!isAdmin&&hs.actionType==='color_picker')bindColorPicker(hs,el);
+    if(!isAdmin&&hs.actionType==='font_size_slider')bindFontSizeSlider(hs,el);
     if(isAdmin) {
       el.style.cursor = 'move';
       el.title = isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
@@ -3008,11 +3085,12 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
         window.addEventListener('mouseup', onUp);
       });
       el.appendChild(handle);
-    } else if(hs.actionType!=='color_picker') {
+    } else if(hs.actionType!=='color_picker'&&hs.actionType!=='font_size_slider') {
       el.addEventListener('click', () => isGuideOverlay ? showOverlayGuide(hs) : handleHotspotAction(hs,el));
     }
     layer.appendChild(el);
   });
+  if(!isAdmin)document.querySelectorAll('.hotspot-font-size-value').forEach(value=>syncFontSizeSliders(value.dataset.styleGroupKey));
 }
 
 function showOverlayGuide(item) {
@@ -4884,12 +4962,16 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsTextColorText').value='';
     document.getElementById('hsTextColorGroup').value='글자색';
     document.getElementById('hsTextColorInitial').value='#2563eb';
+    document.getElementById('hsTextColorMinSize').value='10';
     document.getElementById('hsTextColorSize').value='18';
+    document.getElementById('hsTextColorMaxSize').value='24';
     document.getElementById('hsTextColorWeight').value='700';
     document.getElementById('hsTextColorAlign').value='left';
     document.getElementById('hsTextColorBackground').value='#ffffff';
     document.getElementById('hsTextColorMask').checked=true;
     document.getElementById('hsColorPickerGroup').value='글자색';
+    document.getElementById('hsFontSizeSliderGroup').value='글자색';
+    document.getElementById('hsFontSizeValueGroup').value='글자색';
     updateHsActionFields();
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
@@ -4947,9 +5029,13 @@ function updateHsActionFields() {
   const hasNavigation=action==='navigate'||action==='navigate_toast';
   const hasTextColor=action==='text_color_target';
   const hasColorPicker=action==='color_picker';
+  const hasFontSizeSlider=action==='font_size_slider';
+  const hasFontSizeValue=action==='font_size_value';
   document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
   document.getElementById('hsTextColorFields').style.display=hasTextColor?'':'none';
   document.getElementById('hsColorPickerFields').style.display=hasColorPicker?'':'none';
+  document.getElementById('hsFontSizeSliderFields').style.display=hasFontSizeSlider?'':'none';
+  document.getElementById('hsFontSizeValueFields').style.display=hasFontSizeValue?'':'none';
   document.getElementById('hsToastFields').style.display=hasToast?'':'none';
   document.getElementById('hsNavigationFields').style.display=hasNavigation?'grid':'none';
   document.getElementById('hsToastSingleRow').style.display=(action==='toast'||action==='navigate_toast')?'':'none';
@@ -5101,19 +5187,25 @@ function confirmHs() {
   if((actionType==='toast'||actionType==='navigate_toast') && !toastMessage) { alert('알림 문구를 입력해 주세요.'); return; }
   if(actionType==='toggle_toast' && (!toastOnMessage||!toastOffMessage)) { alert('선택 및 해제 알림 문구를 모두 입력해 주세요.'); return; }
   const textColorText=document.getElementById('hsTextColorText').value.trim();
-  const textColorGroup=(actionType==='color_picker'?document.getElementById('hsColorPickerGroup').value:document.getElementById('hsTextColorGroup').value).trim();
+  const textColorGroup=(actionType==='color_picker'?document.getElementById('hsColorPickerGroup').value:actionType==='font_size_slider'?document.getElementById('hsFontSizeSliderGroup').value:actionType==='font_size_value'?document.getElementById('hsFontSizeValueGroup').value:document.getElementById('hsTextColorGroup').value).trim();
   if(actionType==='text_color_target'&&!textColorText) { alert('화면에 표시할 문구를 입력해 주세요.'); return; }
-  if((actionType==='text_color_target'||actionType==='color_picker')&&!textColorGroup) { alert('연결할 색상 그룹을 입력해 주세요.'); return; }
+  if((actionType==='text_color_target'||actionType==='color_picker'||actionType==='font_size_slider'||actionType==='font_size_value')&&!textColorGroup) { alert('연결할 스타일 그룹을 입력해 주세요.'); return; }
+  const textMinSize=Number(document.getElementById('hsTextColorMinSize').value);
+  const textDefaultSize=Number(document.getElementById('hsTextColorSize').value);
+  const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
+  if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':'토글 및 토스트 알림');
+    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':'토글 및 토스트 알림');
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
   if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
   if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
   if(actionType==='toast'||actionType==='navigate_toast'||actionType==='toggle_toast') Object.assign(hotspot,{toastMessage,toastOnMessage,toastOffMessage,toastDuration:Number(document.getElementById('hsToastDuration').value)||3000,toastPosition:document.getElementById('hsToastPosition').value,toastConfirm:document.getElementById('hsToastConfirm').checked});
-  if(actionType==='text_color_target') Object.assign(hotspot,{textColorText,textColorGroup,textColorInitial:document.getElementById('hsTextColorInitial').value,textColorSize:Number(document.getElementById('hsTextColorSize').value)||18,textColorWeight:document.getElementById('hsTextColorWeight').value,textColorAlign:document.getElementById('hsTextColorAlign').value,textColorBackground:document.getElementById('hsTextColorBackground').value,textColorMask:document.getElementById('hsTextColorMask').checked});
+  if(actionType==='text_color_target') Object.assign(hotspot,{textColorText,textColorGroup,textColorInitial:document.getElementById('hsTextColorInitial').value,textMinSize,textColorSize:textDefaultSize,textMaxSize,textColorWeight:document.getElementById('hsTextColorWeight').value,textColorAlign:document.getElementById('hsTextColorAlign').value,textColorBackground:document.getElementById('hsTextColorBackground').value,textColorMask:document.getElementById('hsTextColorMask').checked});
   if(actionType==='color_picker') Object.assign(hotspot,{textColorGroup});
+  if(actionType==='font_size_slider') Object.assign(hotspot,{textColorGroup});
+  if(actionType==='font_size_value') Object.assign(hotspot,{textColorGroup});
   st.flow.screens[st.cur].hotspots.push(hotspot);
   pendingHs = null;
   cancelDraw();
