@@ -803,6 +803,7 @@ textarea.form-input{resize:vertical;}
         <div class="section-title">핫스팟 편집</div>
         <div class="btn-row" style="margin-bottom:8px">
           <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
+          <button class="btn btn-secondary" id="btnMultiSelect" type="button">▧ 여러 영역 선택</button>
           <button class="btn btn-secondary" type="button" onclick="startMaskDraw()">+ 마스킹 영역</button>
           <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('text')">+ 텍스트 삽입</button>
           <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('box')">+ 박스 삽입</button>
@@ -1454,6 +1455,8 @@ let counselorPreviewMode = false;
 let showHotspots = false;
 let drawing = false, drawStart = null, pendingHs = null, drawMode = 'hotspot';
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
+let selectedHotspotIndices = [];
+let selectedHotspotContext = null;
 let siteImageManifest = null;
 let activePage = 'simulator';
 let editingGuidePage = false;
@@ -2116,6 +2119,7 @@ async function boot() {
   document.getElementById('adminEmail').value=rememberedAdminEmail;
   document.getElementById('rememberAdminEmail').checked=!!rememberedAdminEmail;
   document.getElementById('btnDraw').onclick = startDraw;
+  document.getElementById('btnMultiSelect').onclick = startHotspotMultiSelect;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
   document.getElementById('btnSaveFlow').onclick = () => saveSimulatorFlow();
@@ -3064,6 +3068,13 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     if(!isAdmin&&hs.actionType==='color_picker')bindColorPicker(hs,el);
     if(!isAdmin&&hs.actionType==='font_size_slider')bindFontSizeSlider(hs,el);
     if(isAdmin) {
+      const isMultiSelected = selectedHotspotContext?.sec===activeSec
+        && selectedHotspotContext?.screen===cache[activeSec]?.cur
+        && selectedHotspotIndices.includes(i);
+      if(isMultiSelected) {
+        el.style.outline='3px solid #06b6d4';
+        el.style.outlineOffset='1px';
+      }
       el.style.cursor = 'move';
       el.title = isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
       el.addEventListener('dblclick', e => {
@@ -3082,6 +3093,8 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
         e.stopPropagation();
         const st = cache[activeSec];
         st.flow.screens[st.cur].hotspots.splice(i,1);
+        selectedHotspotIndices=[];
+        selectedHotspotContext=null;
         renderHotspots(layerId, st.flow.screens[st.cur].hotspots, false);
         renderHsList();
       });
@@ -3140,7 +3153,46 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     }
     layer.appendChild(el);
   });
+  if(isAdmin && selectedHotspotContext?.sec===activeSec && selectedHotspotContext?.screen===cache[activeSec]?.cur && selectedHotspotIndices.length>1) {
+    renderHotspotGroupBox(layerId,hotspots);
+  }
   if(!isAdmin)document.querySelectorAll('.hotspot-font-size-value').forEach(value=>syncFontSizeSliders(value.dataset.styleGroupKey));
+}
+
+function renderHotspotGroupBox(layerId,hotspots) {
+  const layer=document.getElementById(layerId);
+  const selected=selectedHotspotIndices.map(i=>hotspots[i]).filter(Boolean);
+  if(!layer||selected.length<2)return;
+  const left=Math.min(...selected.map(h=>h.left)), top=Math.min(...selected.map(h=>h.top));
+  const right=Math.max(...selected.map(h=>h.left+h.width)), bottom=Math.max(...selected.map(h=>h.top+h.height));
+  const box=document.createElement('div');
+  box.style.cssText=`position:absolute;left:${left}%;top:${top}%;width:${right-left}%;height:${bottom-top}%;border:2px dashed #06b6d4;box-sizing:border-box;pointer-events:none;z-index:30;`;
+  const handle=document.createElement('div');
+  handle.title='선택 영역 전체 크기 조절';
+  handle.style.cssText='position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border:2px solid #fff;border-radius:3px;background:#06b6d4;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:se-resize;pointer-events:auto;';
+  handle.addEventListener('mousedown',e=>startHotspotGroupResize(e,layerId,hotspots,{left,top,width:right-left,height:bottom-top}));
+  box.appendChild(handle); layer.appendChild(box);
+}
+
+function startHotspotGroupResize(e,layerId,hotspots,bounds) {
+  e.preventDefault();e.stopPropagation();
+  const layer=document.getElementById(layerId),lr=layer.getBoundingClientRect();
+  const sx=e.clientX,sy=e.clientY;
+  const originals=selectedHotspotIndices.map(i=>({i,hs:{...hotspots[i]}})).filter(v=>v.hs);
+  const onMove=ev=>{
+    const scaleX=Math.max(.1,Math.min((100-bounds.left)/Math.max(.1,bounds.width),(bounds.width+(ev.clientX-sx)/lr.width*100)/Math.max(.1,bounds.width)));
+    const scaleY=Math.max(.1,Math.min((100-bounds.top)/Math.max(.1,bounds.height),(bounds.height+(ev.clientY-sy)/lr.height*100)/Math.max(.1,bounds.height)));
+    originals.forEach(({i,hs})=>{
+      const target=hotspots[i];
+      target.left=round1(bounds.left+(hs.left-bounds.left)*scaleX);
+      target.top=round1(bounds.top+(hs.top-bounds.top)*scaleY);
+      target.width=round1(hs.width*scaleX);
+      target.height=round1(hs.height*scaleY);
+    });
+    renderHotspots(layerId,hotspots,true);
+  };
+  const onUp=()=>{window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);renderHsList();};
+  window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);
 }
 
 function showOverlayGuide(item) {
@@ -3552,6 +3604,9 @@ function syncAdminUI() {
 function renderHsList() {
   renderMainScreenStatus();
   const st = cache[activeSec];
+  const multiBtn=document.getElementById('btnMultiSelect');
+  const selectionHere=selectedHotspotContext?.sec===activeSec&&selectedHotspotContext?.screen===st.cur;
+  if(multiBtn)multiBtn.textContent=selectionHere&&selectedHotspotIndices.length?`☑ ${selectedHotspotIndices.length}개 선택됨`:'▧ 여러 영역 선택';
   const hs = st.flow.screens?.[st.cur]?.hotspots || [];
   const el = document.getElementById('hsList');
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
@@ -3565,6 +3620,8 @@ function renderHsList() {
 function delHs(i) {
   const st = cache[activeSec];
   st.flow.screens[st.cur].hotspots.splice(i,1);
+  selectedHotspotIndices=[];
+  selectedHotspotContext=null;
   const layerId = SECS[activeSec].type==='pc' ? 'pcHotspotLayer' : 'hotspotLayer';
   renderHotspots(layerId, st.flow.screens[st.cur].hotspots, true);
   renderHsList();
@@ -4978,6 +5035,18 @@ function setupDrawEvents(overlayId, rectId) {
       top: round1(t/b.height*100), left: round1(l/b.width*100),
       width: round1(w/b.width*100), height: round1(h/b.height*100),
     };
+    if(drawMode==='multi') {
+      const st=cache[activeSec], hotspots=st.flow.screens[st.cur].hotspots||[];
+      selectedHotspotIndices=hotspots.map((hs,i)=>({hs,i})).filter(({hs})=>hs.left<pendingHs.left+pendingHs.width&&hs.left+hs.width>pendingHs.left&&hs.top<pendingHs.top+pendingHs.height&&hs.top+hs.height>pendingHs.top).map(({i})=>i);
+      selectedHotspotContext={sec:activeSec,screen:st.cur};
+      pendingHs=null;
+      cancelDraw();
+      const layerId=SECS[activeSec].type==='pc'?'pcHotspotLayer':'hotspotLayer';
+      renderHotspots(layerId,hotspots,true);
+      const btn=document.getElementById('btnMultiSelect');
+      btn.textContent=selectedHotspotIndices.length?`☑ ${selectedHotspotIndices.length}개 선택됨`:'▧ 여러 영역 선택';
+      return;
+    }
     if(drawMode==='mask') {
       const st=cache[activeSec];
       const screen=st.flow.screens[st.cur];
@@ -5172,6 +5241,13 @@ function startDraw() {
 
 function startOverlayDraw(kind) {
   drawMode = kind;
+  beginScreenDraw();
+}
+
+function startHotspotMultiSelect() {
+  selectedHotspotIndices=[];
+  selectedHotspotContext={sec:activeSec,screen:cache[activeSec]?.cur};
+  drawMode='multi';
   beginScreenDraw();
 }
 
@@ -6257,20 +6333,11 @@ function cteAdmColHtml(panel) {
     <!-- ── 섹션 1: 이동 영역 ── -->
     <div style="margin-top:8px;padding:7px 8px;background:#1a1200;border-radius:6px;border:1px solid #3b2800;">
       <div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:5px;">🔗 클릭 이동 영역 &nbsp;<span style="font-weight:400;color:#78716c;">드래그로 영역을 그리면 → 이동할 이미지 선택</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:5px;align-items:end;margin-bottom:5px;">
-        <label class="cte-adm-flbl">높이(px)
-          <input class="cte-adm-inp" type="number" min="8" max="120" step="1" value="${st.hotspotHeightPx}" oninput="cteHotSizeSetting('${panel}','hotspotHeightPx',this.value)">
-        </label>
-        <label class="cte-adm-flbl">좌우 여백(px)
-          <input class="cte-adm-inp" type="number" min="0" max="40" step="1" value="${st.hotspotPadXPx}" oninput="cteHotSizeSetting('${panel}','hotspotPadXPx',this.value)">
-        </label>
-        <button class="cte-adm-mainbtn" style="height:27px;white-space:nowrap;" onclick="cteApplyHotBatch('${panel}')" ${st.hotSelected.length?'':'disabled'}>선택 영역 적용</button>
-      </div>
-      <div style="font-size:9px;color:#78716c;margin:-1px 0 5px;">여러 영역 선택 후 값을 적용하거나, 선택 테두리 우하단 손잡이로 전체 크기를 조절하세요.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
-        <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot" onclick="cteItTool('${panel}','hotspot')" style="justify-content:center;font-size:11px;padding:4px 0;">${st.tool==='hotspot'?'✏ 새 영역 그리기 ON':'＋ 새 영역'}</button>
-        <button class="cte-it-btn${st.tool==='hotspotBatch'?' on':''}" id="cte${px}Tool_hotspotBatch" onclick="cteItTool('${panel}','hotspotBatch')" style="justify-content:center;font-size:11px;padding:4px 0;">${st.tool==='hotspotBatch'?`☑ ${st.hotSelected.length}개 선택됨`:'▧ 여러 영역 선택'}</button>
-      </div>
+      <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot"
+        onclick="cteItTool('${panel}','hotspot')"
+        style="width:100%;justify-content:center;font-size:11px;padding:4px 0;">
+        ${st.tool==='hotspot'?'✏ 이동 영역 그리기 모드 ON (이미지 위에서 드래그)':'🔗 이동 영역 설정 모드'}
+      </button>
       ${cteHotListHtml(panel, scr)}
     </div>
 
@@ -6416,7 +6483,6 @@ function cteGoHot(panel, idx) {
 function cteHotDel(panel, idx) {
   const scr = cteScr(panel, cteNav[panel].cur);
   scr.hotspots.splice(idx,1);
-  cteItSt[panel].hotSelected = [];
   cteItRedraw(panel);
   cteRenderAdmPanel();
 }
@@ -6556,68 +6622,13 @@ function cteRegionImg(panel, i, val) {
 // 인라인 편집 도구 (이미지 위 드래그)
 // ═══════════════════════════════════════════
 const cteItSt = {
-  phone: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, hotSelected:[], selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
-  agent: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, hotSelected:[], selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
+  phone: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
+  agent: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
 };
-function cteHotSizeSetting(panel, key, value) {
-  const limits = key==='hotspotHeightPx' ? [8,120] : [0,40];
-  cteItSt[panel][key] = Math.max(limits[0], Math.min(limits[1], Number(value)||limits[0]));
-}
-function cteNormalizeHotRect(panel, rect, addPadding=true) {
-  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
-  if(!svg) return rect;
-  const st = cteItSt[panel];
-  const width = svg.clientWidth || 1, height = svg.clientHeight || 1;
-  const fixedH = st.hotspotHeightPx / height * 100;
-  const padX = addPadding ? st.hotspotPadXPx / width * 100 : 0;
-  const centerY = rect.y + rect.h/2;
-  const x = Math.max(0, rect.x-padX);
-  const right = Math.min(100, rect.x+rect.w+padX);
-  const y = Math.max(0, Math.min(100-fixedH, centerY-fixedH/2));
-  return { ...rect, x:round1(x), y:round1(y), w:round1(right-x), h:round1(fixedH) };
-}
-function cteApplyHotBatch(panel) {
-  const st = cteItSt[panel];
-  const scr = cteScr(panel, cteNav[panel].cur);
-  scr.hotspots = scr.hotspots.map((hs,i) => st.hotSelected.includes(i) ? cteNormalizeHotRect(panel, hs, true) : hs);
-  cteItRedraw(panel);
-  cteRenderAdmPanel();
-}
-function cteHotBatchStart(panel, ev) {
-  const st=cteItSt[panel], svg=document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
-  if(st.tool!=='hotspotBatch'||!svg) return false;
-  ev.preventDefault(); ev.stopPropagation();
-  st.drawing=true; st.start=cteItPct(svg,ev); st.temp=null;
-  return true;
-}
-function cteHotGroupBounds(panel) {
-  const st=cteItSt[panel], hs=cteScr(panel,cteNav[panel].cur).hotspots.filter((_,i)=>st.hotSelected.includes(i));
-  if(!hs.length) return null;
-  const x=Math.min(...hs.map(v=>v.x)), y=Math.min(...hs.map(v=>v.y));
-  const right=Math.max(...hs.map(v=>v.x+v.w)), bottom=Math.max(...hs.map(v=>v.y+v.h));
-  return {x,y,w:right-x,h:bottom-y};
-}
-function cteHotGroupResizeStart(panel, ev) {
-  const svg=document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg'), st=cteItSt[panel];
-  const bounds=cteHotGroupBounds(panel), scr=cteScr(panel,cteNav[panel].cur);
-  if(!svg||!bounds||!st.hotSelected.length) return;
-  ev.preventDefault(); ev.stopPropagation();
-  const start=cteItPct(svg,ev), originals=st.hotSelected.map(i=>({i,hs:{...scr.hotspots[i]}}));
-  const onMove=e=>{
-    const p=cteItPct(svg,e);
-    const sx=Math.max(.1,Math.min((100-bounds.x)/Math.max(.1,bounds.w),(bounds.w+p.x-start.x)/Math.max(.1,bounds.w)));
-    const sy=Math.max(.1,Math.min((100-bounds.y)/Math.max(.1,bounds.h),(bounds.h+p.y-start.y)/Math.max(.1,bounds.h)));
-    originals.forEach(({i,hs})=>{ const v=scr.hotspots[i]; v.x=round1(bounds.x+(hs.x-bounds.x)*sx); v.y=round1(bounds.y+(hs.y-bounds.y)*sy); v.w=round1(hs.w*sx); v.h=round1(hs.h*sy); });
-    cteItRedraw(panel);
-  };
-  const onUp=()=>{window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);cteRenderAdmPanel();};
-  window.addEventListener('mousemove',onMove); window.addEventListener('mouseup',onUp);
-}
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
   if(tool === 'text' && cteItSt[panel].color === '#ef4444') cteItSt[panel].color = '#000000';
-  if(tool==='hotspotBatch') cteItSt[panel].hotSelected=[];
-  ['hotspot','hotspotBatch','scroll','box','text','arrow'].forEach(t => {
+  ['hotspot','scroll','box','text','arrow'].forEach(t => {
     const el = document.getElementById(`cte${panel==='phone'?'Phone':'Agent'}Tool_${t}`);
     if(el) el.classList.toggle('on', t===tool);
   });
@@ -6695,10 +6706,6 @@ function cteItBindSvg() {
       const st = cteItSt[panel];
       const scr = cteScr(panel, cteNav[panel].cur);
       const p = cteItPct(svg, e);
-      if(st.tool==='hotspotBatch'){
-        st.drawing=true; st.start=p; st.temp=null; st.hotSelected=[];
-        cteItRedraw(panel); e.preventDefault(); return;
-      }
       if(st.tool==='text'){
         const hit = cteItHit(scr.annotations, p);
         if(hit<0) return; // 빈 곳 클릭은 onclick에서 새 텍스트 생성
@@ -6754,10 +6761,6 @@ function cteItBindSvg() {
       const scr = cteScr(panel, cteNav[panel].cur);
       if(st.temp){
         const r=st.temp;
-        if(st.tool==='hotspotBatch' && r.w!=null){
-          st.hotSelected=scr.hotspots.map((hs,i)=>({hs,i})).filter(({hs})=>hs.x<r.x+r.w&&hs.x+hs.w>r.x&&hs.y<r.y+r.h&&hs.y+hs.h>r.y).map(({i})=>i);
-          st.temp=null; cteItRedraw(panel); cteRenderAdmPanel(); return;
-        }
         if(st.tool==='hotspot' && r.w!=null && r.w>1 && r.h>1){
           // 영역 확정 → "이동할 이미지" 선택 모달
           st.temp=null;
@@ -6860,20 +6863,13 @@ function cteItRedraw(panel) {
     const bx = hs.x+hs.w, by = hs.y; // X버튼 우상단
     const rs = Math.min(hs.w, hs.h) * 0.18; // 버튼 반지름(%)
     const btnR = Math.max(1.2, Math.min(rs, 3));
-    const batch=st.tool==='hotspotBatch', picked=st.hotSelected.includes(i);
     h += `<g>
-      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:${batch?'crosshair':'move'};${picked?'stroke:#22d3ee;stroke-width:3':''}" onmousedown="${batch?`cteHotBatchStart('${panel}',event)`:`event.stopPropagation();cteHotDragStart('${panel}',${i},event)`}" ondblclick="event.stopPropagation();cteGo('${panel}','${esc(hs.goto||'')}')"/>
-      ${batch?'':`
+      <rect class="cte-hot-edit" x="${hs.x}%" y="${hs.y}%" width="${hs.w}%" height="${hs.h}%" rx="2" style="cursor:move" onmousedown="event.stopPropagation();cteHotDragStart('${panel}',${i},event)" ondblclick="event.stopPropagation();cteGo('${panel}','${esc(hs.goto||'')}')"/>
       <circle cx="${bx}%" cy="${by}%" r="${btnR}%" fill="#ef4444" style="cursor:pointer" onclick="event.stopPropagation();cteHotDel('${panel}',${i})"/>
       <text x="${bx}%" y="${by}%" fill="white" text-anchor="middle" dominant-baseline="middle" font-size="${btnR*1.4}%" font-weight="900" style="pointer-events:none">×</text>
-      <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>`}
+      <rect x="${hs.x+hs.w-btnR*1.5}%" y="${hs.y+hs.h-btnR*1.5}%" width="${btnR*1.5}%" height="${btnR*1.5}%" fill="white" stroke="rgba(245,158,11,.9)" stroke-width="0.5" style="cursor:se-resize" onmousedown="event.stopPropagation();cteHotResizeStart('${panel}',${i},event)"/>
     </g>`;
   });
-  const gb=st.tool==='hotspotBatch'?cteHotGroupBounds(panel):null;
-  if(gb){
-    h+=`<rect x="${gb.x}%" y="${gb.y}%" width="${gb.w}%" height="${gb.h}%" fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="5 3" pointer-events="none"/>
-      <rect x="${gb.x+gb.w-1.3}%" y="${gb.y+gb.h-1.3}%" width="2.6%" height="2.6%" rx=".4" fill="#22d3ee" stroke="white" stroke-width=".5" style="cursor:se-resize" onmousedown="cteHotGroupResizeStart('${panel}',event)"/>`;
-  }
   scr.annotations.forEach((a,i)=>{
     const sel = i===st.selected;
     const sw = sel?2.6:1.8;
