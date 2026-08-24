@@ -6257,6 +6257,16 @@ function cteAdmColHtml(panel) {
     <!-- ── 섹션 1: 이동 영역 ── -->
     <div style="margin-top:8px;padding:7px 8px;background:#1a1200;border-radius:6px;border:1px solid #3b2800;">
       <div style="font-size:10px;font-weight:700;color:#f59e0b;margin-bottom:5px;">🔗 클릭 이동 영역 &nbsp;<span style="font-weight:400;color:#78716c;">드래그로 영역을 그리면 → 이동할 이미지 선택</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:5px;align-items:end;margin-bottom:5px;">
+        <label class="cte-adm-flbl">높이(px)
+          <input class="cte-adm-inp" type="number" min="8" max="120" step="1" value="${st.hotspotHeightPx}" oninput="cteHotSizeSetting('${panel}','hotspotHeightPx',this.value)">
+        </label>
+        <label class="cte-adm-flbl">좌우 여백(px)
+          <input class="cte-adm-inp" type="number" min="0" max="40" step="1" value="${st.hotspotPadXPx}" oninput="cteHotSizeSetting('${panel}','hotspotPadXPx',this.value)">
+        </label>
+        <button class="cte-adm-mainbtn" style="height:27px;white-space:nowrap;" onclick="cteNormalizeHotspots('${panel}')" title="기존 이동 영역의 높이를 같은 값으로 맞춤">기존 높이 맞춤</button>
+      </div>
+      <div style="font-size:9px;color:#78716c;margin:-1px 0 5px;">드래그한 범위의 가운데를 기준으로 높이를 통일하고 좌우에 같은 여백을 더합니다.</div>
       <button class="cte-it-btn${st.tool==='hotspot'?' on':''}" id="cte${px}Tool_hotspot"
         onclick="cteItTool('${panel}','hotspot')"
         style="width:100%;justify-content:center;font-size:11px;padding:4px 0;">
@@ -6546,9 +6556,32 @@ function cteRegionImg(panel, i, val) {
 // 인라인 편집 도구 (이미지 위 드래그)
 // ═══════════════════════════════════════════
 const cteItSt = {
-  phone: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
-  agent: { tool:'hotspot', color:'#000000', selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
+  phone: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null },
+  agent: { tool:'hotspot', color:'#000000', hotspotHeightPx:24, hotspotPadXPx:4, selected:-1, drawing:false, moving:false, suppressClick:false, start:null, temp:null, moveBase:null }
 };
+function cteHotSizeSetting(panel, key, value) {
+  const limits = key==='hotspotHeightPx' ? [8,120] : [0,40];
+  cteItSt[panel][key] = Math.max(limits[0], Math.min(limits[1], Number(value)||limits[0]));
+}
+function cteNormalizeHotRect(panel, rect, addPadding=true) {
+  const svg = document.getElementById(panel==='phone'?'cteCustomerSvg':'cteAgentSvg');
+  if(!svg) return rect;
+  const st = cteItSt[panel];
+  const width = svg.clientWidth || 1, height = svg.clientHeight || 1;
+  const fixedH = st.hotspotHeightPx / height * 100;
+  const padX = addPadding ? st.hotspotPadXPx / width * 100 : 0;
+  const centerY = rect.y + rect.h/2;
+  const x = Math.max(0, rect.x-padX);
+  const right = Math.min(100, rect.x+rect.w+padX);
+  const y = Math.max(0, Math.min(100-fixedH, centerY-fixedH/2));
+  return { ...rect, x:round1(x), y:round1(y), w:round1(right-x), h:round1(fixedH) };
+}
+function cteNormalizeHotspots(panel) {
+  const scr = cteScr(panel, cteNav[panel].cur);
+  scr.hotspots = scr.hotspots.map(hs => cteNormalizeHotRect(panel, hs, false));
+  cteItRedraw(panel);
+  cteRenderAdmPanel();
+}
 function cteItTool(panel, tool) {
   cteItSt[panel].tool = tool;
   if(tool === 'text' && cteItSt[panel].color === '#ef4444') cteItSt[panel].color = '#000000';
@@ -6689,7 +6722,7 @@ function cteItBindSvg() {
           // 영역 확정 → "이동할 이미지" 선택 모달
           st.temp=null;
           cteItRedraw(panel);
-          cteOpenHotPicker(panel, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)});
+          cteOpenHotPicker(panel, cteNormalizeHotRect(panel, {x:round1(r.x),y:round1(r.y),w:round1(r.w),h:round1(r.h)}));
           return;
         }
         if(st.tool==='scroll' && r.w!=null && r.w>1 && r.h>1){
