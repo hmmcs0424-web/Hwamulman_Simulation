@@ -3169,9 +3169,10 @@ function renderHotspotGroupBox(layerId,hotspots) {
   box.style.cssText=`position:absolute;left:${left}%;top:${top}%;width:${right-left}%;height:${bottom-top}%;border:2px dashed #06b6d4;box-sizing:border-box;pointer-events:none;z-index:30;`;
   const handle=document.createElement('div');
   handle.title='선택 영역 전체 크기 조절';
-  handle.style.cssText='position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border:2px solid #fff;border-radius:3px;background:#06b6d4;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:se-resize;pointer-events:auto;';
+  handle.style.cssText=`position:absolute;left:${right}%;top:${bottom}%;width:16px;height:16px;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:3px;background:#06b6d4;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:se-resize;pointer-events:auto;z-index:31;touch-action:none;`;
   handle.addEventListener('mousedown',e=>startHotspotGroupResize(e,layerId,hotspots,{left,top,width:right-left,height:bottom-top}));
-  box.appendChild(handle); layer.appendChild(box);
+  layer.appendChild(box);
+  layer.appendChild(handle);
 }
 
 function startHotspotGroupResize(e,layerId,hotspots,bounds) {
