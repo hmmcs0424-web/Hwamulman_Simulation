@@ -803,7 +803,6 @@ textarea.form-input{resize:vertical;}
         <div class="section-title">핫스팟 편집</div>
         <div class="btn-row" style="margin-bottom:8px">
           <button class="btn btn-primary" id="btnDraw">+ 영역 드래그</button>
-          <button class="btn btn-secondary" id="btnMultiSelect" type="button">▧ 여러 영역 선택</button>
           <button class="btn btn-secondary" type="button" onclick="startMaskDraw()">+ 마스킹 영역</button>
           <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('text')">+ 텍스트 삽입</button>
           <button class="btn btn-secondary" type="button" onclick="startOverlayDraw('box')">+ 박스 삽입</button>
@@ -2119,7 +2118,6 @@ async function boot() {
   document.getElementById('adminEmail').value=rememberedAdminEmail;
   document.getElementById('rememberAdminEmail').checked=!!rememberedAdminEmail;
   document.getElementById('btnDraw').onclick = startDraw;
-  document.getElementById('btnMultiSelect').onclick = startHotspotMultiSelect;
   document.getElementById('btnCancelDraw').onclick = cancelDraw;
   document.getElementById('btnAddScreen').onclick = addScreen;
   document.getElementById('btnSaveFlow').onclick = () => saveSimulatorFlow();
@@ -3153,47 +3151,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     }
     layer.appendChild(el);
   });
-  if(isAdmin && selectedHotspotContext?.sec===activeSec && selectedHotspotContext?.screen===cache[activeSec]?.cur && selectedHotspotIndices.length>1) {
-    renderHotspotGroupBox(layerId,hotspots);
-  }
   if(!isAdmin)document.querySelectorAll('.hotspot-font-size-value').forEach(value=>syncFontSizeSliders(value.dataset.styleGroupKey));
-}
-
-function renderHotspotGroupBox(layerId,hotspots) {
-  const layer=document.getElementById(layerId);
-  const selected=selectedHotspotIndices.map(i=>hotspots[i]).filter(Boolean);
-  if(!layer||selected.length<2)return;
-  const left=Math.min(...selected.map(h=>h.left)), top=Math.min(...selected.map(h=>h.top));
-  const right=Math.max(...selected.map(h=>h.left+h.width)), bottom=Math.max(...selected.map(h=>h.top+h.height));
-  const box=document.createElement('div');
-  box.style.cssText=`position:absolute;left:${left}%;top:${top}%;width:${right-left}%;height:${bottom-top}%;border:2px dashed #06b6d4;box-sizing:border-box;pointer-events:none;z-index:30;`;
-  const handle=document.createElement('div');
-  handle.title='선택 영역 전체 크기 조절';
-  handle.style.cssText=`position:absolute;left:${right}%;top:${bottom}%;width:16px;height:16px;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:3px;background:#06b6d4;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:se-resize;pointer-events:auto;z-index:31;touch-action:none;`;
-  handle.addEventListener('mousedown',e=>startHotspotGroupResize(e,layerId,hotspots,{left,top,width:right-left,height:bottom-top}));
-  layer.appendChild(box);
-  layer.appendChild(handle);
-}
-
-function startHotspotGroupResize(e,layerId,hotspots,bounds) {
-  e.preventDefault();e.stopPropagation();
-  const layer=document.getElementById(layerId),lr=layer.getBoundingClientRect();
-  const sx=e.clientX,sy=e.clientY;
-  const originals=selectedHotspotIndices.map(i=>({i,hs:{...hotspots[i]}})).filter(v=>v.hs);
-  const onMove=ev=>{
-    const scaleX=Math.max(.1,Math.min((100-bounds.left)/Math.max(.1,bounds.width),(bounds.width+(ev.clientX-sx)/lr.width*100)/Math.max(.1,bounds.width)));
-    const scaleY=Math.max(.1,Math.min((100-bounds.top)/Math.max(.1,bounds.height),(bounds.height+(ev.clientY-sy)/lr.height*100)/Math.max(.1,bounds.height)));
-    originals.forEach(({i,hs})=>{
-      const target=hotspots[i];
-      target.left=round1(bounds.left+(hs.left-bounds.left)*scaleX);
-      target.top=round1(bounds.top+(hs.top-bounds.top)*scaleY);
-      target.width=round1(hs.width*scaleX);
-      target.height=round1(hs.height*scaleY);
-    });
-    renderHotspots(layerId,hotspots,true);
-  };
-  const onUp=()=>{window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp);renderHsList();};
-  window.addEventListener('mousemove',onMove);window.addEventListener('mouseup',onUp);
 }
 
 function showOverlayGuide(item) {
@@ -3605,17 +3563,73 @@ function syncAdminUI() {
 function renderHsList() {
   renderMainScreenStatus();
   const st = cache[activeSec];
-  const multiBtn=document.getElementById('btnMultiSelect');
   const selectionHere=selectedHotspotContext?.sec===activeSec&&selectedHotspotContext?.screen===st.cur;
-  if(multiBtn)multiBtn.textContent=selectionHere&&selectedHotspotIndices.length?`☑ ${selectedHotspotIndices.length}개 선택됨`:'▧ 여러 영역 선택';
+  if(!selectionHere)selectedHotspotIndices=[];
   const hs = st.flow.screens?.[st.cur]?.hotspots || [];
   const el = document.getElementById('hsList');
   if(!hs.length) { el.innerHTML = '<div style="color:#aaa;font-size:13px;margin-bottom:6px">등록된 핫스팟 없음</div>'; return; }
-  el.innerHTML = hs.map((h,i) => `
+  const selected=selectedHotspotIndices.map(i=>hs[i]).filter(Boolean);
+  const commonValue=key=>selected.length&&selected.every(h=>Number(h[key])===Number(selected[0][key]))?round1(selected[0][key]):'';
+  const toolbar=selected.length?`<div style="margin:0 0 8px;padding:10px;border:1px solid #a5e5ee;border-radius:8px;background:#ecfeff;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#0e7490;font-size:12px;font-weight:800;"><span>☑ ${selected.length}개 영역 편집</span><button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end;margin-bottom:8px;">
+      <label class="form-label">너비(%)<input class="form-input" id="selectedHsWidth" type="number" min="0.5" max="100" step="0.1" value="${commonValue('width')}" placeholder="혼합"></label>
+      <label class="form-label">높이(%)<input class="form-input" id="selectedHsHeight" type="number" min="0.5" max="100" step="0.1" value="${commonValue('height')}" placeholder="혼합"></label>
+      <button class="btn btn-primary btn-sm" onclick="applySelectedHotspotSize()">크기 적용</button>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;"><button class="btn btn-secondary btn-sm" onclick="alignSelectedHotspots('top')">위 맞춤</button><button class="btn btn-secondary btn-sm" onclick="alignSelectedHotspots('bottom')">아래 맞춤</button><button class="btn btn-secondary btn-sm" onclick="alignSelectedHotspots('left')">왼쪽 맞춤</button><button class="btn btn-secondary btn-sm" onclick="alignSelectedHotspots('right')">오른쪽 맞춤</button></div>
+    <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end;"><label class="form-label">간격(%)<input class="form-input" id="selectedHsGap" type="number" min="0" max="100" step="0.1" value="1"></label><button class="btn btn-secondary btn-sm" onclick="spaceSelectedHotspots('horizontal')">가로 간격</button><button class="btn btn-secondary btn-sm" onclick="spaceSelectedHotspots('vertical')">세로 간격</button></div>
+  </div>`:'';
+  el.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:7px;"><button class="btn btn-secondary btn-sm" onclick="selectAllHotspots()">전체 선택</button>${selected.length?'<button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button>':''}</div>${toolbar}`+hs.map((h,i) => `
     <div class="hs-item">
-      <span>${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`}</span>
+      <input type="checkbox" aria-label="${esc(h.label||`영역 ${i+1}`)} 선택" ${selectedHotspotIndices.includes(i)?'checked':''} onchange="toggleHotspotSelection(${i},this.checked)" style="width:16px;height:16px;accent-color:#0891b2;flex:0 0 auto;">
+      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
+}
+
+function refreshSelectedHotspots() {
+  const st=cache[activeSec];
+  const layerId=SECS[activeSec].type==='pc'?'pcHotspotLayer':'hotspotLayer';
+  renderHotspots(layerId,st.flow.screens[st.cur].hotspots||[],true);
+  renderHsList();
+}
+function toggleHotspotSelection(i,checked) {
+  selectedHotspotContext={sec:activeSec,screen:cache[activeSec].cur};
+  selectedHotspotIndices=checked?[...new Set([...selectedHotspotIndices,i])]:selectedHotspotIndices.filter(v=>v!==i);
+  refreshSelectedHotspots();
+}
+function selectAllHotspots() {
+  const st=cache[activeSec];
+  selectedHotspotContext={sec:activeSec,screen:st.cur};
+  selectedHotspotIndices=(st.flow.screens[st.cur].hotspots||[]).map((_,i)=>i);
+  refreshSelectedHotspots();
+}
+function clearHotspotSelection() {
+  selectedHotspotIndices=[];selectedHotspotContext=null;refreshSelectedHotspots();
+}
+function applySelectedHotspotSize() {
+  const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[];
+  const width=document.getElementById('selectedHsWidth')?.value, height=document.getElementById('selectedHsHeight')?.value;
+  selectedHotspotIndices.forEach(i=>{const h=hs[i];if(!h)return;if(width!=='')h.width=round1(Math.max(.5,Math.min(100-h.left,Number(width))));if(height!=='')h.height=round1(Math.max(.5,Math.min(100-h.top,Number(height))));});
+  refreshSelectedHotspots();
+}
+function alignSelectedHotspots(mode) {
+  const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[],items=selectedHotspotIndices.map(i=>hs[i]).filter(Boolean);
+  if(items.length<2)return;
+  if(mode==='top'){const v=Math.min(...items.map(h=>h.top));items.forEach(h=>h.top=v);}
+  if(mode==='bottom'){const v=Math.max(...items.map(h=>h.top+h.height));items.forEach(h=>h.top=round1(v-h.height));}
+  if(mode==='left'){const v=Math.min(...items.map(h=>h.left));items.forEach(h=>h.left=v);}
+  if(mode==='right'){const v=Math.max(...items.map(h=>h.left+h.width));items.forEach(h=>h.left=round1(v-h.width));}
+  refreshSelectedHotspots();
+}
+function spaceSelectedHotspots(axis) {
+  const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[],gap=Math.max(0,Number(document.getElementById('selectedHsGap')?.value)||0);
+  const items=selectedHotspotIndices.map(i=>hs[i]).filter(Boolean).sort((a,b)=>axis==='horizontal'?a.left-b.left:a.top-b.top);
+  if(items.length<2)return;
+  let cursor=axis==='horizontal'?items[0].left:items[0].top;
+  items.forEach(h=>{if(axis==='horizontal'){h.left=round1(Math.min(100-h.width,cursor));cursor=h.left+h.width+gap;}else{h.top=round1(Math.min(100-h.height,cursor));cursor=h.top+h.height+gap;}});
+  refreshSelectedHotspots();
 }
 
 function delHs(i) {
@@ -5036,18 +5050,6 @@ function setupDrawEvents(overlayId, rectId) {
       top: round1(t/b.height*100), left: round1(l/b.width*100),
       width: round1(w/b.width*100), height: round1(h/b.height*100),
     };
-    if(drawMode==='multi') {
-      const st=cache[activeSec], hotspots=st.flow.screens[st.cur].hotspots||[];
-      selectedHotspotIndices=hotspots.map((hs,i)=>({hs,i})).filter(({hs})=>hs.left<pendingHs.left+pendingHs.width&&hs.left+hs.width>pendingHs.left&&hs.top<pendingHs.top+pendingHs.height&&hs.top+hs.height>pendingHs.top).map(({i})=>i);
-      selectedHotspotContext={sec:activeSec,screen:st.cur};
-      pendingHs=null;
-      cancelDraw();
-      const layerId=SECS[activeSec].type==='pc'?'pcHotspotLayer':'hotspotLayer';
-      renderHotspots(layerId,hotspots,true);
-      const btn=document.getElementById('btnMultiSelect');
-      btn.textContent=selectedHotspotIndices.length?`☑ ${selectedHotspotIndices.length}개 선택됨`:'▧ 여러 영역 선택';
-      return;
-    }
     if(drawMode==='mask') {
       const st=cache[activeSec];
       const screen=st.flow.screens[st.cur];
@@ -5242,13 +5244,6 @@ function startDraw() {
 
 function startOverlayDraw(kind) {
   drawMode = kind;
-  beginScreenDraw();
-}
-
-function startHotspotMultiSelect() {
-  selectedHotspotIndices=[];
-  selectedHotspotContext={sec:activeSec,screen:cache[activeSec]?.cur};
-  drawMode='multi';
   beginScreenDraw();
 }
 
