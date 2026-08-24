@@ -1247,7 +1247,8 @@ textarea.form-input{resize:vertical;}
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택한 작은 이미지를 지정한 영역 크기에 맞춰 겹쳐 표시합니다.</div>
     </div>
     <div id="hsStateGroupFields" style="display:none">
-      <div class="form-row"><div class="form-label">상태 그룹</div><input class="form-input" id="hsStateGroup" placeholder="예: 상차지거리"></div>
+      <div class="form-row" id="hsStateGroupInputRow"><div class="form-label">새 상태 그룹명</div><input class="form-input" id="hsStateGroup" placeholder="예: 상차지거리"></div>
+      <div class="form-row" id="hsStateGroupSelectRow" style="display:none"><div class="form-label">연결할 상태 그룹</div><select class="form-input" id="hsStateGroupSelect"><option value="">먼저 그룹 토글을 등록해 주세요</option></select></div>
       <label id="hsGroupInitialRow" style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsGroupInitialOn"> 처음부터 ON 상태로 표시</label>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">동일한 그룹명의 토글과 조건부 이미지 영역이 화면 이동 없이 함께 변경됩니다.</div>
     </div>
@@ -5022,6 +5023,7 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsFontSizeSliderGroup').value='글자색';
     document.getElementById('hsFontSizeValueGroup').value='글자색';
     document.getElementById('hsStateGroup').value='';
+    document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';
     document.getElementById('hsGroupInitialOn').checked=false;
     updateHsActionFields();
     openModal('hsModal');
@@ -5089,7 +5091,10 @@ function updateHsActionFields() {
   document.getElementById('hsFontSizeSliderFields').style.display=hasFontSizeSlider?'':'none';
   document.getElementById('hsFontSizeValueFields').style.display=hasFontSizeValue?'':'none';
   document.getElementById('hsStateGroupFields').style.display=hasStateGroup?'':'none';
+  document.getElementById('hsStateGroupInputRow').style.display=action==='group_toggle'?'':'none';
+  document.getElementById('hsStateGroupSelectRow').style.display=action==='conditional_image'?'':'none';
   document.getElementById('hsGroupInitialRow').style.display=action==='group_toggle'?'flex':'none';
+  if(action==='conditional_image')populateHsStateGroupSelect();
   document.getElementById('hsToastFields').style.display=hasToast?'':'none';
   document.getElementById('hsNavigationFields').style.display=hasNavigation?'grid':'none';
   document.getElementById('hsToastSingleRow').style.display=(action==='toast'||action==='navigate_toast')?'':'none';
@@ -5170,6 +5175,22 @@ function startOverlayDraw(kind) {
   beginScreenDraw();
 }
 
+function populateHsStateGroupSelect() {
+  const select=document.getElementById('hsStateGroupSelect');
+  if(!select)return;
+  const current=select.value;
+  const hotspots=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.hotspots||[];
+  const groups=[...new Set(hotspots.filter(hs=>hs.actionType==='group_toggle').map(hs=>String(hs.stateGroup||'').trim()).filter(Boolean))];
+  if(!groups.length) {
+    select.innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';
+    select.disabled=true;
+    return;
+  }
+  select.disabled=false;
+  select.innerHTML='<option value="">상태 그룹을 선택해 주세요</option>'+groups.map(group=>`<option value="${esc(group)}">${esc(group)}</option>`).join('');
+  if(groups.includes(current))select.value=current;
+}
+
 function startMaskDraw() {
   drawMode='mask';
   beginScreenDraw();
@@ -5235,9 +5256,10 @@ function confirmHs() {
   if(hasNavigation && !goto) { alert('이동할 화면 또는 이미지를 선택해 주세요.'); return; }
   const toggleOnImage=document.getElementById('hsToggleOnImage').value;
   if((actionType==='toggle'||actionType==='toggle_toast') && !toggleOnImage) { alert('선택 상태 이미지를 선택해 주세요.'); return; }
-  const stateGroup=document.getElementById('hsStateGroup').value.trim();
+  const stateGroup=(actionType==='conditional_image'?document.getElementById('hsStateGroupSelect').value:document.getElementById('hsStateGroup').value).trim();
   const toggleOffImage=document.getElementById('hsToggleOffImage').value;
   if((actionType==='group_toggle'||actionType==='conditional_image')&&!stateGroup) { alert('상태 그룹을 입력해 주세요.'); return; }
+  if(actionType==='group_toggle'&&(st.flow.screens[st.cur].hotspots||[]).some(hs=>hs.actionType==='group_toggle'&&String(hs.stateGroup||'').trim()===stateGroup)) { alert('같은 이름의 상태 그룹이 이미 있습니다. 기존 그룹을 사용하려면 조건부 이미지 표시에서 선택해 주세요.'); return; }
   if(actionType==='group_toggle'&&!toggleOnImage) { alert('그룹 토글의 선택 상태 이미지를 선택해 주세요.'); return; }
   if(actionType==='conditional_image'&&!toggleOffImage&&!toggleOnImage) { alert('조건부로 표시할 해제 또는 선택 상태 이미지를 선택해 주세요.'); return; }
   const toastMessage=document.getElementById('hsToastMessage').value.trim();
