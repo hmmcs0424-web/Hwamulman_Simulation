@@ -2786,7 +2786,10 @@ function setupPhoneImageScroll() {
   });
 }
 
+let phoneAdCarouselTimer = null;
 function clearPhoneAdCarousel() {
+  if(phoneAdCarouselTimer) clearInterval(phoneAdCarouselTimer);
+  phoneAdCarouselTimer = null;
   document.getElementById('phoneAdCarousel')?.remove();
 }
 
@@ -2891,9 +2894,7 @@ function renderPhoneAdCarousel(scr) {
     slideImg.src = src;
     slideImg.alt = '';
     slideImg.draggable = false;
-    slideImg.style.width = `${10000/Number(ad.width)}%`;
-    slideImg.style.left = `${-100*Number(ad.left)/Number(ad.width)}%`;
-    slideImg.style.top = `${-100*Number(ad.top)/Number(ad.height)}%`;
+    slideImg.style.cssText = 'inset:0;width:100%;height:100%;object-fit:cover;';
     slide.appendChild(slideImg);
     track.appendChild(slide);
   });
@@ -2925,6 +2926,7 @@ function renderPhoneAdCarousel(scr) {
   carousel.append(track,dots);
   wrapper.appendChild(carousel);
   show(0);
+  if(images.length>1) phoneAdCarouselTimer=setInterval(()=>{if(!drag&&carousel.isConnected)show(current+1);},3000);
 }
 
 function openAdSlideLink(value) {
