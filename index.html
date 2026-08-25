@@ -3233,7 +3233,12 @@ function renderList() {
   el.innerHTML = '';
   if(!st.flow.screens) return;
   // 실제 이미지가 있는 화면만 표시하고, 같은 이미지 주소를 쓰는 중복 화면은 하나로 합친다.
-  const rawEntries = Object.entries(st.flow.screens).filter(([,scr])=>String(scr?.image||'').trim());
+  const actualImageIds=availableSimulatorImageIds.get(activeSec)
+    || new Set(((siteImageManifest?.[activeSec])||[]).map(assetIdentity));
+  const rawEntries = Object.entries(st.flow.screens).filter(([,scr])=>{
+    const identity=assetIdentity(scr?.image);
+    return identity&&actualImageIds.has(identity);
+  });
   const screenPriority = ([id,scr]) => (id===st.cur?1000000:0)
     + (id===st.flow.start?100000:0)
     + ((scr.hotspots||[]).length*100)
