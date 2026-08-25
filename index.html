@@ -3232,8 +3232,19 @@ function renderList() {
   const st = cache[activeSec];
   el.innerHTML = '';
   if(!st.flow.screens) return;
-  // 이미지 파일의 이전/누락 여부와 관계없이 기존 화면과 경로 설정은 항상 유지해서 보여준다.
-  const allEntries = Object.entries(st.flow.screens);
+  // 실제 이미지가 있는 화면만 표시하고, 같은 이미지 주소를 쓰는 중복 화면은 하나로 합친다.
+  const rawEntries = Object.entries(st.flow.screens).filter(([,scr])=>String(scr?.image||'').trim());
+  const screenPriority = ([id,scr]) => (id===st.cur?1000000:0)
+    + (id===st.flow.start?100000:0)
+    + ((scr.hotspots||[]).length*100)
+    + ((scr.guide?.points||[]).length);
+  const entriesByImage = new Map();
+  rawEntries.forEach(entry=>{
+    const key=assetIdentity(entry[1].image);
+    const current=entriesByImage.get(key);
+    if(!current||screenPriority(entry)>screenPriority(current))entriesByImage.set(key,entry);
+  });
+  const allEntries = Array.from(entriesByImage.values());
   const entryById = new Map(allEntries);
   const matchesQuery = ([id,scr]) => {
     const label = String(scr.label||'').toLocaleLowerCase('ko-KR');
