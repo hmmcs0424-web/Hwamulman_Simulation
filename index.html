@@ -3491,6 +3491,8 @@ async function startCounselorPreview() {
   if(!adminMode || activeSec==='채널톡') return;
   if(!(await saveSimulatorFlow(activeSec))) return;
   if(drawing) cancelDraw();
+  cancelLayoutDraw();
+  document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
   counselorPreviewMode=true;
   showHotspots=false;
   const hotspotBtn=document.getElementById('btnShowHotspots');
@@ -3519,6 +3521,10 @@ function syncAdminUI() {
   const unregCard = document.getElementById('unregCard');
   const contactsMenu = document.getElementById('contactsMenu');
   const adminEditing = adminMode && !counselorPreviewMode;
+  if(!adminEditing) {
+    cancelLayoutDraw();
+    document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
+  }
   contactsMenu?.classList.toggle('visible',adminMode);
   if(!adminMode && unsubscribeBusinessContacts) {
     unsubscribeBusinessContacts();
