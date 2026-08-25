@@ -5166,7 +5166,10 @@ function setupDrawEvents(overlayId, rectId) {
 function renderHsTargetList(screens, images, loading=false) {
   const target = document.getElementById('hsGoto');
   const list = document.getElementById('hsGotoList');
-  const availableImageIds = new Set(images.map(assetIdentity));
+  const uniqueImageMap=new Map();
+  images.forEach(image=>{const identity=assetIdentity(image);if(identity&&!uniqueImageMap.has(identity))uniqueImageMap.set(identity,image);});
+  const uniqueImages=Array.from(uniqueImageMap.values());
+  const availableImageIds = new Set(uniqueImages.map(assetIdentity));
   const visibleScreens = loading ? [] : screens.filter(([,screen]) => {
     const identity = assetIdentity(screen.image);
     return identity && availableImageIds.has(identity);
@@ -5174,30 +5177,25 @@ function renderHsTargetList(screens, images, loading=false) {
   const screenByImage = new Map();
   visibleScreens.forEach(([id,screen]) => {
     const identity = assetIdentity(screen.image);
-    if(identity && !screenByImage.has(identity)) screenByImage.set(identity,id);
+    const current=screenByImage.get(identity);
+    const priority=(entryId,entry)=>(entryId===cache[activeSec]?.flow?.start?100000:0)+((entry.hotspots||[]).length*100)+((entry.guide?.points||[]).length);
+    if(identity&&(!current||priority(id,screen)>priority(current.id,current.screen)))screenByImage.set(identity,{id,screen});
   });
-  const imageValue = image => screenByImage.get(assetIdentity(image)) || `__image__:${image}`;
+  const imageValue = image => screenByImage.get(assetIdentity(image))?.id || `__image__:${image}`;
   const values = [
     HOTSPOT_GO_BACK,
-    ...visibleScreens.map(([id]) => id),
-    ...images.map(imageValue)
+    ...uniqueImages.map(imageValue)
   ];
   const selected = values.includes(target.value) ? target.value : (values[0] || '');
   target.value = selected;
-  const screenRows = visibleScreens.map(([id,screen]) => {
-    const value = encodeURIComponent(id);
-    const imageName = assetDisplayName(screen.image).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'');
-    return `<button type="button" class="route-picker-item ${selected===id?'active':''}" data-hs-group="screen" data-hs-search="${esc(`${imageName} ${screen.label} ${id}`.toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${value}'),this)"><span>${esc(imageName||screen.label)} (${esc(id)})</span></button>`;
-  }).join('');
   const backRow = `<button type="button" class="route-picker-item ${selected===HOTSPOT_GO_BACK?'active':''}" onclick="selectHsTarget('${HOTSPOT_GO_BACK}',this)"><span>↩ 직전 화면으로 돌아가기</span></button>`;
-  const imageRows = images.map(image => {
-    const existingScreenId = screenByImage.get(assetIdentity(image));
+  const imageRows = uniqueImages.map(image => {
+    const existingScreenId = screenByImage.get(assetIdentity(image))?.id;
     const value = imageValue(image);
     return `<button type="button" class="route-picker-item ${selected===value?'active':''}" data-hs-group="image" data-hs-search="${esc(assetDisplayName(image).toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${existingScreenId?'<small class="route-picker-used">등록됨</small>':''}${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
   }).join('');
   list.innerHTML = `<div class="route-picker-heading">이동 동작</div>${backRow}`
-    + (screenRows ? `<div class="route-picker-heading" data-hs-heading="screen">등록된 화면</div>${screenRows}` : '')
-    + (imageRows ? `<div class="route-picker-heading" data-hs-heading="image">전체 이미지 · 사용 중인 이미지도 재선택 가능</div>${imageRows}` : '')
+    + (imageRows ? `<div class="route-picker-heading" data-hs-heading="image">실제 이미지</div>${imageRows}` : '')
     + (loading ? '<div style="padding:14px;color:#888;font-size:12px">업로드 이미지 목록을 불러오는 중...</div>' : '')
     + '<div class="hs-target-empty" id="hsTargetEmpty">검색 결과가 없습니다.</div>'
     || '<div style="padding:18px;color:#999;text-align:center">등록된 화면 또는 이미지가 없습니다.</div>';
