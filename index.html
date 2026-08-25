@@ -1456,6 +1456,7 @@ let drawing = false, drawStart = null, pendingHs = null, drawMode = 'hotspot';
 let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
 let selectedHotspotIndices = [];
 let selectedHotspotContext = null;
+let hotspotUndoStack = [];
 let siteImageManifest = null;
 let activePage = 'simulator';
 let editingGuidePage = false;
@@ -2132,6 +2133,10 @@ async function boot() {
 
   // 단축키 H: 핫스팟 보기 토글
   document.addEventListener('keydown', e => {
+    if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key.toLowerCase()==='z'&&adminMode&&undoHotspotEdit()) {
+      e.preventDefault();
+      return;
+    }
     if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
     if(e.key === 'h' || e.key === 'H') toggleShowHotspots();
   });
@@ -3589,8 +3594,7 @@ function renderHsList() {
       <label class="form-label">높이(%)<input class="form-input" id="selectedHsHeight" type="number" min="0.5" max="100" step="0.1" value="${commonValue('height')}" placeholder="혼합"></label>
       <button class="btn btn-primary btn-sm" onclick="applySelectedHotspotSize()">크기 적용</button>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span class="form-label" style="margin:0 2px 0 0">맞춤</span><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="위쪽 맞춤" aria-label="위쪽 맞춤" onclick="alignSelectedHotspots('top')">${hotspotArrangeIcon('top')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="아래쪽 맞춤" aria-label="아래쪽 맞춤" onclick="alignSelectedHotspots('bottom')">${hotspotArrangeIcon('bottom')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="왼쪽 맞춤" aria-label="왼쪽 맞춤" onclick="alignSelectedHotspots('left')">${hotspotArrangeIcon('left')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="오른쪽 맞춤" aria-label="오른쪽 맞춤" onclick="alignSelectedHotspots('right')">${hotspotArrangeIcon('right')}</button></div>
-    <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end;"><label class="form-label">간격(%)<input class="form-input" id="selectedHsGap" type="number" min="0" max="100" step="0.1" value="1"></label><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="가로 간격 동일하게" aria-label="가로 간격 동일하게" onclick="spaceSelectedHotspots('horizontal')">${hotspotArrangeIcon('horizontal')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0" title="세로 간격 동일하게" aria-label="세로 간격 동일하게" onclick="spaceSelectedHotspots('vertical')">${hotspotArrangeIcon('vertical')}</button></div>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;"><span class="form-label" style="margin:0 2px 0 0;white-space:nowrap">맞춤</span><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="위쪽 맞춤" aria-label="위쪽 맞춤" onclick="alignSelectedHotspots('top')">${hotspotArrangeIcon('top')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="아래쪽 맞춤" aria-label="아래쪽 맞춤" onclick="alignSelectedHotspots('bottom')">${hotspotArrangeIcon('bottom')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="왼쪽 맞춤" aria-label="왼쪽 맞춤" onclick="alignSelectedHotspots('left')">${hotspotArrangeIcon('left')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="오른쪽 맞춤" aria-label="오른쪽 맞춤" onclick="alignSelectedHotspots('right')">${hotspotArrangeIcon('right')}</button><span style="width:1px;height:25px;background:#bae6ec;margin:0 2px;flex:0 0 auto"></span><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="가로 간격 동일하게" aria-label="가로 간격 동일하게" onclick="spaceSelectedHotspots('horizontal')">${hotspotArrangeIcon('horizontal')}</button><button class="btn btn-secondary btn-sm" style="display:grid;place-items:center;width:36px;height:34px;padding:0;flex:0 0 auto" title="세로 간격 동일하게" aria-label="세로 간격 동일하게" onclick="spaceSelectedHotspots('vertical')">${hotspotArrangeIcon('vertical')}</button></div>
   </div>`:'';
   el.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:7px;"><button class="btn btn-secondary btn-sm" onclick="selectAllHotspots()">전체 선택</button>${selected.length?'<button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button>':''}</div>${toolbar}`+hs.map((h,i) => `
     <div class="hs-item">
@@ -3620,15 +3624,38 @@ function selectAllHotspots() {
 function clearHotspotSelection() {
   selectedHotspotIndices=[];selectedHotspotContext=null;refreshSelectedHotspots();
 }
+function pushHotspotUndo() {
+  const st=cache[activeSec],screen=st?.flow?.screens?.[st.cur];
+  if(!screen)return;
+  hotspotUndoStack.push({sec:activeSec,screen:st.cur,hotspots:JSON.parse(JSON.stringify(screen.hotspots||[]))});
+  if(hotspotUndoStack.length>30)hotspotUndoStack.shift();
+}
+function undoHotspotEdit() {
+  const st=cache[activeSec];
+  for(let i=hotspotUndoStack.length-1;i>=0;i--){
+    const snapshot=hotspotUndoStack[i];
+    if(snapshot.sec!==activeSec||snapshot.screen!==st?.cur)continue;
+    hotspotUndoStack.splice(i,1);
+    st.flow.screens[st.cur].hotspots=JSON.parse(JSON.stringify(snapshot.hotspots));
+    selectedHotspotIndices=selectedHotspotIndices.filter(index=>index<snapshot.hotspots.length);
+    selectedHotspotContext={sec:activeSec,screen:st.cur};
+    refreshSelectedHotspots();
+    return true;
+  }
+  return false;
+}
 function applySelectedHotspotSize() {
   const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[];
   const width=document.getElementById('selectedHsWidth')?.value, height=document.getElementById('selectedHsHeight')?.value;
+  if(width===''&&height==='')return;
+  pushHotspotUndo();
   selectedHotspotIndices.forEach(i=>{const h=hs[i];if(!h)return;if(width!=='')h.width=round1(Math.max(.5,Math.min(100-h.left,Number(width))));if(height!=='')h.height=round1(Math.max(.5,Math.min(100-h.top,Number(height))));});
   refreshSelectedHotspots();
 }
 function alignSelectedHotspots(mode) {
   const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[],items=selectedHotspotIndices.map(i=>hs[i]).filter(Boolean);
   if(items.length<2)return;
+  pushHotspotUndo();
   if(mode==='top'){const v=Math.min(...items.map(h=>h.top));items.forEach(h=>h.top=v);}
   if(mode==='bottom'){const v=Math.max(...items.map(h=>h.top+h.height));items.forEach(h=>h.top=round1(v-h.height));}
   if(mode==='left'){const v=Math.min(...items.map(h=>h.left));items.forEach(h=>h.left=v);}
@@ -3636,11 +3663,19 @@ function alignSelectedHotspots(mode) {
   refreshSelectedHotspots();
 }
 function spaceSelectedHotspots(axis) {
-  const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[],gap=Math.max(0,Number(document.getElementById('selectedHsGap')?.value)||0);
+  const st=cache[activeSec],hs=st.flow.screens[st.cur].hotspots||[];
   const items=selectedHotspotIndices.map(i=>hs[i]).filter(Boolean).sort((a,b)=>axis==='horizontal'?a.left-b.left:a.top-b.top);
-  if(items.length<2)return;
-  let cursor=axis==='horizontal'?items[0].left:items[0].top;
-  items.forEach(h=>{if(axis==='horizontal'){h.left=round1(Math.min(100-h.width,cursor));cursor=h.left+h.width+gap;}else{h.top=round1(Math.min(100-h.height,cursor));cursor=h.top+h.height+gap;}});
+  if(items.length<3)return;
+  pushHotspotUndo();
+  if(axis==='horizontal'){
+    const start=items[0].left,end=items[items.length-1].left+items[items.length-1].width;
+    const gap=(end-start-items.reduce((sum,h)=>sum+h.width,0))/(items.length-1);
+    let cursor=start;items.forEach(h=>{h.left=round1(cursor);cursor+=h.width+gap;});
+  }else{
+    const start=items[0].top,end=items[items.length-1].top+items[items.length-1].height;
+    const gap=(end-start-items.reduce((sum,h)=>sum+h.height,0))/(items.length-1);
+    let cursor=start;items.forEach(h=>{h.top=round1(cursor);cursor+=h.height+gap;});
+  }
   refreshSelectedHotspots();
 }
 
