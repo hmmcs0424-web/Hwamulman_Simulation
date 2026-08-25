@@ -1254,12 +1254,13 @@ textarea.form-input{resize:vertical;}
         <option value="font_size_slider">글자 크기 슬라이더</option>
         <option value="font_size_value">현재 글자 크기 값 표시</option>
         <option value="group_toggle">그룹 토글</option>
+        <option value="radio_select">단일 선택 (라디오)</option>
         <option value="conditional_image">조건부 이미지 표시</option>
       </select>
     </div>
     <div id="hsToggleFields" style="display:none">
-      <div class="form-row"><div class="form-label">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
-      <div class="form-row"><div class="form-label">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage"><option value="">이미지를 선택하세요</option></select></div>
+      <div class="form-row"><div class="form-label" id="hsToggleOffLabel">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
+      <div class="form-row"><div class="form-label" id="hsToggleOnLabel">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage"><option value="">이미지를 선택하세요</option></select></div>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택한 작은 이미지를 지정한 영역 크기에 맞춰 겹쳐 표시합니다.</div>
     </div>
     <div id="hsStateGroupFields" style="display:none">
@@ -1267,6 +1268,12 @@ textarea.form-input{resize:vertical;}
       <div class="form-row" id="hsStateGroupSelectRow" style="display:none"><div class="form-label">연결할 상태 그룹</div><select class="form-input" id="hsStateGroupSelect"><option value="">먼저 그룹 토글을 등록해 주세요</option></select></div>
       <label id="hsGroupInitialRow" style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsGroupInitialOn"> 처음부터 ON 상태로 표시</label>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">동일한 그룹명의 토글과 조건부 이미지 영역이 화면 이동 없이 함께 변경됩니다.</div>
+    </div>
+    <div id="hsRadioFields" style="display:none">
+      <div class="form-row"><div class="form-label">단일 선택 그룹명</div><input class="form-input" id="hsRadioGroup" placeholder="예: 화물 정보 배경화면 색상"></div>
+      <div class="form-row"><div class="form-label">이 항목의 값</div><input class="form-input" id="hsRadioValue" placeholder="예: 자동, 주간, 야간"></div>
+      <label style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsRadioInitial"> 처음 선택된 항목</label>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">같은 그룹명의 영역 중 하나만 선택됩니다. 그룹마다 반드시 한 항목을 ‘처음 선택’으로 지정하세요.</div>
     </div>
     <div id="hsTextColorFields" style="display:none">
       <div class="form-row"><div class="form-label">표시할 문구</div><input class="form-input" id="hsTextColorText" placeholder="예: 경기 이천 장호원"></div>
@@ -2385,6 +2392,7 @@ const HOTSPOT_GO_BACK = '__history_back__';
 let pendingScrollTransition = null;
 const hotspotToggleStates = new Map();
 const hotspotGroupStates = new Map();
+const hotspotRadioStates = new Map();
 const hotspotTextColorStates = new Map();
 const hotspotTextSizeStates = new Map();
 const selectedTextColorTargets = new Map();
@@ -2418,6 +2426,31 @@ function refreshHotspotGroup(groupKey) {
   document.querySelectorAll('.hotspot[data-hotspot-group-key]').forEach(element=>{
     if(element.dataset.hotspotGroupKey!==groupKey||!element._groupedHotspot)return;
     applyHotspotToggleImage(element._groupedHotspot,element,!!hotspotGroupStates.get(groupKey));
+  });
+}
+
+function hotspotRadioGroupKey(hotspot) {
+  return `${activeSec}:${cache[activeSec]?.cur}:${hotspot.radioGroup||''}`;
+}
+function ensureHotspotRadioState(hotspot) {
+  const key=hotspotRadioGroupKey(hotspot);
+  if(!hotspotRadioStates.has(key)) {
+    const items=(cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.hotspots||[]).filter(item=>item.actionType==='radio_select'&&item.radioGroup===hotspot.radioGroup);
+    const initial=items.find(item=>item.radioInitial)||items[0];
+    hotspotRadioStates.set(key,initial?.radioValue||'');
+  }
+  return hotspotRadioStates.get(key);
+}
+function applyRadioHotspotImage(hotspot,element) {
+  const key=hotspotRadioGroupKey(hotspot);
+  element.dataset.hotspotRadioKey=key;
+  element._radioHotspot=hotspot;
+  applyHotspotToggleImage(hotspot,element,ensureHotspotRadioState(hotspot)===hotspot.radioValue);
+}
+function refreshHotspotRadioGroup(groupKey) {
+  document.querySelectorAll('.hotspot[data-hotspot-radio-key]').forEach(element=>{
+    if(element.dataset.hotspotRadioKey!==groupKey||!element._radioHotspot)return;
+    applyHotspotToggleImage(element._radioHotspot,element,hotspotRadioStates.get(groupKey)===element._radioHotspot.radioValue);
   });
 }
 
@@ -2545,6 +2578,12 @@ function handleHotspotAction(hotspot, element) {
     isOn=!ensureHotspotGroupState(hotspot);
     hotspotGroupStates.set(key,isOn);
     refreshHotspotGroup(key);
+  }
+  if(action==='radio_select') {
+    const key=hotspotRadioGroupKey(hotspot);
+    ensureHotspotRadioState(hotspot);
+    hotspotRadioStates.set(key,hotspot.radioValue);
+    refreshHotspotRadioGroup(key);
   }
   if(action==='toggle'||action==='toggle_toast') {
     const key=hotspotStateKey(hotspot);
@@ -2866,6 +2905,7 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
   layer.style.transform = fixedEdge === 'bottom' ? `translateY(${fixedHeight-imageHeight}px)` : '';
   if(!fixedHeight || !imageHeight) return;
   hotspots.filter(hs=>hs.actionType==='group_toggle').forEach(ensureHotspotGroupState);
+  hotspots.filter(hs=>hs.actionType==='radio_select').forEach(ensureHotspotRadioState);
   hotspots.forEach(hs => {
     const hotspotTop = Number(hs.top)/100*imageHeight;
     if(fixedEdge === 'top' ? hotspotTop >= fixedHeight : hotspotTop + Number(hs.height)/100*imageHeight <= imageHeight-fixedHeight) return;
@@ -2884,6 +2924,7 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
       el.addEventListener('click', () => showOverlayGuide(hs));
     } else {
       if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else if(hs.actionType==='radio_select')applyRadioHotspotImage(hs,el);
       else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
       if(hs.actionType==='conditional_image')el.style.pointerEvents='none';
       else el.addEventListener('click', () => handleHotspotAction(hs,el));
@@ -3045,6 +3086,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
   const isAdmin = forceAdmin || (adminMode && !counselorPreviewMode);
   const isShow  = !isAdmin && showHotspots;
   hotspots.filter(hs=>hs.actionType==='group_toggle').forEach(ensureHotspotGroupState);
+  hotspots.filter(hs=>hs.actionType==='radio_select').forEach(ensureHotspotRadioState);
   hotspots.forEach((hs, i) => {
     const el = document.createElement('div');
     el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : isShow ? 'show-mode' : 'normal-mode');
@@ -3086,6 +3128,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     }
     if(!isGuideOverlay) {
       if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else if(hs.actionType==='radio_select')applyRadioHotspotImage(hs,el);
       else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
     }
     if(!isAdmin&&hs.actionType==='conditional_image')el.style.pointerEvents='none';
@@ -3681,7 +3724,7 @@ function renderHsList() {
   el.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:7px;"><button class="btn btn-secondary btn-sm" onclick="selectAllHotspots()">전체 선택</button>${selected.length?'<button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button>':''}</div>${toolbar}`+hs.map((h,i) => `
     <div class="hs-item">
       <input type="checkbox" aria-label="${esc(h.label||`영역 ${i+1}`)} 선택" ${selectedHotspotIndices.includes(i)?'checked':''} onchange="toggleHotspotSelection(${i},this.checked)" style="width:16px;height:16px;accent-color:#0891b2;flex:0 0 auto;">
-      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
+      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='radio_select'?'◉':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='radio_select'?` · ${esc(h.radioGroup)} / ${esc(h.radioValue)}${h.radioInitial?' · 초기 선택':''}`:h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -5240,6 +5283,9 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsStateGroup').value='';
     document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';
     document.getElementById('hsGroupInitialOn').checked=false;
+    document.getElementById('hsRadioGroup').value='';
+    document.getElementById('hsRadioValue').value='';
+    document.getElementById('hsRadioInitial').checked=false;
     updateHsActionFields();
     openModal('hsModal');
     const availableImages = await getSimulatorImages(activeSec);
@@ -5290,7 +5336,7 @@ function renderHsTargetList(screens, images, loading=false) {
 
 function updateHsActionFields() {
   const action=document.getElementById('hsActionType').value;
-  const hasToggle=action==='toggle'||action==='toggle_toast'||action==='group_toggle'||action==='conditional_image';
+  const hasToggle=action==='toggle'||action==='toggle_toast'||action==='group_toggle'||action==='conditional_image'||action==='radio_select';
   const hasToast=action==='toast'||action==='navigate_toast'||action==='toggle_toast';
   const hasNavigation=action==='navigate'||action==='navigate_toast';
   const hasTextColor=action==='text_color_target';
@@ -5299,11 +5345,14 @@ function updateHsActionFields() {
   const hasFontSizeValue=action==='font_size_value';
   const hasStateGroup=action==='group_toggle'||action==='conditional_image';
   document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
+  document.getElementById('hsToggleOffLabel').textContent=action==='radio_select'?'미체크 동그라미 이미지':'해제 상태 이미지 (선택)';
+  document.getElementById('hsToggleOnLabel').textContent=action==='radio_select'?'체크된 동그라미 이미지':'선택 상태 이미지';
   document.getElementById('hsTextColorFields').style.display=hasTextColor?'':'none';
   document.getElementById('hsColorPickerFields').style.display=hasColorPicker?'':'none';
   document.getElementById('hsFontSizeSliderFields').style.display=hasFontSizeSlider?'':'none';
   document.getElementById('hsFontSizeValueFields').style.display=hasFontSizeValue?'':'none';
   document.getElementById('hsStateGroupFields').style.display=hasStateGroup?'':'none';
+  document.getElementById('hsRadioFields').style.display=action==='radio_select'?'':'none';
   document.getElementById('hsStateGroupInputRow').style.display=action==='group_toggle'?'':'none';
   document.getElementById('hsStateGroupSelectRow').style.display=action==='conditional_image'?'':'none';
   document.getElementById('hsGroupInitialRow').style.display=action==='group_toggle'?'flex':'none';
@@ -5471,6 +5520,15 @@ function confirmHs() {
   if((actionType==='toggle'||actionType==='toggle_toast') && !toggleOnImage) { alert('선택 상태 이미지를 선택해 주세요.'); return; }
   const stateGroup=(actionType==='conditional_image'?document.getElementById('hsStateGroupSelect').value:document.getElementById('hsStateGroup').value).trim();
   const toggleOffImage=document.getElementById('hsToggleOffImage').value;
+  const radioGroup=document.getElementById('hsRadioGroup').value.trim();
+  const radioValue=document.getElementById('hsRadioValue').value.trim();
+  const radioInitial=document.getElementById('hsRadioInitial').checked;
+  const radioItems=(st.flow.screens[st.cur].hotspots||[]).filter(hs=>hs.actionType==='radio_select'&&String(hs.radioGroup||'').trim()===radioGroup);
+  if(actionType==='radio_select'&&(!radioGroup||!radioValue)) { alert('단일 선택 그룹명과 항목 값을 모두 입력해 주세요.'); return; }
+  if(actionType==='radio_select'&&(!toggleOffImage||!toggleOnImage)) { alert('미체크 이미지와 체크 이미지를 모두 선택해 주세요.'); return; }
+  if(actionType==='radio_select'&&radioItems.some(hs=>String(hs.radioValue||'').trim()===radioValue)) { alert('같은 그룹에 동일한 항목 값이 이미 있습니다.'); return; }
+  if(actionType==='radio_select'&&!radioItems.length&&!radioInitial) { alert('그룹의 첫 항목은 ‘처음 선택된 항목’으로 지정해 주세요.'); return; }
+  if(actionType==='radio_select'&&radioInitial&&radioItems.some(hs=>hs.radioInitial)) { alert('이 그룹에는 이미 처음 선택된 항목이 있습니다.'); return; }
   if((actionType==='group_toggle'||actionType==='conditional_image')&&!stateGroup) { alert('상태 그룹을 입력해 주세요.'); return; }
   if(actionType==='group_toggle'&&(st.flow.screens[st.cur].hotspots||[]).some(hs=>hs.actionType==='group_toggle'&&String(hs.stateGroup||'').trim()===stateGroup)) { alert('같은 이름의 상태 그룹이 이미 있습니다. 기존 그룹을 사용하려면 조건부 이미지 표시에서 선택해 주세요.'); return; }
   if(actionType==='group_toggle'&&!toggleOnImage) { alert('그룹 토글의 선택 상태 이미지를 선택해 주세요.'); return; }
@@ -5489,13 +5547,14 @@ function confirmHs() {
   const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
   if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:'토글 및 토스트 알림');
+    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
   if(!st.flow.screens[st.cur].hotspots) st.flow.screens[st.cur].hotspots = [];
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
   if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
   if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
   if(actionType==='group_toggle'||actionType==='conditional_image') Object.assign(hotspot,{stateGroup,toggleOffImage,toggleOnImage,...(actionType==='group_toggle'?{groupInitialOn:document.getElementById('hsGroupInitialOn').checked}:{})});
+  if(actionType==='radio_select') Object.assign(hotspot,{radioGroup,radioValue,radioInitial,toggleOffImage,toggleOnImage});
   if(actionType==='toast'||actionType==='navigate_toast'||actionType==='toggle_toast') Object.assign(hotspot,{toastMessage,toastOnMessage,toastOffMessage,toastDuration:Number(document.getElementById('hsToastDuration').value)||3000,toastPosition:document.getElementById('hsToastPosition').value,toastConfirm:document.getElementById('hsToastConfirm').checked});
   if(actionType==='text_color_target') Object.assign(hotspot,{textColorText,textColorGroup,textColorInitial:document.getElementById('hsTextColorInitial').value,textMinSize,textColorSize:textDefaultSize,textMaxSize,textColorWeight:document.getElementById('hsTextColorWeight').value,textColorAlign:document.getElementById('hsTextColorAlign').value,textColorBackground:document.getElementById('hsTextColorBackground').value,textColorMask:document.getElementById('hsTextColorMask').checked});
   if(actionType==='color_picker') Object.assign(hotspot,{textColorGroup});
