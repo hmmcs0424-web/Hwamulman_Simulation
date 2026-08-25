@@ -146,7 +146,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .phone-ad-dots{position:absolute;right:5px;bottom:4px;z-index:3;padding:2px 6px;border-radius:99px;background:rgba(0,0,0,.58);color:#fff;font-size:9px;font-weight:800}
 .phone-ad-admin{outline:2px dashed #f59e0b;outline-offset:-2px}.phone-ad-admin::before{content:'↔ 광고 슬라이드';position:absolute;z-index:4;left:4px;top:4px;padding:2px 5px;border-radius:4px;background:#f59e0b;color:#fff;font-size:9px;font-weight:800}
 .phone-promo-overlay{display:none;position:absolute;inset:0;z-index:45;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.62)}
-.phone-promo-overlay.active{display:flex}.phone-promo-card{width:min(82%,280px);max-height:92%;overflow:hidden;border-radius:7px;background:#fff;box-shadow:0 14px 38px rgba(0,0,0,.42)}
+.phone-promo-overlay.active{display:flex}.phone-promo-card{width:min(68%,230px);max-height:82%;overflow:hidden;border-radius:7px;background:#fff;box-shadow:0 14px 38px rgba(0,0,0,.42)}
 .phone-promo-card img{display:block;width:100%;max-height:calc(100% - 46px);object-fit:contain;background:#fff}.phone-promo-actions{display:grid;grid-template-columns:1fr 1fr;height:46px;border-top:1px solid #e5e7eb}
 .phone-promo-actions button{border:0;background:#fff;color:#252936;font:800 13px inherit;cursor:pointer}.phone-promo-actions button+button{border-left:1px solid #e5e7eb}.phone-promo-actions button:hover{background:#f8fafc}
 .phone-promo-count{position:absolute;right:8px;top:8px;padding:3px 7px;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;font-size:10px;font-weight:800}
@@ -709,7 +709,7 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
       <div class="phone-promo-overlay" id="phonePromoOverlay" role="dialog" aria-modal="true" aria-label="팝업 광고">
-        <div class="phone-promo-card"><div style="position:relative"><img id="phonePromoImage" alt="팝업 광고"><span class="phone-promo-count" id="phonePromoCount"></span></div><div class="phone-promo-actions"><button type="button" onclick="closeAllLoginPopupAds()">모두 닫기</button><button type="button" onclick="closeCurrentLoginPopupAd()">닫기</button></div></div>
+        <div class="phone-promo-card"><div style="position:relative"><img id="phonePromoImage" alt="팝업 광고"><span class="phone-promo-count" id="phonePromoCount"></span></div><div class="phone-promo-actions"><button type="button" onclick="dismissLoginPopupAdsToday()">오늘은 그만 보기</button><button type="button" onclick="closeCurrentLoginPopupAd()">닫기</button></div></div>
       </div>
     </div>
     <!-- Android 네비게이션 바: 최근앱 | 홈 | 뒤로 -->
@@ -1511,6 +1511,7 @@ let currentCounselor = null;
 let loginPopupState = {armed:false,shown:false,images:[],index:0};
 const COUNSELOR_SESSION_KEY = 'hmm-counselor-session-v1';
 const COUNSELOR_NAME_KEY = 'hmm-remembered-counselor-name';
+const LOGIN_POPUP_DISMISS_DATE_KEY = 'hmm-login-popup-dismiss-date-v1';
 const ADMIN_EMAIL_KEY = 'hmm-remembered-admin-email';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -3283,12 +3284,18 @@ function armLoginPopupAds() {
   renderBreadcrumb();renderGuide(st.flow.screens[start]?.guide);renderExceptions(start);renderList();syncSimulatorDeepLink();
 }
 function showArmedLoginPopupAds() {
-  if(!loginPopupState.armed||loginPopupState.shown||adminMode||counselorPreviewMode)return;
+  if(!loginPopupState.armed||loginPopupState.shown||(adminMode&&!counselorPreviewMode))return;
+  if(!counselorPreviewMode&&localStorage.getItem(LOGIN_POPUP_DISMISS_DATE_KEY)===localDateKey()) {
+    loginPopupState.armed=false;
+    return;
+  }
   const st=cache[activeSec];
-  if(!currentCounselor||st?.cur!==st?.flow?.start)return;
+  if(!counselorPreviewMode&&!currentCounselor)return;
+  const images=(st?.flow?.screens?.[st?.cur]?.phoneLayout?.popupAds?.images||[]).filter(Boolean);
+  if(!images.length)return;
   loginPopupState.armed=false;
   loginPopupState.shown=true;
-  loginPopupState.images=(st.flow.screens[st.cur]?.phoneLayout?.popupAds?.images||[]).filter(Boolean);
+  loginPopupState.images=images;
   loginPopupState.index=0;
   renderCurrentLoginPopupAd();
 }
@@ -3300,7 +3307,15 @@ function renderCurrentLoginPopupAd() {
   overlay.classList.add('active');
 }
 function closeCurrentLoginPopupAd(){loginPopupState.index+=1;renderCurrentLoginPopupAd()}
-function closeAllLoginPopupAds(){loginPopupState.index=loginPopupState.images.length;renderCurrentLoginPopupAd()}
+function localDateKey(){
+  const now=new Date(),offset=now.getTimezoneOffset()*60000;
+  return new Date(now.getTime()-offset).toISOString().slice(0,10);
+}
+function dismissLoginPopupAdsToday(){
+  localStorage.setItem(LOGIN_POPUP_DISMISS_DATE_KEY,localDateKey());
+  loginPopupState.index=loginPopupState.images.length;
+  renderCurrentLoginPopupAd();
+}
 function previewLoginPopupAds(){
   const images=popupImageValues();
   if(!images.length)return alert('미리보기할 팝업 이미지를 먼저 추가해 주세요.');
@@ -3605,6 +3620,7 @@ async function startCounselorPreview() {
   st.hist=[];
   const start=st.flow?.start;
   st.cur=null;
+  loginPopupState={armed:true,shown:false,images:[],index:0};
   syncAdminUI();
   if(start) goTo(start,true);
 }
