@@ -652,7 +652,7 @@ textarea.form-input{resize:vertical;}
       <button class="side-menu" type="button" data-page="profile"><span class="side-icon">✎</span><span class="side-label">정보변경</span></button>
       <button class="side-menu" type="button" data-page="appErrorChecklist"><span class="side-icon">⚠</span><span class="side-label">APP 오류 체크리스트</span></button>
       <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
-      <button class="side-menu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
+      <button class="side-menu admin-only-menu" id="faqMenu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
       <button class="side-menu admin-only-menu" id="contactsMenu" type="button" data-page="contacts"><span class="side-icon">☎</span><span class="side-label">업무 연락처</span></button>
     </div>
   </aside>
@@ -3638,12 +3638,14 @@ function syncAdminUI() {
   const btn = document.getElementById('topAdminBtn');
   const counselorBtn = document.getElementById('topCounselorBtn');
   const unregCard = document.getElementById('unregCard');
+  const faqMenu = document.getElementById('faqMenu');
   const contactsMenu = document.getElementById('contactsMenu');
   const adminEditing = adminMode && !counselorPreviewMode;
   if(!adminEditing) {
     cancelLayoutDraw();
     document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
   }
+  faqMenu?.classList.toggle('visible',adminEditing);
   contactsMenu?.classList.toggle('visible',adminMode);
   if(!adminMode && unsubscribeBusinessContacts) {
     unsubscribeBusinessContacts();
@@ -3651,6 +3653,10 @@ function syncAdminUI() {
     businessContacts=[];
   }
   if(!adminMode && activePage==='contacts') {
+    setWorkspacePage('simulator');
+    return;
+  }
+  if(!adminEditing && activePage==='faq') {
     setWorkspacePage('simulator');
     return;
   }
