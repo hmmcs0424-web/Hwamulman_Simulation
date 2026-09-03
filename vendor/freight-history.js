@@ -77,7 +77,7 @@
       const output = find('output');
       valid = !!next;
       let needsReview = false;
-      if (!output.value || output.value === generated) output.value = next;
+      if (!output.value || output.value === generated || output.value === generated + '\n') output.value = next ? next + '\n' : '';
       else if (generated && output.value.includes(generated) && next) output.value = output.value.replace(generated, next);
       else if (!generated && next) output.value = next + '\n\n' + output.value;
       else if (next && next !== generated) needsReview = true;
@@ -93,7 +93,15 @@
       attempted = !!find('source').value.trim();
       update();
     });
-    root.querySelectorAll('[data-field], input[name="fh-payment"]').forEach(input=>input.addEventListener('input',()=>{attempted=true;update();}));
+    root.querySelectorAll('[data-field], input[name="fh-payment"]').forEach(input=>input.addEventListener('input',()=>{
+      attempted=true;
+      update();
+      if (input.name === 'fh-payment' && valid) {
+        const output = find('output');
+        output.focus();
+        output.setSelectionRange(output.value.length, output.value.length);
+      }
+    }));
     find('output').addEventListener('input', () => {
       revision++;
       find('copy').disabled = !valid || !find('output').value.trim();
