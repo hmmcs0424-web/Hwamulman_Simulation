@@ -36,3 +36,27 @@
 #fh-status{font-size:13px;color:#1e40af}
 @media(max-width:1100px){.fh-grid{grid-template-columns:1fr}.fh-app .fh-source{min-height:210px}}
 @media(max-width:560px){.fh-fields{grid-template-columns:1fr}.fh-card,.fh-result{padding:16px}.fh-payment{flex-wrap:wrap}}
+
+/* Keep the complete writing workflow and copy actions in the desktop viewport. */
+@media(min-width:1200px){
+  .guide-page:has(.fh-app){padding:20px}
+  .guide-page:has(.fh-app) .guide-page-header{margin-bottom:16px}
+  .guide-page:has(.fh-app) .guide-content-card{padding:16px;min-height:0}
+  .fh-app{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr) minmax(0,1.2fr);gap:14px;height:calc(100dvh - 230px);min-height:420px}
+  .fh-grid{display:contents}
+  .fh-card,.fh-result{min-width:0;min-height:0;padding:16px;overflow:auto}
+  .fh-card:first-child,.fh-result{display:flex;flex-direction:column}
+  .fh-app h2{font-size:16px;flex-shrink:0}
+  .fh-app p{margin:0 0 10px}
+  .fh-app .fh-source{height:auto;min-height:120px;flex:1;resize:none}
+  .fh-fields{gap:8px 10px}
+  .fh-app input[type="text"],.fh-app input[type="date"]{padding:8px;margin-top:4px;min-width:0}
+  .fh-payment{padding:8px;margin-top:10px;gap:6px}
+  .fh-payment legend{margin-bottom:3px}
+  .fh-payment span{padding:8px 4px}
+  .fh-result{margin-top:0;overflow:hidden}
+  .fh-result textarea{flex:1;min-height:100px;resize:none;padding:12px;font-size:16px}
+  .fh-actions{flex-shrink:0;margin-top:12px;gap:8px}
+  .fh-actions button{padding:10px 14px}
+  #fh-status{flex-basis:100%}
+}
