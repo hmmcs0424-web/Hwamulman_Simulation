@@ -33,15 +33,33 @@
   window.mountFreightHistory = root => {
     root.innerHTML = `<section class="fh-app">
       <div class="fh-grid"><section class="fh-card"><h2><span>1</span> 조회 내용 입력</h2><p>조회 내용을 통째로 붙여넣으세요. 필요한 항목만 자동으로 추출합니다.</p>
-      <label for="fh-source" class="fh-label">조회 원문</label><textarea id="fh-source" class="fh-source" placeholder="조회한 운송장 정보를 여기에 붙여넣으세요." spellcheck="false"></textarea>
+      <label for="fh-source" class="fh-label">조회 원문</label><textarea id="fh-source" class="fh-source" placeholder="조회한 운송장 정보를 여기에 붙여넣으세요.
+
+[2026-09-04 08:06:09]
+운송장번호 : 20260901111111
+협력사명 : (주)지영물류
+화물명 : 가공철근
+화물수신번호 : 01012345678
+고객전화번호 : 01056785678
+상차지 : 경기 여주시 강천면 적금리
+하차지 : 경기 부천시 소사구 괴안동
+기사운임 : 330000
+주선료 : 경기 부천시 소사구 괴안동
+차주 아이디: 400000
+차주명 : 오로라
+차주 차량번호: 경기00자0000
+차주핸드폰 : 01000000000
+화물등록일시: 2026-09-04 08:03:27
+상담 유형 :
+인입 큐 : [DEV] Queue" spellcheck="false"></textarea>
       <small>입력 내용은 저장되지 않으며, 메뉴를 다시 열거나 새로고침하면 비워집니다.</small></section>
       <section class="fh-card"><h2><span>2</span> 내용 확인 및 운임 선택</h2><p>추출된 내용을 확인하고, 누락되거나 잘못된 값은 수정하세요.</p>
       <div class="fh-fields">${fields.map(([key,label,type]) => `<label class="fh-label" for="fh-${key}">${label}<input id="fh-${key}" data-field="${key}" type="${type}" ${['fare','invoice'].includes(key)?'inputmode="numeric"':''} autocomplete="off" required><small class="fh-error" id="fh-error-${key}"></small></label>`).join('')}</div>
-      <fieldset class="fh-payment"><legend>운임 구분 <small>필수 선택</small></legend>${[['인','인수증'],['선불','선불'],['착불','착불']].map(([value,label])=>`<label><input type="radio" name="fh-payment" value="${value}"><span>${label}</span></label>`).join('')}</fieldset></section></div>
-      <section class="fh-result"><h2><span>3</span> 자동 작성 결과</h2><label class="fh-label" for="fh-output">복사할 민원 이력</label><textarea id="fh-output" readonly placeholder="필수 항목을 입력하고 운임 구분을 선택하세요."></textarea><div class="fh-actions"><button type="button" id="fh-copy" disabled>이력 복사</button><button type="button" id="fh-reset" class="fh-secondary">초기화</button><span id="fh-status" role="status" aria-live="polite"></span></div></section>
+      <fieldset class="fh-payment"><legend>운임 구분 <small>필수 선택</small></legend><p class="fh-payment-prompt">운임을 선택하세요.</p>${[['인','인수증'],['선불','선불'],['착불','착불']].map(([value,label])=>`<label><input type="radio" name="fh-payment" value="${value}"><span>${label}</span></label>`).join('')}</fieldset></section></div>
+      <section class="fh-result"><h2><span>3</span> 자동 작성 결과</h2><label class="fh-label" for="fh-output">복사할 민원 이력</label><p>자동 작성된 이력 아래에 상담 내용이나 추가 메모를 자유롭게 작성하세요. 작성란의 전체 내용이 복사됩니다.</p><textarea id="fh-output" placeholder="필수 항목을 입력하고 운임 구분을 선택하세요.&#10;&#10;이력이 생성되면 이곳에 상담 내용을 추가로 작성할 수 있습니다."></textarea><div class="fh-actions"><button type="button" id="fh-copy" disabled>전체 내용 복사</button><button type="button" id="fh-reset" class="fh-secondary">초기화</button><span id="fh-status" role="status" aria-live="polite"></span></div></section>
       </section>`;
     const find = id => root.querySelector(`#fh-${id}`);
-    let attempted = false, revision = 0;
+    let attempted = false, revision = 0, generated = '', valid = false;
     function update() {
       revision++;
       const values = Object.fromEntries(fields.map(([key])=>[key,find(key).value.trim()]));
@@ -55,9 +73,18 @@
         find(key).setAttribute('aria-invalid', String(attempted && !!error));
         find(key).setAttribute('aria-describedby', `fh-error-${key}`);
       });
-      find('output').value = format(values, root.querySelector('input[name="fh-payment"]:checked')?.value);
-      find('copy').disabled = !find('output').value;
-      find('status').textContent = '';
+      const next = format(values, root.querySelector('input[name="fh-payment"]:checked')?.value);
+      const output = find('output');
+      valid = !!next;
+      let needsReview = false;
+      if (!output.value || output.value === generated) output.value = next;
+      else if (generated && output.value.includes(generated) && next) output.value = output.value.replace(generated, next);
+      else if (!generated && next) output.value = next + '\n\n' + output.value;
+      else if (next && next !== generated) needsReview = true;
+      if (next) generated = next;
+      find('copy').disabled = !valid || !output.value.trim();
+      find('status').textContent = needsReview ? '입력 정보가 변경되었습니다. 직접 수정한 이력 내용을 확인해 주세요.' : '';
+      root.querySelector('.fh-payment').classList.toggle('is-selected', !!root.querySelector('input[name="fh-payment"]:checked'));
     }
     find('source').addEventListener('input', () => {
       const values = parse(find('source').value);
@@ -67,10 +94,15 @@
       update();
     });
     root.querySelectorAll('[data-field], input[name="fh-payment"]').forEach(input=>input.addEventListener('input',()=>{attempted=true;update();}));
+    find('output').addEventListener('input', () => {
+      revision++;
+      find('copy').disabled = !valid || !find('output').value.trim();
+      find('status').textContent = '';
+    });
     find('reset').addEventListener('click',()=>{
       root.querySelectorAll('textarea, [data-field]').forEach(input=>{input.value='';});
       root.querySelectorAll('input[name="fh-payment"]').forEach(input=>{input.checked=false;});
-      attempted=false;update();find('source').focus();
+      attempted=false;generated='';update();find('source').focus();
     });
     find('copy').addEventListener('click',async()=>{
       const output = find('output'), text = output.value, version = revision;
