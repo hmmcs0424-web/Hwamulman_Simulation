@@ -34,9 +34,9 @@
     if (lines.some(l => /[:：]/.test(l))) blocks.push(lines.join('\n'));
     return blocks.map(parse);
   }
-  function formatMany(records) {
+  function formatMany(records, receiver = '') {
     const lines = records.map(record => format(record, record.payment));
-    return lines.length && lines.every(Boolean) ? lines.map(line => line + '\n차주 인입 : 운임 미수').join('\n\n') : '';
+    return lines.length && lines.every(Boolean) ? lines.map(line => line + '\n차주 인입 : 운임 미수\n접수자 : ' + String(receiver).trim()).join('\n\n') : '';
   }
   const fields = [['date','화물 등록일','date'],['origin','상차 지역','text'],['destination','하차 지역','text'],['fare','기사운임 (원)','text'],['vehicle','차량번호','text'],['invoice','운송장번호','text']];
   function validDate(value) {
@@ -48,7 +48,7 @@
   }
   if (typeof module !== 'undefined' && module.exports) module.exports = { region, parse, parseMany, format, formatMany };
   if (typeof window === 'undefined') return;
-  window.mountFreightHistory = root => {
+  window.mountFreightHistory = (root, getReceiver = () => '') => {
     root.innerHTML = `<section class="fh-app">
       <div class="fh-grid"><section class="fh-card"><h2><span>1</span> 조회 내용 입력</h2><p>여러 운송장의 조회 내용을 한 번에 붙여넣으세요. 운송장별로 자동 구분합니다.</p>
       <label for="fh-source" class="fh-label">조회 원문</label><textarea id="fh-source" class="fh-source" placeholder="조회한 운송장 정보를 여기에 붙여넣으세요.
@@ -98,7 +98,7 @@
       });
       const complete=records.filter(record=>format(record,record.payment)).length;
       find('count').textContent='총 '+records.length+'건 · 작성 준비 완료 '+complete+'건';
-      const next=formatMany(records), output=find('output');
+      const next=formatMany(records, getReceiver()), output=find('output');
       valid=!!next;
       let needsReview=false;
       if (!output.value || output.value===generated || output.value===generated+'\n') output.value=next?next+'\n':'';
@@ -131,6 +131,8 @@
     });
     renderRecords();update();
     find('copy').addEventListener('click',async()=>{
+      update();
+      if (!valid) return;
       const output = find('output'), text = output.value, version = revision;
       if (!text) return;
       try {

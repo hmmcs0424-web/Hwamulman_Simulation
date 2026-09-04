@@ -1430,7 +1430,7 @@ textarea.form-input{resize:vertical;}
 <script src="/vendor/signup-guide.js?v=3"></script>
 <script src="/vendor/signup-checklist.js?v=2"></script>
 <script src="./vendor/app-error-checklist.js?v=8"></script>
-<script src="./vendor/freight-history.js?v=4"></script>
+<script src="./vendor/freight-history.js?v=5"></script>
 <script src="/vendor/membership-guide.js?v=1"></script>
 <script src="/vendor/profile-guide.js?v=1"></script>
 <script>
@@ -1653,7 +1653,7 @@ function renderGuidePage() {
     document.getElementById('guideEditorBox').style.display = 'none';
     document.getElementById('guideContent').style.display = '';
     document.getElementById('guideContent').innerHTML = '<div id="freightHistoryRoot"></div>';
-    window.mountFreightHistory(document.getElementById('freightHistoryRoot'));
+    window.mountFreightHistory(document.getElementById('freightHistoryRoot'), () => adminMode ? (currentAdminProfile?.name || '') : (currentCounselor?.name || ''));
     return;
   }
   if(activePage === 'signup') {
