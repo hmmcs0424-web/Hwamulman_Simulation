@@ -60,3 +60,7 @@
   .fh-actions button{padding:10px 14px}
   #fh-status{flex-basis:100%}
 }
+
+.fh-record+ .fh-record{margin-top:20px;padding-top:18px;border-top:2px solid #dbe3ef}
+.fh-record h3{margin:0 0 10px;font-size:14px;color:#1d4ed8}
+.fh-app #fh-count{font-weight:700;color:#1d4ed8}
