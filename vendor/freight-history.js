@@ -36,7 +36,7 @@
   }
   function formatMany(records, receiver = '') {
     const lines = records.map(record => format(record, record.payment));
-    return lines.length && lines.every(Boolean) ? lines.map(line => line + '\n차주 인입 : 운임 미수\n접수자 : ' + String(receiver).trim()).join('\n\n') : '';
+    return lines.length && lines.every(Boolean) ? lines.join('\n') + '\n차주 인입 : 운임 미수\n접수자 : ' + String(receiver).trim() : '';
   }
   const fields = [['date','화물 등록일','date'],['origin','상차 지역','text'],['destination','하차 지역','text'],['fare','기사운임 (원)','text'],['vehicle','차량번호','text'],['invoice','운송장번호','text']];
   function validDate(value) {
@@ -122,7 +122,7 @@
       else if(input.dataset.payment) record.payment=input.value;
       else return;
       attempted=true;update();
-      if(input.dataset.payment && valid){const output=find('output');output.focus();output.setSelectionRange(output.value.length,output.value.length);}
+      if(input.dataset.payment && valid){const output=find('output');output.focus({preventScroll:true});output.setSelectionRange(output.value.length,output.value.length);}
     });
     find('output').addEventListener('input',()=>{revision++;find('copy').disabled=!valid || !find('output').value.trim();find('status').textContent='';});
     find('reset').addEventListener('click',()=>{
@@ -141,7 +141,7 @@
           await navigator.clipboard.writeText(text);
         } catch {
           if (version !== revision || !root.isConnected) return;
-          output.focus();output.select();
+          output.focus({preventScroll:true});output.select();
           if (!document.execCommand('copy')) throw new Error('Copy failed');
         }
         if (version === revision) find('status').textContent='이력이 복사되었습니다.';
