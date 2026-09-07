@@ -188,7 +188,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .hotspot-font-size-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;color:#293047;font-weight:800;pointer-events:none}
 .sim-toast{display:none;position:absolute;z-index:60;left:12px;right:12px;bottom:12px;align-items:center;gap:10px;padding:13px 14px;border-radius:4px;background:rgba(31,31,36,.96);color:#fff;box-shadow:0 3px 12px rgba(0,0,0,.35);font-size:12px;line-height:1.45;transform:translateY(16px);opacity:0;transition:opacity .18s,transform .18s}
 .sim-toast.show{display:flex;transform:translateY(0);opacity:1}.sim-toast.top{top:12px;bottom:auto}.sim-toast-message{flex:1}.sim-toast-close{border:0;background:transparent;color:#4da3ff;font:inherit;font-weight:700;cursor:pointer;padding:3px}
-.draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:20;}
+.draw-overlay{display:none;position:absolute;inset:0;cursor:crosshair;z-index:22;}
 .draw-overlay.active{display:block;}
 .draw-rect{display:none;position:absolute;background:rgba(30,100,255,.2);border:2px solid rgba(30,100,255,.85);border-radius:4px;pointer-events:none;}
 .layout-draw-overlay{display:none;position:absolute;inset:0;z-index:24;cursor:crosshair;background:rgba(255,255,255,.08);touch-action:none}
@@ -3146,6 +3146,7 @@ function renderMasks(layerId, masks, forceAdmin) {
   if(!layer)return;
   layer.innerHTML='';
   const isAdmin=forceAdmin||(adminMode&&!counselorPreviewMode);
+  layer.style.zIndex=isAdmin?'21':'';
   (Array.isArray(masks)?masks:[]).forEach((mask,i)=>{
     const el=document.createElement('div');
     el.className='screen-mask'+(isAdmin?' admin-mask':'');
@@ -3157,7 +3158,8 @@ function renderMasks(layerId, masks, forceAdmin) {
       el.appendChild(label);
       const del=document.createElement('button');
       del.type='button';del.className='screen-mask-delete';del.textContent='×';del.title='마스킹 삭제';
-      del.onclick=e=>{e.stopPropagation();deleteMask(i)};
+      del.onpointerdown=e=>e.stopPropagation();
+      del.onclick=e=>{e.preventDefault();e.stopPropagation();deleteMask(i)};
       el.appendChild(del);
     }
     layer.appendChild(el);
