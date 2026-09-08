@@ -856,10 +856,10 @@ textarea.form-input{resize:vertical;}
         </div>
         <div class="layout-selection-status" id="phoneLayoutSelectionStatus"></div>
         <div class="layout-choice-row">
-          <button class="btn btn-danger btn-sm" type="button" onclick="clearPhoneLayoutPart('top')">상단 고정 삭제</button>
-          <button class="btn btn-danger btn-sm" type="button" onclick="clearPhoneLayoutPart('bottom')">하단 고정 삭제</button>
-          <button class="btn btn-danger btn-sm" type="button" onclick="clearPhoneLayoutPart('ad')">광고 영역 삭제</button>
-          <button class="btn btn-danger btn-sm" type="button" onclick="clearPhoneLayoutPart('horizontal')">가로 메뉴 삭제</button>
+          <button class="btn btn-danger btn-sm" id="btnClearFixedTop" type="button" onclick="clearPhoneLayoutPart('top')">상단 고정 삭제</button>
+          <button class="btn btn-danger btn-sm" id="btnClearFixedBottom" type="button" onclick="clearPhoneLayoutPart('bottom')">하단 고정 삭제</button>
+          <button class="btn btn-danger btn-sm" id="btnClearAdArea" type="button" onclick="clearPhoneLayoutPart('ad')">광고 영역 삭제</button>
+          <button class="btn btn-danger btn-sm" id="btnClearHorizontal" type="button" onclick="clearPhoneLayoutPart('horizontal')">가로 메뉴 삭제</button>
         </div>
         <div style="display:none">
           <input id="phoneFixedTop" type="number"><input id="phoneFixedBottom" type="number">
@@ -4290,6 +4290,10 @@ function updateLayoutSelectionStatus(){
   const fixedTop=Number(document.getElementById('phoneFixedTop').value)||0, fixedBottom=Number(document.getElementById('phoneFixedBottom').value)||0;
   const aw=Number(document.getElementById('phoneAdWidth').value)||0, ah=Number(document.getElementById('phoneAdHeight').value)||0;
   const hw=Number(document.getElementById('phoneHorizontalWidth').value)||0,hh=Number(document.getElementById('phoneHorizontalHeight').value)||0;
+  document.getElementById('btnClearFixedTop').style.display=fixedTop?'':'none';
+  document.getElementById('btnClearFixedBottom').style.display=fixedBottom?'':'none';
+  document.getElementById('btnClearAdArea').style.display=aw&&ah?'':'none';
+  document.getElementById('btnClearHorizontal').style.display=hw&&hh?'':'none';
   el.textContent=`상단 고정: ${fixedTop?`${fixedTop.toFixed(1)}%`:'선택 안 함'} · 하단 고정: ${fixedBottom?`${fixedBottom.toFixed(1)}%`:'선택 안 함'} · 광고 영역: ${aw&&ah?`${aw.toFixed(1)}% × ${ah.toFixed(1)}%`:'선택 안 함'} · 가로 메뉴: ${hw&&hh?`${hw.toFixed(1)}% × ${hh.toFixed(1)}%`:'선택 안 함'}`;
   renderSavedLayoutRegions();
 }
