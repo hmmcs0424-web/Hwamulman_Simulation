@@ -3868,6 +3868,7 @@ function exitAdmin() {
 
 async function startCounselorPreview() {
   if(!adminMode || activeSec==='채널톡') return;
+  if(SECS[activeSec]?.type==='app')syncPhoneLayoutDraftToScreen();
   if(!(await saveSimulatorFlow(activeSec))) return;
   if(drawing) cancelDraw();
   cancelLayoutDraw();
@@ -4250,8 +4251,7 @@ function setAdSlideValues(images,links=[]){
   const normalizedLinks=images.map((_,i)=>links[i]||'');
   document.getElementById('phoneAdImages').value=images.join('\n');
   document.getElementById('phoneAdLinks').value=normalizedLinks.join('\n');
-  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];
-  if(scr?.phoneLayout?.adCarousel){scr.phoneLayout.adCarousel.images=[...images];scr.phoneLayout.adCarousel.links=[...normalizedLinks]}
+  syncPhoneLayoutDraftToScreen();
   renderAdSlideList();
 }
 function setAdImageValues(images){const current=adImageValues(),links=adLinkValues();const unique=Array.from(new Set(images));setAdSlideValues(unique,unique.map(image=>{const index=current.indexOf(image);return index>=0?links[index]||'':''}))}
@@ -4266,7 +4266,7 @@ function renderAdSlideList(){
   const images=adImageValues(),links=adLinkValues();
   list.innerHTML=images.length?images.map((url,index)=>`<div class="ad-slide-item"><img src="${esc(url)}" alt=""><span>${index+1}. ${esc(assetDisplayName(url))}</span><button type="button" onclick="moveAdImage(${index},-1)" ${index===0?'disabled':''}>↑</button><button type="button" onclick="moveAdImage(${index},1)" ${index===images.length-1?'disabled':''}>↓</button><button type="button" onclick="removeAdImage(${index})">삭제</button><input type="url" value="${esc(links[index]||'')}" placeholder="클릭 시 이동할 링크 (https://...)" oninput="setAdLink(${index},this.value)"></div>`).join(''):'<div style="color:#999;font-size:11px">추가된 광고 이미지가 없습니다.</div>';
 }
-function setAdLink(index,value){const images=adImageValues(),links=adLinkValues();links[index]=value.trim();document.getElementById('phoneAdLinks').value=images.map((_,i)=>links[i]||'').join('\n')}
+function setAdLink(index,value){const images=adImageValues(),links=adLinkValues();links[index]=value.trim();document.getElementById('phoneAdLinks').value=images.map((_,i)=>links[i]||'').join('\n');syncPhoneLayoutDraftToScreen()}
 function moveAdImage(index,direction){const images=adImageValues(),links=adLinkValues(),next=index+direction;if(next<0||next>=images.length)return;[images[index],images[next]]=[images[next],images[index]];[links[index],links[next]]=[links[next]||'',links[index]||''];setAdSlideValues(images,links)}
 function removeAdImage(index){const images=adImageValues(),links=adLinkValues();images.splice(index,1);links.splice(index,1);setAdSlideValues(images,links)}
 
@@ -4324,7 +4324,7 @@ function setupLayoutDrawing() {
     const rect=overlay.querySelector('.layout-draw-rect');
     overlay.addEventListener('pointerdown',e=>{ if(!layoutDrawing) return; e.stopPropagation(); const b=overlay.getBoundingClientRect(); layoutDrawing.start={x:Math.max(0,Math.min(b.width,e.clientX-b.left)),y:Math.max(0,Math.min(b.height,e.clientY-b.top))}; overlay.setPointerCapture(e.pointerId); e.preventDefault(); });
     overlay.addEventListener('pointermove',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)); const mode=layoutDrawing.mode; let l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y); if(mode==='fixed-top'){l=0;t=0;w=b.width;h=Math.max(layoutDrawing.start.y,y)} if(mode==='fixed-bottom'){l=0;t=Math.min(layoutDrawing.start.y,y);w=b.width;h=b.height-t} rect.style.cssText=`display:block;left:${l}px;top:${t}px;width:${w}px;height:${h}px`; });
-    overlay.addEventListener('pointerup',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)), mode=layoutDrawing.mode; if(mode==='ad'||mode==='horizontal'){ const l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y),prefix=mode==='ad'?'phoneAd':'phoneHorizontal'; if(w>5&&h>5){document.getElementById(prefix+'Left').value=(l/b.width*100).toFixed(1);document.getElementById(prefix+'Top').value=(t/b.height*100).toFixed(1);document.getElementById(prefix+'Width').value=(w/b.width*100).toFixed(1);document.getElementById(prefix+'Height').value=(h/b.height*100).toFixed(1);}} else { const h=mode==='fixed-top'?Math.max(layoutDrawing.start.y,y):b.height-Math.min(layoutDrawing.start.y,y); document.getElementById(mode==='fixed-bottom'?'phoneFixedBottom':'phoneFixedTop').value=(h/b.height*100).toFixed(1); } cancelLayoutDraw(); updateLayoutSelectionStatus(); });
+    overlay.addEventListener('pointerup',e=>{ if(!layoutDrawing?.start) return; const b=overlay.getBoundingClientRect(), x=Math.max(0,Math.min(b.width,e.clientX-b.left)), y=Math.max(0,Math.min(b.height,e.clientY-b.top)), mode=layoutDrawing.mode; if(mode==='ad'||mode==='horizontal'){ const l=Math.min(layoutDrawing.start.x,x),t=Math.min(layoutDrawing.start.y,y),w=Math.abs(x-layoutDrawing.start.x),h=Math.abs(y-layoutDrawing.start.y),prefix=mode==='ad'?'phoneAd':'phoneHorizontal'; if(w>5&&h>5){document.getElementById(prefix+'Left').value=(l/b.width*100).toFixed(1);document.getElementById(prefix+'Top').value=(t/b.height*100).toFixed(1);document.getElementById(prefix+'Width').value=(w/b.width*100).toFixed(1);document.getElementById(prefix+'Height').value=(h/b.height*100).toFixed(1);}} else { const h=mode==='fixed-top'?Math.max(layoutDrawing.start.y,y):b.height-Math.min(layoutDrawing.start.y,y); document.getElementById(mode==='fixed-bottom'?'phoneFixedBottom':'phoneFixedTop').value=(h/b.height*100).toFixed(1); } syncPhoneLayoutDraftToScreen(); cancelLayoutDraw(); updateLayoutSelectionStatus(); });
   });
 }
 function updateLayoutSelectionStatus(){
@@ -4355,6 +4355,19 @@ function renderSavedLayoutRegions(){
 function phoneLayoutNumber(id,min,max) {
   const value = Number(document.getElementById(id).value);
   return Number.isFinite(value) ? Math.max(min,Math.min(max,value)) : 0;
+}
+
+function syncPhoneLayoutDraftToScreen(){
+  if(!adminMode || counselorPreviewMode || SECS[activeSec]?.type!=='app')return;
+  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];
+  if(!scr)return;
+  const layout=scr.phoneLayout||{};
+  layout.fixedTopPercent=phoneLayoutNumber('phoneFixedTop',0,100);
+  layout.fixedBottomPercent=phoneLayoutNumber('phoneFixedBottom',0,100);
+  const images=adImageValues(),links=adLinkValues().slice(0,images.length);
+  const ad={top:phoneLayoutNumber('phoneAdTop',0,100),left:phoneLayoutNumber('phoneAdLeft',0,100),width:phoneLayoutNumber('phoneAdWidth',0,100),height:phoneLayoutNumber('phoneAdHeight',0,100),images:[...images],links:[...links]};
+  layout.adCarousel=(ad.top||ad.left||ad.width||ad.height||ad.images.length)?ad:null;
+  scr.phoneLayout=layout;
 }
 
 async function savePhoneLayout() {
