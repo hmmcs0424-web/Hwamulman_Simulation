@@ -154,6 +154,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .phone-horizontal-menu{position:absolute;z-index:11;overflow-x:auto;overflow-y:hidden;background:#fff;touch-action:pan-x;overscroll-behavior-x:contain;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
 .phone-horizontal-menu::-webkit-scrollbar{display:none}.phone-horizontal-menu.dragging{cursor:grabbing;user-select:none}.phone-horizontal-menu-track{position:relative;height:100%;min-width:100%}.phone-horizontal-menu-track>img{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none}.phone-horizontal-menu-item{position:absolute;top:0;height:100%;border:0;padding:0;background:transparent;cursor:pointer;overflow:hidden}.phone-horizontal-menu-item:hover{background:rgba(30,100,255,.1)}.phone-horizontal-menu-item.admin{outline:2px dashed #2563eb;outline-offset:-2px}.phone-horizontal-menu-item>img{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}.phone-horizontal-menu-item span{display:none;position:absolute;z-index:2;left:3px;top:3px;padding:2px 4px;border-radius:3px;background:#2563eb;color:#fff;font-size:9px;font-weight:800;white-space:nowrap}.phone-horizontal-menu-item.admin span{display:block}
 .phone-scroll-region-layer{position:absolute;inset:0;z-index:17;pointer-events:none}.phone-scroll-region{position:absolute;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y;background:#fff;pointer-events:auto;cursor:grab;scrollbar-width:thin;scrollbar-color:#94a3b8 #f1f5f9}.phone-scroll-region.dragging{cursor:grabbing;user-select:none}.phone-scroll-region>img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none}.phone-scroll-region::-webkit-scrollbar{width:6px}.phone-scroll-region::-webkit-scrollbar-thumb{border-radius:99px;background:#94a3b8}.phone-scroll-region::-webkit-scrollbar-track{background:#f1f5f9}.phone-scroll-region.admin{outline:2px dashed #06b6d4;outline-offset:-2px}.phone-scroll-region-label{display:none;position:sticky;z-index:2;top:2px;float:left;margin:2px;padding:2px 5px;border-radius:4px;background:#0891b2;color:#fff;font-size:9px;font-weight:800;pointer-events:none}.phone-scroll-region.admin .phone-scroll-region-label{display:block}.phone-scroll-region-delete{display:none;position:sticky;z-index:3;top:2px;float:right;width:18px;height:18px;margin:2px;border:0;border-radius:50%;padding:0;background:#ef4444;color:#fff;font-size:14px;font-weight:900;line-height:18px;cursor:pointer}.phone-scroll-region.admin .phone-scroll-region-delete{display:block}
+.phone-accordion-canvas{display:none;width:100%;height:auto}.phone-accordion-layer{position:absolute;inset:0;z-index:20;pointer-events:none}.phone-accordion-trigger{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto}.phone-accordion-trigger:hover{background:rgba(30,100,255,.08)}.phone-accordion-trigger.admin{outline:2px dashed #8b5cf6;outline-offset:-2px}.phone-accordion-trigger>img{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}.phone-accordion-trigger-label{display:none;position:absolute;left:3px;top:3px;padding:2px 5px;border-radius:4px;background:#7c3aed;color:#fff;font-size:9px;font-weight:800;white-space:nowrap}.phone-accordion-trigger.admin .phone-accordion-trigger-label{display:block}.phone-accordion-trigger-delete{display:none;position:absolute;right:-8px;top:-8px;width:18px;height:18px;border:0;border-radius:50%;padding:0;background:#ef4444;color:#fff;font-size:14px;font-weight:900;line-height:18px}.phone-accordion-trigger.admin .phone-accordion-trigger-delete{display:block}
 .inline-help{position:relative;display:inline-flex;vertical-align:middle}.inline-help-button{width:18px;height:18px;border:0;border-radius:50%;padding:0;background:#2563eb;color:#fff;font-size:12px;font-weight:900;line-height:18px;cursor:pointer}.inline-help-panel{display:none;position:absolute;z-index:50;top:24px;left:0;width:270px;padding:12px;border:1px solid #bfdbfe;border-radius:9px;background:#fff;color:#334155;box-shadow:0 8px 24px rgba(15,23,42,.18);font-size:11px;line-height:1.6}.inline-help.open .inline-help-panel{display:block}.inline-help-panel b{display:block;margin-bottom:5px;color:#1d4ed8;font-size:12px}.inline-help-panel .help-note{display:block;margin-top:7px;padding:6px 7px;border-radius:5px;background:#eff6ff;color:#1e40af}
 .phone-fixed-icon-layer{position:absolute;inset:0;z-index:19;pointer-events:none}.phone-fixed-icon{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}.phone-fixed-icon img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}.phone-fixed-icon.admin{outline:2px dashed #8b5cf6;outline-offset:2px;border-radius:5px}
 .mask-layer{position:absolute;inset:0;z-index:18;pointer-events:none}
@@ -695,9 +696,11 @@ textarea.form-input{resize:vertical;}
       <div class="phone-scroll-viewport" id="phoneScrollViewport">
         <div class="image-wrapper" id="imageWrapper">
           <img class="screen-image" id="screenImg" alt="화면">
+          <canvas class="phone-accordion-canvas" id="phoneAccordionCanvas"></canvas>
           <div class="phone-scroll-region-layer" id="phoneScrollRegionLayer"></div>
           <div class="mask-layer" id="maskLayer"></div>
           <div class="hotspot-layer" id="hotspotLayer"></div>
+          <div class="phone-accordion-layer" id="phoneAccordionLayer"></div>
           <div id="phoneHorizontalMenu"></div>
           <div class="draw-overlay" id="drawOverlay"><div class="draw-rect" id="drawRect"></div></div>
           <div class="layout-saved-region fixed-top" id="phoneSavedFixedTop"></div><div class="layout-saved-region fixed-bottom" id="phoneSavedFixedBottom"></div><div class="layout-saved-region ad-region" id="phoneSavedAd"></div><div class="layout-saved-region horizontal-region" id="phoneSavedHorizontal"></div>
@@ -830,6 +833,12 @@ textarea.form-input{resize:vertical;}
           <button class="btn btn-secondary" id="btnScrollRegionDraw" type="button" onclick="startPhoneScrollRegionDraw()">+ 스크롤 영역 드래그</button>
         </div>
         <div id="phoneScrollRegionList"></div>
+      </div>
+      <div class="admin-section" id="phoneAccordionAdminSection" style="display:none">
+        <div class="section-title">↕ 부분 펼치기</div>
+        <div class="form-label">펼치기 버튼 영역을 드래그한 뒤, 아래에 삽입할 상세 조각 이미지를 선택하세요.</div>
+        <div class="btn-row" style="margin-bottom:8px"><button class="btn btn-secondary" type="button" onclick="startPhoneAccordionDraw()">+ 펼침 영역 드래그</button></div>
+        <div id="phoneAccordionList"></div>
       </div>
       <div class="admin-section">
         <div class="section-title">가이드 편집</div>
@@ -1398,6 +1407,19 @@ textarea.form-input{resize:vertical;}
 </div>
 
 <!-- 채널톡 화면 선택: 파일명 직접 입력 없이 기존 이미지 목록에서 선택 -->
+<div class="modal-bg" id="phoneAccordionModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title">↕ 부분 펼치기 설정</div>
+    <div class="form-row"><div class="form-label">이름</div><input class="form-input" id="phoneAccordionLabel" placeholder="예: 발급 이력"></div>
+    <div class="form-row"><div class="form-label">펼쳤을 때 버튼 부분 이미지 (선택)</div><select class="form-input" id="phoneAccordionTriggerImage"></select></div>
+    <div class="form-row"><div class="form-label">아래에 삽입할 상세 조각 이미지</div><select class="form-input" id="phoneAccordionDetailImage" onchange="previewPhoneAccordionImage()"></select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="form-label">상세 이미지 왼쪽(%)<input class="form-input" id="phoneAccordionDetailLeft" type="number" min="0" max="100" step="0.1" value="0"></label><label class="form-label">상세 이미지 너비(%)<input class="form-input" id="phoneAccordionDetailWidth" type="number" min="1" max="100" step="0.1" value="100"></label></div>
+    <div style="text-align:center"><img id="phoneAccordionPreview" alt="상세 이미지 미리보기" style="max-width:100%;height:220px;object-fit:contain;border:1px solid #e2e2e2;border-radius:8px;background:#f5f5f5"></div>
+    <div class="modal-footer"><button class="btn btn-secondary" type="button" onclick="cancelDraw()">취소</button><button class="btn btn-primary" type="button" onclick="confirmPhoneAccordion()">부분 펼치기 설정</button></div>
+  </div>
+</div>
+
+<!-- 채널톡 화면 선택: 파일명 직접 입력 없이 기존 이미지 목록에서 선택 -->
 <div class="modal-bg" id="cteScreenPickModal">
   <div class="modal" style="max-width:440px;">
     <div class="modal-title">🖼️ 편집할 화면 선택</div>
@@ -1510,6 +1532,8 @@ let activeDrawOverlayId = null; // 'drawOverlay' or 'pcDrawOverlay'
 let selectedHotspotIndices = [];
 let selectedHotspotContext = null;
 let hotspotUndoStack = [];
+const phoneAccordionExpanded = new Set();
+let phoneAccordionLayout = null;
 let siteImageManifest = null;
 let activePage = 'simulator';
 let editingGuidePage = false;
@@ -2766,6 +2790,7 @@ function renderPhoneScreen(scr) {
   const ca = document.getElementById('contentArea');
   const viewport = document.getElementById('phoneScrollViewport');
   const img = document.getElementById('screenImg');
+  const accordionCanvas=document.getElementById('phoneAccordionCanvas');
   const nb = document.getElementById('cssNavbar');
 
   viewport.classList.toggle('scroll-mode', scr.type==='scroll');
@@ -2779,10 +2804,14 @@ function renderPhoneScreen(scr) {
   clearPhoneHorizontalMenu();
   document.getElementById('phoneFixedIconLayer').innerHTML='';
   document.getElementById('phoneScrollRegionLayer').innerHTML='';
+  document.getElementById('phoneAccordionLayer').innerHTML='';
+  accordionCanvas.style.display='none';
+  img.style.display='block';
+  phoneAccordionLayout=null;
   document.getElementById('maskLayer').innerHTML='';
   document.getElementById('phonePromoOverlay').classList.remove('active');
   img.src = '';
-  img.onload = () => {
+  img.onload = async () => {
     const layout = scr.phoneLayout || {};
     const legacyPercent = Number(layout.fixedPercent)||0;
     const topPercent = Math.max(0,Math.min(100,Number(layout.fixedTopPercent ?? (layout.fixedEdge!=='bottom'?legacyPercent:0))||0));
@@ -2800,6 +2829,7 @@ function renderPhoneScreen(scr) {
     viewport.dataset.minScroll = String(topHeight);
     const isLongImage = imageHeight > viewport.clientHeight + topHeight + bottomHeight + 1;
     viewport.classList.toggle('scroll-mode', scr.type==='scroll' || isLongImage || topHeight>0 || bottomHeight>0);
+    await renderPhoneAccordions(scr);
     renderHotspots('hotspotLayer', scr.hotspots||[], false);
     renderMasks('maskLayer',scr.masks||[],false);
     renderPhoneScrollRegions(scr);
@@ -3042,8 +3072,9 @@ function renderPhoneScrollRegions(scr) {
     if(!region?.image)return;
     const el=document.createElement('div');
     el.className='phone-scroll-region'+(editing?' admin':'');
-    el.style.top=(Number(region.top)||0)+'%';el.style.left=(Number(region.left)||0)+'%';
-    el.style.width=(Number(region.width)||0)+'%';el.style.height=(Number(region.height)||0)+'%';
+    const rect=mapPhoneOverlayRect(region);
+    el.style.top=(Number(rect.top)||0)+'%';el.style.left=(Number(rect.left)||0)+'%';
+    el.style.width=(Number(rect.width)||0)+'%';el.style.height=(Number(rect.height)||0)+'%';
     const image=document.createElement('img');image.src=region.image;image.alt=region.label||'부분 스크롤 이미지';
     el.appendChild(image);
     if(editing){
@@ -3073,6 +3104,56 @@ function deletePhoneScrollRegion(index) {
   if(!scr||!Array.isArray(scr.scrollRegions))return;
   scr.scrollRegions.splice(index,1);renderPhoneScrollRegions(scr);renderPhoneScrollRegionList();
 }
+
+function phoneAccordionKey(item) { return `${activeSec}:${cache[activeSec]?.cur}:${item.id}`; }
+function loadImageElement(src) { return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src;}); }
+function mapPhoneOverlayRect(item) {
+  if(!phoneAccordionLayout)return item;
+  const base=phoneAccordionLayout.baseHeight,total=phoneAccordionLayout.displayHeight;
+  const topPx=(Number(item.top)||0)*base/100,bottomPx=((Number(item.top)||0)+(Number(item.height)||0))*base/100;
+  const shiftAt=y=>phoneAccordionLayout.insertions.reduce((sum,insertion)=>sum+(insertion.at<=y?insertion.height:0),0);
+  const mappedTop=topPx+shiftAt(topPx),mappedBottom=bottomPx+phoneAccordionLayout.insertions.reduce((sum,insertion)=>sum+(insertion.at<bottomPx?insertion.height:0),0);
+  return {...item,top:mappedTop/total*100,height:(mappedBottom-mappedTop)/total*100};
+}
+
+async function renderPhoneAccordions(scr) {
+  const layer=document.getElementById('phoneAccordionLayer'),canvas=document.getElementById('phoneAccordionCanvas'),base=document.getElementById('screenImg');
+  if(!layer||!canvas||!base)return;
+  layer.innerHTML='';phoneAccordionLayout=null;
+  const items=APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)&&Array.isArray(scr.accordions)?scr.accordions:[],editing=adminMode&&!counselorPreviewMode;
+  const expanded=[];
+  for(const item of items.filter(value=>!editing&&phoneAccordionExpanded.has(phoneAccordionKey(value)))){
+    try{const detail=await loadImageElement(item.detailImage);const width=(Number(item.detailWidth)||100)*base.naturalWidth/100;expanded.push({item,detail,at:((Number(item.top)||0)+(Number(item.height)||0))*base.naturalHeight/100,height:detail.naturalHeight*(width/detail.naturalWidth),width});}catch(error){console.warn('부분 펼침 이미지 로드 실패:',item.detailImage,error);}
+  }
+  expanded.sort((a,b)=>a.at-b.at);
+  const displayHeight=base.naturalHeight+expanded.reduce((sum,value)=>sum+value.height,0);
+  phoneAccordionLayout={baseHeight:base.naturalHeight,displayHeight,insertions:expanded.map(value=>({at:value.at,height:value.height}))};
+  if(expanded.length){
+    canvas.width=base.naturalWidth;canvas.height=Math.ceil(displayHeight);const context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,canvas.width,canvas.height);
+    let sourceY=0,targetY=0;
+    expanded.forEach(value=>{const slice=Math.max(0,value.at-sourceY);if(slice)context.drawImage(base,0,sourceY,base.naturalWidth,slice,0,targetY,base.naturalWidth,slice);targetY+=slice;context.drawImage(value.detail,(Number(value.item.detailLeft)||0)*base.naturalWidth/100,targetY,value.width,value.height);targetY+=value.height;sourceY=value.at;});
+    context.drawImage(base,0,sourceY,base.naturalWidth,base.naturalHeight-sourceY,0,targetY,base.naturalWidth,base.naturalHeight-sourceY);
+    for(const value of expanded.filter(value=>value.item.triggerImage)){try{const trigger=await loadImageElement(value.item.triggerImage),rect=mapPhoneOverlayRect(value.item);context.drawImage(trigger,(Number(rect.left)||0)*base.naturalWidth/100,(Number(rect.top)||0)*displayHeight/100,(Number(rect.width)||0)*base.naturalWidth/100,(Number(rect.height)||0)*displayHeight/100);}catch(error){console.warn('펼침 버튼 이미지 로드 실패:',error);}}
+    base.style.display='none';canvas.style.display='block';
+  }else{base.style.display='block';canvas.style.display='none';}
+  items.forEach((item,index)=>{const rect=mapPhoneOverlayRect(item),button=document.createElement('div');button.className='phone-accordion-trigger'+(editing?' admin':'');button.style.cssText=`top:${rect.top}%;left:${rect.left}%;width:${rect.width}%;height:${rect.height}%;`;
+    if(editing){const label=document.createElement('span');label.className='phone-accordion-trigger-label';label.textContent=item.label||`펼침 영역 ${index+1}`;button.appendChild(label);const remove=document.createElement('button');remove.type='button';remove.className='phone-accordion-trigger-delete';remove.textContent='×';remove.onclick=event=>{event.preventDefault();event.stopPropagation();deletePhoneAccordion(index)};button.appendChild(remove);}
+    else button.onclick=()=>togglePhoneAccordion(item,scr);
+    layer.appendChild(button);
+  });
+  const viewport=document.getElementById('phoneScrollViewport');if(expanded.length)viewport.classList.add('scroll-mode');
+}
+
+async function togglePhoneAccordion(item,scr) {
+  const key=phoneAccordionKey(item);phoneAccordionExpanded.has(key)?phoneAccordionExpanded.delete(key):phoneAccordionExpanded.add(key);
+  await renderPhoneAccordions(scr);renderHotspots('hotspotLayer',scr.hotspots||[],false);renderMasks('maskLayer',scr.masks||[],false);renderPhoneScrollRegions(scr);
+}
+
+function renderPhoneAccordionList() {
+  const el=document.getElementById('phoneAccordionList');if(!el)return;const items=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.accordions||[];
+  el.innerHTML=items.length?items.map((item,index)=>`<div class="hs-item"><span>↕ ${esc(item.label||`펼침 영역 ${index+1}`)}</span><button class="btn btn-danger btn-sm" onclick="deletePhoneAccordion(${index})">삭제</button></div>`).join(''):'<div style="color:#aaa;font-size:13px">등록된 펼침 영역 없음</div>';
+}
+function deletePhoneAccordion(index) { const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];if(!scr||!Array.isArray(scr.accordions))return;phoneAccordionExpanded.delete(phoneAccordionKey(scr.accordions[index]));scr.accordions.splice(index,1);renderPhoneAccordions(scr);renderPhoneAccordionList(); }
 
 function openAdSlideLink(value) {
   const link = String(value||'').trim();
@@ -3151,7 +3232,8 @@ function renderMasks(layerId, masks, forceAdmin) {
   (Array.isArray(masks)?masks:[]).forEach((mask,i)=>{
     const el=document.createElement('div');
     el.className='screen-mask'+(isAdmin?' admin-mask':'');
-    el.style.cssText=`top:${mask.top}%;left:${mask.left}%;width:${mask.width}%;height:${mask.height}%;`;
+    const rect=layerId==='maskLayer'?mapPhoneOverlayRect(mask):mask;
+    el.style.cssText=`top:${rect.top}%;left:${rect.left}%;width:${rect.width}%;height:${rect.height}%;`;
     if(isAdmin){
       const label=document.createElement('span');
       label.className='screen-mask-label';
@@ -3179,7 +3261,8 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     el.className = 'hotspot ' + (isAdmin ? 'admin-mode' : isShow ? 'show-mode' : 'normal-mode');
     const isGuideOverlay = hs.kind==='text'||hs.kind==='box';
     if(isGuideOverlay) el.className += ` guide-overlay overlay-${hs.kind}`;
-    el.style.cssText = `top:${hs.top}%;left:${hs.left}%;width:${hs.width}%;height:${hs.height}%;`;
+    const displayRect=layerId==='hotspotLayer'?mapPhoneOverlayRect(hs):hs;
+    el.style.cssText = `top:${displayRect.top}%;left:${displayRect.left}%;width:${displayRect.width}%;height:${displayRect.height}%;`;
     const lbl = document.createElement('span');
     lbl.className = isGuideOverlay ? 'guide-overlay-copy' : 'hotspot-label';
     lbl.textContent = hs.label || hs.goto || '';
@@ -3813,6 +3896,7 @@ function syncAdminUI() {
   document.getElementById('adminPanel').style.display = (adminEditing && !isCte) ? 'block' : 'none';
   document.getElementById('phoneLayoutAdminSection').style.display = (adminEditing && !isCte) ? '' : 'none';
   document.getElementById('phoneScrollRegionAdminSection').style.display = (adminEditing && APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)) ? '' : 'none';
+  document.getElementById('phoneAccordionAdminSection').style.display = (adminEditing && APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)) ? '' : 'none';
 
   if(isCte) {
     unregCard.style.display = 'none';
@@ -3837,7 +3921,7 @@ function syncAdminUI() {
   renderHotspots(layerId, st.flow.screens?.[st.cur]?.hotspots||[], adminEditing);
   const maskLayerId=SECS[activeSec].type==='pc'?'pcMaskLayer':'maskLayer';
   renderMasks(maskLayerId,st.flow.screens?.[st.cur]?.masks||[],adminEditing);
-  if(adminEditing) { renderHsList(); renderMaskList(); renderPhoneScrollRegionList(); renderGuideEditor(); renderPhoneLayoutEditor(); }
+  if(adminEditing) { renderHsList(); renderMaskList(); renderPhoneScrollRegionList(); renderPhoneAccordionList(); renderGuideEditor(); renderPhoneLayoutEditor(); }
   renderExceptionEditor();
   renderOverlayAdminSection();
   renderChatScrollAdmin();
@@ -5408,6 +5492,10 @@ function setupDrawEvents(overlayId, rectId) {
       await openPhoneScrollRegionPicker();
       return;
     }
+    if(drawMode==='accordion') {
+      await openPhoneAccordionPicker();
+      return;
+    }
     if(drawMode==='text'||drawMode==='box') {
       document.getElementById('overlayGuideModalTitle').textContent=drawMode==='text'?'텍스트 삽입':'박스 삽입';
       document.getElementById('overlayGuideLabel').value='';
@@ -5624,6 +5712,11 @@ function startPhoneScrollRegionDraw() {
   beginScreenDraw();
 }
 
+function startPhoneAccordionDraw() {
+  if(!APP_PARTIAL_SCROLL_SECTIONS.has(activeSec))return;
+  drawMode='accordion';beginScreenDraw();
+}
+
 function beginScreenDraw() {
   drawing = true;
   activeDrawOverlayId = SECS[activeSec].type==='pc' ? 'pcDrawOverlay' : 'drawOverlay';
@@ -5641,6 +5734,7 @@ function cancelDraw() {
   closeModal('hsModal');
   closeModal('overlayGuideModal');
   closeModal('phoneScrollRegionModal');
+  closeModal('phoneAccordionModal');
 }
 
 async function openPhoneScrollRegionPicker() {
@@ -5666,6 +5760,25 @@ function confirmPhoneScrollRegion() {
   if(!Array.isArray(scr.scrollRegions))scr.scrollRegions=[];
   scr.scrollRegions.push({id:`scroll_${Date.now().toString(36)}`,label:`스크롤 영역 ${scr.scrollRegions.length+1}`,image,...pendingHs});
   pendingHs=null;cancelDraw();renderPhoneScrollRegions(scr);renderPhoneScrollRegionList();
+}
+
+async function openPhoneAccordionPicker() {
+  if(!pendingHs||!APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)){cancelDraw();return;}
+  const images=await getSimulatorImages(activeSec),options=images.map(image=>`<option value="${esc(image)}">${esc(assetDisplayName(image))}</option>`).join('');
+  document.getElementById('phoneAccordionLabel').value='';
+  document.getElementById('phoneAccordionTriggerImage').innerHTML='<option value="">기본 이미지 그대로</option>'+options;
+  document.getElementById('phoneAccordionDetailImage').innerHTML='<option value="">상세 조각 이미지 선택</option>'+options;
+  document.getElementById('phoneAccordionDetailLeft').value='0';document.getElementById('phoneAccordionDetailWidth').value='100';
+  previewPhoneAccordionImage();openModal('phoneAccordionModal');
+}
+function previewPhoneAccordionImage(){const value=document.getElementById('phoneAccordionDetailImage')?.value||'',preview=document.getElementById('phoneAccordionPreview');if(preview){preview.src=value;preview.style.visibility=value?'visible':'hidden';}}
+function confirmPhoneAccordion(){
+  if(!pendingHs||!APP_PARTIAL_SCROLL_SECTIONS.has(activeSec))return;
+  const detailImage=document.getElementById('phoneAccordionDetailImage').value;if(!detailImage)return alert('아래에 삽입할 상세 조각 이미지를 선택해 주세요.');
+  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];if(!scr)return;if(!Array.isArray(scr.accordions))scr.accordions=[];
+  const detailLeft=Math.max(0,Math.min(100,Number(document.getElementById('phoneAccordionDetailLeft').value)||0)),detailWidth=Math.max(1,Math.min(100-detailLeft,Number(document.getElementById('phoneAccordionDetailWidth').value)||100));
+  scr.accordions.push({id:`accordion_${Date.now().toString(36)}`,label:document.getElementById('phoneAccordionLabel').value.trim()||`펼침 영역 ${scr.accordions.length+1}`,triggerImage:document.getElementById('phoneAccordionTriggerImage').value,detailImage,detailLeft,detailWidth,...pendingHs});
+  pendingHs=null;cancelDraw();renderPhoneAccordions(scr);renderPhoneAccordionList();
 }
 
 function confirmGuideOverlay() {
