@@ -918,8 +918,8 @@ textarea.form-input{resize:vertical;}
           <textarea id="phoneFixedIcons" style="display:none"></textarea>
         </div>
         <div class="btn-row">
-          <button class="btn btn-primary btn-sm" onclick="savePhoneLayout()">저장</button>
-          <button class="btn btn-danger btn-sm" onclick="clearPhoneLayout()">설정 삭제</button>
+          <button class="btn btn-primary btn-sm" id="btnSavePhoneLayout" type="button" onclick="savePhoneLayout()">저장</button>
+          <button class="btn btn-danger btn-sm" type="button" onclick="clearPhoneLayout()">설정 삭제</button>
         </div>
         <div style="margin-top:7px;color:#888;font-size:11px;line-height:1.5">이미지 보관함에 현재 화면과 같은 크기의 광고별 전체 화면 캡처를 올린 뒤 여러 장을 추가하세요. 위에서 아래 순서로 좌우 슬라이드됩니다.</div>
       </div>
@@ -4229,7 +4229,14 @@ async function refreshAdImagePicker(){
 }
 function adImageValues(){return document.getElementById('phoneAdImages').value.split('\n').map(v=>v.trim()).filter(Boolean)}
 function adLinkValues(){return document.getElementById('phoneAdLinks').value.split('\n')}
-function setAdSlideValues(images,links=[]){document.getElementById('phoneAdImages').value=images.join('\n');document.getElementById('phoneAdLinks').value=images.map((_,i)=>links[i]||'').join('\n');renderAdSlideList()}
+function setAdSlideValues(images,links=[]){
+  const normalizedLinks=images.map((_,i)=>links[i]||'');
+  document.getElementById('phoneAdImages').value=images.join('\n');
+  document.getElementById('phoneAdLinks').value=normalizedLinks.join('\n');
+  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];
+  if(scr?.phoneLayout?.adCarousel){scr.phoneLayout.adCarousel.images=[...images];scr.phoneLayout.adCarousel.links=[...normalizedLinks]}
+  renderAdSlideList();
+}
 function setAdImageValues(images){const current=adImageValues(),links=adLinkValues();const unique=Array.from(new Set(images));setAdSlideValues(unique,unique.map(image=>{const index=current.indexOf(image);return index>=0?links[index]||'':''}))}
 function addSelectedAdImages(){
   const picker=document.getElementById('phoneAdImagePicker');
@@ -4334,9 +4341,14 @@ function phoneLayoutNumber(id,min,max) {
 }
 
 async function savePhoneLayout() {
-  const st = cache[activeSec];
-  const scr = st.flow.screens?.[st.cur];
+  const sectionName=activeSec;
+  const st = cache[sectionName];
+  const screenId=st?.cur;
+  const scr = st?.flow?.screens?.[screenId];
   if(!scr) return;
+  const btn=document.getElementById('btnSavePhoneLayout');
+  if(btn?.disabled)return;
+  if(btn){btn.disabled=true;btn.textContent='저장 중...'}
   const images = document.getElementById('phoneAdImages').value
     .split('\n').map(value=>value.trim()).filter(Boolean);
   const links = adLinkValues().slice(0,images.length).map(value=>value.trim());
@@ -4360,8 +4372,10 @@ async function savePhoneLayout() {
     fixedIcons,
   };
   if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel || scr.phoneLayout.horizontalMenu || fixedIcons.length) scr.type = 'scroll';
-  renderScreen(activeSec,st.cur);
-  await saveSimulatorFlow(activeSec);
+  const saved=await saveSimulatorFlow(sectionName);
+  if(saved && cache[sectionName]?.cur===screenId)renderScreen(sectionName,screenId);
+  if(btn){btn.disabled=false;btn.textContent=saved?'✓ 저장됨':'저장 실패';setTimeout(()=>{if(btn.isConnected)btn.textContent='저장'},1500)}
+  return saved;
 }
 
 async function clearPhoneLayout() {
