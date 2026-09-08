@@ -1043,6 +1043,7 @@ textarea.form-input{resize:vertical;}
           </div>
           <div class="form-row">
             <div class="form-label">이동할 화면</div>
+            <input class="form-input" id="excGotoSearch" type="search" placeholder="화면명 또는 이미지명 검색..." autocomplete="off" oninput="renderExceptionTargetOptions(this.value)" style="margin-bottom:6px">
             <select class="form-input" id="excGoto"></select>
           </div>
           <button class="btn btn-primary btn-sm" style="width:100%" onclick="addException()">+ 예외 추가</button>
@@ -6063,11 +6064,10 @@ function renderExceptionEditor() {
 
   adminArea.style.display = 'block';
 
-  // 드롭다운 옵션 갱신
-  const sel = document.getElementById('excGoto');
-  sel.innerHTML = Object.entries(st.flow.screens)
-    .filter(([id]) => id !== st.cur)
-    .map(([id,s]) => `<option value="${esc(id)}">${esc(s.label)}</option>`).join('');
+  // 이동 대상 검색 및 드롭다운 옵션 갱신
+  const search=document.getElementById('excGotoSearch');
+  if(search)search.value='';
+  renderExceptionTargetOptions('');
 
   // 등록된 예외 목록
   const excs = scr.exceptions || [];
@@ -6330,6 +6330,20 @@ const CTE_AGENT_IMGS = CTE_ALL_IMGS;
 function cteImgsFor(panel){
   const filtered = Array.from(new Set(CTE_ALL_IMGS.map(cteNormalizeImg))).filter(img => ctePanelForImg(img) === panel);
   return filtered.sort((a,b)=>a.localeCompare(b,'ko',{numeric:true,sensitivity:'base'}));
+}
+
+function renderExceptionTargetOptions(query='') {
+  const st=cache[activeSec],sel=document.getElementById('excGoto');
+  if(!st?.flow?.screens||!sel)return;
+  const keyword=String(query||'').trim().toLocaleLowerCase();
+  const matches=Object.entries(st.flow.screens).filter(([id,screen])=>{
+    if(id===st.cur)return false;
+    const searchable=[id,screen.label,assetDisplayName(screen.image)].join(' ').toLocaleLowerCase();
+    return !keyword||searchable.includes(keyword);
+  });
+  sel.innerHTML=matches.length
+    ? '<option value="">이동할 화면 선택</option>'+matches.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)} — ${esc(assetDisplayName(screen.image))}</option>`).join('')
+    : '<option value="">검색 결과 없음</option>';
 }
 function cteRememberImg(panel, img) {
   img = cteNormalizeImg(img);
