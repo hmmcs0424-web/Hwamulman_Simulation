@@ -2788,6 +2788,21 @@ function renderScreen(secName, id) {
   }
 }
 
+function hasPhoneLayout(layout) {
+  return !!(Number(layout?.fixedTopPercent)>0 || Number(layout?.fixedBottomPercent)>0 || Number(layout?.fixedPercent)>0
+    || layout?.adCarousel || layout?.popupAds || layout?.horizontalMenu || layout?.fixedIcons?.length);
+}
+function phoneLayoutForScreen(scr) {
+  const own=scr?.phoneLayout;
+  if(hasPhoneLayout(own))return own;
+  if(!APP_PARTIAL_SCROLL_SECTIONS.has(activeSec) || !scr?.image)return own||{};
+  const identity=assetIdentity(scr.image);
+  const alias=Object.values(cache[activeSec]?.flow?.screens||{}).find(candidate=>
+    candidate!==scr && assetIdentity(candidate?.image)===identity && hasPhoneLayout(candidate?.phoneLayout)
+  );
+  return alias?.phoneLayout||{};
+}
+
 function renderPhoneScreen(scr) {
   const ca = document.getElementById('contentArea');
   const viewport = document.getElementById('phoneScrollViewport');
@@ -2814,7 +2829,7 @@ function renderPhoneScreen(scr) {
   document.getElementById('phonePromoOverlay').classList.remove('active');
   img.src = '';
   img.onload = async () => {
-    const layout = scr.phoneLayout || {};
+    const layout = phoneLayoutForScreen(scr);
     const legacyPercent = Number(layout.fixedPercent)||0;
     const topPercent = Math.max(0,Math.min(100,Number(layout.fixedTopPercent ?? (layout.fixedEdge!=='bottom'?legacyPercent:0))||0));
     const bottomPercent = Math.max(0,Math.min(100,Number(layout.fixedBottomPercent ?? (layout.fixedEdge==='bottom'?legacyPercent:0))||0));
@@ -2864,7 +2879,8 @@ function renderPhoneFixedIcons(scr) {
   const layer=document.getElementById('phoneFixedIconLayer');
   if(!layer)return;
   layer.innerHTML='';
-  const icons=Array.isArray(scr?.phoneLayout?.fixedIcons)?scr.phoneLayout.fixedIcons:[];
+  const layout=phoneLayoutForScreen(scr);
+  const icons=Array.isArray(layout.fixedIcons)?layout.fixedIcons:[];
   icons.forEach(icon=>{
     if(!icon?.image)return;
     const button=document.createElement('button');
@@ -2937,7 +2953,7 @@ function clearPhoneHorizontalMenu() {
 const horizontalMenuToggleStates=new Map();
 function renderPhoneHorizontalMenu(scr) {
   clearPhoneHorizontalMenu();
-  const menu=scr?.phoneLayout?.horizontalMenu;
+  const menu=phoneLayoutForScreen(scr).horizontalMenu;
   if(!menu?.image || !(Number(menu.width)>0) || !(Number(menu.height)>0)) return;
   const host=document.getElementById('phoneHorizontalMenu');
   const scroller=document.createElement('div');
@@ -3013,12 +3029,13 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
 
 function renderPhoneAdCarousel(scr) {
   clearPhoneAdCarousel();
-  const ad = scr?.phoneLayout?.adCarousel;
+  const layout=phoneLayoutForScreen(scr);
+  const ad = layout.adCarousel;
   const images = Array.isArray(ad?.images) ? ad.images.filter(Boolean) : [];
   const links = Array.isArray(ad?.links) ? ad.links : [];
   if(!images.length || !(Number(ad.width)>0) || !(Number(ad.height)>0)) return;
   const wrapper = document.getElementById('imageWrapper');
-  const layout=scr?.phoneLayout||{},topFixed=Math.max(0,Number(layout.fixedTopPercent)||0),bottomFixed=Math.max(0,Number(layout.fixedBottomPercent)||0);
+  const topFixed=Math.max(0,Number(layout.fixedTopPercent)||0),bottomFixed=Math.max(0,Number(layout.fixedBottomPercent)||0);
   const adTop=Number(ad.top)||0,adLeft=Number(ad.left)||0,adWidth=Number(ad.width),adHeight=Number(ad.height);
   const inTopFixed=topFixed>0&&adTop>=0&&adTop+adHeight<=topFixed;
   const inBottomFixed=bottomFixed>0&&adTop>=100-bottomFixed&&adTop+adHeight<=100;
@@ -4144,7 +4161,7 @@ function renderPhoneLayoutEditor() {
   const show = adminMode && !counselorPreviewMode && activeSec!=='채널톡' && activePage==='simulator';
   section.style.display = show ? '' : 'none';
   if(!show) return;
-  const layout = cache[activeSec].flow.screens?.[cache[activeSec].cur]?.phoneLayout || {};
+  const layout = phoneLayoutForScreen(cache[activeSec].flow.screens?.[cache[activeSec].cur]);
   const ad = layout.adCarousel || {};
   const popupAds = layout.popupAds || {};
   const legacyPercent=Number(layout.fixedPercent)||0;
@@ -4372,6 +4389,14 @@ async function savePhoneLayout() {
     fixedIcons,
   };
   if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel || scr.phoneLayout.horizontalMenu || fixedIcons.length) scr.type = 'scroll';
+  if(APP_PARTIAL_SCROLL_SECTIONS.has(sectionName)){
+    const imageIdentity=assetIdentity(scr.image);
+    Object.values(st.flow.screens||{}).forEach(alias=>{
+      if(alias===scr || assetIdentity(alias?.image)!==imageIdentity)return;
+      alias.phoneLayout=JSON.parse(JSON.stringify(scr.phoneLayout));
+      if(scr.type==='scroll')alias.type='scroll';
+    });
+  }
   const saved=await saveSimulatorFlow(sectionName);
   if(saved && cache[sectionName]?.cur===screenId)renderScreen(sectionName,screenId);
   if(btn){btn.disabled=false;btn.textContent=saved?'✓ 저장됨':'저장 실패';setTimeout(()=>{if(btn.isConnected)btn.textContent='저장'},1500)}
