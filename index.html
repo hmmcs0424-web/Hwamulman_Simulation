@@ -3835,12 +3835,13 @@ async function startCounselorPreview() {
   hotspotBtn.classList.remove('on');
   hotspotBtn.textContent='👆 영역 보기';
   const st=cache[activeSec];
+  const previewScreen=st.cur||st.flow?.start;
   st.hist=[];
   const start=st.flow?.start;
   st.cur=null;
-  loginPopupState={armed:true,shown:false,images:[],index:0};
+  loginPopupState={armed:previewScreen===start,shown:false,images:[],index:0};
   syncAdminUI();
-  if(start) goTo(start,true);
+  if(previewScreen) goTo(previewScreen,true);
 }
 
 function stopCounselorPreview() {
