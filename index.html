@@ -2894,7 +2894,7 @@ function setupPhoneImageScroll() {
   let drag = null;
   area.addEventListener('pointerdown', event => {
     if(event.pointerType!=='mouse' || !area.classList.contains('scroll-mode')) return;
-    if(event.target.closest('.hotspot,.draw-overlay,.layout-draw-overlay,.phone-ad-carousel,.phone-scroll-region')) return;
+    if(event.target.closest('.hotspot,.draw-overlay,.layout-draw-overlay,.phone-ad-carousel,.phone-scroll-region,.phone-accordion-trigger')) return;
     drag = { pointerId:event.pointerId, startY:event.clientY, startScroll:area.scrollTop };
     area.classList.add('dragging');
     area.setPointerCapture(event.pointerId);
@@ -3137,6 +3137,7 @@ async function renderPhoneAccordions(scr) {
     base.style.display='none';canvas.style.display='block';
   }else{base.style.display='block';canvas.style.display='none';}
   items.forEach((item,index)=>{const rect=mapPhoneOverlayRect(item),button=document.createElement('div');button.className='phone-accordion-trigger'+(editing?' admin':'');button.style.cssText=`top:${rect.top}%;left:${rect.left}%;width:${rect.width}%;height:${rect.height}%;`;
+    button.onpointerdown=event=>event.stopPropagation();
     if(editing){const label=document.createElement('span');label.className='phone-accordion-trigger-label';label.textContent=item.label||`펼침 영역 ${index+1}`;button.appendChild(label);const remove=document.createElement('button');remove.type='button';remove.className='phone-accordion-trigger-delete';remove.textContent='×';remove.onclick=event=>{event.preventDefault();event.stopPropagation();deletePhoneAccordion(index)};button.appendChild(remove);}
     else button.onclick=()=>togglePhoneAccordion(item,scr);
     layer.appendChild(button);
