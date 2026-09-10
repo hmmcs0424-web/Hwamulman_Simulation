@@ -649,6 +649,7 @@ textarea.form-input{resize:vertical;}
         <div class="side-submenus">
           <button class="side-submenu" type="button" data-signup-page="signup">가입 업무 가이드</button>
           <button class="side-submenu" type="button" data-signup-page="signupChecklist">상담 체크리스트</button>
+          <button class="side-submenu" type="button" data-signup-page="signupInfoCheck">정보확인</button>
         </div>
       </div>
       <button class="side-menu" type="button" data-page="membership"><span class="side-icon">Ⅱ</span><span class="side-label">일시정지/복구/탈퇴</span></button>
@@ -1571,6 +1572,7 @@ const ADMIN_EMAIL_KEY = 'hmm-remembered-admin-email';
 const guidePages = {
   signup: { title:'신규가입', desc:'신규 회원 가입과 관련된 업무 절차를 정리하는 공간입니다.', html:'<h2>신규가입 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
   signupChecklist: { title:'상담 체크리스트', desc:'신규가입 상담 중 안내 사항을 확인하며 체크할 수 있습니다.', html:'' },
+  signupInfoCheck: { title:'정보확인', desc:'주소와 차량등록증 제원을 확인해 관제 등록 추천값을 안내합니다. 입력 내용은 저장되지 않습니다.', html:'' },
   appErrorChecklist: { title:'APP 오류 체크리스트', desc:'앱 오류 접수에 필요한 정보와 재현 결과를 순서대로 확인합니다.', html:'' },
   freightHistory: { title:'운송료 민원 이력 작성', desc:'조회 내용을 붙여넣고 운임 구분을 선택하면 민원 이력이 자동으로 작성됩니다.', html:'' },
   membership: { title:'일시정지/복구/탈퇴', desc:'회원 상태 변경과 탈퇴 업무 절차를 정리하는 공간입니다.', html:'<h2>일시정지/복구/탈퇴 업무 가이드</h2><p>가이드 내용을 준비 중입니다. 관리자 모드에서 내용을 입력해 주세요.</p>' },
@@ -1681,7 +1683,7 @@ async function setWorkspacePage(page) {
   document.getElementById('ctEduArea').style.display = 'none';
   document.getElementById('btnShowHotspots').style.display = isSimulator ? '' : 'none';
   document.querySelectorAll('.side-menu[data-page]').forEach(btn => {
-    const isSignupPage = page === 'signup' || page === 'signupChecklist';
+    const isSignupPage = page === 'signup' || page === 'signupChecklist' || page === 'signupInfoCheck';
     btn.classList.toggle('active', btn.dataset.page === page || (btn.dataset.page === 'signup' && isSignupPage));
   });
   document.querySelectorAll('[data-signup-page]').forEach(btn => btn.classList.toggle('active', btn.dataset.signupPage === page));
@@ -1726,6 +1728,23 @@ function renderGuidePage() {
     document.getElementById('guideContent').innerHTML = '<div id="signupChecklistRoot"></div>';
     window.mountSignupChecklist?.(document.getElementById('signupChecklistRoot'));
     document.getElementById('guidePage').classList.toggle('admin-editable', adminMode);
+    return;
+  }
+  if(activePage === 'signupInfoCheck') {
+    editingGuidePage = false;
+    editBtn.style.display = 'none';
+    document.getElementById('guideEditorBox').style.display = 'none';
+    document.getElementById('guideContent').style.display = '';
+    document.getElementById('guideContent').innerHTML = '<iframe id="signupInfoCheckFrame" title="신규가입 정보확인" src="/가입_정지_변경/정보확인_기능시안.html?embed=1" style="display:block;width:100%;min-height:1100px;border:0;background:#f5f7fb"></iframe>';
+    const frame = document.getElementById('signupInfoCheckFrame');
+    frame.addEventListener('load', () => {
+      const resize = () => {
+        try { frame.style.height = `${frame.contentDocument.documentElement.scrollHeight}px`; } catch(_) {}
+      };
+      resize();
+      try { new ResizeObserver(resize).observe(frame.contentDocument.documentElement); } catch(_) {}
+    });
+    document.getElementById('guidePage').classList.remove('admin-editable');
     return;
   }
   if(activePage === 'appErrorChecklist') {
