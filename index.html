@@ -2693,7 +2693,29 @@ function applyHotspotToggleImage(hotspot, element, isOn) {
     image.alt=''; image.draggable=false;
     element.prepend(image);
   }
-  image.src=src;
+  const candidates=simulatorAssetSourceCandidates(src);
+  let candidateIndex=0;
+  image.onerror=()=>{
+    candidateIndex++;
+    if(candidateIndex<candidates.length)image.src=candidates[candidateIndex];
+    else {
+      console.error('토글 상태 이미지를 불러오지 못했습니다:',src);
+      image.removeAttribute('src');
+    }
+  };
+  image.onload=()=>{image.onerror=null;};
+  image.src=candidates[0];
+}
+
+function simulatorAssetSourceCandidates(value) {
+  const src=String(value||'').trim().replace(/\\/g,'/');
+  if(!src)return [''];
+  if(/^(?:data:|blob:|https?:\/\/)/i.test(src))return [src];
+  const relative=src.replace(/^\.\//,'');
+  const candidates=[];
+  try { candidates.push(new URL(relative,document.baseURI).href); } catch(e) {}
+  try { candidates.push(new URL('/'+relative.replace(/^\//,''),location.origin).href); } catch(e) {}
+  return Array.from(new Set(candidates.length?candidates:[src]));
 }
 
 function navigateHotspotTarget(target, hotspot=null, sourceElement=null) {
