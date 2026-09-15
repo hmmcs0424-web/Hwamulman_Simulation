@@ -1283,7 +1283,8 @@ textarea.form-input{resize:vertical;}
     </div>
     <div id="hsToggleFields" style="display:none">
       <div class="form-row"><div class="form-label" id="hsToggleOffLabel">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
-      <div class="form-row"><div class="form-label" id="hsToggleOnLabel">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage"><option value="">이미지를 선택하세요</option></select></div>
+      <div class="form-row"><div class="form-label" id="hsToggleOnLabel">선택 상태 이미지</div><select class="form-input" id="hsToggleOnImage" onchange="previewHsToggleImage()"><option value="">이미지를 선택하세요</option></select></div>
+      <div id="hsTogglePreview" hidden style="margin-bottom:10px;font-size:11px;color:#666"><img alt="선택 상태 이미지 미리보기" style="display:block;max-width:160px;max-height:110px;object-fit:contain;margin-bottom:4px"><span></span></div>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">선택한 작은 이미지를 지정한 영역 크기에 맞춰 겹쳐 표시합니다.</div>
     </div>
     <div id="hsStateGroupFields" style="display:none">
@@ -2117,6 +2118,8 @@ function localizeFlowImages(sectionName,flow,localImages=siteImageManifest?.[sec
   duplicates.forEach(key=>normalized.delete(key));
   const resolve=value=>{
     if(typeof value!=='string'||!(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i.test(value)))return value;
+    // Explicit asset locations must survive reloads, including same-name uploads.
+    if(/^(?:https?:|data:|blob:|\/)/i.test(value)||/[\\/]/.test(value))return value;
     return exact.get(assetDisplayName(value).toLocaleLowerCase('ko-KR'))||normalized.get(localImageMatchKey(value))||value;
   };
   const visit=value=>{
@@ -4574,9 +4577,10 @@ async function getSimulatorImages(sectionName=activeSec) {
   await loadSiteImageManifest();
   const flow = cache[sectionName]?.flow;
   const candidates = [
-    ...((siteImageManifest?.[sectionName])||[])
+    ...((siteImageManifest?.[sectionName])||[]),
+    ...((flow?.imageManifest)||[])
   ];
-  if(adminMode && !candidates.length) {
+  if(adminMode) {
     try {
       const result = await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(sectionName))}`);
       result.assets.forEach(asset => {
@@ -4707,13 +4711,6 @@ async function refreshAssetList() {
     url:path,
     name:path.split('/').pop()
   }));
-  if(staticAssets.length) {
-    if(requestedSec!==assetManageSec) return;
-    managedAssets=staticAssets.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
-    renderAssetList();
-    status.textContent=`${requestedSec} · GitHub 기본 이미지 ${staticAssets.length}개`;
-    return;
-  }
   try {
     const result=await assetApi(`/api/assets/list?section=${encodeURIComponent(assetFolderName(requestedSec))}`);
     const blobAssets=result.assets.map(item=>({
@@ -5756,9 +5753,20 @@ function updateHsActionFields() {
 }
 
 function populateHsToggleImages(images) {
-  const options=images.map(image=>`<option value="${esc(image)}">${esc(assetDisplayName(image))}</option>`).join('');
+  const options=images.map(image=>`<option value="${esc(image)}">${esc(assetDisplayName(image))} · ${assetBlobPath(image)?'업로드':'기본'} · ${esc(assetIdentity(image))}</option>`).join('');
   document.getElementById('hsToggleOffImage').innerHTML='<option value="">기존 화면 이미지 그대로</option>'+options;
   document.getElementById('hsToggleOnImage').innerHTML='<option value="">이미지를 선택하세요</option>'+options;
+  previewHsToggleImage();
+}
+function previewHsToggleImage() {
+  const src=document.getElementById('hsToggleOnImage').value;
+  const preview=document.getElementById('hsTogglePreview');
+  const image=preview.querySelector('img'),caption=preview.querySelector('span');
+  preview.hidden=!src;
+  image.onload=()=>{caption.textContent=`${image.naturalWidth} × ${image.naturalHeight}px · 이 이미지 전체가 클릭 영역 안에 표시됩니다.`;};
+  image.onerror=()=>{caption.textContent='이미지를 불러오지 못했습니다. 파일을 다시 선택해 주세요.';};
+  caption.textContent='';
+  if(src)image.src=src;else image.removeAttribute('src');
 }
 function filterHsTargetList(value) {
   const list = document.getElementById('hsGotoList');
