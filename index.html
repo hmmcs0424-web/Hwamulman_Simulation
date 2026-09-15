@@ -3395,6 +3395,7 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
     if(!isAdmin&&hs.actionType==='color_picker')bindColorPicker(hs,el);
     if(!isAdmin&&hs.actionType==='font_size_slider')bindFontSizeSlider(hs,el);
     if(isAdmin) {
+      let adminPointerMoved=false;
       const isMultiSelected = selectedHotspotContext?.sec===activeSec
         && selectedHotspotContext?.screen===cache[activeSec]?.cur
         && selectedHotspotIndices.includes(i);
@@ -3403,10 +3404,19 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
         el.style.outlineOffset='1px';
       }
       el.style.cursor = 'move';
-      el.title = isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
+      const adminSingleClickAction=hs.actionType==='toggle'||hs.actionType==='toggle_toast'||hs.actionType==='toast';
+      el.title = adminSingleClickAction
+        ? '클릭: 동작 확인 · 드래그: 위치 이동'
+        : isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
+      if(adminSingleClickAction) el.addEventListener('click',e=>{
+        e.preventDefault();e.stopPropagation();
+        if(adminPointerMoved){adminPointerMoved=false;return;}
+        handleHotspotAction(hs,el);
+      });
       el.addEventListener('dblclick', e => {
         e.preventDefault();
         e.stopPropagation();
+        if(adminSingleClickAction)return;
         if(isGuideOverlay) showOverlayGuide(hs); else handleHotspotAction(hs,el);
       });
 
@@ -3435,7 +3445,9 @@ function renderHotspots(layerId, hotspots, forceAdmin) {
         const lr = layerEl.getBoundingClientRect();
         const sx = e.clientX, sy = e.clientY;
         const sl = hs.left, st2 = hs.top;
+        adminPointerMoved=false;
         const onMove = ev => {
+          if(Math.abs(ev.clientX-sx)>3||Math.abs(ev.clientY-sy)>3)adminPointerMoved=true;
           hs.left = Math.max(0, Math.min(100 - hs.width,  round1(sl + (ev.clientX - sx) / lr.width  * 100)));
           hs.top  = Math.max(0, Math.min(100 - hs.height, round1(st2 + (ev.clientY - sy) / lr.height * 100)));
           el.style.left = hs.left + '%';
