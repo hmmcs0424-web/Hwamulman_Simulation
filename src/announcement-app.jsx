@@ -186,7 +186,6 @@ function Editor({ post, categories, onClose }) {
     images: post?.images || [],
   }));
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const contentRef = useRef(null);
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }));
   const updateLink = (index, key, value) => setForm(current => ({
@@ -198,20 +197,12 @@ function Editor({ post, categories, onClose }) {
     document.execCommand(command, false, value);
     update('content', contentRef.current?.innerHTML || '');
   };
-  const addImage = async file => {
-    if (!file?.type?.startsWith('image/')) return;
-    setUploading(true);
-    try {
-      const url = await window.announcementBridge.uploadImage(file);
-      update('images', [...form.images, url]);
-      const imageHtml = `<p><img src="${url}" alt="${file.name || '공지 이미지'}"></p>`;
-      update('content', form.content + imageHtml);
-    } catch (error) { alert(`이미지를 올리지 못했습니다: ${error.message || error}`); }
-    finally { setUploading(false); }
-  };
-  const onPaste = event => {
+  const blockImagePaste = event => {
     const file = [...event.clipboardData.items].find(item => item.type.startsWith('image/'))?.getAsFile();
-    if (file) { event.preventDefault(); addImage(file); }
+    if (file) {
+      event.preventDefault();
+      alert('공지사항 이미지 붙여넣기 기능은 지원하지 않습니다.');
+    }
   };
   const previewHtml = useMemo(
     () => ({ __html: renderRichMarkdown(form.content || '*작성한 내용과 이미지가 여기에 표시됩니다.*') }),
@@ -253,22 +244,21 @@ function Editor({ post, categories, onClose }) {
         </select>
         <label className="an-color-tool">색상<input type="color" defaultValue="#d32f2f" onChange={event => formatSelection('foreColor', event.target.value)} /></label>
       </div><span>텍스트를 먼저 선택한 뒤 서식을 적용하세요.</span>
-        <label className="an-image-button">＋ 이미지<input type="file" accept="image/*" hidden onChange={event => addImage(event.target.files[0])} /></label>
       </div>
       <div className="an-compose">
         <div className="an-compose-pane">
           <div className="an-pane-label">편집</div>
           <div ref={contentRef} className="an-rich-editor" contentEditable suppressContentEditableWarning
-            dangerouslySetInnerHTML={{ __html: form.content }} onInput={event => update('content', event.currentTarget.innerHTML)} onPaste={onPaste}
-            data-placeholder="내용을 입력하세요. 캡처한 이미지는 Ctrl+V로 바로 붙여넣을 수 있습니다." />
+            dangerouslySetInnerHTML={{ __html: form.content }} onInput={event => update('content', event.currentTarget.innerHTML)} onPaste={blockImagePaste}
+            data-placeholder="내용을 입력하세요." />
         </div>
         <div className="an-compose-pane an-preview-pane">
           <div className="an-pane-label">미리보기</div>
           <div className="an-live-preview an-markdown" dangerouslySetInnerHTML={previewHtml} />
         </div>
       </div>
-      <footer><span>{uploading ? '이미지 업로드 중…' : '이미지를 복사한 뒤 본문에서 Ctrl+V'}</span>
-        <div><button className="secondary" onClick={onClose}>취소</button><button className="primary" disabled={saving || uploading} onClick={save}>{saving ? '저장 중…' : '저장'}</button></div>
+      <footer><span>공지사항은 텍스트와 KMS 링크로 작성할 수 있습니다.</span>
+        <div><button className="secondary" onClick={onClose}>취소</button><button className="primary" disabled={saving} onClick={save}>{saving ? '저장 중…' : '저장'}</button></div>
       </footer>
     </section>
   </div>;

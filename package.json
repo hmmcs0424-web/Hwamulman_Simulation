@@ -1,10 +1,9 @@
 {
   "scripts": {
-    "build": "node scripts/generate-image-manifest.js && node scripts/build-vercel-blob-client.js && node scripts/build-announcement-app.js",
+    "build": "node scripts/generate-image-manifest.js && node scripts/build-announcement-app.js",
     "serve": "node scripts/static-server.js"
   },
   "dependencies": {
-    "@vercel/blob": "^2.6.1",
     "dompurify": "^3.4.12",
     "marked": "^16.4.2",
     "react": "^19.2.8",

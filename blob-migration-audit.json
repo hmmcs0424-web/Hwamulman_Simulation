@@ -1,0 +1,4325 @@
+{
+  "generatedAt": "2026-09-15T04:46:42.392Z",
+  "trackedFileCount": 740,
+  "trackedImageCount": 683,
+  "trackedImageBytes": 125885791,
+  "blobReferenceCount": 364,
+  "uniqueBlobUrlCount": 149,
+  "exactSingleCandidateCount": 80,
+  "missingCount": 65,
+  "ambiguousCount": 4,
+  "missing": [
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/",
+      "blobPath": "simulator-images/channelTalk/",
+      "basename": "channelTalk",
+      "candidates": [],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6525
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
+      "blobPath": "simulator-images/backtongPC/빽통PC_로그인.png",
+      "basename": "빽통PC_로그인.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "빽통PC/flow.json",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EB%B9%BD%ED%86%B5%EC%95%B1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/backtongApp/빽통앱_로그인.jpg",
+      "basename": "빽통앱_로그인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "빽통앱/flow.json",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "blobPath": "simulator-images/driverApp/메인화면.jpg",
+      "basename": "메인화면.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 3
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 92
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1210
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/비밀번호입력.jpg",
+      "basename": "비밀번호입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 4
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 115
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/비밀번호입력시.jpg",
+      "basename": "비밀번호입력시.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 5
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 131
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg",
+      "blobPath": "simulator-images/driverApp/내정보_계산서이메일변경.jpg",
+      "basename": "내정보_계산서이메일변경.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 8
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 186
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/내정보_실운전자정보변경.png",
+      "basename": "내정보_실운전자정보변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 9
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 202
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%9D%B4%EB%A9%94%EC%9D%BC%20%EB%B3%80%EA%B2%BD.jpg",
+      "blobPath": "simulator-images/driverApp/내정보_이메일 변경.jpg",
+      "basename": "내정보_이메일 변경.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 10
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 218
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/내정보_주민등록번호 변경.png",
+      "basename": "내정보_주민등록번호 변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 11
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 234
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%EB%AF%B8%ED%99%95%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/배차내역_수금미확인.jpg",
+      "basename": "배차내역_수금미확인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 13
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 266
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%ED%99%95%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/배차내역_수금확인.jpg",
+      "basename": "배차내역_수금확인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 14
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 282
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_가상계좌만들기.jpg",
+      "basename": "예치금_가상계좌만들기.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 16
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 314
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_기간설정.jpg",
+      "basename": "예치금_기간설정.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 17
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 330
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_사용내역.jpg",
+      "basename": "예치금_사용내역.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 18
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 346
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금.jpg",
+      "basename": "예치금_실계좌출금.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 19
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 362
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금_메시지입력.jpg",
+      "basename": "예치금_실계좌출금_메시지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 20
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 378
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금_출금금액입력.jpg",
+      "basename": "예치금_실계좌출금_출금금액입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 21
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 394
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_입금내역.jpg",
+      "basename": "예치금_입금내역.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 22
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 410
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정기결제인경우.jpg",
+      "basename": "예치금_정기결제인경우.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 23
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 426
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "basename": "예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 24
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 442
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_약관.png",
+      "basename": "예치금_정보이용료_단기_일반결제_약관.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 25
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 458
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_예치금.png",
+      "basename": "예치금_정보이용료_단기_일반결제_예치금.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 26
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 474
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "basename": "예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 27
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 490
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_정보확인.png",
+      "basename": "예치금_정보이용료_단기_일반결제_정보확인.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 28
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 506
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_카드선택.png",
+      "basename": "예치금_정보이용료_단기_일반결제_카드선택.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 29
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 522
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_할부선택.png",
+      "basename": "예치금_정보이용료_단기_일반결제_할부선택.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 30
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 538
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리.png",
+      "basename": "예치금_정보이용료관리.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 31
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 554
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_3자제공.jpg",
+      "basename": "예치금_정보이용료관리_3자제공.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 32
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 570
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_개인정보수집.jpg",
+      "basename": "예치금_정보이용료관리_개인정보수집.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 33
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 586
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 34
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 602
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 35
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 618
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 36
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 634
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 37
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 650
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 38
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 666
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 39
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 682
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 40
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 41
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 714
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제수단관리.jpg",
+      "basename": "예치금_정보이용료관리_결제수단관리.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 42
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 730
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "basename": "예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 43
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 746
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_금융거래.jpg",
+      "basename": "예치금_정보이용료관리_금융거래.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 44
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 762
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_약관.jpg",
+      "basename": "예치금_정보이용료관리_약관.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 45
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 778
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_정기결제동의.jpg",
+      "basename": "예치금_정보이용료관리_정기결제동의.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 46
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 794
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_단기_일반결제.png",
+      "basename": "예치금_정보이용료납부_단기_일반결제.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 47
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 810
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_단기_페이.png",
+      "basename": "예치금_정보이용료납부_단기_페이.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 48
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 826
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_예치금_결제완료.jpg",
+      "basename": "예치금_정보이용료납부_예치금_결제완료.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 49
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 842
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "basename": "예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 50
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 858
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_정기_예치금.png",
+      "basename": "예치금_정보이용료납부_정기_예치금.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 51
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 874
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_정기_페이.png",
+      "basename": "예치금_정보이용료납부_정기_페이.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 52
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 890
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체.jpg",
+      "basename": "예치금_회원간이체.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 53
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 906
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_금액입력.png",
+      "basename": "예치금_회원간이체_금액입력.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 54
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 922
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_완료.jpg",
+      "basename": "예치금_회원간이체_완료.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 55
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 938
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_이름조회.png",
+      "basename": "예치금_회원간이체_이름조회.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 56
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 954
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg",
+      "blobPath": "simulator-images/driverApp/포인트.jpg",
+      "basename": "포인트.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 57
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 970
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록.jpg",
+      "basename": "화물등록.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 58
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 986
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png",
+      "blobPath": "simulator-images/driverApp/화물등록_등록.png",
+      "basename": "화물등록_등록.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 59
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1002
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_등록대수.jpg",
+      "basename": "화물등록_등록대수.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 60
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1018
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_등록목록.jpg",
+      "basename": "화물등록_등록목록.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 61
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1034
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차지입력.jpg",
+      "basename": "화물등록_상차지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 64
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1082
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_지불방식선택.jpg",
+      "basename": "화물등록_지불방식선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 65
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1098
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_차종선택.jpg",
+      "basename": "화물등록_차종선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 66
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1114
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_톤수선택.jpg",
+      "basename": "화물등록_톤수선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 67
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1130
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차지입력.jpg",
+      "basename": "화물등록_하차지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 70
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1178
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg",
+      "blobPath": "simulator-images/driverApp/회차검색_불가.jpg",
+      "basename": "회차검색_불가.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 71
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1194
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/차주앱_로그인.jpg",
+      "basename": "차주앱_로그인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 76
+        }
+      ]
+    }
+  ],
+  "ambiguous": [
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차방법.jpg",
+      "basename": "화물등록_상차방법.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_상차방법.jpg",
+          "basename": "화물등록_상차방법.jpg",
+          "bytes": 187708
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_상차방법.jpg",
+          "basename": "화물등록_상차방법.jpg",
+          "bytes": 147863
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 62
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1050
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차일시.jpg",
+      "basename": "화물등록_상차일시.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_상차일시.jpg",
+          "basename": "화물등록_상차일시.jpg",
+          "bytes": 229096
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_상차일시.jpg",
+          "basename": "화물등록_상차일시.jpg",
+          "bytes": 257691
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 63
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1066
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차방법.jpg",
+      "basename": "화물등록_하차방법.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_하차방법.jpg",
+          "basename": "화물등록_하차방법.jpg",
+          "bytes": 184293
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_하차방법.jpg",
+          "basename": "화물등록_하차방법.jpg",
+          "bytes": 147322
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 68
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1146
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차일시.jpg",
+      "basename": "화물등록_하차일시.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_하차일시.jpg",
+          "basename": "화물등록_하차일시.jpg",
+          "bytes": 231362
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_하차일시.jpg",
+          "basename": "화물등록_하차일시.jpg",
+          "bytes": 261588
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 69
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1162
+        }
+      ]
+    }
+  ],
+  "mappings": [
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "blobPath": "simulator-images/channelTalk/1.차주앱_메인화면.jpg",
+      "basename": "1.차주앱_메인화면.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/1.차주앱_메인화면.jpg",
+          "basename": "1.차주앱_메인화면.jpg",
+          "bytes": 415479
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6478
+        },
+        {
+          "file": "index.html",
+          "line": 6671
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 6
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 12
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 17
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 49
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg",
+      "blobPath": "simulator-images/channelTalk/1-1.차주앱_채널톡진입.jpg",
+      "basename": "1-1.차주앱_채널톡진입.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/1-1.차주앱_채널톡진입.jpg",
+          "basename": "1-1.차주앱_채널톡진입.jpg",
+          "bytes": 348469
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6479
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 24
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 56
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 72
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 104
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg",
+      "blobPath": "simulator-images/channelTalk/1-2.차주앱_채널톡 상담 시작.jpg",
+      "basename": "1-2.차주앱_채널톡 상담 시작.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/1-2.차주앱_채널톡 상담 시작.jpg",
+          "basename": "1-2.차주앱_채널톡 상담 시작.jpg",
+          "bytes": 132309
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6480
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 79
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 111
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 127
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 159
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg",
+      "blobPath": "simulator-images/channelTalk/1-3.차주앱_입장.jpg",
+      "basename": "1-3.차주앱_입장.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/1-3.차주앱_입장.jpg",
+          "basename": "1-3.차주앱_입장.jpg",
+          "bytes": 99205
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6481
+        },
+        {
+          "file": "index.html",
+          "line": 6672
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 134
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 166
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 182
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 208
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg",
+      "blobPath": "simulator-images/channelTalk/1-4.차주앱_첨부파일넣기.jpg",
+      "basename": "1-4.차주앱_첨부파일넣기.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/1-4.차주앱_첨부파일넣기.jpg",
+          "basename": "1-4.차주앱_첨부파일넣기.jpg",
+          "bytes": 183831
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6482
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 215
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 339
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 353
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EC%9E%85%EC%9E%A5.jpg",
+      "blobPath": "simulator-images/channelTalk/2.차주앱_텍스트문의_입장.jpg",
+      "basename": "2.차주앱_텍스트문의_입장.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/2.차주앱_텍스트문의_입장.jpg",
+          "basename": "2.차주앱_텍스트문의_입장.jpg",
+          "bytes": 99205
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6484
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_텍스트문의_고객 발화.jpg",
+      "basename": "2-1.차주앱_텍스트문의_고객 발화.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_텍스트문의_고객 발화.jpg",
+          "basename": "2-1.차주앱_텍스트문의_고객 발화.jpg",
+          "bytes": 226064
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6485
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 189
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 205
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 239
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 242
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 299
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg",
+      "blobPath": "simulator-images/channelTalk/차주앱_문자로 발송되는 메시지.jpg",
+      "basename": "차주앱_문자로 발송되는 메시지.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/차주앱_문자로 발송되는 메시지.jpg",
+          "basename": "차주앱_문자로 발송되는 메시지.jpg",
+          "bytes": 274296
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6487
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 528
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 544
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1803
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1820
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EA%B3%A0%EA%B0%9D%20%EB%AC%B8%EC%9D%98.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_고객 문의.png",
+      "basename": "채널톡_고객 문의.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_고객 문의.png",
+          "basename": "채널톡_고객 문의.png",
+          "bytes": 326999
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6488
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_로그인_채널목록.png",
+      "basename": "채널톡_로그인_채널목록.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_로그인_채널목록.png",
+          "basename": "채널톡_로그인_채널목록.png",
+          "bytes": 51145
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6490
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 682
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 732
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 799
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 831
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_로그인이후.png",
+      "basename": "채널톡_로그인이후.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_로그인이후.png",
+          "basename": "채널톡_로그인이후.png",
+          "bytes": 149395
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6491
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 806
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 838
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 961
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 993
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_목록선택.png",
+      "basename": "채널톡_목록선택.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_목록선택.png",
+          "basename": "채널톡_목록선택.png",
+          "bytes": 221296
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6492
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 863
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 912
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1032
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1081
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%88%EB%A1%9C%EC%9A%B4%20%EB%A9%94%EC%8B%9C%EC%A7%80%20%ED%99%95%EC%9D%B8.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_새로운 메시지 확인.png",
+      "basename": "채널톡_새로운 메시지 확인.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_새로운 메시지 확인.png",
+          "basename": "채널톡_새로운 메시지 확인.png",
+          "bytes": 215888
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6493
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_수신함 확인.png",
+      "basename": "채널톡_수신함 확인.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_수신함 확인.png",
+          "basename": "채널톡_수신함 확인.png",
+          "bytes": 218523
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6494
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 968
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1000
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1025
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1074
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_끝인사.png",
+      "basename": "채널톡_끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_끝인사.png",
+          "basename": "채널톡_끝인사.png",
+          "bytes": 349344
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6495
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EA%B3%A0%EA%B0%9D%EB%B0%9C%ED%99%94.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_고객발화.png",
+      "basename": "채널톡_내부_고객발화.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_고객발화.png",
+          "basename": "채널톡_내부_고객발화.png",
+          "bytes": 134931
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6496
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_끝인사.png",
+      "basename": "채널톡_내부_끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_끝인사.png",
+          "basename": "채널톡_내부_끝인사.png",
+          "bytes": 223615
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6497
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1442
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%B5%EB%B3%80.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_이미지답변.png",
+      "basename": "채널톡_내부_이미지답변.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_이미지답변.png",
+          "basename": "채널톡_내부_이미지답변.png",
+          "bytes": 237941
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6498
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_로그인.png",
+      "basename": "채널톡_로그인.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_로그인.png",
+          "basename": "채널톡_로그인.png",
+          "bytes": 41213
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6499
+        },
+        {
+          "file": "index.html",
+          "line": 6671
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 13
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 431
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 446
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 675
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 725
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2321
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담종료_종료.png",
+      "basename": "채널톡_상담종료_종료.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담종료_종료.png",
+          "basename": "채널톡_상담종료_종료.png",
+          "bytes": 338644
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6501
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1569
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1601
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1626
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1658
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담종료_종료됨.png",
+      "basename": "채널톡_상담종료_종료됨.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담종료_종료됨.png",
+          "basename": "채널톡_상담종료_종료됨.png",
+          "bytes": 346108
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6502
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1633
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1665
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1690
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1739
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담종료_태그선택.png",
+      "basename": "채널톡_상담종료_태그선택.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담종료_태그선택.png",
+          "basename": "채널톡_상담종료_태그선택.png",
+          "bytes": 341539
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6503
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1498
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1530
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1829
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1878
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담종료_태그적용.png",
+      "basename": "채널톡_상담종료_태그적용.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담종료_태그적용.png",
+          "basename": "채널톡_상담종료_태그적용.png",
+          "bytes": 332931
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6504
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1505
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1537
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1562
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1594
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%B0%BE%EA%B8%B0.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담종료_태그찾기.png",
+      "basename": "채널톡_상담종료_태그찾기.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담종료_태그찾기.png",
+          "basename": "채널톡_상담종료_태그찾기.png",
+          "bytes": 324588
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6505
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_이미지_나에게 배정.png",
+      "basename": "채널톡_이미지_나에게 배정.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_이미지_나에게 배정.png",
+          "basename": "채널톡_이미지_나에게 배정.png",
+          "bytes": 338455
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6506
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1162
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1187
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1194
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%B0%B0%EC%A0%95%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_이미지_배정완료.png",
+      "basename": "채널톡_이미지_배정완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_이미지_배정완료.png",
+          "basename": "채널톡_이미지_배정완료.png",
+          "bytes": 243535
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6507
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_종료됨패널.png",
+      "basename": "채널톡_종료됨패널.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_종료됨패널.png",
+          "basename": "채널톡_종료됨패널.png",
+          "bytes": 253868
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6508
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1697
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1746
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1788
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1805
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_텍스트문의_끝인사.png",
+      "basename": "채널톡_텍스트문의_끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_텍스트문의_끝인사.png",
+          "basename": "채널톡_텍스트문의_끝인사.png",
+          "bytes": 406978
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6509
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_텍스트문의_다른문의.png",
+      "basename": "채널톡_텍스트문의_다른문의.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_텍스트문의_다른문의.png",
+          "basename": "채널톡_텍스트문의_다른문의.png",
+          "bytes": 401989
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6510
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블1.png",
+      "basename": "채널톡_테이블1.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블1.png",
+          "basename": "채널톡_테이블1.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6511
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 476
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 482
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 870
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 919
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1130
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1201
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1241
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2225
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블2.png",
+      "basename": "채널톡_테이블2.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블2.png",
+          "basename": "채널톡_테이블2.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6512
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 488
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 494
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1305
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1346
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2361
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2563
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블3.png",
+      "basename": "채널톡_테이블3.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블3.png",
+          "basename": "채널톡_테이블3.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6513
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1312
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1398
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1448
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2622
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블4.png",
+      "basename": "채널톡_테이블4.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블4.png",
+          "basename": "채널톡_테이블4.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6514
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1822
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1871
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2679
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2711
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%945.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블5.png",
+      "basename": "채널톡_테이블5.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블5.png",
+          "basename": "채널톡_테이블5.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6515
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%95%EC%9D%B8%EC%95%88%EB%82%B4.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_확인안내.png",
+      "basename": "채널톡_확인안내.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_확인안내.png",
+          "basename": "채널톡_확인안내.png",
+          "bytes": 335393
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6516
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_채팅화면.png",
+      "basename": "채널톡_채팅화면.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_채팅화면.png",
+          "basename": "채널톡_채팅화면.png",
+          "bytes": 148911
+        }
+      ],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6517
+        },
+        {
+          "file": "index.html",
+          "line": 6672
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 787
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 793
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/",
+      "blobPath": "simulator-images/channelTalk/",
+      "basename": "channelTalk",
+      "candidates": [],
+      "references": [
+        {
+          "file": "index.html",
+          "line": 6525
+        }
+      ]
+    },
+    {
+      "url": "https://example.public.blob.vercel-storage.com/%EC%B0%A8%EC%A3%BC%EC%95%B1/%EA%B4%80%EC%8B%AC%ED%99%94%EB%AC%BC.png",
+      "blobPath": "차주앱/관심화물.png",
+      "basename": "관심화물.png",
+      "candidates": [
+        {
+          "file": "차주앱/차주앱이미지/관심화물.png",
+          "basename": "관심화물.png",
+          "bytes": 68187
+        }
+      ],
+      "references": [
+        {
+          "file": "scripts/test-hotspot-assets.js",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
+      "blobPath": "simulator-images/backtongPC/빽통PC_로그인.png",
+      "basename": "빽통PC_로그인.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "빽통PC/flow.json",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EB%B9%BD%ED%86%B5%EC%95%B1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/backtongApp/빽통앱_로그인.jpg",
+      "basename": "빽통앱_로그인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "빽통앱/flow.json",
+          "line": 5
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "blobPath": "simulator-images/driverApp/메인화면.jpg",
+      "basename": "메인화면.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 3
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 92
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1210
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/비밀번호입력.jpg",
+      "basename": "비밀번호입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 4
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 115
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/비밀번호입력시.jpg",
+      "basename": "비밀번호입력시.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 5
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 131
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80.png",
+      "blobPath": "simulator-images/driverApp/마이페이지.png",
+      "basename": "마이페이지.png",
+      "candidates": [
+        {
+          "file": "차주앱/차주앱이미지/마이페이지.png",
+          "basename": "마이페이지.png",
+          "bytes": 313081
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 6
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 147
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80_%EB%82%B4%EC%A0%95%EB%B3%B4.png",
+      "blobPath": "simulator-images/driverApp/마이페이지_내정보.png",
+      "basename": "마이페이지_내정보.png",
+      "candidates": [
+        {
+          "file": "차주앱/차주앱이미지/마이페이지_내정보.png",
+          "basename": "마이페이지_내정보.png",
+          "bytes": 132143
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 7
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 170
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg",
+      "blobPath": "simulator-images/driverApp/내정보_계산서이메일변경.jpg",
+      "basename": "내정보_계산서이메일변경.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 8
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 186
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/내정보_실운전자정보변경.png",
+      "basename": "내정보_실운전자정보변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 9
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 202
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%9D%B4%EB%A9%94%EC%9D%BC%20%EB%B3%80%EA%B2%BD.jpg",
+      "blobPath": "simulator-images/driverApp/내정보_이메일 변경.jpg",
+      "basename": "내정보_이메일 변경.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 10
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 218
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/내정보_주민등록번호 변경.png",
+      "basename": "내정보_주민등록번호 변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 11
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 234
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD.png",
+      "blobPath": "simulator-images/driverApp/배차내역.png",
+      "basename": "배차내역.png",
+      "candidates": [
+        {
+          "file": "차주앱/차주앱이미지/배차내역.png",
+          "basename": "배차내역.png",
+          "bytes": 228602
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 12
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 250
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%EB%AF%B8%ED%99%95%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/배차내역_수금미확인.jpg",
+      "basename": "배차내역_수금미확인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 13
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 266
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD_%EC%88%98%EA%B8%88%ED%99%95%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/배차내역_수금확인.jpg",
+      "basename": "배차내역_수금확인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 14
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 282
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88.jpg",
+      "blobPath": "simulator-images/driverApp/예치금.jpg",
+      "basename": "예치금.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/예치금.jpg",
+          "basename": "예치금.jpg",
+          "bytes": 251945
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 15
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 298
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_가상계좌만들기.jpg",
+      "basename": "예치금_가상계좌만들기.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 16
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 314
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_기간설정.jpg",
+      "basename": "예치금_기간설정.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 17
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 330
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_사용내역.jpg",
+      "basename": "예치금_사용내역.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 18
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 346
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금.jpg",
+      "basename": "예치금_실계좌출금.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 19
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 362
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금_메시지입력.jpg",
+      "basename": "예치금_실계좌출금_메시지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 20
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 378
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_실계좌출금_출금금액입력.jpg",
+      "basename": "예치금_실계좌출금_출금금액입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 21
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 394
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_입금내역.jpg",
+      "basename": "예치금_입금내역.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 22
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 410
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정기결제인경우.jpg",
+      "basename": "예치금_정기결제인경우.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 23
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 426
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "basename": "예치금_정보이용료_단기_일반결제_앱결제이동.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 24
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 442
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_약관.png",
+      "basename": "예치금_정보이용료_단기_일반결제_약관.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 25
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 458
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_예치금.png",
+      "basename": "예치금_정보이용료_단기_일반결제_예치금.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 26
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 474
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "basename": "예치금_정보이용료_단기_일반결제_예치금비밀번호.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 27
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 490
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_정보확인.png",
+      "basename": "예치금_정보이용료_단기_일반결제_정보확인.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 28
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 506
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_카드선택.png",
+      "basename": "예치금_정보이용료_단기_일반결제_카드선택.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 29
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 522
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료_단기_일반결제_할부선택.png",
+      "basename": "예치금_정보이용료_단기_일반결제_할부선택.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 30
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 538
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리.png",
+      "basename": "예치금_정보이용료관리.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 31
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 554
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_3자제공.jpg",
+      "basename": "예치금_정보이용료관리_3자제공.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 32
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 570
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_개인정보수집.jpg",
+      "basename": "예치금_정보이용료관리_개인정보수집.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 33
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 586
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 34
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 602
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 35
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 618
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증문자.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 36
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 634
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_본인인증성공.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 37
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 650
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_약관.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 38
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 666
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_완료.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 39
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 682
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_입력.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 40
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "basename": "예치금_정보이용료관리_결제비밀번호변경_한번더.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 41
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 714
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제수단관리.jpg",
+      "basename": "예치금_정보이용료관리_결제수단관리.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 42
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 730
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "basename": "예치금_정보이용료관리_결제수단관리_결제 해지.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 43
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 746
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_금융거래.jpg",
+      "basename": "예치금_정보이용료관리_금융거래.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 44
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 762
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_약관.jpg",
+      "basename": "예치금_정보이용료관리_약관.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 45
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 778
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료관리_정기결제동의.jpg",
+      "basename": "예치금_정보이용료관리_정기결제동의.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 46
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 794
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_단기_일반결제.png",
+      "basename": "예치금_정보이용료납부_단기_일반결제.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 47
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 810
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_단기_페이.png",
+      "basename": "예치금_정보이용료납부_단기_페이.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 48
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 826
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_예치금_결제완료.jpg",
+      "basename": "예치금_정보이용료납부_예치금_결제완료.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 49
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 842
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "basename": "예치금_정보이용료납부_예치금_비밀번호입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 50
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 858
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_정기_예치금.png",
+      "basename": "예치금_정보이용료납부_정기_예치금.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 51
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 874
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "blobPath": "simulator-images/driverApp/예치금_정보이용료납부_정기_페이.png",
+      "basename": "예치금_정보이용료납부_정기_페이.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 52
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 890
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체.jpg",
+      "basename": "예치금_회원간이체.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 53
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 906
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_금액입력.png",
+      "basename": "예치금_회원간이체_금액입력.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 54
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 922
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_완료.jpg",
+      "basename": "예치금_회원간이체_완료.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 55
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 938
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png",
+      "blobPath": "simulator-images/driverApp/예치금_회원간이체_이름조회.png",
+      "basename": "예치금_회원간이체_이름조회.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 56
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 954
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg",
+      "blobPath": "simulator-images/driverApp/포인트.jpg",
+      "basename": "포인트.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 57
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 970
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록.jpg",
+      "basename": "화물등록.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 58
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 986
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png",
+      "blobPath": "simulator-images/driverApp/화물등록_등록.png",
+      "basename": "화물등록_등록.png",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 59
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1002
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_등록대수.jpg",
+      "basename": "화물등록_등록대수.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 60
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1018
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_등록목록.jpg",
+      "basename": "화물등록_등록목록.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 61
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1034
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차방법.jpg",
+      "basename": "화물등록_상차방법.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_상차방법.jpg",
+          "basename": "화물등록_상차방법.jpg",
+          "bytes": 187708
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_상차방법.jpg",
+          "basename": "화물등록_상차방법.jpg",
+          "bytes": 147863
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 62
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1050
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차일시.jpg",
+      "basename": "화물등록_상차일시.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_상차일시.jpg",
+          "basename": "화물등록_상차일시.jpg",
+          "bytes": 229096
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_상차일시.jpg",
+          "basename": "화물등록_상차일시.jpg",
+          "bytes": 257691
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 63
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1066
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_상차지입력.jpg",
+      "basename": "화물등록_상차지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 64
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1082
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_지불방식선택.jpg",
+      "basename": "화물등록_지불방식선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 65
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1098
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_차종선택.jpg",
+      "basename": "화물등록_차종선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 66
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1114
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_톤수선택.jpg",
+      "basename": "화물등록_톤수선택.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 67
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1130
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EB%B0%A9%EB%B2%95.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차방법.jpg",
+      "basename": "화물등록_하차방법.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_하차방법.jpg",
+          "basename": "화물등록_하차방법.jpg",
+          "bytes": 184293
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_하차방법.jpg",
+          "basename": "화물등록_하차방법.jpg",
+          "bytes": 147322
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 68
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1146
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%9D%BC%EC%8B%9C.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차일시.jpg",
+      "basename": "화물등록_하차일시.jpg",
+      "candidates": [
+        {
+          "file": "빽통앱/빽통앱이미지/화물등록_하차일시.jpg",
+          "basename": "화물등록_하차일시.jpg",
+          "bytes": 231362
+        },
+        {
+          "file": "차주앱/차주앱이미지/화물등록_하차일시.jpg",
+          "basename": "화물등록_하차일시.jpg",
+          "bytes": 261588
+        }
+      ],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 69
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1162
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "blobPath": "simulator-images/driverApp/화물등록_하차지입력.jpg",
+      "basename": "화물등록_하차지입력.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 70
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1178
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg",
+      "blobPath": "simulator-images/driverApp/회차검색_불가.jpg",
+      "basename": "회차검색_불가.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 71
+        },
+        {
+          "file": "차주앱/flow.json",
+          "line": 1194
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
+      "blobPath": "simulator-images/driverApp/차주앱_로그인.jpg",
+      "basename": "차주앱_로그인.jpg",
+      "candidates": [],
+      "references": [
+        {
+          "file": "차주앱/flow.json",
+          "line": 76
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png",
+      "blobPath": "simulator-images/channelTalk/홈페이지 화면.png",
+      "basename": "홈페이지 화면.png",
+      "candidates": [
+        {
+          "file": "채널톡/홈페이지 화면.png",
+          "basename": "홈페이지 화면.png",
+          "bytes": 1518841
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 7
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2259
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀.png",
+      "basename": "2-1.차주앱_기본틀.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀.png",
+          "basename": "2-1.차주앱_기본틀.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 249
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 306
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 360
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 418
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 433
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1192
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1199
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png",
+      "blobPath": "simulator-images/channelTalk/2-2. 차주앱_내부 배차 문의.png",
+      "basename": "2-2. 차주앱_내부 배차 문의.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-2. 차주앱_내부 배차 문의.png",
+          "basename": "2-2. 차주앱_내부 배차 문의.png",
+          "bytes": 103188
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 427
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1236
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-1.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "blobPath": "simulator-images/channelTalk/3-1. 차주앱_이미지_이미지전송.png",
+      "basename": "3-1. 차주앱_이미지_이미지전송.png",
+      "candidates": [
+        {
+          "file": "채널톡/3-1. 차주앱_이미지_이미지전송.png",
+          "basename": "3-1. 차주앱_이미지_이미지전송.png",
+          "bytes": 127091
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 442
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀 2.png",
+      "basename": "2-1.차주앱_기본틀 2.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀 2.png",
+          "basename": "2-1.차주앱_기본틀 2.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 448
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 462
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1344
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png",
+      "blobPath": "simulator-images/channelTalk/2-2. 차주앱_내부 다른문의.png",
+      "basename": "2-2. 차주앱_내부 다른문의.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-2. 차주앱_내부 다른문의.png",
+          "basename": "2-2. 차주앱_내부 다른문의.png",
+          "bytes": 115650
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 457
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1340
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png",
+      "blobPath": "simulator-images/channelTalk/3-2.차주앱_이미지_내부 답변.png",
+      "basename": "3-2.차주앱_이미지_내부 답변.png",
+      "candidates": [
+        {
+          "file": "채널톡/3-2.차주앱_이미지_내부 답변.png",
+          "basename": "3-2.차주앱_이미지_내부 답변.png",
+          "bytes": 153860
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 471
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1381
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀 3.png",
+      "basename": "2-1.차주앱_기본틀 3.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀 3.png",
+          "basename": "2-1.차주앱_기본틀 3.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 500
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 514
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1386
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1392
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1446
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1496
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/2-2. 차주앱_내부_끝인사.png",
+      "basename": "2-2. 차주앱_내부_끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-2. 차주앱_내부_끝인사.png",
+          "basename": "2-2. 차주앱_내부_끝인사.png",
+          "bytes": 124906
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 509
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-3.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/3-3. 차주앱_이미지_내부_끝인사.png",
+      "basename": "3-3. 차주앱_이미지_내부_끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/3-3. 차주앱_이미지_내부_끝인사.png",
+          "basename": "3-3. 차주앱_이미지_내부_끝인사.png",
+          "bytes": 193129
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 523
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2603
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀 4.png",
+      "basename": "2-1.차주앱_기본틀 4.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀 4.png",
+          "basename": "2-1.차주앱_기본틀 4.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 560
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 574
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/2-2. 차주앱_내부_처리완료.png",
+      "basename": "2-2. 차주앱_내부_처리완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-2. 차주앱_내부_처리완료.png",
+          "basename": "2-2. 차주앱_내부_처리완료.png",
+          "bytes": 130818
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 569
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/3-4.차주앱_이미지_내부_처리완료.png",
+      "basename": "3-4.차주앱_이미지_내부_처리완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/3-4.차주앱_이미지_내부_처리완료.png",
+          "basename": "3-4.차주앱_이미지_내부_처리완료.png",
+          "bytes": 199036
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 583
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg",
+      "blobPath": "simulator-images/channelTalk/4.차주앱_이미지첨부.jpg",
+      "basename": "4.차주앱_이미지첨부.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/4.차주앱_이미지첨부.jpg",
+          "basename": "4.차주앱_이미지첨부.jpg",
+          "bytes": 469536
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 588
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2595
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg",
+      "blobPath": "simulator-images/channelTalk/차주앱_이미지다운로드.jpg",
+      "basename": "차주앱_이미지다운로드.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/차주앱_이미지다운로드.jpg",
+          "basename": "차주앱_이미지다운로드.jpg",
+          "bytes": 1080252
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 595
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 620
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg",
+      "blobPath": "simulator-images/channelTalk/차주앱_이미지 다운완료.jpg",
+      "basename": "차주앱_이미지 다운완료.jpg",
+      "candidates": [
+        {
+          "file": "채널톡/차주앱_이미지 다운완료.jpg",
+          "basename": "차주앱_이미지 다운완료.jpg",
+          "bytes": 945056
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 627
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 652
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_테이블6.png",
+      "basename": "채널톡_테이블6.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_테이블6.png",
+          "basename": "채널톡_테이블6.png",
+          "bytes": 338322
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 657
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2523
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2556
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%205.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀 5.png",
+      "basename": "2-1.차주앱_기본틀 5.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀 5.png",
+          "basename": "2-1.차주앱_기본틀 5.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 659
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%83%81%EB%8B%B4%EC%82%AC%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%A0%84%EC%86%A1.png",
+      "blobPath": "simulator-images/channelTalk/차주앱_내부_상담사 이미지 전송.png",
+      "basename": "차주앱_내부_상담사 이미지 전송.png",
+      "candidates": [
+        {
+          "file": "채널톡/차주앱_내부_상담사 이미지 전송.png",
+          "basename": "차주앱_내부_상담사 이미지 전송.png",
+          "bytes": 168383
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 668
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_매크로사용.png",
+      "basename": "채널톡_매크로사용.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_매크로사용.png",
+          "basename": "채널톡_매크로사용.png",
+          "bytes": 224032
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1208
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1353
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2354
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2615
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담사이미지전송.png",
+      "basename": "채널톡_상담사이미지전송.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담사이미지전송.png",
+          "basename": "채널톡_상담사이미지전송.png",
+          "bytes": 414283
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1248
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2419
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_파일 다운.png",
+      "basename": "첨부파일_파일 다운.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_파일 다운.png",
+          "basename": "첨부파일_파일 다운.png",
+          "bytes": 366391
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1255
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1920
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_이미지_내부_이미지전송.png",
+      "basename": "채널톡_이미지_내부_이미지전송.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_이미지_내부_이미지전송.png",
+          "basename": "채널톡_이미지_내부_이미지전송.png",
+          "bytes": 143849
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1300
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부대화.png",
+      "basename": "채널톡_내부대화.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부대화.png",
+          "basename": "채널톡_내부대화.png",
+          "bytes": 331595
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1405
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1455
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2672
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2704
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_이미지끝인사.png",
+      "basename": "채널톡_내부_이미지끝인사.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_이미지끝인사.png",
+          "basename": "채널톡_내부_이미지끝인사.png",
+          "bytes": 232049
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1492
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2609
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_처리완료.png",
+      "basename": "채널톡_내부_처리완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_처리완료.png",
+          "basename": "채널톡_내부_처리완료.png",
+          "bytes": 235520
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1866
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_이미지 처리완료.png",
+      "basename": "채널톡_내부_이미지 처리완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_이미지 처리완료.png",
+          "basename": "채널톡_내부_이미지 처리완료.png",
+          "bytes": 236780
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1915
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_다운완료.png",
+      "basename": "첨부파일_다운완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_다운완료.png",
+          "basename": "첨부파일_다운완료.png",
+          "bytes": 313860
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1927
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1952
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_그림판검색.png",
+      "basename": "첨부파일_그림판검색.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_그림판검색.png",
+          "basename": "첨부파일_그림판검색.png",
+          "bytes": 459497
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 1959
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2000
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_그림판_파일열기.png",
+      "basename": "첨부파일_그림판_파일열기.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_그림판_파일열기.png",
+          "basename": "첨부파일_그림판_파일열기.png",
+          "bytes": 154445
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2007
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2066
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_그림판_이미지불러오기.png",
+      "basename": "첨부파일_그림판_이미지불러오기.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_그림판_이미지불러오기.png",
+          "basename": "첨부파일_그림판_이미지불러오기.png",
+          "bytes": 194441
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2073
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2106
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_다른이름저장.png",
+      "basename": "첨부파일_다른이름저장.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_다른이름저장.png",
+          "basename": "첨부파일_다른이름저장.png",
+          "bytes": 308083
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2113
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2162
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/첨부파일_확장자 변경 완료.png",
+      "basename": "첨부파일_확장자 변경 완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/첨부파일_확장자 변경 완료.png",
+          "basename": "첨부파일_확장자 변경 완료.png",
+          "bytes": 93124
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2169
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2218
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png",
+      "blobPath": "simulator-images/channelTalk/홈페이지_채널톡.png",
+      "basename": "홈페이지_채널톡.png",
+      "candidates": [
+        {
+          "file": "채널톡/홈페이지_채널톡.png",
+          "basename": "홈페이지_채널톡.png",
+          "bytes": 1043393
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2266
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2291
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_홈페이지_정보입력.png",
+      "basename": "채널톡_홈페이지_정보입력.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_홈페이지_정보입력.png",
+          "basename": "채널톡_홈페이지_정보입력.png",
+          "bytes": 516927
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2298
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2314
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담사이미지전송_파일첨부.png",
+      "basename": "채널톡_상담사이미지전송_파일첨부.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담사이미지전송_파일첨부.png",
+          "basename": "채널톡_상담사이미지전송_파일첨부.png",
+          "bytes": 310349
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2426
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2459
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_상담사이미지전송_첨부됨.png",
+      "basename": "채널톡_상담사이미지전송_첨부됨.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_상담사이미지전송_첨부됨.png",
+          "basename": "채널톡_상담사이미지전송_첨부됨.png",
+          "bytes": 223212
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2466
+        },
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2516
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80%EC%99%84%EB%A3%8C.png",
+      "blobPath": "simulator-images/channelTalk/채널톡_내부_이미지첨부완료.png",
+      "basename": "채널톡_내부_이미지첨부완료.png",
+      "candidates": [
+        {
+          "file": "채널톡/채널톡_내부_이미지첨부완료.png",
+          "basename": "채널톡_내부_이미지첨부완료.png",
+          "bytes": 234497
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2591
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%206.png",
+      "blobPath": "simulator-images/channelTalk/2-1.차주앱_기본틀 6.png",
+      "basename": "2-1.차주앱_기본틀 6.png",
+      "candidates": [
+        {
+          "file": "채널톡/2-1.차주앱_기본틀 6.png",
+          "basename": "2-1.차주앱_기본틀 6.png",
+          "bytes": 71175
+        }
+      ],
+      "references": [
+        {
+          "file": "채널톡/교육_flow.json",
+          "line": 2597
+        }
+      ]
+    }
+  ]
+}

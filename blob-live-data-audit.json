@@ -1,0 +1,2383 @@
+{
+  "generatedAt": "2026-09-15T04:49:39.589Z",
+  "projectId": "hmm-work-guide",
+  "collections": [
+    {
+      "collection": "announcements",
+      "documentCount": 12,
+      "blobReferenceCount": 10,
+      "references": [
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.history.arrayValue.values[0].mapValue.fields.previous.mapValue.fields.content.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459855387-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.history.arrayValue.values[0].mapValue.fields.previous.mapValue.fields.content.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459878204-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.content.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459855387-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.content.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459878204-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[0].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459803050-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[1].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459814626-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[2].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459831658-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[3].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459841046-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[4].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459855387-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png"
+        },
+        {
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[5].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459878204-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png"
+        }
+      ]
+    },
+    {
+      "collection": "simulatorFlows",
+      "documentCount": 4,
+      "blobReferenceCount": 160,
+      "references": [
+        {
+          "documentId": "backtongApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통앱_온핀_단건_거절처리.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EC%98%AC%ED%95%80_%EB%8B%A8%EA%B1%B4_%EA%B1%B0%EC%A0%88%EC%B2%98%EB%A6%AC.png"
+        },
+        {
+          "documentId": "backtongApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통앱_예치금_회원이체금액입력.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EC%9D%B4%EC%B2%B4%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png"
+        },
+        {
+          "documentId": "backtongPC",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통PC_001.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "backtongPC",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[0].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-1.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.syncAgent.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-3.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-5.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B3%A0%EA%B0%9D%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.typingGoto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.typingGoto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.syncAgent.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg.mapValue.fields.syncAgent.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%205.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%83%81%EB%8B%B4%EC%82%AC%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%A0%84%EC%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[0].mapValue.fields.phoneStart.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[0].mapValue.fields.agentStart.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[1].mapValue.fields.phoneStart.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[1].mapValue.fields.agentStart.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%81%9D%EC%9D%B8%EC%82%AC.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AF%B8%EB%B0%B0%EC%A0%95%EC%83%81%ED%83%9C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AF%B8%EB%B0%B0%EC%A0%95%EC%83%81%ED%83%9C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png.mapValue.fields.syncPhone.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[1].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_done.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_terms.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_app.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_payment_cancel.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_unload_loc.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_deposit.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_regular_pay.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_register.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_3rd.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_invoice_email.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_vehicle.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw_amount.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_deposit_pw.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_short.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.route_unavailable.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_short_pay.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_virtual.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.point.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_payment.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.password_typing.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_amount.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_regular.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_deposit_pw.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_privacy.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_terms.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth_ok.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_tonnage.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_install.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_regular.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_driver_change.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.password_input.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_id_change.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw_msg.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_info.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_period.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_deposit_done.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_list.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_finance.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_input.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_usage.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_load_loc.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_card.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_again.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_done.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_name.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_regular_deposit.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_income.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_terms.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_payment.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth_sms.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_count.mapValue.fields.image.stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[1].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/1.%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.png"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[69].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg"
+        },
+        {
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[88].stringValue",
+          "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD.jpg"
+        }
+      ]
+    },
+    {
+      "collection": "guides",
+      "documentCount": 8,
+      "blobReferenceCount": 0,
+      "references": []
+    },
+    {
+      "collection": "guideFlows",
+      "documentCount": 0,
+      "blobReferenceCount": 0,
+      "references": []
+    }
+  ],
+  "uniqueBlobUrlCount": 129,
+  "urls": [
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459855387-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.history.arrayValue.values[0].mapValue.fields.previous.mapValue.fields.content.stringValue"
+        },
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.content.stringValue"
+        },
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[4].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459878204-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.history.arrayValue.values[0].mapValue.fields.previous.mapValue.fields.content.stringValue"
+        },
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.content.stringValue"
+        },
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[5].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459803050-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[0].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459814626-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[1].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459831658-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785457382810.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[2].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/announcement-images/1785459841046-%EC%9D%B4%EC%96%B4%EB%B6%99%EC%9D%B8_%ED%99%94%EB%A9%B4_1785458414602.png",
+      "references": [
+        {
+          "collection": "announcements",
+          "documentId": "announcement-1785459942072",
+          "fieldPath": "$.images.arrayValue.values[3].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EC%98%AC%ED%95%80_%EB%8B%A8%EA%B1%B4_%EA%B1%B0%EC%A0%88%EC%B2%98%EB%A6%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "backtongApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통앱_온핀_단건_거절처리.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EC%9D%B4%EC%B2%B4%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "backtongApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통앱_예치금_회원이체금액입력.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/backtongPC/%EB%B9%BD%ED%86%B5PC_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "backtongPC",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.빽통PC_001.mapValue.fields.image.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "backtongPC",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[0].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-1.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.syncAgent.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.syncAgent.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[1].mapValue.fields.agentStart.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-3.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-5.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B3%A0%EA%B0%9D%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.typingGoto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.typingGoto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80%20%EB%8B%B5%EB%B3%80.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-3.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9E%85%EC%9E%A5.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/3-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%204.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%B0%B0%EC%B0%A8%20%EB%AC%B8%EC%9D%98.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-2.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%20%EC%83%81%EB%8B%B4%20%EC%8B%9C%EC%9E%91.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B1%84%EB%84%90%ED%86%A1%EC%A7%84%EC%9E%85.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80%20%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%9D%98.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.jpg.mapValue.fields.syncAgent.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%AC%B8%EC%9D%98_%EA%B3%A0%EA%B0%9D%20%EB%B0%9C%ED%99%94.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1-4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC%EB%84%A3%EA%B8%B0.jpg.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png.mapValue.fields.syncPhone.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png.mapValue.fields.syncPhone.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EC%83%81%EB%8B%B4%EC%82%AC%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%A0%84%EC%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%205.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-2.%20%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.phoneScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[0].mapValue.fields.phoneStart.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[1].mapValue.fields.phoneStart.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.modes.arrayValue.values[0].mapValue.fields.agentStart.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%EC%B2%A8%EB%B6%80%EB%90%A8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%203.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.syncPhone.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.syncPhone.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AF%B8%EB%B0%B0%EC%A0%95%EC%83%81%ED%83%9C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%81%9D%EC%9D%B8%EC%82%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B0%A8%EC%A3%BC%EC%95%B1_%EB%AC%B8%EC%9E%90%EB%A1%9C%20%EB%B0%9C%EC%86%A1%EB%90%98%EB%8A%94%20%EB%A9%94%EC%8B%9C%EC%A7%80.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png.mapValue.fields.syncPhone.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%A2%85%EB%A3%8C%EB%90%A8%ED%8C%A8%EB%84%90.png.mapValue.fields.syncPhone.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80%EB%8C%80%ED%99%94.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C%EB%90%A8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/4.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%B2%A8%EB%B6%80.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%946.png.mapValue.fields.syncPhone.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1_%ED%8C%8C%EC%9D%BC%EC%B2%A8%EB%B6%80.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%EC%A2%85%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%A0%81%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%943.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/2-1.%EC%B0%A8%EC%A3%BC%EC%95%B1_%EA%B8%B0%EB%B3%B8%ED%8B%80%202.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.syncPhone.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%98%EC%97%90%EA%B2%8C%20%EB%B0%B0%EC%A0%95.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AF%B8%EB%B0%B0%EC%A0%95%EC%83%81%ED%83%9C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%99%95%EC%9E%A5%EC%9E%90%20%EB%B3%80%EA%B2%BD%20%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%A2%85%EB%A3%8C_%ED%83%9C%EA%B7%B8%EC%84%A0%ED%83%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EB%A5%B8%EC%9D%B4%EB%A6%84%EC%A0%80%EC%9E%A5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%B2%98%EB%A6%AC%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%944.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%A0%95%EB%B3%B4%EC%9E%85%EB%A0%A5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EB%8B%A4%EC%9A%B4%EC%99%84%EB%A3%8C.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80_%EC%B1%84%EB%84%90%ED%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%ED%99%88%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%99%94%EB%A9%B4.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%82%AC%EC%9A%A9.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%942.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8%EC%9D%B4%ED%9B%84.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%A1%9C%EA%B7%B8%EC%9D%B8_%EC%B1%84%EB%84%90%EB%AA%A9%EB%A1%9D.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%9D%B4%EB%AF%B8%EC%A7%80_%EB%82%B4%EB%B6%80_%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.scrollRegions.arrayValue.values[0].mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%83%81%EB%8B%B4%EC%82%AC%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%A0%84%EC%86%A1.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%ED%8C%8C%EC%9D%BC%20%EB%8B%A4%EC%9A%B4.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%ED%85%8C%EC%9D%B4%EB%B8%941.png.mapValue.fields.hotspots.arrayValue.values[1].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90_%ED%8C%8C%EC%9D%BC%EC%97%B4%EA%B8%B0.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B2%A8%EB%B6%80%ED%8C%8C%EC%9D%BC_%EA%B7%B8%EB%A6%BC%ED%8C%90%EA%B2%80%EC%83%89.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EB%AA%A9%EB%A1%9D%EC%84%A0%ED%83%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.consult::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        },
+        {
+          "collection": "simulatorFlows",
+          "documentId": "channelTalk",
+          "fieldPath": "$.flow.mapValue.fields.agentScreens.mapValue.fields.image::https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/channelTalk/%EC%B1%84%EB%84%90%ED%86%A1_%EC%88%98%EC%8B%A0%ED%95%A8%20%ED%99%95%EC%9D%B8.png.mapValue.fields.hotspots.arrayValue.values[0].mapValue.fields.goto.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%99%84%EB%A3%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_done.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%95%BD%EA%B4%80.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_terms.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%B1%EA%B2%B0%EC%A0%9C%EC%9D%B4%EB%8F%99.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_app.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%20%ED%95%B4%EC%A7%80.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_payment_cancel.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%95%98%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_unload_loc.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_deposit.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_regular_pay.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_register.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_3%EC%9E%90%EC%A0%9C%EA%B3%B5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_3rd.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EA%B3%84%EC%82%B0%EC%84%9C%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%B3%80%EA%B2%BD.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_invoice_email.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%B0%A8%EC%A2%85%EC%84%A0%ED%83%9D.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_vehicle.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EC%B6%9C%EA%B8%88%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw_amount.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_deposit_pw.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_short.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%9A%8C%EC%B0%A8%EA%B2%80%EC%83%89_%EB%B6%88%EA%B0%80.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.route_unavailable.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EB%8B%A8%EA%B8%B0_%ED%8E%98%EC%9D%B4.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_short_pay.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B0%80%EC%83%81%EA%B3%84%EC%A2%8C%EB%A7%8C%EB%93%A4%EA%B8%B0.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_virtual.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%8F%AC%EC%9D%B8%ED%8A%B8.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.point.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%A7%80%EB%B6%88%EB%B0%A9%EC%8B%9D%EC%84%A0%ED%83%9D.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_payment.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5%EC%8B%9C.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.password_typing.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EA%B8%88%EC%95%A1%EC%9E%85%EB%A0%A5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_amount.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EB%8F%99%EC%9D%98.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_regular.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%98%88%EC%B9%98%EA%B8%88%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_deposit_pw.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%88%98%EC%A7%91.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_privacy.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%95%BD%EA%B4%80.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_terms.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%B1%EA%B3%B5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth_ok.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%ED%86%A4%EC%88%98%EC%84%A0%ED%83%9D.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_tonnage.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%ED%95%A0%EB%B6%80%EC%84%A0%ED%83%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_install.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EA%B8%B0%EA%B2%B0%EC%A0%9C%EC%9D%B8%EA%B2%BD%EC%9A%B0.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_regular.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%8B%A4%EC%9A%B4%EC%A0%84%EC%9E%90%EC%A0%95%EB%B3%B4%EB%B3%80%EA%B2%BD.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_driver_change.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.password_input.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%82%B4%EC%A0%95%EB%B3%B4_%EC%A3%BC%EB%AF%BC%EB%93%B1%EB%A1%9D%EB%B2%88%ED%98%B8%20%EB%B3%80%EA%B2%BD.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.info_id_change.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%8B%A4%EA%B3%84%EC%A2%8C%EC%B6%9C%EA%B8%88_%EB%A9%94%EC%8B%9C%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_withdraw_msg.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%A0%95%EB%B3%B4%ED%99%95%EC%9D%B8.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_info.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EA%B8%B0%EA%B0%84%EC%84%A4%EC%A0%95.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_period.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%98%88%EC%B9%98%EA%B8%88_%EA%B2%B0%EC%A0%9C%EC%99%84%EB%A3%8C.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_deposit_done.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%AA%A9%EB%A1%9D.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_list.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B8%88%EC%9C%B5%EA%B1%B0%EB%9E%98.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_finance.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EC%9E%85%EB%A0%A5.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_input.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%82%AC%EC%9A%A9%EB%82%B4%EC%97%AD.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_usage.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EC%83%81%EC%B0%A8%EC%A7%80%EC%9E%85%EB%A0%A5.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_load_loc.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C_%EB%8B%A8%EA%B8%B0_%EC%9D%BC%EB%B0%98%EA%B2%B0%EC%A0%9C_%EC%B9%B4%EB%93%9C%EC%84%A0%ED%83%9D.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_short_card.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%ED%95%9C%EB%B2%88%EB%8D%94.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_again.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%99%84%EB%A3%8C.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_done.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%ED%9A%8C%EC%9B%90%EA%B0%84%EC%9D%B4%EC%B2%B4_%EC%9D%B4%EB%A6%84%EC%A1%B0%ED%9A%8C.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_transfer_name.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EB%82%A9%EB%B6%80_%EC%A0%95%EA%B8%B0_%EC%98%88%EC%B9%98%EA%B8%88.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_pay_regular_deposit.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%9E%85%EA%B8%88%EB%82%B4%EC%97%AD.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.deposit_income.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EC%95%BD%EA%B4%80.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_terms.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EC%88%98%EB%8B%A8%EA%B4%80%EB%A6%AC.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_payment.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EC%98%88%EC%B9%98%EA%B8%88_%EC%A0%95%EB%B3%B4%EC%9D%B4%EC%9A%A9%EB%A3%8C%EA%B4%80%EB%A6%AC_%EA%B2%B0%EC%A0%9C%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%B3%80%EA%B2%BD_%EB%B3%B8%EC%9D%B8%EC%9D%B8%EC%A6%9D%EB%AC%B8%EC%9E%90.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.fee_mgmt_pw_auth_sms.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%ED%99%94%EB%AC%BC%EB%93%B1%EB%A1%9D_%EB%93%B1%EB%A1%9D%EB%8C%80%EC%88%98.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.screens.mapValue.fields.freight_count.mapValue.fields.image.stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/1.%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.png",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[1].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%A1%9C%EA%B7%B8%EC%9D%B8.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[69].stringValue"
+        }
+      ]
+    },
+    {
+      "url": "https://rwuyelff504orri4.public.blob.vercel-storage.com/simulator-images/driverApp/%EB%B0%B0%EC%B0%A8%EB%82%B4%EC%97%AD.jpg",
+      "references": [
+        {
+          "collection": "simulatorFlows",
+          "documentId": "driverApp",
+          "fieldPath": "$.flow.mapValue.fields.imageManifest.arrayValue.values[88].stringValue"
+        }
+      ]
+    }
+  ],
+  "protectedCollectionsNotRead": [
+    "businessContacts"
+  ]
+}
