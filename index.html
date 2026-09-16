@@ -5454,7 +5454,7 @@ function renderHsTargetList(screens, images, loading=false) {
   const imageRows = uniqueImages.map(image => {
     const existingScreenId = screenByImage.get(assetIdentity(image))?.id;
     const value = imageValue(image);
-    return `<button type="button" class="route-picker-item ${selected===value?'active':''}" data-hs-group="image" data-hs-search="${esc(assetDisplayName(image).toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${existingScreenId?'<small class="route-picker-used">등록됨</small>':''}${isUploadedToday(image)?'<b class="route-picker-new">N</b>':''}</button>`;
+    return `<button type="button" class="route-picker-item ${selected===value?'active':''}" data-hs-group="image" data-hs-search="${esc(assetDisplayName(image).toLocaleLowerCase('ko-KR'))}" onclick="selectHsTarget(decodeURIComponent('${encodeURIComponent(value)}'),this)"><span>${esc(assetDisplayName(image))}</span>${existingScreenId?'<small class="route-picker-used">등록됨</small>':''}</button>`;
   }).join('');
   list.innerHTML = `<div class="route-picker-heading">이동 동작</div>${backRow}`
     + (imageRows ? `<div class="route-picker-heading" data-hs-heading="image">실제 이미지</div>${imageRows}` : '')
