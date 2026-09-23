@@ -4,6 +4,8 @@
     const parts = address.trim().split(/\s+/);
     const city = parts.find(part => /^[가-힣]+[시군]$/.test(part) && !/(광역시|특별시|특별자치시)$/.test(part));
     if (city) return city.slice(0, -1);
+    const integratedGwangjuDistrict = /^(?:동구|서구|남구|북구|광산구)$/.test(parts[1] || '');
+    if (/^전남광주통합특별시$/.test(parts[0] || '') || (/^(?:전남광주|전남)$/.test(parts[0] || '') && integratedGwangjuDistrict)) return '광주';
     const metro = parts[0]?.match(/^(서울|부산|대구|인천|광주|대전|울산|세종)(?:특별자치시|특별시|광역시|시)?$/);
     return metro ? metro[1] : '';
   }
