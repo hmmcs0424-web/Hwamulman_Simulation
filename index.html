@@ -2157,6 +2157,7 @@ async function boot() {
   loadGuidePages();
   await loadDefaultNotices();
   await initFirebase();
+  if(new URLSearchParams(location.search).get('adminLogin') === '1' && !adminMode) showLoginGate('admin');
 
   document.getElementById('sidebarToggle').addEventListener('click', () => {
     const sidebar = document.getElementById('sidebar');
@@ -3936,6 +3937,8 @@ function enterAdmin(profile=currentAdminProfile) {
   counselorPreviewMode = false;
   syncAdminUI();
   syncAccessGate();
+  const loginParams = new URLSearchParams(location.search);
+  if(loginParams.get('return') === 'messageTemplates') location.replace('문자_템플릿/');
 }
 
 function exitAdmin() {

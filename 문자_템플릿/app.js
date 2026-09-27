@@ -1,4 +1,21 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
 const STORAGE_KEY = "hwamulman-message-templates-v1";
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCS8wF_cqijeEenTCkmg7gmcajDJgIbB3w",
+  authDomain: "hmm-work-guide.firebaseapp.com",
+  projectId: "hmm-work-guide",
+  storageBucket: "hmm-work-guide.firebasestorage.app",
+  messagingSenderId: "120174961727",
+  appId: "1:120174961727:web:852779f0088ddf9bcb048a"
+};
+const firebaseApp = initializeApp(FIREBASE_CONFIG);
+const firebaseAuth = getAuth(firebaseApp);
+const firestoreDb = getFirestore(firebaseApp);
+const templateDocument = doc(firestoreDb, "messageTemplates", "library");
+let adminProfile = null;
 
 const seedData = {
   categories: [
@@ -178,7 +195,7 @@ https://play.google.com/store/apps/details?id=ktc.cargo.driver
 };
 
 const palette = ["#f59e0b", "#3b82f6", "#10b981", "#8b5cf6", "#ef4444", "#06b6d4", "#ec4899", "#64748b"];
-let data = loadData();
+let data = clone(seedData);
 let selectedCategory = "all";
 let activeTemplateId = null;
 let activeOriginalContent = "";
@@ -201,8 +218,29 @@ function loadData() {
   return clone(seedData);
 }
 
-function saveData() {
+async function saveData() {
+  if (!adminProfile || !firebaseAuth.currentUser) throw new Error("관리자 로그인이 필요합니다.");
+  await setDoc(templateDocument, {
+    categories: data.categories,
+    templates: data.templates,
+    updatedAt: serverTimestamp(),
+    updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+  });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+async function loadSharedData() {
+  try {
+    const snapshot = await getDoc(templateDocument);
+    const shared = snapshot.data();
+    if (snapshot.exists() && Array.isArray(shared.categories) && Array.isArray(shared.templates)) {
+      data = { categories: shared.categories, templates: shared.templates };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      render();
+    }
+  } catch (error) {
+    console.warn("공용 문자 템플릿을 불러오지 못했습니다.", error);
+  }
 }
 
 function getCategory(id) {
@@ -382,15 +420,40 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
 }
 
-function toggleAdmin() {
-  const active = document.body.classList.toggle("admin-mode");
+function applyAdminProfile(profile) {
+  adminProfile = profile;
+  const active = Boolean(profile);
+  document.body.classList.toggle("admin-mode", active);
   $("#adminToggle").classList.toggle("active", active);
   $("#adminToggle").setAttribute("aria-pressed", String(active));
   $("#modeLabel").textContent = active ? "관리자 모드" : "직원 모드";
+  $("#adminToggle").innerHTML = active
+    ? `<span aria-hidden="true">🔓</span> ${escapeHtml(profile.name)} · 업무 가이드`
+    : '<span aria-hidden="true">🔐</span> 관리자 로그인';
   if (!active) $$(".modal-backdrop").forEach(closeModal);
 }
 
-$("#adminToggle").addEventListener("click", toggleAdmin);
+async function initializeFirebaseSession() {
+  await setPersistence(firebaseAuth, browserLocalPersistence);
+  onAuthStateChanged(firebaseAuth, async (user) => {
+    if (!user) return applyAdminProfile(null);
+    try {
+      const snapshot = await getDoc(doc(firestoreDb, "admins", user.uid));
+      const profile = snapshot.data();
+      applyAdminProfile(snapshot.exists() && profile.admin === true && profile.active !== false
+        ? { name: String(profile.name || user.email || "관리자") }
+        : null);
+    } catch (error) {
+      console.error("관리자 권한 확인 실패", error);
+      applyAdminProfile(null);
+    }
+  });
+  await loadSharedData();
+}
+
+$("#adminToggle").addEventListener("click", () => {
+  location.href = adminProfile ? "../" : "../?adminLogin=1&return=messageTemplates";
+});
 $("#searchInput").addEventListener("input", renderTemplates);
 $("#addTemplateButton").addEventListener("click", () => openTemplateForm());
 $("#addCategoryButton").addEventListener("click", () => openCategoryForm());
@@ -426,8 +489,10 @@ $("#templateGrid").addEventListener("click", (event) => {
   if (editButton) openTemplateForm(editButton.dataset.editTemplate);
 });
 
-$("#templateForm").addEventListener("submit", (event) => {
+$("#templateForm").addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (!adminProfile) return showToast("관리자 로그인이 필요합니다.");
+  const previousData = clone(data);
   const id = $("#templateId").value;
   const next = {
     id: id || makeId("template"),
@@ -441,25 +506,32 @@ $("#templateForm").addEventListener("submit", (event) => {
   } else {
     data.templates.push(next);
   }
-  saveData();
-  closeModal($("#templateFormModal"));
-  render();
-  showToast(id ? "템플릿을 수정했습니다." : "새 템플릿을 추가했습니다.");
+  try {
+    await saveData();
+    closeModal($("#templateFormModal"));
+    render();
+    showToast(id ? "템플릿을 수정했습니다." : "새 템플릿을 추가했습니다.");
+  } catch (error) { data = previousData; render(); alert(`저장하지 못했습니다: ${error.message || error}`); }
 });
 
-$("#deleteTemplateButton").addEventListener("click", () => {
+$("#deleteTemplateButton").addEventListener("click", async () => {
   const id = $("#templateId").value;
   const template = data.templates.find((item) => item.id === id);
   if (!template || !confirm(`‘${template.title}’ 템플릿을 삭제할까요?`)) return;
+  const previousData = clone(data);
   data.templates = data.templates.filter((item) => item.id !== id);
-  saveData();
-  closeModal($("#templateFormModal"));
-  render();
-  showToast("템플릿을 삭제했습니다.");
+  try {
+    await saveData();
+    closeModal($("#templateFormModal"));
+    render();
+    showToast("템플릿을 삭제했습니다.");
+  } catch (error) { data = previousData; render(); alert(`삭제하지 못했습니다: ${error.message || error}`); }
 });
 
-$("#categoryForm").addEventListener("submit", (event) => {
+$("#categoryForm").addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (!adminProfile) return showToast("관리자 로그인이 필요합니다.");
+  const previousData = clone(data);
   const id = $("#categoryId").value;
   const next = {
     id: id || makeId("category"),
@@ -473,13 +545,15 @@ $("#categoryForm").addEventListener("submit", (event) => {
     data.categories.push(next);
     selectedCategory = next.id;
   }
-  saveData();
-  closeModal($("#categoryModal"));
-  render();
-  showToast(id ? "카테고리 설정을 저장했습니다." : "새 카테고리를 추가했습니다.");
+  try {
+    await saveData();
+    closeModal($("#categoryModal"));
+    render();
+    showToast(id ? "카테고리 설정을 저장했습니다." : "새 카테고리를 추가했습니다.");
+  } catch (error) { data = previousData; render(); alert(`저장하지 못했습니다: ${error.message || error}`); }
 });
 
-$("#deleteCategoryButton").addEventListener("click", () => {
+$("#deleteCategoryButton").addEventListener("click", async () => {
   const id = $("#categoryId").value;
   const category = getCategory(id);
   const count = data.templates.filter((item) => item.categoryId === id).length;
@@ -489,12 +563,15 @@ $("#deleteCategoryButton").addEventListener("click", () => {
     return;
   }
   if (!confirm(`‘${category.name}’ 카테고리를 삭제할까요?`)) return;
+  const previousData = clone(data);
   data.categories = data.categories.filter((item) => item.id !== id);
   selectedCategory = "all";
-  saveData();
-  closeModal($("#categoryModal"));
-  render();
-  showToast("카테고리를 삭제했습니다.");
+  try {
+    await saveData();
+    closeModal($("#categoryModal"));
+    render();
+    showToast("카테고리를 삭제했습니다.");
+  } catch (error) { data = previousData; render(); alert(`삭제하지 못했습니다: ${error.message || error}`); }
 });
 
 $("#colorSwatches").addEventListener("click", (event) => {
@@ -527,3 +604,4 @@ document.addEventListener("keydown", (event) => {
 });
 
 render();
+initializeFirebaseSession();
