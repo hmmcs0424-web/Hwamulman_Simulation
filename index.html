@@ -82,6 +82,8 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 #signupGroup .side-submenu:hover,#signupGroup .side-submenu.active{color:#60a5fa;background:#172d4d}
 .side-menu[data-page="notice"],.side-menu[data-page="notice"]:hover{color:#f87171}
 .side-menu[data-page="notice"].active{color:#fca5a5;background:#491f25}
+.side-menu[data-page="messageTemplates"],.side-menu[data-page="messageTemplates"]:hover{color:#fbbf24}
+.side-menu[data-page="messageTemplates"].active{color:#fde68a;background:#422f0a}
 .side-menu[data-page="faq"],.side-menu[data-page="faq"]:hover{color:#facc15}
 .side-menu[data-page="faq"].active{color:#fde047;background:#403610}
 .side-menu[data-page="contacts"],.side-menu[data-page="contacts"]:hover{color:#34d399}
@@ -658,6 +660,7 @@ textarea.form-input{resize:vertical;}
       <button class="side-menu" type="button" data-page="appErrorChecklist"><span class="side-icon">⚠</span><span class="side-label">APP 오류 체크리스트</span></button>
       <button class="side-menu" type="button" data-page="freightHistory" title="운송료 민원 이력 작성"><span class="side-icon">▤</span><span class="side-label">운송료 민원 이력 작성</span></button>
       <button class="side-menu" type="button" data-page="notice"><span class="side-icon">●</span><span class="side-label">공지사항</span></button>
+      <button class="side-menu" type="button" data-page="messageTemplates"><span class="side-icon">✉</span><span class="side-label">문자 템플릿</span></button>
       <button class="side-menu admin-only-menu" id="faqMenu" type="button" data-page="faq"><span class="side-icon">?</span><span class="side-label">FAQ</span></button>
       <button class="side-menu admin-only-menu" id="contactsMenu" type="button" data-page="contacts"><span class="side-icon">☎</span><span class="side-label">업무 연락처</span></button>
     </div>
@@ -2165,6 +2168,10 @@ async function boot() {
     toggle.setAttribute('aria-label', toggle.title);
   });
   document.querySelectorAll('.side-menu[data-page]').forEach(btn => btn.addEventListener('click', async () => {
+    if(btn.dataset.page === 'messageTemplates') {
+      location.href = '문자_템플릿/';
+      return;
+    }
     if(btn.dataset.page === 'simulator') {
       document.getElementById('simulatorGroup').classList.toggle('open');
       await setWorkspacePage('simulator');

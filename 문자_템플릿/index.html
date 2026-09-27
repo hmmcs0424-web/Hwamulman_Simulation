@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="화물맨 상담용 문자 템플릿을 분류하고 편집해 복사하는 시안입니다.">
+  <title>문자 템플릿 · 화물맨 업무 가이드</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2318181b'/%3E%3Cpath d='M14 18h36v25H30l-10 8v-8h-6z' fill='%23ffb800'/%3E%3Cpath d='M22 26h20M22 33h15' stroke='%2318181b' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">화물맨 <span>업무 가이드</span></div>
+    <div class="topbar-spacer"></div>
+    <span class="mode-label" id="modeLabel">직원 모드</span>
+    <button class="admin-toggle" id="adminToggle" type="button" aria-pressed="false">
+      <span aria-hidden="true">⚙</span> 관리자 모드
+    </button>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="업무 가이드 메뉴">
+      <div class="sidebar-title">업무 가이드</div>
+      <nav class="sidebar-nav">
+        <a href="../" class="side-link"><span class="side-icon">▣</span><span>시뮬레이터</span></a>
+        <a href="../" class="side-link"><span class="side-icon">＋</span><span>신규가입</span></a>
+        <a href="../" class="side-link"><span class="side-icon">Ⅱ</span><span>일시정지/복구/탈퇴</span></a>
+        <a href="../" class="side-link"><span class="side-icon">✎</span><span>정보변경</span></a>
+        <a href="../" class="side-link"><span class="side-icon">⚠</span><span>APP 오류 체크리스트</span></a>
+        <a href="../" class="side-link"><span class="side-icon">▤</span><span>운송료 민원 이력 작성</span></a>
+        <a href="../" class="side-link"><span class="side-icon">●</span><span>공지사항</span></a>
+        <a href="#" class="side-link active" aria-current="page"><span class="side-icon">✉</span><span>문자 템플릿</span></a>
+      </nav>
+      <p class="sidebar-note">독립 화면 시안</p>
+    </aside>
+
+    <main class="workspace">
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">MESSAGE LIBRARY</p>
+          <h1>문자 템플릿</h1>
+          <p class="page-description">상황에 맞는 문구를 선택해 필요한 부분만 수정한 뒤 복사하세요.</p>
+        </div>
+        <button class="primary-button admin-only" id="addTemplateButton" type="button">
+          <span aria-hidden="true">＋</span> 템플릿 추가
+        </button>
+      </section>
+
+      <section class="toolbar" aria-label="템플릿 검색과 분류">
+        <label class="search-field">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <span class="sr-only">템플릿 검색</span>
+          <input id="searchInput" type="search" placeholder="제목이나 내용으로 검색" autocomplete="off">
+          <kbd>Ctrl K</kbd>
+        </label>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+      </section>
+
+      <section class="category-panel">
+        <div class="category-heading">
+          <div>
+            <h2>카테고리</h2>
+            <p>업무 상황별로 템플릿을 모아봤어요.</p>
+          </div>
+          <button class="text-button admin-only" id="addCategoryButton" type="button">＋ 카테고리 추가</button>
+        </div>
+        <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="문자 템플릿 카테고리"></div>
+      </section>
+
+      <section class="template-section" aria-labelledby="listTitle">
+        <div class="list-heading">
+          <div>
+            <h2 id="listTitle">전체 템플릿</h2>
+            <p id="listDescription">등록된 모든 문자 문구입니다.</p>
+          </div>
+          <button class="category-manage-button admin-only" id="editCategoryButton" type="button">카테고리 설정</button>
+        </div>
+        <div class="template-grid" id="templateGrid"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-icon" aria-hidden="true">✉</div>
+          <strong>조건에 맞는 템플릿이 없습니다.</strong>
+          <p>검색어를 바꾸거나 다른 카테고리를 선택해 주세요.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="templateModal" hidden>
+    <section class="modal template-modal" role="dialog" aria-modal="true" aria-labelledby="templateModalTitle">
+      <header class="modal-header">
+        <div>
+          <span class="category-badge" id="modalCategoryBadge"></span>
+          <h2 id="templateModalTitle"></h2>
+          <p>문구를 자유롭게 수정해도 원본 템플릿은 바뀌지 않습니다.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-modal aria-label="닫기">×</button>
+      </header>
+      <div class="modal-body">
+        <label class="field-label" for="messageEditor">문자 내용</label>
+        <textarea id="messageEditor" class="message-editor" spellcheck="false"></textarea>
+        <div class="editor-meta">
+          <span id="characterCount">0자</span>
+          <button class="reset-button" id="resetMessageButton" type="button">원문으로 되돌리기</button>
+        </div>
+        <p class="linebreak-note"><span aria-hidden="true">↵</span> 복사 시 화면에 보이는 줄바꿈이 그대로 유지됩니다.</p>
+      </div>
+      <footer class="modal-footer">
+        <button class="secondary-button admin-only" id="adminEditTemplateButton" type="button">원본 템플릿 수정</button>
+        <div class="footer-spacer"></div>
+        <button class="secondary-button" type="button" data-close-modal>취소</button>
+        <button class="copy-button" id="copyButton" type="button"><span aria-hidden="true">▣</span> 내용 복사</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="templateFormModal" hidden>
+    <section class="modal form-modal" role="dialog" aria-modal="true" aria-labelledby="templateFormTitle">
+      <header class="modal-header">
+        <div>
+          <p class="modal-kicker">관리자 설정</p>
+          <h2 id="templateFormTitle">템플릿 추가</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-modal aria-label="닫기">×</button>
+      </header>
+      <form id="templateForm">
+        <div class="modal-body form-fields">
+          <input type="hidden" id="templateId">
+          <label>
+            <span class="field-label">카테고리</span>
+            <select id="templateCategory" required></select>
+          </label>
+          <label>
+            <span class="field-label">템플릿 이름</span>
+            <input id="templateTitle" type="text" maxlength="80" required placeholder="예: 부재중 안내 문자">
+          </label>
+          <label>
+            <span class="field-label">문자 원문</span>
+            <textarea id="templateContent" required spellcheck="false" placeholder="줄바꿈을 포함해 문구를 입력하세요."></textarea>
+          </label>
+        </div>
+        <footer class="modal-footer">
+          <button class="danger-button" id="deleteTemplateButton" type="button" hidden>삭제</button>
+          <div class="footer-spacer"></div>
+          <button class="secondary-button" type="button" data-close-modal>취소</button>
+          <button class="primary-button" type="submit">저장</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="categoryModal" hidden>
+    <section class="modal category-modal" role="dialog" aria-modal="true" aria-labelledby="categoryModalTitle">
+      <header class="modal-header">
+        <div>
+          <p class="modal-kicker">관리자 설정</p>
+          <h2 id="categoryModalTitle">카테고리 추가</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-modal aria-label="닫기">×</button>
+      </header>
+      <form id="categoryForm">
+        <div class="modal-body form-fields">
+          <input type="hidden" id="categoryId">
+          <label>
+            <span class="field-label">카테고리 이름</span>
+            <input id="categoryName" type="text" maxlength="30" required placeholder="예: 신규가입 안내">
+          </label>
+          <fieldset class="color-fieldset">
+            <legend class="field-label">카테고리 색상</legend>
+            <div class="color-swatches" id="colorSwatches"></div>
+            <label class="custom-color">
+              <span>직접 선택</span>
+              <input id="categoryColor" type="color" value="#f59e0b">
+            </label>
+          </fieldset>
+          <div class="category-preview">
+            <span>미리보기</span>
+            <strong id="categoryPreview">새 카테고리</strong>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <button class="danger-button" id="deleteCategoryButton" type="button" hidden>삭제</button>
+          <div class="footer-spacer"></div>
+          <button class="secondary-button" type="button" data-close-modal>취소</button>
+          <button class="primary-button" type="submit">저장</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
