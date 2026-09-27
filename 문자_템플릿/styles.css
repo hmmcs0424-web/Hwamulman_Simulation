@@ -41,6 +41,9 @@ button { cursor: pointer; }
 .sidebar-note { margin: auto 18px 18px; padding-top: 15px; border-top: 1px solid #2b2b30; color: #6e6e77; font-size: .72rem; }
 
 .workspace { width: calc(100% - 228px); min-height: calc(100vh - 56px); margin-left: 228px; padding: 34px clamp(22px, 4vw, 56px) 64px; }
+body.embedded .topbar,body.embedded .sidebar{display:none}
+body.embedded .app-shell{display:block;min-height:100vh;padding-top:0}
+body.embedded .workspace{width:100%;min-height:100vh;margin-left:0;padding-top:30px}
 .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; max-width: 1240px; margin: 0 auto 24px; }
 .eyebrow, .modal-kicker { margin: 0 0 7px; color: #bb8200; font-size: .72rem; font-weight: 850; letter-spacing: .12em; }
 h1 { margin: 0; color: #1c1d21; font-size: clamp(1.75rem, 3vw, 2.25rem); letter-spacing: -.045em; }

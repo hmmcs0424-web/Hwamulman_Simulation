@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { collection, doc, getDoc, getFirestore, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const STORAGE_KEY = "hwamulman-message-templates-v1";
 const FIREBASE_CONFIG = {
@@ -16,6 +16,8 @@ const firebaseAuth = getAuth(firebaseApp);
 const firestoreDb = getFirestore(firebaseApp);
 const templateDocument = doc(firestoreDb, "messageTemplates", "library");
 let adminProfile = null;
+let dataRevision = 0;
+let stopSharedDataListener = null;
 
 const seedData = {
   categories: [
@@ -220,13 +222,41 @@ function loadData() {
 
 async function saveData() {
   if (!adminProfile || !firebaseAuth.currentUser) throw new Error("관리자 로그인이 필요합니다.");
-  await setDoc(templateDocument, {
-    categories: data.categories,
-    templates: data.templates,
-    updatedAt: serverTimestamp(),
-    updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+  const nextRevision = await runTransaction(firestoreDb, async (transaction) => {
+    const currentSnapshot = await transaction.get(templateDocument);
+    const current = currentSnapshot.data();
+    const remoteRevision = Number(current?.revision || 0);
+    if (currentSnapshot.exists() && remoteRevision !== dataRevision) {
+      throw new Error("다른 관리자가 먼저 변경했습니다. 최신 내용을 불러온 뒤 다시 시도해 주세요.");
+    }
+    if (currentSnapshot.exists()) {
+      transaction.set(doc(collection(firestoreDb, "messageTemplateBackups")), {
+        categories: current.categories || [],
+        templates: current.templates || [],
+        sourceRevision: remoteRevision,
+        backedUpAt: serverTimestamp(),
+        backedUpBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+      });
+    }
+    transaction.set(templateDocument, {
+      categories: data.categories,
+      templates: data.templates,
+      revision: remoteRevision + 1,
+      updatedAt: serverTimestamp(),
+      updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
+    });
+    return remoteRevision + 1;
   });
+  dataRevision = nextRevision;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function mergeWithoutLoss(primary, additional) {
+  const categories = new Map(primary.categories.map((item) => [item.id, clone(item)]));
+  const templates = new Map(primary.templates.map((item) => [item.id, clone(item)]));
+  additional.categories.forEach((item) => { if (!categories.has(item.id)) categories.set(item.id, clone(item)); });
+  additional.templates.forEach((item) => { if (!templates.has(item.id)) templates.set(item.id, clone(item)); });
+  return { categories: [...categories.values()], templates: [...templates.values()] };
 }
 
 async function loadSharedData() {
@@ -234,12 +264,31 @@ async function loadSharedData() {
     const snapshot = await getDoc(templateDocument);
     const shared = snapshot.data();
     if (snapshot.exists() && Array.isArray(shared.categories) && Array.isArray(shared.templates)) {
-      data = { categories: shared.categories, templates: shared.templates };
+      const cloudData = { categories: shared.categories, templates: shared.templates };
+      dataRevision = Number(shared.revision || 0);
+      data = adminProfile ? mergeWithoutLoss(cloudData, loadData()) : cloudData;
+      if (adminProfile && JSON.stringify(data) !== JSON.stringify(cloudData)) await saveData();
+    } else {
+      data = mergeWithoutLoss(clone(seedData), loadData());
+      dataRevision = 0;
+      if (adminProfile) await saveData();
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    render();
+    stopSharedDataListener?.();
+    stopSharedDataListener = onSnapshot(templateDocument, (nextSnapshot) => {
+      const next = nextSnapshot.data();
+      if (!nextSnapshot.exists() || !Array.isArray(next.categories) || !Array.isArray(next.templates)) return;
+      data = { categories: next.categories, templates: next.templates };
+      dataRevision = Number(next.revision || 0);
+      if (selectedCategory !== "all" && !data.categories.some((item) => item.id === selectedCategory)) selectedCategory = "all";
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       render();
-    }
+    }, (error) => console.warn("문자 템플릿 실시간 연결 실패", error));
   } catch (error) {
     console.warn("공용 문자 템플릿을 불러오지 못했습니다.", error);
+    data = mergeWithoutLoss(clone(seedData), loadData());
+    render();
   }
 }
 
@@ -433,22 +482,30 @@ function applyAdminProfile(profile) {
   if (!active) $$(".modal-backdrop").forEach(closeModal);
 }
 
+async function syncFirebaseUser(user) {
+  if (!user) return applyAdminProfile(null);
+  try {
+    const snapshot = await getDoc(doc(firestoreDb, "admins", user.uid));
+    const profile = snapshot.data();
+    applyAdminProfile(snapshot.exists() && profile.admin === true && profile.active !== false
+      ? { name: String(profile.name || user.email || "관리자") }
+      : null);
+  } catch (error) {
+    console.error("관리자 권한 확인 실패", error);
+    applyAdminProfile(null);
+  }
+}
+
 async function initializeFirebaseSession() {
   await setPersistence(firebaseAuth, browserLocalPersistence);
-  onAuthStateChanged(firebaseAuth, async (user) => {
-    if (!user) return applyAdminProfile(null);
-    try {
-      const snapshot = await getDoc(doc(firestoreDb, "admins", user.uid));
-      const profile = snapshot.data();
-      applyAdminProfile(snapshot.exists() && profile.admin === true && profile.active !== false
-        ? { name: String(profile.name || user.email || "관리자") }
-        : null);
-    } catch (error) {
-      console.error("관리자 권한 확인 실패", error);
-      applyAdminProfile(null);
-    }
-  });
+  await firebaseAuth.authStateReady();
+  await syncFirebaseUser(firebaseAuth.currentUser);
   await loadSharedData();
+  onAuthStateChanged(firebaseAuth, async (user) => {
+    const previousAdminState = Boolean(adminProfile);
+    await syncFirebaseUser(user);
+    if (Boolean(adminProfile) !== previousAdminState) await loadSharedData();
+  });
 }
 
 $("#adminToggle").addEventListener("click", () => {
