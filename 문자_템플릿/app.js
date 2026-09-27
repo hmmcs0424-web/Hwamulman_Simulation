@@ -16,6 +16,9 @@ const firebaseAuth = getAuth(firebaseApp);
 const firestoreDb = getFirestore(firebaseApp);
 const templateDocument = doc(firestoreDb, "messageTemplates", "library");
 let adminProfile = null;
+let verifiedAdminProfile = null;
+const isEmbedded = new URLSearchParams(location.search).get("embedded") === "1";
+let parentAllowsAdminEditing = !isEmbedded;
 let dataRevision = 0;
 let stopSharedDataListener = null;
 
@@ -482,19 +485,37 @@ function applyAdminProfile(profile) {
   if (!active) $$(".modal-backdrop").forEach(closeModal);
 }
 
+function refreshEffectiveAdminProfile() {
+  applyAdminProfile(verifiedAdminProfile && parentAllowsAdminEditing ? verifiedAdminProfile : null);
+}
+
 async function syncFirebaseUser(user) {
-  if (!user) return applyAdminProfile(null);
+  if (!user) {
+    verifiedAdminProfile = null;
+    return refreshEffectiveAdminProfile();
+  }
   try {
     const snapshot = await getDoc(doc(firestoreDb, "admins", user.uid));
     const profile = snapshot.data();
-    applyAdminProfile(snapshot.exists() && profile.admin === true && profile.active !== false
+    verifiedAdminProfile = snapshot.exists() && profile.admin === true && profile.active !== false
       ? { name: String(profile.name || user.email || "관리자") }
-      : null);
+      : null;
+    refreshEffectiveAdminProfile();
   } catch (error) {
     console.error("관리자 권한 확인 실패", error);
-    applyAdminProfile(null);
+    verifiedAdminProfile = null;
+    refreshEffectiveAdminProfile();
   }
 }
+
+window.addEventListener("message", async (event) => {
+  if (!isEmbedded || event.origin !== location.origin || event.source !== parent) return;
+  if (event.data?.type !== "hmm-template-admin-mode") return;
+  const wasAdmin = Boolean(adminProfile);
+  parentAllowsAdminEditing = event.data.enabled === true;
+  refreshEffectiveAdminProfile();
+  if (!wasAdmin && adminProfile) await loadSharedData();
+});
 
 async function initializeFirebaseSession() {
   await setPersistence(firebaseAuth, browserLocalPersistence);

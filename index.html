@@ -685,7 +685,7 @@ textarea.form-input{resize:vertical;}
         </div>
       </div>
     </div>
-    <iframe class="message-templates-frame" id="messageTemplatesFrame" title="문자 템플릿" loading="lazy"></iframe>
+    <iframe class="message-templates-frame" id="messageTemplatesFrame" title="문자 템플릿" loading="lazy" onload="syncMessageTemplateAdminMode()"></iframe>
   </main>
 
   <!-- ── PHONE FRAME (APP 모드) ── -->
@@ -1715,6 +1715,7 @@ function renderGuidePage() {
   if(activePage === 'messageTemplates') {
     const frame = document.getElementById('messageTemplatesFrame');
     if(!frame.src) frame.src = '문자_템플릿/?embedded=1';
+    syncMessageTemplateAdminMode();
     return;
   }
   document.getElementById('guidePageTitle').textContent = page.title;
@@ -3998,6 +3999,7 @@ function syncAdminUI() {
   const faqMenu = document.getElementById('faqMenu');
   const contactsMenu = document.getElementById('contactsMenu');
   const adminEditing = adminMode && !counselorPreviewMode;
+  syncMessageTemplateAdminMode();
   if(!adminEditing) {
     cancelLayoutDraw();
     document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
@@ -4069,6 +4071,14 @@ function syncAdminUI() {
   if(st.cur && st.flow.screens?.[st.cur]) renderChatScroll(st.flow.screens[st.cur]);
   detectUnreg();
   refreshScreenImageOptions();
+}
+
+function syncMessageTemplateAdminMode() {
+  const frame = document.getElementById('messageTemplatesFrame');
+  frame?.contentWindow?.postMessage({
+    type:'hmm-template-admin-mode',
+    enabled:adminMode && !counselorPreviewMode
+  }, location.origin);
 }
 
 function hotspotArrangeIcon(type) {
