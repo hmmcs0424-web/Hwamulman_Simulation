@@ -2778,6 +2778,8 @@ function goTo(id, init=false) {
   if(id===st.cur && scr.type!=='popup') return;
 
   if(scr.type==='popup' && !init) { showPopup(id); return; }
+  // The start screen begins a fresh training path; completed actions from a previous path must not leak in.
+  if(!init && id===st.flow.start) hotspotCompletionStates.clear();
   if(!init && st.cur) st.hist.push(st.cur);
   st.cur = id;
 
@@ -2809,6 +2811,7 @@ function goHome() {
   closePopup();
   const st = cache[activeSec];
   if(!st?.flow?.screens || !st.flow.start || !st.flow.screens[st.flow.start]) return;
+  hotspotCompletionStates.clear();
   st.hist = [];
   st.cur = st.flow.start;
   renderScreen(activeSec, st.cur);
