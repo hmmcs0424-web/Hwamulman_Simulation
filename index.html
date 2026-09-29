@@ -1289,6 +1289,8 @@ textarea.form-input{resize:vertical;}
         <option value="group_toggle">그룹 토글</option>
         <option value="radio_select">단일 선택 (라디오)</option>
         <option value="conditional_image">조건부 이미지 표시</option>
+        <option value="complete_navigate">저장 완료 후 화면 이동</option>
+        <option value="completion_image">완료 상태 이미지 표시</option>
       </select>
     </div>
     <div id="hsToggleFields" style="display:none">
@@ -1302,6 +1304,10 @@ textarea.form-input{resize:vertical;}
       <div class="form-row" id="hsStateGroupSelectRow" style="display:none"><div class="form-label">연결할 상태 그룹</div><select class="form-input" id="hsStateGroupSelect"><option value="">먼저 그룹 토글을 등록해 주세요</option></select></div>
       <label id="hsGroupInitialRow" style="display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:10px"><input type="checkbox" id="hsGroupInitialOn"> 처음부터 ON 상태로 표시</label>
       <div style="color:#777;font-size:11px;margin:-3px 0 10px">동일한 그룹명의 토글과 조건부 이미지 영역이 화면 이동 없이 함께 변경됩니다.</div>
+    </div>
+    <div id="hsCompletionFields" style="display:none">
+      <div class="form-row"><div class="form-label">완료 상태 이름</div><input class="form-input" id="hsCompletionKey" placeholder="예: 인수증 등록"></div>
+      <div style="color:#777;font-size:11px;margin:-3px 0 10px">저장 버튼과 완료 상태 이미지는 같은 이름으로 연결하세요. 저장 후 상세 화면으로 돌아오면 완료 이미지가 자동으로 표시됩니다.</div>
     </div>
     <div id="hsRadioFields" style="display:none">
       <div class="form-row"><div class="form-label">단일 선택 그룹명</div><input class="form-input" id="hsRadioGroup" placeholder="예: 화물 정보 배경화면 색상"></div>
@@ -2495,6 +2501,7 @@ let pendingScrollTransition = null;
 const hotspotToggleStates = new Map();
 const hotspotGroupStates = new Map();
 const hotspotRadioStates = new Map();
+const hotspotCompletionStates = new Map();
 const hotspotTextColorStates = new Map();
 const hotspotTextSizeStates = new Map();
 const selectedTextColorTargets = new Map();
@@ -2506,6 +2513,15 @@ function hotspotStateKey(hotspot) {
 
 function hotspotGroupStateKey(hotspot) {
   return `${activeSec}:${cache[activeSec]?.cur}:${hotspot.stateGroup||''}`;
+}
+
+function hotspotCompletionStateKey(hotspot) {
+  return `${activeSec}:${hotspot.completionKey||''}`;
+}
+
+function applyCompletionHotspotImage(hotspot, element) {
+  const completed=hotspotCompletionStates.get(hotspotCompletionStateKey(hotspot))===true;
+  applyHotspotToggleImage(hotspot,element,completed);
 }
 
 function ensureHotspotGroupState(hotspot) {
@@ -2693,7 +2709,10 @@ function handleHotspotAction(hotspot, element) {
     hotspotToggleStates.set(key,isOn);
     applyHotspotToggleImage(hotspot,element,isOn);
   }
-  if(action==='navigate'||action==='navigate_toast') navigateHotspotTarget(hotspot.goto,hotspot,element);
+  if(action==='complete_navigate') {
+    hotspotCompletionStates.set(hotspotCompletionStateKey(hotspot),true);
+  }
+  if(action==='navigate'||action==='navigate_toast'||action==='complete_navigate') navigateHotspotTarget(hotspot.goto,hotspot,element);
   if(action==='toast'||action==='navigate_toast'||action==='toggle_toast') {
     const message=action==='toggle_toast' ? (isOn?hotspot.toastOnMessage:hotspot.toastOffMessage) : hotspot.toastMessage;
     showSimulatorToast(message,{duration:hotspot.toastDuration,position:hotspot.toastPosition,confirm:hotspot.toastConfirm});
@@ -3081,9 +3100,10 @@ function renderPhoneFixedHotspots(hotspots,imageHeight,fixedHeight,fixedEdge='to
       el.addEventListener('click', () => showOverlayGuide(hs));
     } else {
       if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else if(hs.actionType==='completion_image')applyCompletionHotspotImage(hs,el);
       else if(hs.actionType==='radio_select')applyRadioHotspotImage(hs,el);
       else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
-      if(hs.actionType==='conditional_image')el.style.pointerEvents='none';
+      if(hs.actionType==='conditional_image'||hs.actionType==='completion_image')el.style.pointerEvents='none';
       else el.addEventListener('click', () => handleHotspotAction(hs,el));
     }
     layer.appendChild(el);
@@ -3422,10 +3442,11 @@ function renderHotspots(layerId, hotspots, forceAdmin, options={}) {
     }
     if(!isGuideOverlay) {
       if(hs.actionType==='group_toggle'||hs.actionType==='conditional_image')applyGroupedHotspotImage(hs,el);
+      else if(hs.actionType==='completion_image')applyCompletionHotspotImage(hs,el);
       else if(hs.actionType==='radio_select')applyRadioHotspotImage(hs,el);
       else applyHotspotToggleImage(hs,el,!!hotspotToggleStates.get(hotspotStateKey(hs)));
     }
-    if(!isAdmin&&hs.actionType==='conditional_image')el.style.pointerEvents='none';
+    if(!isAdmin&&(hs.actionType==='conditional_image'||hs.actionType==='completion_image'))el.style.pointerEvents='none';
     if(!isAdmin&&hs.actionType==='color_picker')bindColorPicker(hs,el);
     if(!isAdmin&&hs.actionType==='font_size_slider')bindFontSizeSlider(hs,el);
     if(isAdmin) {
@@ -3522,7 +3543,7 @@ function renderHotspots(layerId, hotspots, forceAdmin, options={}) {
         window.addEventListener('mouseup', onUp);
       });
       el.appendChild(handle);
-    } else if(hs.actionType!=='color_picker'&&hs.actionType!=='font_size_slider'&&hs.actionType!=='conditional_image') {
+    } else if(hs.actionType!=='color_picker'&&hs.actionType!=='font_size_slider'&&hs.actionType!=='conditional_image'&&hs.actionType!=='completion_image') {
       const scrollPassthrough=bindPhoneScrollPassthrough(el,hs);
       el.addEventListener('click', event => {
         if(scrollPassthrough?.wasDragged()||options.dragHost?.dataset.dragged==='true'){event.preventDefault();event.stopPropagation();return;}
@@ -3974,6 +3995,7 @@ async function startCounselorPreview() {
   hotspotBtn.classList.remove('on');
   hotspotBtn.textContent='👆 영역 보기';
   const st=cache[activeSec];
+  hotspotCompletionStates.clear();
   const previewScreen=st.cur||st.flow?.start;
   st.hist=[];
   const start=st.flow?.start;
@@ -4115,7 +4137,7 @@ function renderHsList() {
   el.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:7px;"><button class="btn btn-secondary btn-sm" onclick="selectAllHotspots()">전체 선택</button>${selected.length?'<button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button>':''}</div>${toolbar}`+hs.map((h,i) => `
     <div class="hs-item">
       <input type="checkbox" aria-label="${esc(h.label||`영역 ${i+1}`)} 선택" ${selectedHotspotIndices.includes(i)?'checked':''} onchange="toggleHotspotSelection(${i},this.checked)" style="width:16px;height:16px;accent-color:#0891b2;flex:0 0 auto;">
-      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='radio_select'?'◉':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='radio_select'?` · ${esc(h.radioGroup)} / ${esc(h.radioValue)}${h.radioInitial?' · 초기 선택':''}`:h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
+      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='radio_select'?'◉':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':h.actionType==='complete_navigate'?'✓↗':h.actionType==='completion_image'?'✓':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='radio_select'?` · ${esc(h.radioGroup)} / ${esc(h.radioValue)}${h.radioInitial?' · 초기 선택':''}`:h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':h.actionType==='complete_navigate'?` · ${esc(h.completionKey)} 완료 → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}`:h.actionType==='completion_image'?` · ${esc(h.completionKey)} 완료 때 표시`:` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -5466,6 +5488,7 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsStateGroup').value='';
     document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';
     document.getElementById('hsGroupInitialOn').checked=false;
+    document.getElementById('hsCompletionKey').value='';
     document.getElementById('hsRadioGroup').value='';
     document.getElementById('hsRadioValue').value='';
     document.getElementById('hsRadioInitial').checked=false;
@@ -5519,9 +5542,9 @@ function renderHsTargetList(screens, images, loading=false) {
 
 function updateHsActionFields() {
   const action=document.getElementById('hsActionType').value;
-  const hasToggle=action==='toggle'||action==='toggle_toast'||action==='group_toggle'||action==='conditional_image'||action==='radio_select';
+  const hasToggle=action==='toggle'||action==='toggle_toast'||action==='group_toggle'||action==='conditional_image'||action==='radio_select'||action==='completion_image';
   const hasToast=action==='toast'||action==='navigate_toast'||action==='toggle_toast';
-  const hasNavigation=action==='navigate'||action==='navigate_toast';
+  const hasNavigation=action==='navigate'||action==='navigate_toast'||action==='complete_navigate';
   const hasTextColor=action==='text_color_target';
   const hasColorPicker=action==='color_picker';
   const hasFontSizeSlider=action==='font_size_slider';
@@ -5529,12 +5552,13 @@ function updateHsActionFields() {
   const hasStateGroup=action==='group_toggle'||action==='conditional_image';
   document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
   document.getElementById('hsToggleOffLabel').textContent=action==='radio_select'?'미체크 동그라미 이미지':'해제 상태 이미지 (선택)';
-  document.getElementById('hsToggleOnLabel').textContent=action==='radio_select'?'체크된 동그라미 이미지':'선택 상태 이미지';
+  document.getElementById('hsToggleOnLabel').textContent=action==='radio_select'?'체크된 동그라미 이미지':action==='completion_image'?'완료 상태 이미지':'선택 상태 이미지';
   document.getElementById('hsTextColorFields').style.display=hasTextColor?'':'none';
   document.getElementById('hsColorPickerFields').style.display=hasColorPicker?'':'none';
   document.getElementById('hsFontSizeSliderFields').style.display=hasFontSizeSlider?'':'none';
   document.getElementById('hsFontSizeValueFields').style.display=hasFontSizeValue?'':'none';
   document.getElementById('hsStateGroupFields').style.display=hasStateGroup?'':'none';
+  document.getElementById('hsCompletionFields').style.display=(action==='complete_navigate'||action==='completion_image')?'':'none';
   document.getElementById('hsRadioFields').style.display=action==='radio_select'?'':'none';
   document.getElementById('hsStateGroupInputRow').style.display=action==='group_toggle'?'':'none';
   document.getElementById('hsStateGroupSelectRow').style.display=action==='conditional_image'?'':'none';
@@ -5775,7 +5799,7 @@ function confirmHs() {
   const scrollRegion=scrollRegionIndex>=0?screen?.scrollRegions?.[scrollRegionIndex]:null;
   const targetHotspots=scrollRegion?(scrollRegion.hotspots||(scrollRegion.hotspots=[])):(screen.hotspots||(screen.hotspots=[]));
   let createdNewScreen = false;
-  const hasNavigation=actionType==='navigate'||actionType==='navigate_toast';
+  const hasNavigation=actionType==='navigate'||actionType==='navigate_toast'||actionType==='complete_navigate';
   if(hasNavigation && goto.startsWith('__image__:')) {
     const image = goto.slice('__image__:'.length);
     const existing = Object.entries(st.flow.screens).find(([,screen]) => assetIdentity(screen.image)===assetIdentity(image));
@@ -5797,6 +5821,7 @@ function confirmHs() {
   const toggleOnImage=document.getElementById('hsToggleOnImage').value;
   if((actionType==='toggle'||actionType==='toggle_toast') && !toggleOnImage) { alert('선택 상태 이미지를 선택해 주세요.'); return; }
   const stateGroup=(actionType==='conditional_image'?document.getElementById('hsStateGroupSelect').value:document.getElementById('hsStateGroup').value).trim();
+  const completionKey=document.getElementById('hsCompletionKey').value.trim();
   const toggleOffImage=document.getElementById('hsToggleOffImage').value;
   const radioGroup=document.getElementById('hsRadioGroup').value.trim();
   const radioValue=document.getElementById('hsRadioValue').value.trim();
@@ -5811,6 +5836,8 @@ function confirmHs() {
   if(actionType==='group_toggle'&&targetHotspots.some(hs=>hs.actionType==='group_toggle'&&String(hs.stateGroup||'').trim()===stateGroup)) { alert('같은 이름의 상태 그룹이 이미 있습니다. 기존 그룹을 사용하려면 조건부 이미지 표시에서 선택해 주세요.'); return; }
   if(actionType==='group_toggle'&&!toggleOnImage) { alert('그룹 토글의 선택 상태 이미지를 선택해 주세요.'); return; }
   if(actionType==='conditional_image'&&!toggleOffImage&&!toggleOnImage) { alert('조건부로 표시할 해제 또는 선택 상태 이미지를 선택해 주세요.'); return; }
+  if((actionType==='complete_navigate'||actionType==='completion_image')&&!completionKey) { alert('완료 상태 이름을 입력해 주세요.'); return; }
+  if(actionType==='completion_image'&&!toggleOnImage) { alert('완료 상태 이미지를 선택해 주세요.'); return; }
   const toastMessage=document.getElementById('hsToastMessage').value.trim();
   const toastOnMessage=document.getElementById('hsToastOnMessage').value.trim();
   const toastOffMessage=document.getElementById('hsToastOffMessage').value.trim();
@@ -5825,12 +5852,13 @@ function confirmHs() {
   const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
   if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
+    || (actionType==='complete_navigate'?`${completionKey} 완료 후 이동`:actionType==='completion_image'?`${completionKey} 완료 이미지`:hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
   if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
   if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
   if(actionType==='group_toggle'||actionType==='conditional_image') Object.assign(hotspot,{stateGroup,toggleOffImage,toggleOnImage,...(actionType==='group_toggle'?{groupInitialOn:document.getElementById('hsGroupInitialOn').checked}:{})});
+  if(actionType==='complete_navigate'||actionType==='completion_image') Object.assign(hotspot,{completionKey,...(actionType==='completion_image'?{toggleOnImage}:{})});
   if(actionType==='radio_select') Object.assign(hotspot,{radioGroup,radioValue,radioInitial,toggleOffImage,toggleOnImage});
   if(actionType==='toast'||actionType==='navigate_toast'||actionType==='toggle_toast') Object.assign(hotspot,{toastMessage,toastOnMessage,toastOffMessage,toastDuration:Number(document.getElementById('hsToastDuration').value)||3000,toastPosition:document.getElementById('hsToastPosition').value,toastConfirm:document.getElementById('hsToastConfirm').checked});
   if(actionType==='text_color_target') Object.assign(hotspot,{textColorText,textColorGroup,textColorInitial:document.getElementById('hsTextColorInitial').value,textMinSize,textColorSize:textDefaultSize,textMaxSize,textColorWeight:document.getElementById('hsTextColorWeight').value,textColorAlign:document.getElementById('hsTextColorAlign').value,textColorBackground:document.getElementById('hsTextColorBackground').value,textColorMask:document.getElementById('hsTextColorMask').checked});
