@@ -3210,7 +3210,19 @@ function renderPhoneScrollRegions(scr) {
     const draw=document.createElement('div');draw.className='scroll-region-hotspot-draw';draw.dataset.scrollRegionIndex=String(index);draw.innerHTML='<div class="scroll-region-hotspot-draw-rect"></div>';track.appendChild(draw);
     el.appendChild(track);
     layer.appendChild(el);
-    if(direction==='horizontal')track.style.width=Math.max(101,Math.min(500,Number(region.contentWidth)||130))+'%';
+    if(direction==='horizontal') {
+      const requestedWidth=Math.max(101,Math.min(500,Number(region.contentWidth)||125));
+      const fitImageToRegion=()=>{
+        const bounds=el.getBoundingClientRect();
+        if(!image.naturalWidth||!image.naturalHeight||!bounds.width||!bounds.height)return;
+        // Keep the source ratio inside the menu strip. A wider track would make its bottom crop.
+        const maximumWidth=image.naturalWidth/image.naturalHeight*bounds.height/bounds.width*100;
+        track.style.width=Math.min(requestedWidth,maximumWidth).toFixed(2)+'%';
+      };
+      image.addEventListener('load',fitImageToRegion,{once:true});
+      if(image.complete)requestAnimationFrame(fitImageToRegion);
+      track.style.width=requestedWidth+'%';
+    }
     renderHotspots(hotspotLayer.id,Array.isArray(region.hotspots)?region.hotspots:[],editing,{context:'scroll-region',dragHost:el,onDelete:i=>deleteScrollRegionHotspot(index,i),onChange:()=>renderPhoneScrollRegionList()});
     if(editing){
       const label=document.createElement('span');label.className='phone-scroll-region-label';label.textContent=region.label||`${direction==='horizontal'?'가로':'세로'} 스크롤 영역 ${index+1}`;el.appendChild(label);
@@ -3230,7 +3242,7 @@ function renderPhoneScrollRegionList() {
   const el=document.getElementById('phoneScrollRegionList');
   if(!el)return;
   const regions=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.scrollRegions||[];
-  el.innerHTML=regions.length?regions.map((region,index)=>{const horizontal=region.direction==='horizontal',hotspots=region.hotspots||[];return `<div class="hs-item" style="flex-wrap:wrap"><span style="flex:1">${horizontal?'↔':'↕'} ${esc(region.label||`${horizontal?'가로':'세로'} 스크롤 영역 ${index+1}`)} <small style="color:#64748b">(${round1(region.width)} × ${round1(region.height)}% · 핫스팟 ${hotspots.length}개)</small></span><button class="btn btn-secondary btn-sm" type="button" onclick="startScrollRegionHotspotDraw(${index})">+ 핫스팟</button><button class="btn btn-danger btn-sm" type="button" onclick="deletePhoneScrollRegion(${index})">삭제</button>${horizontal?`<label style="display:flex;flex-basis:100%;align-items:center;gap:6px;margin-top:6px;font-size:11px">가로 이미지 너비 <input class="form-input" style="width:82px;padding:4px 6px" type="number" min="101" max="500" step="1" value="${Math.max(101,Math.min(500,Number(region.contentWidth)||130))}" onchange="updateScrollRegionContentWidth(${index},this.value)">%</label>`:''}${hotspots.length?`<div style="flex-basis:100%;padding-left:8px">${hotspots.map((hs,hotspotIndex)=>`<div style="display:flex;justify-content:space-between;gap:6px;margin-top:4px;font-size:11px"><span>↗ ${esc(hs.label||`핫스팟 ${hotspotIndex+1}`)}</span><button class="btn btn-danger btn-sm" type="button" onclick="deleteScrollRegionHotspot(${index},${hotspotIndex})">삭제</button></div>`).join('')}</div>`:''}</div>`}).join(''):'<div style="color:#aaa;font-size:13px">등록된 부분 스크롤 영역 없음</div>';
+  el.innerHTML=regions.length?regions.map((region,index)=>{const horizontal=region.direction==='horizontal',hotspots=region.hotspots||[];return `<div class="hs-item" style="flex-wrap:wrap"><span style="flex:1">${horizontal?'↔':'↕'} ${esc(region.label||`${horizontal?'가로':'세로'} 스크롤 영역 ${index+1}`)} <small style="color:#64748b">(${round1(region.width)} × ${round1(region.height)}% · 핫스팟 ${hotspots.length}개)</small></span><button class="btn btn-secondary btn-sm" type="button" onclick="startScrollRegionHotspotDraw(${index})">+ 핫스팟</button><button class="btn btn-danger btn-sm" type="button" onclick="deletePhoneScrollRegion(${index})">삭제</button>${horizontal?`<label style="display:flex;flex-basis:100%;align-items:center;gap:6px;margin-top:6px;font-size:11px">가로 이미지 너비 <input class="form-input" style="width:82px;padding:4px 6px" type="number" min="101" max="500" step="1" value="${Math.max(101,Math.min(500,Number(region.contentWidth)||125))}" onchange="updateScrollRegionContentWidth(${index},this.value)">%</label>`:''}${hotspots.length?`<div style="flex-basis:100%;padding-left:8px">${hotspots.map((hs,hotspotIndex)=>`<div style="display:flex;justify-content:space-between;gap:6px;margin-top:4px;font-size:11px"><span>↗ ${esc(hs.label||`핫스팟 ${hotspotIndex+1}`)}</span><button class="btn btn-danger btn-sm" type="button" onclick="deleteScrollRegionHotspot(${index},${hotspotIndex})">삭제</button></div>`).join('')}</div>`:''}</div>`}).join(''):'<div style="color:#aaa;font-size:13px">등록된 부분 스크롤 영역 없음</div>';
 }
 
 function deletePhoneScrollRegion(index) {
@@ -3241,7 +3253,7 @@ function deletePhoneScrollRegion(index) {
 }
 
 function deleteScrollRegionHotspot(regionIndex,hotspotIndex){const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur],region=scr?.scrollRegions?.[regionIndex];if(!region||!Array.isArray(region.hotspots))return;region.hotspots.splice(hotspotIndex,1);renderPhoneScrollRegions(scr);renderPhoneScrollRegionList()}
-function updateScrollRegionContentWidth(index,value){const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur],region=scr?.scrollRegions?.[index];if(!region||region.direction!=='horizontal')return;region.contentWidth=Math.max(101,Math.min(500,Number(value)||130));renderPhoneScrollRegions(scr);renderPhoneScrollRegionList()}
+function updateScrollRegionContentWidth(index,value){const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur],region=scr?.scrollRegions?.[index];if(!region||region.direction!=='horizontal')return;region.contentWidth=Math.max(101,Math.min(500,Number(value)||125));renderPhoneScrollRegions(scr);renderPhoneScrollRegionList()}
 async function savePhoneScrollRegions(){const btn=document.getElementById('btnSaveScrollRegions');if(btn){btn.disabled=true;btn.textContent='저장 중...'}const saved=await saveSimulatorFlow(activeSec);if(btn){btn.disabled=false;btn.textContent=saved?'✓ 저장됨':'저장 실패';setTimeout(()=>{if(btn.isConnected)btn.textContent='스크롤 설정 저장'},1500)}return saved}
 function startScrollRegionHotspotDraw(index){const region=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.scrollRegions?.[index],draw=document.querySelector(`.scroll-region-hotspot-draw[data-scroll-region-index="${index}"]`);if(!region||!draw)return;document.querySelectorAll('.scroll-region-hotspot-draw.active').forEach(item=>item.classList.remove('active'));pendingScrollRegionIndex=index;draw.classList.add('active')}
 function setupScrollRegionHotspotDrawing(draw,index){const rect=draw.querySelector('.scroll-region-hotspot-draw-rect');let start=null;draw.addEventListener('pointerdown',event=>{start={id:event.pointerId,x:event.clientX,y:event.clientY};draw.setPointerCapture(event.pointerId);event.preventDefault();event.stopPropagation()});draw.addEventListener('pointermove',event=>{if(!start||start.id!==event.pointerId)return;const bounds=draw.getBoundingClientRect(),left=Math.min(start.x,event.clientX)-bounds.left,top=Math.min(start.y,event.clientY)-bounds.top,width=Math.abs(event.clientX-start.x),height=Math.abs(event.clientY-start.y);rect.style.cssText=`display:block;left:${left}px;top:${top}px;width:${width}px;height:${height}px`});draw.addEventListener('pointerup',async event=>{if(!start||start.id!==event.pointerId)return;const bounds=draw.getBoundingClientRect(),left=Math.min(start.x,event.clientX)-bounds.left,top=Math.min(start.y,event.clientY)-bounds.top,width=Math.abs(event.clientX-start.x),height=Math.abs(event.clientY-start.y);start=null;rect.style.display='none';draw.classList.remove('active');if(width<8||height<6)return;pendingScrollRegionIndex=index;pendingHs={left:round1(left/bounds.width*100),top:round1(top/bounds.height*100),width:round1(width/bounds.width*100),height:round1(height/bounds.height*100)};await openScrollRegionHotspotPicker();event.preventDefault();event.stopPropagation()});draw.addEventListener('pointercancel',()=>{start=null;rect.style.display='none'})}
@@ -5720,7 +5732,7 @@ async function openPhoneScrollRegionPicker() {
   const horizontal=drawMode==='scroll-region-horizontal';
   document.getElementById('phoneScrollRegionModalTitle').textContent=horizontal?'↔ 부분 가로 스크롤 — 이미지 선택':'↕ 부분 세로 스크롤 — 이미지 선택';
   document.getElementById('phoneScrollRegionContentWidthRow').style.display=horizontal?'':'none';
-  document.getElementById('phoneScrollRegionContentWidth').value='130';
+  document.getElementById('phoneScrollRegionContentWidth').value='125';
   select.value='';previewPhoneScrollRegionImage();openModal('phoneScrollRegionModal');
 }
 
@@ -5738,7 +5750,7 @@ function confirmPhoneScrollRegion() {
   if(!scr)return;
   if(!Array.isArray(scr.scrollRegions))scr.scrollRegions=[];
   const direction=drawMode==='scroll-region-horizontal'?'horizontal':'vertical';
-  const contentWidth=direction==='horizontal'?Math.max(101,Math.min(500,Number(document.getElementById('phoneScrollRegionContentWidth').value)||130)):100;
+  const contentWidth=direction==='horizontal'?Math.max(101,Math.min(500,Number(document.getElementById('phoneScrollRegionContentWidth').value)||125)):100;
   scr.scrollRegions.push({id:`scroll_${Date.now().toString(36)}`,label:`${direction==='horizontal'?'가로':'세로'} 스크롤 영역 ${scr.scrollRegions.length+1}`,direction,contentWidth,image,hotspots:[],...pendingHs});
   pendingHs=null;cancelDraw();renderPhoneScrollRegions(scr);renderPhoneScrollRegionList();
 }
