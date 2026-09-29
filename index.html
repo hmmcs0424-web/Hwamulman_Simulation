@@ -1269,7 +1269,8 @@ textarea.form-input{resize:vertical;}
 <!-- 핫스팟 모달 -->
 <div class="modal-bg" id="hsModal">
   <div class="modal hs-modal">
-    <div class="modal-title">핫스팟 설정</div>
+    <div class="modal-title" id="hsModalTitle">핫스팟 설정</div>
+    <div id="hsScrollRegionHint" style="display:none;margin:-4px 0 12px;padding:9px 10px;border-radius:7px;background:#eff6ff;color:#1d4ed8;font-size:12px;line-height:1.45">이 영역은 가로 이미지와 함께 움직입니다. 완료 아이콘은 <b>완료 상태 이미지 표시</b>로 설정하세요.</div>
     <div class="form-row">
       <div class="form-label">라벨</div>
       <input class="form-input" id="hsLabelInput" placeholder="예: 로그인 버튼">
@@ -5477,6 +5478,8 @@ function setupDrawEvents(overlayId, rectId) {
     const screens = Object.entries(st.flow.screens);
     document.getElementById('hsTargetSearch').value = '';
     renderHsTargetList(screens, [], true);
+    document.getElementById('hsModalTitle').textContent='핫스팟 설정';
+    document.getElementById('hsScrollRegionHint').style.display='none';
     document.getElementById('hsLabelInput').value = '';
     document.getElementById('hsPreserveScroll').checked = false;
     document.getElementById('hsActionType').value='navigate';
@@ -5759,10 +5762,12 @@ async function openScrollRegionHotspotPicker(){
   if(!pendingHs||pendingScrollRegionIndex<0)return;
   const st=cache[activeSec],screens=Object.entries(st.flow.screens);
   document.getElementById('hsTargetSearch').value='';renderHsTargetList(screens,[],true);
+  document.getElementById('hsModalTitle').textContent='가로 스크롤 내부 핫스팟 설정';
+  document.getElementById('hsScrollRegionHint').style.display='block';
   document.getElementById('hsLabelInput').value='';document.getElementById('hsPreserveScroll').checked=false;document.getElementById('hsActionType').value='navigate';
   ['hsToastMessage','hsToastOnMessage','hsToastOffMessage'].forEach(id=>document.getElementById(id).value='');document.getElementById('hsToastDuration').value='3000';document.getElementById('hsToastPosition').value='bottom';document.getElementById('hsToastConfirm').checked=true;
   document.getElementById('hsTextColorText').value='';document.getElementById('hsTextColorGroup').value='글자색';document.getElementById('hsTextColorInitial').value='#2563eb';document.getElementById('hsTextColorMinSize').value='10';document.getElementById('hsTextColorSize').value='18';document.getElementById('hsTextColorMaxSize').value='24';document.getElementById('hsTextColorWeight').value='700';document.getElementById('hsTextColorAlign').value='left';document.getElementById('hsTextColorBackground').value='#ffffff';document.getElementById('hsTextColorMask').checked=true;
-  document.getElementById('hsColorPickerGroup').value='글자색';document.getElementById('hsFontSizeSliderGroup').value='글자색';document.getElementById('hsFontSizeValueGroup').value='글자색';document.getElementById('hsStateGroup').value='';document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';document.getElementById('hsGroupInitialOn').checked=false;document.getElementById('hsRadioGroup').value='';document.getElementById('hsRadioValue').value='';document.getElementById('hsRadioInitial').checked=false;
+  document.getElementById('hsColorPickerGroup').value='글자색';document.getElementById('hsFontSizeSliderGroup').value='글자색';document.getElementById('hsFontSizeValueGroup').value='글자색';document.getElementById('hsStateGroup').value='';document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';document.getElementById('hsGroupInitialOn').checked=false;document.getElementById('hsCompletionKey').value='';document.getElementById('hsRadioGroup').value='';document.getElementById('hsRadioValue').value='';document.getElementById('hsRadioInitial').checked=false;
   updateHsActionFields();openModal('hsModal');const images=await getSimulatorImages(activeSec);renderHsTargetList(screens,images,false);populateHsToggleImages(images);
 }
 
