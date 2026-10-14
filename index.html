@@ -377,6 +377,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .exception-card-title{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
 .exception-empty{color:#bbb;font-size:13px;text-align:center;padding:10px 0;}
 .exception-list{display:flex;flex-direction:column;gap:5px;}
+.exception-item{flex-wrap:wrap;text-align:left;width:100%;min-width:0}
+.exception-item-preview{display:block;flex:0 0 100%;width:100%;height:180px;object-fit:contain;background:#fff;border-radius:5px}
+.exception-item .exception-item-sub{max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .exception-item{
   display:flex;align-items:center;gap:8px;
   padding:7px 10px;border-radius:8px;border:none;background:#FFF3F3;
@@ -6189,15 +6192,38 @@ function renderExceptions(screenId) {
     el.innerHTML = '<div class="exception-empty">선택된 화면에<br>예외 상황 없음</div>';
     return;
   }
-  el.innerHTML = '<div class="exception-list">' + excs.map((ex) => {
+  el.innerHTML = '<div class="exception-list">' + excs.map((ex,index) => {
     const target = st.flow.screens?.[ex.screenId];
     const sub = target ? target.label : ex.screenId;
-    return `<button class="exception-item" onclick="goTo('${esc(ex.screenId)}')">
+    const image=localizeLegacyAssetString(target?.image||ex.image||(String(ex.screenId||'').startsWith('__image__:')?ex.screenId.slice('__image__:'.length):''));
+    return `<button type="button" class="exception-item" onclick="openException(${index})">
+      ${image?`<img class="exception-item-preview" src="${esc(image)}" alt="${esc(ex.label)}" loading="lazy">`:''}
       <span class="exception-item-icon">⚠️</span>
       <span class="exception-item-label">${esc(ex.label)}</span>
       <span class="exception-item-sub">→ ${esc(sub)}</span>
     </button>`;
   }).join('') + '</div>';
+}
+
+function openException(index) {
+  const st=cache[activeSec];
+  const entry=st?.flow?.screens?.[st.cur]?.exceptions?.[index];
+  if(!entry)return;
+  let screenId=entry.screenId;
+  if(!st.flow.screens[screenId]) {
+    const image=entry.image||(String(screenId||'').startsWith('__image__:')?screenId.slice('__image__:'.length):'');
+    if(!image){alert('연결된 예외 화면이 없습니다. 이미지를 다시 선택해 주세요.');return;}
+    const source=localizeLegacyAssetString(image);
+    const existing=Object.entries(st.flow.screens).find(([,screen])=>assetIdentity(screen.image)===assetIdentity(source));
+    if(existing)screenId=existing[0];
+    else {
+      screenId='exception_'+Date.now().toString(36);
+      while(st.flow.screens[screenId])screenId+='_';
+      st.flow.screens[screenId]={label:entry.label,image:source,type:'normal',show_navbar:true,hotspots:[],guide:{points:[],caution:'',kms_link:''}};
+    }
+    entry.screenId=screenId;
+  }
+  goTo(screenId);
 }
 
 function renderExceptionEditor() {
@@ -6254,7 +6280,7 @@ function addException() {
     }
   }
   if(!st.flow.screens[st.cur].exceptions) st.flow.screens[st.cur].exceptions = [];
-  st.flow.screens[st.cur].exceptions.push({ label, screenId });
+  st.flow.screens[st.cur].exceptions.push({ label, screenId, image:st.flow.screens[screenId]?.image||'' });
   document.getElementById('excLabel').value = '';
   renderExceptions(st.cur);
   renderExceptionEditor();
