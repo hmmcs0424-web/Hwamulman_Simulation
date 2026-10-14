@@ -1066,7 +1066,8 @@ textarea.form-input{resize:vertical;}
           <div class="form-row">
             <div class="form-label">이동할 화면</div>
             <input class="form-input" id="excGotoSearch" type="search" placeholder="화면명 또는 이미지명 검색..." autocomplete="off" oninput="renderExceptionTargetOptions(this.value)" style="margin-bottom:6px">
-            <select class="form-input" id="excGoto"></select>
+            <select class="form-input" id="excGoto" onchange="previewExceptionTarget()"></select>
+            <img id="excImagePreview" alt="선택한 예외 상황 이미지" style="display:none;width:100%;height:auto;max-height:360px;object-fit:contain;margin-top:8px;background:#fff;border:1px solid #e5e7eb;border-radius:6px">
           </div>
           <button class="btn btn-primary btn-sm" style="width:100%" onclick="addException()">+ 예외 추가</button>
           <div id="exceptionEditorList" style="margin-top:8px"></div>
@@ -6212,6 +6213,14 @@ function renderExceptionEditor() {
   const search=document.getElementById('excGotoSearch');
   if(search)search.value='';
   renderExceptionTargetOptions('');
+  previewExceptionTarget();
+  const requestedSection=activeSec, requestedScreen=st.cur;
+  getSimulatorImages(requestedSection).then(()=>{
+    if(activeSec===requestedSection&&cache[activeSec]?.cur===requestedScreen) {
+      renderExceptionTargetOptions(search?.value||'');
+      previewExceptionTarget();
+    }
+  }).catch(error=>console.warn('Exception image list load failed:',error));
 
   // 등록된 예외 목록
   const excs = scr.exceptions || [];
@@ -6226,10 +6235,24 @@ function renderExceptionEditor() {
 
 function addException() {
   const label = document.getElementById('excLabel').value.trim();
-  const screenId = document.getElementById('excGoto').value;
+  let screenId = document.getElementById('excGoto').value;
   if(!label) { alert('예외 상황 이름을 입력하세요.'); return; }
   if(!screenId) { alert('이동할 화면을 선택하세요.'); return; }
   const st = cache[activeSec];
+  if(screenId.startsWith('__image__:')) {
+    const image=screenId.slice('__image__:'.length);
+    const existing=Object.entries(st.flow.screens).find(([,screen])=>assetIdentity(screen.image)===assetIdentity(image));
+    if(existing) screenId=existing[0];
+    else {
+      const base='exception_'+Date.now().toString(36);
+      screenId=base;
+      let suffix=2;
+      while(st.flow.screens[screenId])screenId=base+'_'+suffix++;
+      st.flow.screens[screenId]={label:assetDisplayName(image).replace(/\.[^.]+$/,''),image,type:'normal',show_navbar:true,hotspots:[],guide:{points:[],caution:'',kms_link:''}};
+      renderList();
+      detectUnreg();
+    }
+  }
   if(!st.flow.screens[st.cur].exceptions) st.flow.screens[st.cur].exceptions = [];
   st.flow.screens[st.cur].exceptions.push({ label, screenId });
   document.getElementById('excLabel').value = '';
@@ -6474,15 +6497,29 @@ function cteImgsFor(panel){
 function renderExceptionTargetOptions(query='') {
   const st=cache[activeSec],sel=document.getElementById('excGoto');
   if(!st?.flow?.screens||!sel)return;
+  const selected=sel.value;
   const keyword=String(query||'').trim().toLocaleLowerCase();
-  const matches=Object.entries(st.flow.screens).filter(([id,screen])=>{
-    if(id===st.cur)return false;
-    const searchable=[id,screen.label,assetDisplayName(screen.image)].join(' ').toLocaleLowerCase();
-    return !keyword||searchable.includes(keyword);
-  });
-  sel.innerHTML=matches.length
-    ? '<option value="">이동할 화면 선택</option>'+matches.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)} — ${esc(assetDisplayName(screen.image))}</option>`).join('')
-    : '<option value="">검색 결과 없음</option>';
+  const screens=Object.entries(st.flow.screens).filter(([id])=>id!==st.cur);
+  const used=new Set(Object.values(st.flow.screens).map(screen=>assetIdentity(screen.image)));
+  const matches=screens.filter(([id,screen])=>!keyword||[id,screen.label,assetDisplayName(screen.image)].join(' ').toLocaleLowerCase().includes(keyword));
+  const images=new Map();
+  [...(siteImageManifest?.[activeSec]||[]),...(st.flow.imageManifest||[])].filter(Boolean).forEach(image=>images.set(assetIdentity(image),image));
+  const unused=[...images.values()].filter(image=>!used.has(assetIdentity(image))&&(!keyword||assetDisplayName(image).toLocaleLowerCase().includes(keyword))).sort((a,b)=>assetDisplayName(a).localeCompare(assetDisplayName(b),'ko'));
+  sel.innerHTML='<option value="">이동할 화면 또는 이미지 선택</option>'
+    +(matches.length?'<optgroup label="등록된 화면">'+matches.map(([id,screen])=>'<option value="'+esc(id)+'">'+esc(screen.label||id)+' · '+esc(assetDisplayName(screen.image))+'</option>').join('')+'</optgroup>':'')
+    +(unused.length?'<optgroup label="추가 가능한 이미지">'+unused.map(image=>'<option value="'+esc('__image__:'+image)+'">'+esc(assetDisplayName(image))+'</option>').join('')+'</optgroup>':'')
+    +(!matches.length&&!unused.length?'<option value="">검색 결과 없음</option>':'');
+  if([...sel.options].some(option=>option.value===selected))sel.value=selected;
+  previewExceptionTarget();
+}
+function previewExceptionTarget() {
+  const value=document.getElementById('excGoto')?.value||'';
+  const preview=document.getElementById('excImagePreview');
+  if(!preview)return;
+  const image=value.startsWith('__image__:')?value.slice('__image__:'.length):cache[activeSec]?.flow?.screens?.[value]?.image;
+  preview.style.display=image?'block':'none';
+  if(image)preview.src=image;
+  else preview.removeAttribute('src');
 }
 function cteRememberImg(panel, img) {
   img = cteNormalizeImg(img);
