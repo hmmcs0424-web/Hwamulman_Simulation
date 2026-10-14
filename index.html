@@ -141,6 +141,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .content-area{flex:1;overflow:hidden;position:relative;}
 .phone-fixed-header{display:none;position:absolute;z-index:12;top:0;left:0;right:0;overflow:hidden;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.15);pointer-events:none}
 .phone-fixed-header.active{display:block}.phone-fixed-header>img{display:block;position:absolute;left:0;width:100%;max-width:none;user-select:none;-webkit-user-drag:none}
+.phone-fixed-draw-overlay{z-index:24;touch-action:none}
 .phone-scroll-viewport{position:absolute;inset:0;overflow:hidden;overscroll-behavior:contain}
 .phone-scroll-viewport.scroll-mode{overflow-y:auto;cursor:grab;touch-action:pan-y}
 .phone-scroll-viewport.dragging{cursor:grabbing;user-select:none}
@@ -701,8 +702,8 @@ textarea.form-input{resize:vertical;}
       </div>
     </div>
     <div class="content-area" id="contentArea">
-      <div class="phone-fixed-header" id="phoneFixedHeader"><img id="phoneFixedHeaderImg" alt="상단 고정 화면"><div class="hotspot-layer" id="phoneFixedHotspotLayer"></div></div>
-      <div class="phone-fixed-header" id="phoneFixedFooter"><img id="phoneFixedFooterImg" alt="하단 고정 화면"><div class="hotspot-layer" id="phoneFixedFooterHotspotLayer"></div></div>
+      <div class="phone-fixed-header" id="phoneFixedHeader"><img id="phoneFixedHeaderImg" alt="상단 고정 화면"><div class="hotspot-layer" id="phoneFixedHotspotLayer"></div><div class="draw-overlay phone-fixed-draw-overlay" id="phoneFixedHeaderDrawOverlay" data-fixed-draw="true"><div class="draw-rect" id="phoneFixedHeaderDrawRect"></div></div></div>
+      <div class="phone-fixed-header" id="phoneFixedFooter"><img id="phoneFixedFooterImg" alt="하단 고정 화면"><div class="hotspot-layer" id="phoneFixedFooterHotspotLayer"></div><div class="draw-overlay phone-fixed-draw-overlay" id="phoneFixedFooterDrawOverlay" data-fixed-draw="true"><div class="draw-rect" id="phoneFixedFooterDrawRect"></div></div></div>
       <div class="phone-scroll-viewport" id="phoneScrollViewport">
         <div class="image-wrapper" id="imageWrapper">
           <img class="screen-image" id="screenImg" alt="화면">
@@ -2155,7 +2156,7 @@ function clearTransientScreenState() {
     const el = document.getElementById(id);
     if(el) el.innerHTML = '';
   });
-  ['drawOverlay','pcDrawOverlay'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+  ['drawOverlay','pcDrawOverlay','phoneFixedHeaderDrawOverlay','phoneFixedFooterDrawOverlay'].forEach(id => document.getElementById(id)?.classList.remove('active'));
   clearChatScroll();
   clearOverlays();
   const ctArea = document.getElementById('ctEduArea');
@@ -2285,6 +2286,8 @@ async function boot() {
 
   setupDrawEvents('drawOverlay', 'drawRect');
   setupDrawEvents('pcDrawOverlay', 'pcDrawRect');
+  setupDrawEvents('phoneFixedHeaderDrawOverlay', 'phoneFixedHeaderDrawRect');
+  setupDrawEvents('phoneFixedFooterDrawOverlay', 'phoneFixedFooterDrawRect');
   setupLayoutDrawing();
   setupPhoneImageScroll();
   setupDraggableHsModal();
@@ -2942,7 +2945,7 @@ function renderPhoneScreen(scr) {
   img.onerror = () => console.warn('이미지 로드 실패:', scr.image);
   img.src = scr.image;
   nb.style.display = scr.show_navbar===false ? 'none' : 'flex';
-  if(!drawing) document.getElementById('drawOverlay').classList.remove('active');
+  if(!drawing) ['drawOverlay','phoneFixedHeaderDrawOverlay','phoneFixedFooterDrawOverlay'].forEach(id=>document.getElementById(id).classList.remove('active'));
 }
 
 function restorePreservedScroll(scr,imageHeight,minScroll) {
@@ -2984,8 +2987,11 @@ function renderPhoneFixedIcons(scr) {
 function configurePhoneFixedRegion(edge,scr,fixedHeight,imageHeight) {
   const top = edge==='top', region=document.getElementById(top?'phoneFixedHeader':'phoneFixedFooter');
   const fixedImg=document.getElementById(top?'phoneFixedHeaderImg':'phoneFixedFooterImg');
+  const drawOverlay=document.getElementById(top?'phoneFixedHeaderDrawOverlay':'phoneFixedFooterDrawOverlay');
   region.classList.toggle('active',fixedHeight>0);
   region.style.height=fixedHeight+'px'; region.style.top=top?'0':'auto'; region.style.bottom=top?'auto':'0';
+  drawOverlay.dataset.imageHeight=String(imageHeight);
+  drawOverlay.dataset.imageOffsetY=String(top?0:Math.max(0,imageHeight-fixedHeight));
   fixedImg.src=scr.image;
   fixedImg.style.top=top?'0':'auto';
   fixedImg.style.bottom=top?'auto':'0';
@@ -5420,7 +5426,7 @@ function setupDrawEvents(overlayId, rectId) {
   let isDown = false;
 
   overlay.addEventListener('mousedown', e => {
-    if(!drawing || activeDrawOverlayId !== overlayId) return;
+    if(!drawing || (activeDrawOverlayId !== overlayId && overlay.dataset.fixedDraw!=='true')) return;
     isDown = true;
     const b = overlay.getBoundingClientRect();
     drawStart = { x: e.clientX - b.left, y: e.clientY - b.top };
@@ -5445,9 +5451,11 @@ function setupDrawEvents(overlayId, rectId) {
     const w=Math.abs(cx-drawStart.x), h=Math.abs(cy-drawStart.y);
     drawStart = null;
     if(w<10||h<6) return;
+    const imageHeight=Number(overlay.dataset.imageHeight)||b.height;
+    const imageOffsetY=Number(overlay.dataset.imageOffsetY)||0;
     pendingHs = {
-      top: round1(t/b.height*100), left: round1(l/b.width*100),
-      width: round1(w/b.width*100), height: round1(h/b.height*100),
+      top: round1((t+imageOffsetY)/imageHeight*100), left: round1(l/b.width*100),
+      width: round1(w/b.width*100), height: round1(h/imageHeight*100),
     };
     if(drawMode==='mask') {
       const st=cache[activeSec];
@@ -5712,6 +5720,10 @@ function beginScreenDraw() {
   drawing = true;
   activeDrawOverlayId = SECS[activeSec].type==='pc' ? 'pcDrawOverlay' : 'drawOverlay';
   document.getElementById(activeDrawOverlayId).classList.add('active');
+  if(SECS[activeSec].type==='app') {
+    document.getElementById('phoneFixedHeaderDrawOverlay').classList.add('active');
+    document.getElementById('phoneFixedFooterDrawOverlay').classList.add('active');
+  }
   document.getElementById('btnDraw').style.display = 'none';
   document.getElementById('btnCancelDraw').style.display = 'inline-block';
 }
@@ -5720,8 +5732,8 @@ function cancelDraw() {
   drawing = false; drawStart = null; pendingHs = null; drawMode = 'hotspot';
   pendingScrollRegionIndex=-1;
   document.querySelectorAll('.scroll-region-hotspot-draw.active').forEach(item=>item.classList.remove('active'));
-  ['drawOverlay','pcDrawOverlay'].forEach(id => document.getElementById(id).classList.remove('active'));
-  ['drawRect','pcDrawRect'].forEach(id => document.getElementById(id).style.display = 'none');
+  ['drawOverlay','pcDrawOverlay','phoneFixedHeaderDrawOverlay','phoneFixedFooterDrawOverlay'].forEach(id => document.getElementById(id).classList.remove('active'));
+  ['drawRect','pcDrawRect','phoneFixedHeaderDrawRect','phoneFixedFooterDrawRect'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('btnDraw').style.display = 'inline-block';
   document.getElementById('btnCancelDraw').style.display = 'none';
   closeModal('hsModal');
