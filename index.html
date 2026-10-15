@@ -1284,6 +1284,7 @@ textarea.form-input{resize:vertical;}
       <div class="form-label">영역 동작</div>
       <select class="form-input" id="hsActionType" onchange="updateHsActionFields()">
         <option value="navigate">일반 설정 (화면 이동)</option>
+        <option value="link">링크 이동 (새 탭)</option>
         <option value="toggle">토글 설정</option>
         <option value="toast">토스트 알림 설정</option>
         <option value="navigate_toast">화면 이동 + 토스트 알림 설정</option>
@@ -1298,6 +1299,11 @@ textarea.form-input{resize:vertical;}
         <option value="complete_navigate">저장 완료 후 화면 이동</option>
         <option value="completion_image">완료 상태 이미지 표시</option>
       </select>
+    </div>
+    <div class="form-row" id="hsLinkFields" style="display:none">
+      <label class="form-label" for="hsLinkUrl">이동할 링크</label>
+      <input class="form-input" id="hsLinkUrl" type="url" placeholder="https://...">
+      <div style="font-size:12px;color:#777;margin-top:6px">영역을 클릭하면 광고 링크처럼 새 탭에서 열립니다.</div>
     </div>
     <div id="hsToggleFields" style="display:none">
       <div class="form-row"><div class="form-label" id="hsToggleOffLabel">해제 상태 이미지 (선택)</div><select class="form-input" id="hsToggleOffImage"><option value="">기존 화면 이미지 그대로</option></select></div>
@@ -2697,6 +2703,7 @@ function hideSimulatorToast() {
 
 function handleHotspotAction(hotspot, element) {
   const action=hotspot.actionType||'navigate';
+  if(action==='link') { openSimulatorLink(hotspot.linkUrl,'핫스팟'); return; }
   let isOn=false;
   if(action==='text_color_target') selectTextColorTarget(hotspot,element);
   if(action==='group_toggle') {
@@ -3323,14 +3330,24 @@ function renderPhoneAccordionList() {
 }
 function deletePhoneAccordion(index) { const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];if(!scr||!Array.isArray(scr.accordions))return;phoneAccordionExpanded.delete(phoneAccordionKey(scr.accordions[index]));scr.accordions.splice(index,1);renderPhoneAccordions(scr);renderPhoneAccordionList(); }
 
-function openAdSlideLink(value) {
+function normalizeSimulatorLink(value) {
+  const link=String(value||'').trim();
+  if(!link) throw new Error('empty link');
+  const url=new URL(link);
+  if(!['http:','https:'].includes(url.protocol)) throw new Error('unsupported protocol');
+  return url.href;
+}
+
+function openAdSlideLink(value) { openSimulatorLink(value,'광고'); }
+
+function openSimulatorLink(value,label) {
   const link = String(value||'').trim();
   if(!link) return;
   try {
-    const url = new URL(link,location.href);
-    if(!['http:','https:'].includes(url.protocol)) return alert('광고 링크는 http 또는 https 주소만 사용할 수 있습니다.');
-    window.open(url.href,'_blank','noopener,noreferrer');
-  } catch { alert('광고 링크 주소를 확인해 주세요.'); }
+    const url = label==='광고' ? new URL(link,location.href).href : normalizeSimulatorLink(link);
+    if(!['http:','https:'].includes(new URL(url).protocol)) throw new Error('unsupported protocol');
+    window.open(url,'_blank','noopener,noreferrer');
+  } catch { alert(`${label} 링크는 https:// 또는 http://로 시작하는 올바른 주소를 입력해 주세요.`); }
 }
 
 function renderPcScreen(scr) {
@@ -3488,7 +3505,7 @@ function renderHotspots(layerId, hotspots, forceAdmin, options={}) {
       const adminSingleClickAction=hs.actionType==='toggle'||hs.actionType==='toggle_toast'||hs.actionType==='toast';
       el.title = adminSingleClickAction
         ? '클릭: 동작 확인 · 드래그: 위치 이동'
-        : isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : '드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
+        : isGuideOverlay ? '드래그: 위치 이동 · 더블클릭: 상담 가이드 보기' : hs.actionType==='link'?'드래그: 위치 이동 · 더블클릭: 링크 새 탭 열기':'드래그: 위치 이동 · 더블클릭: 연결 화면 열기';
       if(adminSingleClickAction) el.addEventListener('click',e=>{
         e.preventDefault();e.stopPropagation();
         if(adminPointerMoved){adminPointerMoved=false;return;}
@@ -4163,7 +4180,7 @@ function renderHsList() {
   el.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:5px;margin-bottom:7px;"><button class="btn btn-secondary btn-sm" onclick="selectAllHotspots()">전체 선택</button>${selected.length?'<button class="btn btn-secondary btn-sm" onclick="clearHotspotSelection()">선택 해제</button>':''}</div>${toolbar}`+hs.map((h,i) => `
     <div class="hs-item">
       <input type="checkbox" aria-label="${esc(h.label||`영역 ${i+1}`)} 선택" ${selectedHotspotIndices.includes(i)?'checked':''} onchange="toggleHotspotSelection(${i},this.checked)" style="width:16px;height:16px;accent-color:#0891b2;flex:0 0 auto;">
-      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='radio_select'?'◉':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':h.actionType==='complete_navigate'?'✓↗':h.actionType==='completion_image'?'✓':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='radio_select'?` · ${esc(h.radioGroup)} / ${esc(h.radioValue)}${h.radioInitial?' · 초기 선택':''}`:h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':h.actionType==='complete_navigate'?` · ${esc(h.completionKey)} 완료 → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}`:h.actionType==='completion_image'?` · ${esc(h.completionKey)} 완료 때 표시`:` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
+      <span style="flex:1">${h.kind==='text'?'📝':h.kind==='box'?'▣':h.actionType==='radio_select'?'◉':h.actionType==='toggle'?'⇄':h.actionType==='toast'?'▰':h.actionType==='navigate_toast'?'↗▰':h.actionType==='toggle_toast'?'⇄▰':h.actionType==='complete_navigate'?'✓↗':h.actionType==='completion_image'?'✓':'↗'} ${esc(h.label||'(없음)')}${h.kind==='text'||h.kind==='box'?' → 상담 가이드':h.actionType==='link'?` → ${esc(h.linkUrl)} · 새 탭`:h.actionType==='radio_select'?` · ${esc(h.radioGroup)} / ${esc(h.radioValue)}${h.radioInitial?' · 초기 선택':''}`:h.actionType==='toggle'?' · 토글':h.actionType==='toast'?' · 토스트 알림':h.actionType==='navigate_toast'?` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)} · 토스트${h.preserveScroll?' · 스크롤 유지':''}`:h.actionType==='toggle_toast'?' · 토글+토스트':h.actionType==='complete_navigate'?` · ${esc(h.completionKey)} 완료 → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}`:h.actionType==='completion_image'?` · ${esc(h.completionKey)} 완료 때 표시`:` → ${esc(h.goto===HOTSPOT_GO_BACK?'직전 화면':h.goto)}${h.preserveScroll?' · 스크롤 유지':''}`} <small style="color:#64748b">(${round1(h.width)} × ${round1(h.height)}%)</small></span>
       <button class="btn btn-danger btn-sm" onclick="delHs(${i})">삭제</button>
     </div>`).join('');
 }
@@ -5498,6 +5515,7 @@ function setupDrawEvents(overlayId, rectId) {
     document.getElementById('hsLabelInput').value = '';
     document.getElementById('hsPreserveScroll').checked = false;
     document.getElementById('hsActionType').value='navigate';
+    document.getElementById('hsLinkUrl').value='';
     ['hsToastMessage','hsToastOnMessage','hsToastOffMessage'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('hsToastDuration').value='3000';
     document.getElementById('hsToastPosition').value='bottom';
@@ -5580,6 +5598,7 @@ function updateHsActionFields() {
   const hasFontSizeSlider=action==='font_size_slider';
   const hasFontSizeValue=action==='font_size_value';
   const hasStateGroup=action==='group_toggle'||action==='conditional_image';
+  document.getElementById('hsLinkFields').style.display=action==='link'?'':'none';
   document.getElementById('hsToggleFields').style.display=hasToggle?'':'none';
   document.getElementById('hsToggleOffLabel').textContent=action==='radio_select'?'미체크 동그라미 이미지':'해제 상태 이미지 (선택)';
   document.getElementById('hsToggleOnLabel').textContent=action==='radio_select'?'체크된 동그라미 이미지':action==='completion_image'?'완료 상태 이미지':'선택 상태 이미지';
@@ -5784,6 +5803,7 @@ async function openScrollRegionHotspotPicker(){
   document.getElementById('hsModalTitle').textContent='가로 스크롤 내부 핫스팟 설정';
   document.getElementById('hsScrollRegionHint').style.display='block';
   document.getElementById('hsLabelInput').value='';document.getElementById('hsPreserveScroll').checked=false;document.getElementById('hsActionType').value='navigate';
+    document.getElementById('hsLinkUrl').value='';
   ['hsToastMessage','hsToastOnMessage','hsToastOffMessage'].forEach(id=>document.getElementById(id).value='');document.getElementById('hsToastDuration').value='3000';document.getElementById('hsToastPosition').value='bottom';document.getElementById('hsToastConfirm').checked=true;
   document.getElementById('hsTextColorText').value='';document.getElementById('hsTextColorGroup').value='글자색';document.getElementById('hsTextColorInitial').value='#2563eb';document.getElementById('hsTextColorMinSize').value='10';document.getElementById('hsTextColorSize').value='18';document.getElementById('hsTextColorMaxSize').value='24';document.getElementById('hsTextColorWeight').value='700';document.getElementById('hsTextColorAlign').value='left';document.getElementById('hsTextColorBackground').value='#ffffff';document.getElementById('hsTextColorMask').checked=true;
   document.getElementById('hsColorPickerGroup').value='글자색';document.getElementById('hsFontSizeSliderGroup').value='글자색';document.getElementById('hsFontSizeValueGroup').value='글자색';document.getElementById('hsStateGroup').value='';document.getElementById('hsStateGroupSelect').innerHTML='<option value="">먼저 그룹 토글을 등록해 주세요</option>';document.getElementById('hsGroupInitialOn').checked=false;document.getElementById('hsCompletionKey').value='';document.getElementById('hsRadioGroup').value='';document.getElementById('hsRadioValue').value='';document.getElementById('hsRadioInitial').checked=false;
@@ -5829,6 +5849,11 @@ function confirmHs() {
   if(!pendingHs) return;
   const scrollRegionIndex=pendingScrollRegionIndex;
   const actionType=document.getElementById('hsActionType').value;
+  let linkUrl='';
+  if(actionType==='link') {
+    try { linkUrl=normalizeSimulatorLink(document.getElementById('hsLinkUrl').value); }
+    catch { alert('이동할 링크를 https:// 또는 http://로 시작하는 올바른 주소로 입력해 주세요.'); return; }
+  }
   let goto = document.getElementById('hsGoto').value;
   const st = cache[activeSec];
   const screen=st.flow.screens[st.cur];
@@ -5888,9 +5913,10 @@ function confirmHs() {
   const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
   if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
   const label = document.getElementById('hsLabelInput').value.trim()
-    || (actionType==='complete_navigate'?`${completionKey} 완료 후 이동`:actionType==='completion_image'?`${completionKey} 완료 이미지`:hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
+    || (actionType==='link'?linkUrl:actionType==='complete_navigate'?`${completionKey} 완료 후 이동`:actionType==='completion_image'?`${completionKey} 완료 이미지`:hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
+  if(actionType==='link') hotspot.linkUrl=linkUrl;
   if(hasNavigation) Object.assign(hotspot,{goto,...(preserveScroll?{preserveScroll:true}:{})});
   if(actionType==='toggle'||actionType==='toggle_toast') Object.assign(hotspot,{toggleOffImage:document.getElementById('hsToggleOffImage').value,toggleOnImage});
   if(actionType==='group_toggle'||actionType==='conditional_image') Object.assign(hotspot,{stateGroup,toggleOffImage,toggleOnImage,...(actionType==='group_toggle'?{groupInitialOn:document.getElementById('hsGroupInitialOn').checked}:{})});
