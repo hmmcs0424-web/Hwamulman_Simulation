@@ -940,6 +940,7 @@ textarea.form-input{resize:vertical;}
         <div style="margin-top:7px;color:#888;font-size:11px;line-height:1.5">이미지 보관함에 현재 화면과 같은 크기의 광고별 전체 화면 캡처를 올린 뒤 여러 장을 추가하세요. 위에서 아래 순서로 좌우 슬라이드됩니다.</div>
       </div>
       <div class="admin-section">
+        <div id="popupPositionEditor"></div>
         <details class="advanced-screen-add">
         <summary>직접 화면 추가 (고급 설정)</summary>
         <div class="form-row">
@@ -2789,9 +2790,10 @@ function goTo(id, init=false) {
   const st = cache[activeSec];
   const scr = st.flow.screens[id];
   if(!scr) return;
-  if(id===st.cur && scr.type!=='popup') return;
+  if(id===st.cur && scr.type!=='popup') { closePopup(); return; }
 
-  if(scr.type==='popup' && !init) { showPopup(id); return; }
+  if(scr.type==='popup' && !init && !(adminMode && !counselorPreviewMode)) { showPopup(id); return; }
+  closePopup();
   // The start screen begins a fresh training path; completed actions from a previous path must not leak in.
   if(!init && id===st.flow.start) hotspotCompletionStates.clear();
   if(!init && st.cur) st.hist.push(st.cur);
@@ -3672,7 +3674,7 @@ function refreshHotspotLayer() {
   }
   // 팝업 레이어도 갱신
   if(document.getElementById('popupOverlay').classList.contains('active')) {
-    const popScr = Object.values(st.flow.screens).find(s => s.type === 'popup');
+    const popScr = st.flow.screens[document.getElementById('popupOverlay').dataset.screenId];
     if(popScr) renderHotspots('popupHsLayer', popScr.hotspots || [], false);
   }
 }
@@ -3682,9 +3684,20 @@ function refreshHotspotLayer() {
 // ═══════════════════════════════════════════
 function showPopup(id) {
   const scr = cache[activeSec].flow.screens[id];
+  if(!scr)return;
+  const overlay=document.getElementById('popupOverlay');
+  const wrap=document.getElementById('popupWrap');
+  overlay.dataset.screenId=id;
+  const layout=scr.popupLayout;
+  wrap.style.cssText='';
+  overlay.style.background=layout?.dim===false?'transparent':'';
+  if(layout?.mode==='positioned') {
+    const left=Math.max(0,Math.min(99,Number(layout.left)||0));
+    wrap.style.cssText=`position:absolute;top:${Math.max(0,Math.min(99,Number(layout.top)||0))}%;left:${left}%;width:${Math.max(1,Math.min(100-left,Number(layout.width)||40))}%;max-height:${100-Math.max(0,Math.min(99,Number(layout.top)||0))}%;overflow:auto;`;
+  }
   const img = document.getElementById('popupImg');
-  img.src = scr.image;
   img.onload = () => renderHotspots('popupHsLayer', scr.hotspots||[], false);
+  img.src = scr.image;
   document.getElementById('popupOverlay').classList.add('active');
 }
 function closePopup() {
@@ -4327,6 +4340,7 @@ async function saveGuide() {
 }
 
 function renderPhoneLayoutEditor() {
+  renderPopupPositionEditor();
   const section = document.getElementById('phoneLayoutAdminSection');
   const show = adminMode && !counselorPreviewMode && activeSec!=='채널톡' && activePage==='simulator';
   section.style.display = show ? '' : 'none';
@@ -4594,6 +4608,55 @@ async function clearPhoneLayout() {
   await saveSimulatorFlow(activeSec);
 }
 
+function renderPopupPositionEditor() {
+  const el=document.getElementById('popupPositionEditor');
+  const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
+  if(!el)return;
+  if(!scr||SECS[activeSec]?.type!=='app'){el.innerHTML='';return;}
+  const p=scr.popupLayout||{};
+  el.innerHTML=`<div class="section-title">팝업 위치 · 내부 핫스팟</div>
+    <label class="form-label">현재 화면 타입</label>
+    <select class="form-input" id="popupScreenType" onchange="changePopupScreenType(this.value)">
+      <option value="normal" ${scr.type==='normal'?'selected':''}>일반 화면</option>
+      <option value="scroll" ${scr.type==='scroll'?'selected':''}>스크롤 화면</option>
+      <option value="popup" ${scr.type==='popup'?'selected':''}>팝업</option>
+    </select>
+    ${scr.type==='popup'?`<p style="font-size:12px;line-height:1.5">팝업 이미지가 편집 화면에 표시됩니다. ‘영역 드래그’로 메뉴마다 핫스팟을 추가하고 이동할 화면을 선택하세요. 팝업 부분만 잘라낸 이미지를 사용하세요.</p>
+    <label class="form-label">표시 방식</label><select class="form-input" id="popupPositionMode"><option value="bottom" ${p.mode!=='positioned'?'selected':''}>하단 전체 너비</option><option value="positioned" ${p.mode==='positioned'?'selected':''}>위치 직접 지정 (작은 메뉴)</option></select>
+    <div style="display:flex;gap:6px;margin:8px 0">${[['Top','위',p.top??8],['Left','왼쪽',p.left??55],['Width','너비',p.width??40]].map(([id,label,value])=>`<label style="flex:1;min-width:0">${label}(%)<input class="form-input" id="popupPosition${id}" type="number" min="0" max="100" step="0.5" value="${esc(String(value))}"></label>`).join('')}</div>
+    <label style="font-size:12px"><input type="checkbox" id="popupPositionDim" ${p.dim!==false?'checked':''}> 배경 어둡게</label>
+    <div class="form-row"><label class="form-label">미리보기 배경 화면</label><select class="form-input" id="popupPreviewBase">${Object.entries(st.flow.screens).filter(([,s])=>s.type!=='popup').map(([id,s])=>`<option value="${esc(id)}">${esc(s.label||id)}</option>`).join('')}</select></div>
+    <div class="btn-row"><button class="btn btn-primary btn-sm" type="button" onclick="savePopupPosition()">팝업 설정 저장</button><button class="btn btn-secondary btn-sm" type="button" onclick="previewPopupPosition()">위치 미리보기</button><button class="btn btn-secondary btn-sm" type="button" onclick="returnToPopupEditor()">내부 핫스팟 편집</button></div>`:''}<hr style="margin:14px 0;border:0;border-top:1px solid #ddd">`;
+}
+function changePopupScreenType(type) {
+  const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
+  if(!adminMode||!scr)return;
+  scr.type=type;
+  renderScreen(activeSec,st.cur);renderPopupPositionEditor();renderList();
+}
+function readPopupPosition() {
+  const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
+  const left=clamp(document.getElementById('popupPositionLeft').value,0,99);
+  return {mode:document.getElementById('popupPositionMode').value,top:clamp(document.getElementById('popupPositionTop').value,0,99),left,width:clamp(document.getElementById('popupPositionWidth').value,1,100-left),dim:document.getElementById('popupPositionDim').checked};
+}
+async function savePopupPosition() {
+  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec].cur];
+  if(!adminMode||scr?.type!=='popup')return;
+  scr.popupLayout=readPopupPosition();
+  await saveSimulatorFlow(activeSec);
+}
+function previewPopupPosition() {
+  const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
+  if(!adminMode||scr?.type!=='popup')return;
+  const base=document.getElementById('popupPreviewBase').value;
+  if(!base)return alert('미리보기 배경으로 사용할 일반 화면을 먼저 추가해 주세요.');
+  scr.popupLayout=readPopupPosition();
+  cancelDraw();renderScreen(activeSec,base);showPopup(st.cur);
+}
+function returnToPopupEditor() {
+  closePopup();cancelDraw();
+  const st=cache[activeSec];renderScreen(activeSec,st.cur);renderHsList();
+}
 function addScreen() {
   const id = document.getElementById('newId').value.trim();
   const label = document.getElementById('newLabel').value.trim();
@@ -5695,6 +5758,7 @@ function updateHsTargetPreview(value) {
 }
 
 function startDraw() {
+  if(cache[activeSec]?.flow?.screens?.[cache[activeSec].cur]?.type==='popup' && document.getElementById('popupOverlay').classList.contains('active')) returnToPopupEditor();
   pendingScrollRegionIndex=-1;
   drawMode = 'hotspot';
   beginScreenDraw();
