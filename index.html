@@ -5911,6 +5911,7 @@ function confirmGuideOverlay() {
 
 function confirmHs() {
   if(!pendingHs) return;
+  const iconEdit=window.iconHotspotEditor;
   const scrollRegionIndex=pendingScrollRegionIndex;
   const actionType=document.getElementById('hsActionType').value;
   let linkUrl='';
@@ -5922,7 +5923,7 @@ function confirmHs() {
   const st = cache[activeSec];
   const screen=st.flow.screens[st.cur];
   const scrollRegion=scrollRegionIndex>=0?screen?.scrollRegions?.[scrollRegionIndex]:null;
-  const targetHotspots=scrollRegion?(scrollRegion.hotspots||(scrollRegion.hotspots=[])):(screen.hotspots||(screen.hotspots=[]));
+  const targetHotspots=iconEdit?[]:scrollRegion?(scrollRegion.hotspots||(scrollRegion.hotspots=[])):(screen.hotspots||(screen.hotspots=[]));
   let createdNewScreen = false;
   const hasNavigation=actionType==='navigate'||actionType==='navigate_toast'||actionType==='complete_navigate';
   if(hasNavigation && goto.startsWith('__image__:')) {
@@ -5991,6 +5992,15 @@ function confirmHs() {
   if(actionType==='color_picker') Object.assign(hotspot,{textColorGroup});
   if(actionType==='font_size_slider') Object.assign(hotspot,{textColorGroup});
   if(actionType==='font_size_value') Object.assign(hotspot,{textColorGroup});
+  if(iconEdit) {
+    Object.assign(iconEdit.button,hotspot,{id:iconEdit.button.id});
+    iconEdit.button.rememberOrigin=document.getElementById('iconRememberOrigin').checked;
+    window.iconHotspotEditor=null;
+    pendingHs=null;
+    closeModal('hsModal');
+    iconEdit.refresh();
+    return;
+  }
   targetHotspots.push(hotspot);
   pendingHs = null;
   cancelDraw();
@@ -7762,5 +7772,6 @@ window.addEventListener('beforeunload', e => {
 
 boot();
 </script>
+<script src="./vendor/icon-menu-studio.js?v=4"></script>
 </body>
 </html>
