@@ -29,7 +29,7 @@
     const m = menu(), placement = screen()?.iconMenus?.find(p => p.menuId === m?.id);
     panel.innerHTML = `<div class="section-title">아이콘 · 공통 메뉴</div><small>크기를 정하고 아이콘을 추가하면 화면에 바로 배치됩니다. 메뉴 이동 손잡이를 드래그해 위치를 옮기세요. 내 이미지를 등록하고 메뉴에 추가하세요. 화면의 아이콘을 클릭하면 핫스팟을 설정합니다. 변경 후 경로 설정을 저장하세요.</small>
       <label>관리용 이름 <input id="isAssetName" placeholder="예: 즐겨찾기_미등록"></label><label>화면 표시 이름 <input id="isAssetLabel" placeholder="예: 즐겨찾기"></label>
-      <label>기본 이미지 <input id="isAssetFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <label>버튼 배경색 <input id="isAssetBackground" type="color" value="#eeeeee"></label><label><input id="isAssetTransparent" type="checkbox" checked> 배경 투명 (해제하면 아이콘과 텍스트 뒤에 배경색 적용)</label><label>기본 이미지 <input id="isAssetFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <label>완료 이미지 (선택) <input id="isDoneFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <button class="btn btn-secondary" id="isUpload">아이콘 등록</button><div class="icon-studio-assets">${d.assets.map(a=>`<img src="${esc(a.image)}" title="${esc(a.name)}" alt="${esc(a.name)}">`).join('')}</div>
       <label>공통 메뉴 <select id="isMenu"><option value="">메뉴 선택</option>${d.menus.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedMenu?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
@@ -72,7 +72,7 @@
     const name=document.getElementById('isAssetName').value.trim(),file=document.getElementById('isAssetFile').files[0],done=document.getElementById('isDoneFile').files[0];
     if(!name||!file)return alert('아이콘 이름과 기본 이미지를 선택하세요.');
     const section=activeSec,flow=st().flow,button=document.getElementById('isUpload');button.disabled=true;
-    try{const asset={id:uid(),name,displayName:document.getElementById('isAssetLabel').value.trim()||name,image:await readImage(file),doneImage:await readImage(done)};if(new TextEncoder().encode(JSON.stringify(flow)).length+JSON.stringify(asset).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');flow.iconStudio.assets.push(asset);if(activeSec===section){refresh();render();}}catch(e){alert(e.message);}finally{button.disabled=false;}
+    try{const asset={id:uid(),name,displayName:document.getElementById('isAssetLabel').value.trim()||name,background:document.getElementById('isAssetTransparent').checked?'transparent':document.getElementById('isAssetBackground').value,image:await readImage(file),doneImage:await readImage(done)};if(new TextEncoder().encode(JSON.stringify(flow)).length+JSON.stringify(asset).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');flow.iconStudio.assets.push(asset);if(activeSec===section){refresh();render();}}catch(e){alert(e.message);}finally{button.disabled=false;}
   }
   async function edit(b){
     cancelDraw();
@@ -143,7 +143,10 @@
       <label>기본 상태 아이콘 <select id="iconOffAsset">${options(b.offAssetId||b.assetId,'현재 기본 아이콘')}</select></label>
       <label>토글 선택 상태 아이콘 <select id="iconOnAsset">${options(b.onAssetId,'기존 선택 상태 이미지 사용')}</select></label>
       <label>등록·발급 완료 아이콘 <select id="iconDoneAsset">${options(b.doneAssetId,'기존 완료 이미지 사용')}</select></label>
-      <label>완료 후 화면 표시 이름 <input id="iconDoneLabel" value="${esc(b.doneLabel??'등록 완료')}"></label>`;
+      <label>완료 후 화면 표시 이름 <input id="iconDoneLabel" value="${esc(b.doneLabel??'등록 완료')}"></label>
+      <label><input id="iconDoneBackgroundEnabled" type="checkbox" ${b.doneBackground?'checked':''}> 완료 후 버튼 배경색 직접 지정</label>
+      <label>완료 후 배경색 <input id="iconDoneBackground" type="color" value="${esc(b.doneBackground||'#eeeeee')}"></label>
+      <label><input id="iconDisableAfterDone" type="checkbox" ${b.disableAfterDone?'checked':''}> 완료 후 클릭 비활성화</label><small>메인으로 돌아가면 완료·비활성화 상태가 초기화됩니다.</small>`;
   }
   const iconFields=document.createElement('div');iconFields.id='iconStateFields';iconFields.hidden=true;
   document.getElementById('hsActionType').closest('.form-row').after(iconFields);
@@ -159,9 +162,11 @@
       const select=document.getElementById(id),option=document.createElement('option');option.value=a.image;option.textContent=a.name;select.append(option);select.value=a.image;
     }
     const label=document.getElementById('iconDoneLabel').value;
+    const disableAfterDone=document.getElementById('iconDisableAfterDone').checked;
+    const doneBackground=document.getElementById('iconDoneBackgroundEnabled').checked?document.getElementById('iconDoneBackground').value:'';
     originalConfirm(...args);
     if(window.iconHotspotEditor?.button===b)return;
-    Object.assign(b,{offAssetId:off,onAssetId:on,doneAssetId:done,doneLabel:label});if(off)b.assetId=off;
+    Object.assign(b,{offAssetId:off,onAssetId:on,doneAssetId:done,doneLabel:label,disableAfterDone,doneBackground});if(off)b.assetId=off;
     refresh();render();
   };
   function ensurePlacement(){
@@ -183,9 +188,9 @@
       const editing=adminMode&&!counselorPreviewMode;
       if(editing){const handle=document.createElement('button');handle.type='button';handle.className='icon-menu-move';handle.textContent='✥';handle.title='드래그하여 메뉴 이동';handle.setAttribute('aria-label','메뉴 위치 이동');surface.append(handle);let drag=null;handle.onpointerdown=e=>{const bounds=parent.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,left:p.left,top:p.top,bounds};handle.setPointerCapture(e.pointerId);e.preventDefault();e.stopPropagation();};handle.onpointermove=e=>{if(!drag)return;p.left=Math.max(0,Math.min(100-p.width,drag.left+(e.clientX-drag.x)/drag.bounds.width*100));p.top=Math.max(0,Math.min(100-p.height,drag.top+(e.clientY-drag.y)/drag.bounds.height*100));const r=mapPhoneOverlayRect(p);surface.style.left=r.left+'%';surface.style.top=r.top+'%';e.stopPropagation();};const finish=()=>{if(!drag)return;drag=null;selectedMenu=m.id;refresh();};handle.onpointerup=finish;handle.onpointercancel=finish;}
       const track=document.createElement('div');track.className='icon-menu-track';track.style.gap=m.gap+'px';surface.append(track);
-      for(const b of m.buttons){const a=data().assets.find(a=>a.id===b.assetId);if(!a)continue;const done=completed.has(key(activeSec,st().cur,m.id,b.id)),el=document.createElement('button');el.type='button';el.className='icon-menu-button'+(adminMode&&!counselorPreviewMode?' editing':'');el.style.width=m.width+'px';el.style.height='100%';el.title=b.label;const img=document.createElement('img');img.src=(done&&a.doneImage)||a.image;img.alt=b.label;img.draggable=false;el.append(img);const label=document.createElement('span');label.style.fontSize=(m.fontSize??11)+'px';label.style.fontWeight=m.bold?'700':'400';label.textContent=done?(b.doneLabel??'등록 완료'):b.label;el.append(label);const doneAsset=data().assets.find(a=>a.id===b.doneAssetId);if(done&&doneAsset)img.src=doneAsset.image;const stateKey=key(activeSec,st().cur,m.id,b.id);if(['toggle','toggle_toast'].includes(b.actionType)){const on=toggles.get(stateKey)===true;const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;}
+      for(const b of m.buttons){const a=data().assets.find(a=>a.id===b.assetId);if(!a)continue;const done=completed.has(key(activeSec,st().cur,m.id,b.id)),el=document.createElement('button');el.type='button';el.className='icon-menu-button'+(adminMode&&!counselorPreviewMode?' editing':'');el.style.width=m.width+'px';el.style.height='100%';el.title=b.label;const img=document.createElement('img');img.src=(done&&a.doneImage)||a.image;img.alt=b.label;img.draggable=false;el.append(img);const label=document.createElement('span');label.style.fontSize=(m.fontSize??11)+'px';label.style.fontWeight=m.bold?'700':'400';label.textContent=done?(b.doneLabel??'등록 완료'):b.label;el.append(label);const doneAsset=data().assets.find(a=>a.id===b.doneAssetId);if(done&&doneAsset)img.src=doneAsset.image;el.style.background=done?(b.doneBackground||doneAsset?.background||a.background||'transparent'):(a.background||'transparent');const disabled=done&&!!b.disableAfterDone;el.disabled=disabled&&!editing;el.setAttribute('aria-disabled',String(el.disabled));el.style.cursor=disabled&&!editing?'default':'pointer';const stateKey=key(activeSec,st().cur,m.id,b.id);if(['toggle','toggle_toast'].includes(b.actionType)){const on=toggles.get(stateKey)===true;const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;el.style.background=selected?.background||a.background||'transparent';}
         let start=null,startY=0,dragged=false,scroll=0,verticalScroll=0;el.onpointerdown=e=>{start=e.clientX;startY=e.clientY;verticalScroll=document.getElementById('phoneScrollViewport').scrollTop;scroll=surface.scrollLeft;dragged=false;el.setPointerCapture(e.pointerId);e.stopPropagation();};el.onpointermove=e=>{if(start===null)return;const delta=e.clientX-start,dy=e.clientY-startY;if(Math.max(Math.abs(delta),Math.abs(dy))>6)dragged=true;if(dragged){if(Math.abs(dy)>Math.abs(delta))document.getElementById('phoneScrollViewport').scrollTop=verticalScroll-dy;else surface.scrollLeft=scroll-delta;}};el.onpointerup=()=>{start=null;};el.onpointercancel=()=>{start=null;dragged=true;};
-        el.onclick=e=>{e.stopPropagation();if(dragged)return;if(adminMode&&!counselorPreviewMode){selectedMenu=m.id;edit(b);return;}if(b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK&&!st().flow.screens[b.goto])return showSimulatorToast('아직 이동 화면이 설정되지 않았습니다.');if(b.rememberOrigin&&b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK){contexts.set(activeSec,{origin:st().cur,menu:m.id,button:b.id,history:st().hist.length});}if(['toggle','toggle_toast'].includes(b.actionType)){const on=!toggles.get(stateKey);toggles.set(stateKey,on);const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;if(b.actionType==='toggle_toast')showSimulatorToast(on?b.toastOnMessage:b.toastOffMessage,{duration:b.toastDuration,position:b.toastPosition,confirm:b.toastConfirm});return;}handleHotspotAction(b,el);};track.append(el);
+        el.onclick=e=>{e.stopPropagation();if(dragged)return;if(adminMode&&!counselorPreviewMode){selectedMenu=m.id;edit(b);return;}if(disabled)return;if(b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK&&!st().flow.screens[b.goto])return showSimulatorToast('아직 이동 화면이 설정되지 않았습니다.');if(b.rememberOrigin&&b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK){contexts.set(activeSec,{origin:st().cur,menu:m.id,button:b.id,history:st().hist.length});}if(['toggle','toggle_toast'].includes(b.actionType)){const on=!toggles.get(stateKey);toggles.set(stateKey,on);const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;el.style.background=selected?.background||a.background||'transparent';if(b.actionType==='toggle_toast')showSimulatorToast(on?b.toastOnMessage:b.toastOffMessage,{duration:b.toastDuration,position:b.toastPosition,confirm:b.toastConfirm});return;}handleHotspotAction(b,el);};track.append(el);
       }parent.append(surface);
     }
   }
@@ -197,7 +202,7 @@
   renderPhoneScrollRegions=function(s){oldRegions(s);(s?.iconMenus||[]).forEach(p=>{if(p.replacesRegion!==undefined){const el=document.querySelector(`.phone-scroll-region[data-scroll-region-index="${p.replacesRegion}"]`);if(el)el.style.display='none';}});render();};
   const oldList=renderHsList;renderHsList=function(...args){const r=oldList(...args);refresh();render();return r;};
   const oldHome=goHome;goHome=function(...args){completed.clear();contexts.clear();toggles.clear();return oldHome(...args);};
-  const oldBack=goBack;goBack=function(...args){const result=oldBack(...args),c=contexts.get(activeSec);if(c&&st()?.cur===c.origin)contexts.delete(activeSec);return result;};
+  const oldBack=goBack;goBack=function(...args){const result=oldBack(...args),c=contexts.get(activeSec);if(st()?.cur===st()?.flow?.start){completed.clear();contexts.clear();toggles.clear();render();}if(c&&st()?.cur===c.origin)contexts.delete(activeSec);return result;};
   const oldGo=goTo;goTo=function(id,...args){if(id===st()?.flow?.start){completed.clear();contexts.delete(activeSec);toggles.clear();}return oldGo(id,...args);};
   const option=document.createElement('option');option.value='origin_complete';option.textContent='등록 완료 후 원래 화면으로 복귀';document.getElementById('hsActionType').append(option);
   const row=document.createElement('label');row.id='iconOriginRow';row.hidden=true;row.innerHTML='<input type="checkbox" id="iconRememberOrigin"> 출발 화면과 아이콘 기억 (공통 등록 화면 열기)';
