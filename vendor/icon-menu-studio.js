@@ -1,6 +1,6 @@
 /* Reusable icon assets and menus live in the existing section flow and its backups. */
 (() => {
-  const completed = new Set(), contexts = new Map();
+  const completed = new Set(), contexts = new Map(), toggles = new Map();
   let selectedMenu = ''; 
   const st = () => cache[activeSec];
   const screen = () => st()?.flow?.screens?.[st()?.cur];
@@ -28,7 +28,7 @@
     if (!menu()) selectedMenu = d.menus[0]?.id || '';
     const m = menu(), placement = screen()?.iconMenus?.find(p => p.menuId === m?.id);
     panel.innerHTML = `<div class="section-title">아이콘 · 공통 메뉴</div><small>크기를 정하고 아이콘을 추가하면 화면에 바로 배치됩니다. 메뉴 이동 손잡이를 드래그해 위치를 옮기세요. 내 이미지를 등록하고 메뉴에 추가하세요. 화면의 아이콘을 클릭하면 핫스팟을 설정합니다. 변경 후 경로 설정을 저장하세요.</small>
-      <label>아이콘 이름 <input id="isAssetName" placeholder="예: 인수증"></label>
+      <label>관리용 이름 <input id="isAssetName" placeholder="예: 즐겨찾기_미등록"></label><label>화면 표시 이름 <input id="isAssetLabel" placeholder="예: 즐겨찾기"></label>
       <label>기본 이미지 <input id="isAssetFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <label>완료 이미지 (선택) <input id="isDoneFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <button class="btn btn-secondary" id="isUpload">아이콘 등록</button><div class="icon-studio-assets">${d.assets.map(a=>`<img src="${esc(a.image)}" title="${esc(a.name)}" alt="${esc(a.name)}">`).join('')}</div>
@@ -38,7 +38,7 @@
       ${field('버튼 너비(px)','isW',m.width)}${field('버튼 높이(px)','isH',m.height)}${field('아이콘 사이 간격(px)','isGap',m.gap??10)}${field('메뉴 글자 크기(px)','isFontSize',m.fontSize??11)}<label><input id="isBold" type="checkbox" ${m.bold?'checked':''}> 메뉴명 굵게 (볼드)</label>
       <label>추가할 아이콘 <select id="isAsset">${d.assets.map(a=>`<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label>
       <button class="btn btn-secondary" id="isAdd">메뉴에 아이콘 추가</button>
-      <div>${m.buttons.map((b,i)=>`<div><span>${esc(b.label||'아이콘')}</span><button data-up="${i}" ${i===0?'disabled':''}>↑</button><button data-down="${i}" ${i===m.buttons.length-1?'disabled':''}>↓</button><button data-remove="${i}">삭제</button></div>`).join('')}</div>
+      <div>${m.buttons.map((b,i)=>`<div><span>${esc(d.assets.find(a=>a.id===b.assetId)?.name||'아이콘')} · ${esc(b.label||'')}</span><button data-up="${i}" ${i===0?'disabled':''}>↑</button><button data-down="${i}" ${i===m.buttons.length-1?'disabled':''}>↓</button><button data-remove="${i}">삭제</button></div>`).join('')}</div>
       <hr><small>현재 화면의 메뉴 위치(화면 이미지 기준 %). 기존 가로 스크롤 영역을 선택하면 같은 위치에 배치합니다.</small>
       <select id="isRegion"><option value="">직접 위치 입력</option>${(screen()?.scrollRegions||[]).map((r,i)=>r.direction==='horizontal'?`<option value="${i}">가로 영역 ${i+1}</option>`:'').join('')}</select>
       ${field('왼쪽(%)','isLeft',placement?.left??0)}${field('위(%)','isTop',placement?.top??70)}${field('너비(%)','isPW',placement?.width??100)}${field('높이(%)','isPH',placement?.height??12)}
@@ -49,13 +49,13 @@
     on('isUpload', upload);
     document.getElementById('isMenu').onchange=e=>{selectedMenu=e.target.value;refresh();};
     on('isCreate',()=>{const name=prompt('메뉴 묶음 이름');if(!name?.trim())return;const g={id:uid(),name:name.trim(),width:72,height:76,gap:10,buttons:[]};d.menus.push(g);selectedMenu=g.id;refresh();});
-    on('isReset',()=>{completed.clear();contexts.clear();render();});
+    on('isReset',()=>{completed.clear();contexts.clear();toggles.clear();render();});
     on('isSave',()=>saveSimulatorFlow(activeSec));
     if(!m)return;
     ['isMenuName','isW','isH','isGap'].forEach((id,i)=>document.getElementById(id)[i?'oninput':'onchange']=e=>{if(i&&(!e.target.value.trim()||!Number.isFinite(Number(e.target.value))))return;m[['name','width','height','gap'][i]]=i?Math.max(i===3?0:16,Math.min(500,Number(e.target.value)||0)):e.target.value;ensurePlacement();const p=screen()?.iconMenus?.find(p=>p.menuId===m.id);if(p&&i===2){p.height=Math.min(100-p.top,Math.max(1,m.height/Math.max(1,document.getElementById('imageWrapper').getBoundingClientRect().height)*100));document.getElementById('isPH').value=p.height;}render();});
     document.getElementById('isFontSize').oninput=e=>{const value=Number(e.target.value);if(!Number.isFinite(value)||value<1)return;m.fontSize=Math.max(8,Math.min(40,value));render();};
     document.getElementById('isBold').onchange=e=>{m.bold=e.target.checked;render();};
-    on('isAdd',()=>{const a=d.assets.find(a=>a.id===document.getElementById('isAsset').value);if(!a)return alert('먼저 이미지를 등록하세요.');m.buttons.push({id:uid(),assetId:a.id,label:a.name,actionType:'navigate',goto:'',rememberOrigin:true});ensurePlacement();refresh();render();});
+    on('isAdd',()=>{const a=d.assets.find(a=>a.id===document.getElementById('isAsset').value);if(!a)return alert('먼저 이미지를 등록하세요.');m.buttons.push({id:uid(),assetId:a.id,label:a.displayName??a.name,actionType:'navigate',goto:'',rememberOrigin:true});ensurePlacement();refresh();render();});
     ['up','down','remove'].forEach(op=>panel.querySelectorAll(`[data-${op}]`).forEach(e=>e.onclick=()=>{const i=Number(e.dataset[op]);if(op==='remove')m.buttons.splice(i,1);else{const j=i+(op==='up'?-1:1);[m.buttons[i],m.buttons[j]]=[m.buttons[j],m.buttons[i]];}refresh();render();}));
     document.getElementById('isRegion').onchange=e=>{const r=screen().scrollRegions?.[Number(e.target.value)];if(e.target.value===''||!r)return;[['isLeft','left'],['isTop','top'],['isPW','width'],['isPH','height']].forEach(([id,k])=>document.getElementById(id).value=r[k]);};
     on('isApply',()=>{const values=['isLeft','isTop','isPW','isPH'].map(id=>Number(document.getElementById(id).value));const [left,top,width,height]=values;if(values.some(v=>!Number.isFinite(v))||left<0||top<0||width<=0||height<=0||left+width>100||top+height>100)return alert('위치와 크기를 0~100% 범위 안으로 설정하세요.');const region=document.getElementById('isRegion').value;const p={menuId:m.id,left,top,width,height,background:document.getElementById('isBG').value,...(region!==''?{replacesRegion:Number(region)}:placement?.replacesRegion!==undefined?{replacesRegion:placement.replacesRegion}:{})};const s=screen();s.iconMenus=(s.iconMenus||[]).filter(p=>p.menuId!==m.id);s.iconMenus.push(p);renderPhoneScrollRegions(s);refresh();render();});
@@ -72,7 +72,7 @@
     const name=document.getElementById('isAssetName').value.trim(),file=document.getElementById('isAssetFile').files[0],done=document.getElementById('isDoneFile').files[0];
     if(!name||!file)return alert('아이콘 이름과 기본 이미지를 선택하세요.');
     const section=activeSec,flow=st().flow,button=document.getElementById('isUpload');button.disabled=true;
-    try{const asset={id:uid(),name,image:await readImage(file),doneImage:await readImage(done)};if(new TextEncoder().encode(JSON.stringify(flow)).length+JSON.stringify(asset).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');flow.iconStudio.assets.push(asset);if(activeSec===section){refresh();render();}}catch(e){alert(e.message);}finally{button.disabled=false;}
+    try{const asset={id:uid(),name,displayName:document.getElementById('isAssetLabel').value.trim()||name,image:await readImage(file),doneImage:await readImage(done)};if(new TextEncoder().encode(JSON.stringify(flow)).length+JSON.stringify(asset).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');flow.iconStudio.assets.push(asset);if(activeSec===section){refresh();render();}}catch(e){alert(e.message);}finally{button.disabled=false;}
   }
   async function edit(b){
     cancelDraw();
@@ -122,6 +122,7 @@
     document.getElementById('hsTargetSearch').value='';
     renderHsTargetList(screens,[],true);
     updateHsActionFields();
+    showIconFields(b);
     openModal('hsModal');
     const images=await getSimulatorImages(section);
     if(window.iconHotspotEditor?.button!==b||activeSec!==section)return;
@@ -134,6 +135,35 @@
     for(const [id,prop] of [['hsToggleOffImage','toggleOffImage'],['hsToggleOnImage','toggleOnImage']])if(b[prop])document.getElementById(id).value=b[prop];
     updateHsActionFields();
   }
+  function showIconFields(b){
+    const options=(value,empty)=>`<option value="">${empty}</option>`+data().assets.map(a=>`<option value="${esc(a.id)}" ${a.id===value?'selected':''}>${esc(a.name)}</option>`).join('');
+    iconFields.hidden=false;
+    iconFields.innerHTML=`<small>「아이콘 만들기」로 등록한 아이콘을 선택합니다. 목록은 관리용 이름으로 표시됩니다. 토글은 기본·선택 아이콘을, 화면 복귀는 완료 아이콘을 지정하세요. 아래 이미지 파일 선택은 기존 설정 호환용입니다.</small>
+      <label>화면 표시 이름 <input id="iconDisplayLabel" value="${esc(b.label||'')}"></label>
+      <label>기본 상태 아이콘 <select id="iconOffAsset">${options(b.offAssetId||b.assetId,'현재 기본 아이콘')}</select></label>
+      <label>토글 선택 상태 아이콘 <select id="iconOnAsset">${options(b.onAssetId,'기존 선택 상태 이미지 사용')}</select></label>
+      <label>등록·발급 완료 아이콘 <select id="iconDoneAsset">${options(b.doneAssetId,'기존 완료 이미지 사용')}</select></label>
+      <label>완료 후 화면 표시 이름 <input id="iconDoneLabel" value="${esc(b.doneLabel??'등록 완료')}"></label>`;
+  }
+  const iconFields=document.createElement('div');iconFields.id='iconStateFields';iconFields.hidden=true;
+  document.getElementById('hsActionType').closest('.form-row').after(iconFields);
+  const originalConfirm=confirmHs;
+  confirmHs=function(...args){
+    const b=window.iconHotspotEditor?.button;
+    if(!b)return originalConfirm(...args);
+    const off=document.getElementById('iconOffAsset').value,on=document.getElementById('iconOnAsset').value,done=document.getElementById('iconDoneAsset').value;
+    const previous=b.label;
+    document.getElementById('hsLabelInput').value=document.getElementById('iconDisplayLabel').value.trim()||previous;
+    for(const [id,assetId] of [['hsToggleOffImage',off],['hsToggleOnImage',on]]){
+      const a=data().assets.find(a=>a.id===assetId);if(!a)continue;
+      const select=document.getElementById(id),option=document.createElement('option');option.value=a.image;option.textContent=a.name;select.append(option);select.value=a.image;
+    }
+    const label=document.getElementById('iconDoneLabel').value;
+    originalConfirm(...args);
+    if(window.iconHotspotEditor?.button===b)return;
+    Object.assign(b,{offAssetId:off,onAssetId:on,doneAssetId:done,doneLabel:label});if(off)b.assetId=off;
+    refresh();render();
+  };
   function ensurePlacement(){
     const m=menu(),s=screen();if(!m||!s)return;
     s.iconMenus ||= [];
@@ -153,9 +183,9 @@
       const editing=adminMode&&!counselorPreviewMode;
       if(editing){const handle=document.createElement('button');handle.type='button';handle.className='icon-menu-move';handle.textContent='✥';handle.title='드래그하여 메뉴 이동';handle.setAttribute('aria-label','메뉴 위치 이동');surface.append(handle);let drag=null;handle.onpointerdown=e=>{const bounds=parent.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,left:p.left,top:p.top,bounds};handle.setPointerCapture(e.pointerId);e.preventDefault();e.stopPropagation();};handle.onpointermove=e=>{if(!drag)return;p.left=Math.max(0,Math.min(100-p.width,drag.left+(e.clientX-drag.x)/drag.bounds.width*100));p.top=Math.max(0,Math.min(100-p.height,drag.top+(e.clientY-drag.y)/drag.bounds.height*100));const r=mapPhoneOverlayRect(p);surface.style.left=r.left+'%';surface.style.top=r.top+'%';e.stopPropagation();};const finish=()=>{if(!drag)return;drag=null;selectedMenu=m.id;refresh();};handle.onpointerup=finish;handle.onpointercancel=finish;}
       const track=document.createElement('div');track.className='icon-menu-track';track.style.gap=m.gap+'px';surface.append(track);
-      for(const b of m.buttons){const a=data().assets.find(a=>a.id===b.assetId);if(!a)continue;const done=completed.has(key(activeSec,st().cur,m.id,b.id)),el=document.createElement('button');el.type='button';el.className='icon-menu-button'+(adminMode&&!counselorPreviewMode?' editing':'');el.style.width=m.width+'px';el.style.height='100%';el.title=b.label;const img=document.createElement('img');img.src=(done&&a.doneImage)||a.image;img.alt=b.label;img.draggable=false;el.append(img);const label=document.createElement('span');label.style.fontSize=(m.fontSize??11)+'px';label.style.fontWeight=m.bold?'700':'400';label.textContent=done?'등록 완료':b.label;el.append(label);
+      for(const b of m.buttons){const a=data().assets.find(a=>a.id===b.assetId);if(!a)continue;const done=completed.has(key(activeSec,st().cur,m.id,b.id)),el=document.createElement('button');el.type='button';el.className='icon-menu-button'+(adminMode&&!counselorPreviewMode?' editing':'');el.style.width=m.width+'px';el.style.height='100%';el.title=b.label;const img=document.createElement('img');img.src=(done&&a.doneImage)||a.image;img.alt=b.label;img.draggable=false;el.append(img);const label=document.createElement('span');label.style.fontSize=(m.fontSize??11)+'px';label.style.fontWeight=m.bold?'700':'400';label.textContent=done?(b.doneLabel??'등록 완료'):b.label;el.append(label);const doneAsset=data().assets.find(a=>a.id===b.doneAssetId);if(done&&doneAsset)img.src=doneAsset.image;const stateKey=key(activeSec,st().cur,m.id,b.id);if(['toggle','toggle_toast'].includes(b.actionType)){const on=toggles.get(stateKey)===true;const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;}
         let start=null,startY=0,dragged=false,scroll=0,verticalScroll=0;el.onpointerdown=e=>{start=e.clientX;startY=e.clientY;verticalScroll=document.getElementById('phoneScrollViewport').scrollTop;scroll=surface.scrollLeft;dragged=false;el.setPointerCapture(e.pointerId);e.stopPropagation();};el.onpointermove=e=>{if(start===null)return;const delta=e.clientX-start,dy=e.clientY-startY;if(Math.max(Math.abs(delta),Math.abs(dy))>6)dragged=true;if(dragged){if(Math.abs(dy)>Math.abs(delta))document.getElementById('phoneScrollViewport').scrollTop=verticalScroll-dy;else surface.scrollLeft=scroll-delta;}};el.onpointerup=()=>{start=null;};el.onpointercancel=()=>{start=null;dragged=true;};
-        el.onclick=e=>{e.stopPropagation();if(dragged)return;if(adminMode&&!counselorPreviewMode){selectedMenu=m.id;edit(b);return;}if(b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK&&!st().flow.screens[b.goto])return showSimulatorToast('아직 이동 화면이 설정되지 않았습니다.');if(b.rememberOrigin&&b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK){contexts.set(activeSec,{origin:st().cur,menu:m.id,button:b.id,history:st().hist.length});}handleHotspotAction(b,el);};track.append(el);
+        el.onclick=e=>{e.stopPropagation();if(dragged)return;if(adminMode&&!counselorPreviewMode){selectedMenu=m.id;edit(b);return;}if(b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK&&!st().flow.screens[b.goto])return showSimulatorToast('아직 이동 화면이 설정되지 않았습니다.');if(b.rememberOrigin&&b.actionType==='navigate'&&b.goto!==HOTSPOT_GO_BACK){contexts.set(activeSec,{origin:st().cur,menu:m.id,button:b.id,history:st().hist.length});}if(['toggle','toggle_toast'].includes(b.actionType)){const on=!toggles.get(stateKey);toggles.set(stateKey,on);const selected=data().assets.find(a=>a.id===(on?b.onAssetId:b.offAssetId));img.src=selected?.image||(on?b.toggleOnImage:b.toggleOffImage)||a.image;if(b.actionType==='toggle_toast')showSimulatorToast(on?b.toastOnMessage:b.toastOffMessage,{duration:b.toastDuration,position:b.toastPosition,confirm:b.toastConfirm});return;}handleHotspotAction(b,el);};track.append(el);
       }parent.append(surface);
     }
   }
@@ -166,12 +196,12 @@
   const oldRegions=renderPhoneScrollRegions;
   renderPhoneScrollRegions=function(s){oldRegions(s);(s?.iconMenus||[]).forEach(p=>{if(p.replacesRegion!==undefined){const el=document.querySelector(`.phone-scroll-region[data-scroll-region-index="${p.replacesRegion}"]`);if(el)el.style.display='none';}});render();};
   const oldList=renderHsList;renderHsList=function(...args){const r=oldList(...args);refresh();render();return r;};
-  const oldHome=goHome;goHome=function(...args){completed.clear();contexts.clear();return oldHome(...args);};
+  const oldHome=goHome;goHome=function(...args){completed.clear();contexts.clear();toggles.clear();return oldHome(...args);};
   const oldBack=goBack;goBack=function(...args){const result=oldBack(...args),c=contexts.get(activeSec);if(c&&st()?.cur===c.origin)contexts.delete(activeSec);return result;};
-  const oldGo=goTo;goTo=function(id,...args){if(id===st()?.flow?.start){completed.clear();contexts.delete(activeSec);}return oldGo(id,...args);};
+  const oldGo=goTo;goTo=function(id,...args){if(id===st()?.flow?.start){completed.clear();contexts.delete(activeSec);toggles.clear();}return oldGo(id,...args);};
   const option=document.createElement('option');option.value='origin_complete';option.textContent='등록 완료 후 원래 화면으로 복귀';document.getElementById('hsActionType').append(option);
   const row=document.createElement('label');row.id='iconOriginRow';row.hidden=true;row.innerHTML='<input type="checkbox" id="iconRememberOrigin"> 출발 화면과 아이콘 기억 (공통 등록 화면 열기)';
   document.getElementById('hsActionType').closest('.form-row').after(row);
-  const oldClose=closeModal;closeModal=function(id,...args){if(id==='hsModal'){window.iconHotspotEditor=null;row.hidden=true;}return oldClose(id,...args);};
+  const oldClose=closeModal;closeModal=function(id,...args){if(id==='hsModal'){window.iconHotspotEditor=null;row.hidden=true;iconFields.hidden=true;}return oldClose(id,...args);};
   refresh();render();
 })();
