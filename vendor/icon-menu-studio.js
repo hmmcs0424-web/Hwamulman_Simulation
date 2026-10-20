@@ -1,7 +1,7 @@
 /* Reusable icon assets and menus live in the existing section flow and its backups. */
 (() => {
   const completed = new Set(), contexts = new Map(), toggles = new Map();
-  let selectedMenu = ''; 
+  let selectedMenu = '', editingAssetId = '';
   const st = () => cache[activeSec];
   const screen = () => st()?.flow?.screens?.[st()?.cur];
   const uid = () => 'icon_' + crypto.randomUUID();
@@ -26,12 +26,14 @@
     panel.hidden = false;
     const d = data();
     if (!menu()) selectedMenu = d.menus[0]?.id || '';
+    const editingAsset=d.assets.find(a=>a.id===editingAssetId);if(!editingAsset)editingAssetId='';
     const m = menu(), placement = screen()?.iconMenus?.find(p => p.menuId === m?.id);
     panel.innerHTML = `<div class="section-title">아이콘 · 공통 메뉴</div><small>크기를 정하고 아이콘을 추가하면 화면에 바로 배치됩니다. 메뉴 이동 손잡이를 드래그해 위치를 옮기세요. 내 이미지를 등록하고 메뉴에 추가하세요. 화면의 아이콘을 클릭하면 핫스팟을 설정합니다. 변경 후 경로 설정을 저장하세요.</small>
       <label>관리용 이름 <input id="isAssetName" placeholder="예: 즐겨찾기_미등록"></label><label>화면 표시 이름 <input id="isAssetLabel" placeholder="예: 즐겨찾기"></label>
       <label>버튼 배경색 <input id="isAssetBackground" type="color" value="#eeeeee"></label><label><input id="isAssetTransparent" type="checkbox" checked> 배경 투명 (해제하면 아이콘과 텍스트 뒤에 배경색 적용)</label><label>기본 이미지 <input id="isAssetFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <label>완료 이미지 (선택) <input id="isDoneFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
-      <button class="btn btn-secondary" id="isUpload">아이콘 등록</button><div class="icon-studio-assets">${d.assets.map(a=>`<img src="${esc(a.image)}" title="${esc(a.name)}" alt="${esc(a.name)}">`).join('')}</div>
+      <button class="btn btn-secondary" id="isUpload">${editingAsset?'수정 내용 적용':'아이콘 등록'}</button>${editingAsset?'<button class="btn btn-secondary" id="isCancelAsset">수정 취소</button><label><input id="isClearDone" type="checkbox"> 기존 완료 이미지 제거</label><small>이미지 파일을 선택하지 않으면 기존 이미지를 유지합니다. 수정은 이 아이콘을 사용하는 메뉴 전체에 적용됩니다.</small>':''}
+      <div class="form-label" style="margin-top:12px">등록된 아이콘 (${d.assets.length}개)</div><div class="icon-studio-assets">${d.assets.map((a,i)=>`<div style="display:flex;align-items:center;gap:8px;width:100%;padding:8px;border:1px solid #ddd;border-radius:6px"><div style="background:${esc(a.background||'transparent')};padding:4px;text-align:center"><img src="${esc(a.image)}" alt=""><small>${esc(a.displayName??a.name)}</small></div><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(a.name)}</b><small>화면 표시: ${esc(a.displayName??a.name)} · 사용 중 ${assetUsers(a.id).length}개 버튼</small><button class="btn btn-secondary btn-sm" id="isEditAsset${i}">수정</button><button class="btn btn-secondary btn-sm" id="isDeleteAsset${i}">삭제</button></div></div>`).join('')||'<small>등록된 아이콘이 없습니다.</small>'}</div>
       <label>공통 메뉴 <select id="isMenu"><option value="">메뉴 선택</option>${d.menus.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedMenu?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
       <button class="btn btn-secondary" id="isCreate">새 메뉴 묶음</button>
       ${m ? `${field('메뉴 이름','isMenuName',m.name,'text')}<small>이 메뉴를 사용하는 화면 ${Object.values(st().flow.screens).filter(s=>s.iconMenus?.some(p=>p.menuId===m.id)).length}개에 버튼·크기 변경이 함께 적용됩니다.</small>
@@ -47,6 +49,21 @@
       <button class="btn btn-secondary" id="isReset">연습 완료 상태 초기화</button><button class="btn btn-primary" id="isSave">경로 설정 저장</button><div id="isStatus" role="status"></div>`;
     const on = (id, fn) => { const e=document.getElementById(id); if(e)e.onclick=fn; };
     on('isUpload', upload);
+    if(editingAsset){
+      document.getElementById('isAssetName').value=editingAsset.name;
+      document.getElementById('isAssetLabel').value=editingAsset.displayName??editingAsset.name;
+      document.getElementById('isAssetBackground').value=editingAsset.background&&editingAsset.background!=='transparent'?editingAsset.background:'#eeeeee';
+      document.getElementById('isAssetTransparent').checked=!editingAsset.background||editingAsset.background==='transparent';
+    }
+    on('isCancelAsset',()=>{editingAssetId='';refresh();});
+    d.assets.forEach((a,i)=>{
+      on('isEditAsset'+i,()=>{editingAssetId=a.id;refresh();document.getElementById('isAssetName').focus();});
+      on('isDeleteAsset'+i,()=>{
+        const users=assetUsers(a.id);if(users.length)return alert('사용 중인 아이콘입니다. 먼저 아래 메뉴 버튼의 기본·토글·완료 아이콘 연결을 변경하거나 버튼을 삭제해 주세요.\n'+users.join('\n'));
+        if(!confirm('「'+a.name+'」 아이콘을 삭제할까요?'))return;
+        d.assets=d.assets.filter(v=>v.id!==a.id);if(editingAssetId===a.id)editingAssetId='';refresh();render();
+      });
+    });
     document.getElementById('isMenu').onchange=e=>{selectedMenu=e.target.value;refresh();};
     on('isCreate',()=>{const name=prompt('메뉴 묶음 이름');if(!name?.trim())return;const g={id:uid(),name:name.trim(),width:72,height:76,gap:10,buttons:[]};d.menus.push(g);selectedMenu=g.id;refresh();});
     on('isReset',()=>{completed.clear();contexts.clear();toggles.clear();render();});
@@ -68,11 +85,26 @@
     const url=URL.createObjectURL(file);
     try{const img=await loadImageElement(url),ratio=Math.min(1,192/Math.max(img.naturalWidth,img.naturalHeight));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*ratio));canvas.height=Math.max(1,Math.round(img.naturalHeight*ratio));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);return canvas.toDataURL('image/png');}finally{URL.revokeObjectURL(url);}
   }
+  function assetUsers(id){
+    return data().menus.flatMap(m=>m.buttons.filter(b=>[b.assetId,b.offAssetId,b.onAssetId,b.doneAssetId].includes(id)).map(b=>m.name+' → '+b.label));
+  }
   async function upload(){
     const name=document.getElementById('isAssetName').value.trim(),file=document.getElementById('isAssetFile').files[0],done=document.getElementById('isDoneFile').files[0];
-    if(!name||!file)return alert('아이콘 이름과 기본 이미지를 선택하세요.');
-    const section=activeSec,flow=st().flow,button=document.getElementById('isUpload');button.disabled=true;
-    try{const asset={id:uid(),name,displayName:document.getElementById('isAssetLabel').value.trim()||name,background:document.getElementById('isAssetTransparent').checked?'transparent':document.getElementById('isAssetBackground').value,image:await readImage(file),doneImage:await readImage(done)};if(new TextEncoder().encode(JSON.stringify(flow)).length+JSON.stringify(asset).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');flow.iconStudio.assets.push(asset);if(activeSec===section){refresh();render();}}catch(e){alert(e.message);}finally{button.disabled=false;}
+    const section=activeSec,flow=st().flow,existing=data().assets.find(a=>a.id===editingAssetId),button=document.getElementById('isUpload');
+    if(!name||(!existing&&!file))return alert('관리용 이름과 기본 이미지를 선택하세요.');
+    const displayName=document.getElementById('isAssetLabel').value.trim()||name;
+    const background=document.getElementById('isAssetTransparent').checked?'transparent':document.getElementById('isAssetBackground').value;
+    const clearDone=existing&&document.getElementById('isClearDone').checked;
+    button.disabled=true;
+    try{
+      const asset={id:existing?.id||uid(),name,displayName,background,image:file?await readImage(file):existing.image,doneImage:done?await readImage(done):clearDone?'':existing?.doneImage||''};
+      const assets=existing?flow.iconStudio.assets.map(a=>a.id===existing.id?asset:a):[...flow.iconStudio.assets,asset];
+      const candidate={...flow,iconStudio:{...flow.iconStudio,assets}};
+      if(new TextEncoder().encode(JSON.stringify(candidate)).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');
+      if(existing){const previous=existing.displayName??existing.name;flow.iconStudio.menus.forEach(m=>m.buttons.forEach(b=>{if(b.assetId===existing.id&&b.label===previous)b.label=displayName;}));}
+      flow.iconStudio.assets=assets;
+      if(activeSec===section){editingAssetId='';refresh();render();}
+    }catch(e){alert(e.message);}finally{button.disabled=false;}
   }
   async function edit(b){
     cancelDraw();

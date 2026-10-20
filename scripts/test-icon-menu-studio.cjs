@@ -9,6 +9,7 @@ class Element {
   closest() { return this; }
   querySelectorAll() { return []; }
   remove() { if(this.parentElement)this.parentElement.children=this.parentElement.children.filter(n=>n!==this); }
+  focus() {}
   setPointerCapture() {}
   setAttribute() {}
   getBoundingClientRect() { return {left:0,top:0,width:360,height:1200}; }
@@ -32,7 +33,7 @@ const alerts=[];
 let opened='';
 const c={document,window:{},cache:{app:state},activeSec:'app',SECS:{app:{type:'app'}},adminMode:false,counselorPreviewMode:false,esc:String,crypto:require('crypto').webcrypto,TextEncoder,Map,Set,console,
   HOTSPOT_GO_BACK:'__back__',pendingHs:null,pendingScrollRegionIndex:-1,
-  prompt(){},alert:x=>alerts.push(x),mapPhoneOverlayRect:x=>x,saveSimulatorFlow(){},renderBreadcrumb(){},showSimulatorToast:x=>alerts.push(x),renderScreen(){},renderHsList(){},renderPhoneScrollRegions(){},
+  confirm(){return true;},prompt(){},alert:x=>alerts.push(x),mapPhoneOverlayRect:x=>x,saveSimulatorFlow(){},renderBreadcrumb(){},showSimulatorToast:x=>alerts.push(x),renderScreen(){},renderHsList(){},renderPhoneScrollRegions(){},
   goBack(){state.cur=state.hist.pop();c.renderScreen();},goHome(){state.cur='home';},
   goTo(id){state.hist.push(state.cur);state.cur=id;c.renderScreen();},
   handleHotspotAction(h){if(h.goto)c.goTo(h.goto);},cancelDraw(){c.pendingHs=null;c.closeModal('hsModal');},
@@ -112,6 +113,17 @@ const click=()=>currentButton().onclick({stopPropagation(){}});
   document.getElementById('iconDisplayLabel').value='즐겨찾기';document.getElementById('iconDoneLabel').value='완료';
   document.getElementById('hsActionType').value='toggle_toast';document.getElementById('hsToastOnMessage').value='selected';document.getElementById('hsToastOffMessage').value='removed';
   c.confirmHs();assert.equal(button.onAssetId,'favorite-on');assert.equal(button.toggleOnImage,'favorite-on.png');assert.equal(button.label,'즐겨찾기');assert.equal(button.doneLabel,'완료');assert.equal(button.disableAfterDone,true);assert.equal(button.doneBackground,'#dddddd');
+  document.getElementById('isDeleteAsset0').onclick();
+  assert.equal(flow.iconStudio.assets.length,2);assert.match(alerts.pop(),/사용 중/);
+  document.getElementById('isEditAsset0').onclick();
+  assert.equal(document.getElementById('isAssetName').value,'receipt');
+  document.getElementById('isAssetName').value='receipt-renamed';document.getElementById('isAssetLabel').value='new display';
+  document.getElementById('isAssetTransparent').checked=false;document.getElementById('isAssetBackground').value='#cccccc';
+  await document.getElementById('isUpload').onclick();
+  assert.equal(flow.iconStudio.assets[0].id,'a');assert.equal(flow.iconStudio.assets[0].name,'receipt-renamed');assert.equal(flow.iconStudio.assets[0].image,'normal.png');assert.equal(flow.iconStudio.assets[0].background,'#cccccc');
+  assert.equal(button.label,'즐겨찾기'); // A customized menu label stays unchanged.
+  flow.iconStudio.assets.push({id:'unused',name:'unused',image:'unused.png'});c.renderScreen();
+  document.getElementById('isDeleteAsset2').onclick();assert.equal(flow.iconStudio.assets.length,2);
   assert.equal(alerts.length,0);
   console.log('PASS: shared receipt routing, per-screen completion, reset, menu drag, shared hotspot modal, back target save, no duplicate hotspots, automatic placement in scrolling image');
 })().catch(error=>{console.error(error);process.exitCode=1;});
