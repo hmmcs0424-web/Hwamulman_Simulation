@@ -36,7 +36,8 @@
       <label>완료 관리용 이름 <input id="isAssetDoneName" placeholder="예: 인수증_완료"></label><label>완료 화면 표시 이름 <input id="isAssetDoneLabel" placeholder="예: 인수증 완료"></label><label>완료 이미지 (선택) <input id="isDoneFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
       <label>완료 배경색 <input id="isAssetDoneBackground" type="color" value="#eeeeee"></label><label><input id="isAssetDoneTransparent" type="checkbox" checked> 완료 배경 투명</label><small>기본·완료 배경색은 각각 이미지와 텍스트를 포함한 버튼 전체에 적용됩니다. 완료 이미지를 비워도 완료 후 배경색만 바꿀 수 있습니다.</small>${editingAsset?'<label><input id="isClearDone" type="checkbox"> 기존 완료 이미지 제거</label>':''}</fieldset>
       <button class="btn btn-secondary" id="isUpload">${editingAsset?'수정 내용 적용':'아이콘 등록'}</button>${editingAsset?'<button class="btn btn-secondary" id="isCancelAsset">수정 취소</button><small>이미지 파일을 선택하지 않으면 기존 이미지를 유지합니다. 수정은 이 아이콘을 사용하는 메뉴 전체에 적용됩니다.</small>':''}
-      <div class="form-label" style="margin-top:12px">등록된 아이콘 (${d.assets.length}개)</div><div class="icon-studio-assets">${d.assets.map((a,i)=>`<button type="button" class="icon-asset-choice" id="isAssetDetail${i}" aria-expanded="${a.id===detailAssetId}" aria-controls="isAssetDetailPanel" title="${esc(a.name)}">${esc(a.name)}</button>`).join('')||'<small>등록된 아이콘이 없습니다.</small>'}</div><div id="isAssetDetailPanel" class="icon-studio-asset-detail">${d.assets.map((a,i)=>a.id===detailAssetId?`<div style="display:flex;align-items:center;gap:8px;width:100%;padding:8px;border:1px solid #ddd;border-radius:6px"><div style="background:${esc(a.background||'transparent')};padding:4px;text-align:center"><img src="${esc(a.image)}" alt=""><small>${esc(a.displayName??a.name)}</small></div><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(a.name)}</b><small>기본 표시: ${esc(a.displayName??a.name)}<br>${usesCompletion(a)?`완료 관리: ${esc(a.doneName||'미지정')} · 완료 표시: ${esc(a.doneDisplayName||'등록 완료')}`:'완료 상태 사용 안 함'}<br>사용 중 ${assetUsers(a.id).length}개 버튼</small><button class="btn btn-secondary btn-sm" id="isEditAsset${i}">수정</button><button class="btn btn-secondary btn-sm" id="isDeleteAsset${i}">삭제</button></div></div>`:'').join('')}</div>
+      <div class="form-label" style="margin-top:12px">등록된 아이콘 (${d.assets.length}개)</div><div class="icon-studio-assets">${d.assets.map((a,i)=>`<button type="button" class="icon-asset-choice" id="isAssetDetail${i}" aria-expanded="${a.id===detailAssetId}" aria-controls="isAssetDetailPanel" title="${esc(a.name)}">${esc(a.name)}</button>`).join('')||'<small>등록된 아이콘이 없습니다.</small>'}</div>
+<div id="isAssetDetailPanel" class="icon-studio-asset-detail">${d.assets.map((a,i)=>a.id===detailAssetId?`<div style="display:flex;align-items:center;gap:8px;width:100%;padding:8px;border:1px solid #ddd;border-radius:6px"><div style="background:${esc(a.background||'transparent')};padding:4px;text-align:center"><img src="${esc(a.image)}" alt=""><small>${esc(a.displayName??a.name)}</small></div><div style="flex:1;min-width:0;overflow-wrap:anywhere"><b>${esc(a.name)}</b><small>기본 표시: ${esc(a.displayName??a.name)}<br>${usesCompletion(a)?`완료 관리: ${esc(a.doneName||'미지정')} · 완료 표시: ${esc(a.doneDisplayName||'등록 완료')}`:'완료 상태 사용 안 함'}<br>사용 중 ${assetUsers(a.id).length}개 버튼</small><button class="btn btn-secondary btn-sm" id="isEditAsset${i}">수정</button><button class="btn btn-secondary btn-sm" id="isDeleteAsset${i}">삭제</button></div></div>`:'').join('')}</div>
       <label>공통 메뉴 <select id="isMenu"><option value="">메뉴 선택</option>${d.menus.map(g=>`<option value="${esc(g.id)}" ${g.id===selectedMenu?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
       <button class="btn btn-secondary" id="isCreate">새 메뉴 묶음</button>
       ${m ? `${field('메뉴 이름','isMenuName',m.name,'text')}<small>이 메뉴를 사용하는 화면 ${Object.values(st().flow.screens).filter(s=>s.iconMenus?.some(p=>p.menuId===m.id)).length}개에 버튼·크기 변경이 함께 적용됩니다.</small>
@@ -114,13 +115,13 @@
     const clearDone=existing&&document.getElementById('isClearDone').checked;
     button.disabled=true;
     try{
-      const asset={id:existing?.id||uid(),name,displayName,completionEnabled,doneName:completionEnabled?doneName:existing?.doneName||'',doneDisplayName:completionEnabled?doneDisplayName:existing?.doneDisplayName||'',background,doneBackground:completionEnabled?doneBackground:existing?.doneBackground,image:file?await readImage(file):existing.image,doneImage:!completionEnabled?existing?.doneImage||'':done?await readImage(done):clearDone?'':existing?.doneImage||''};
+      const asset={id:existing?.id||uid(),name,displayName,completionEnabled,doneName:completionEnabled?doneName:existing?.doneName||'',doneDisplayName:completionEnabled?doneDisplayName:existing?.doneDisplayName||'',background,doneBackground:completionEnabled?doneBackground:existing?.doneBackground||'transparent',image:file?await readImage(file):existing.image,doneImage:!completionEnabled?existing?.doneImage||'':done?await readImage(done):clearDone?'':existing?.doneImage||''};
       const assets=existing?flow.iconStudio.assets.map(a=>a.id===existing.id?asset:a):[...flow.iconStudio.assets,asset];
       const candidate={...flow,iconStudio:{...flow.iconStudio,assets}};
       if(new TextEncoder().encode(JSON.stringify(candidate)).length>800000)throw Error('이미지 저장 용량이 부족합니다. 더 작은 이미지로 등록해 주세요.');
       if(existing){const previous=existing.displayName??existing.name;flow.iconStudio.menus.forEach(m=>m.buttons.forEach(b=>{if(b.assetId===existing.id&&b.label===previous)b.label=displayName;}));}
       flow.iconStudio.assets=assets;
-      if(activeSec===section){editingAssetId='';refresh();render();}
+      if(activeSec===section){editingAssetId='';refresh();render();document.getElementById('isStatus').textContent='아이콘 변경 사항이 아직 저장되지 않았습니다. 경로 설정 저장을 눌러 주세요.';}
     }catch(e){alert(e.message);}finally{button.disabled=false;}
   }
   async function edit(b){
@@ -215,7 +216,7 @@
     const doneBackground=document.getElementById('iconDoneBackgroundEnabled').checked?document.getElementById('iconDoneBackground').value:'';
     originalConfirm(...args);
     if(window.iconHotspotEditor?.button===b)return;
-    Object.assign(b,{offAssetId:off,onAssetId:on,doneAssetId:done,doneLabel:label.trim()||undefined,disableAfterDone,doneBackground});if(off)b.assetId=off;
+    Object.assign(b,{offAssetId:off,onAssetId:on,doneAssetId:done,disableAfterDone,doneBackground});if(label.trim())b.doneLabel=label.trim();else delete b.doneLabel;if(off)b.assetId=off;
     refresh();render();
   };
   function ensurePlacement(){
