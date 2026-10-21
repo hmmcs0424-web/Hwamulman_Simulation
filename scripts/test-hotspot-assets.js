@@ -21,7 +21,7 @@ const context = vm.createContext({
   loadSiteImageManifest:async()=>{}, assetFolderName:s=>s,
   assetApi:async()=>{calls++;return {assets:[{url:uploaded}]};}
 });
-for (const name of ['assetDisplayName','assetBlobPath','assetIdentity','localImageMatchKey','localizeLegacyAssetString','localizeFlowImages','getSimulatorImages','simulatorAssetSourceCandidates','applyHotspotToggleImage']) {
+for (const name of ['assetDisplayName','assetBlobPath','assetIdentity','localImageMatchKey','localizeLegacyAssetString','localizeFlowImages','currentSimulatorImages','mergeImageManifest','getSimulatorImages','simulatorAssetSourceCandidates','applyHotspotToggleImage']) {
   vm.runInContext(source(name), context);
 }
 (async()=>{
@@ -32,6 +32,19 @@ for (const name of ['assetDisplayName','assetBlobPath','assetIdentity','localIma
   const images = await context.getSimulatorImages();
   assert.equal(calls,0,'GitHub image listing must not call Vercel Blob');
   assert.deepEqual([...images],[local]);
+  const section = context.activeSec;
+  const deleted = section + '/deleted-image.png';
+  context.cache[section].flow.imageManifest = [local, deleted, uploaded];
+  assert.deepEqual([...(await context.getSimulatorImages())], [local], 'saved deleted entries must not reappear');
+  context.cache[section].flow.imageManifest = [deleted];
+  context.mergeImageManifest(section, context.cache[section].flow);
+  assert.deepEqual([...context.cache[section].flow.imageManifest], [local], 'loading must discard stale list entries');
+  context.siteImageManifest[section] = [];
+  assert.deepEqual([...(await context.getSimulatorImages())], [], 'an empty section must discard all old entries');
+  context.siteImageManifest = {};
+  context.cache[section].flow.imageManifest = [local];
+  assert.deepEqual([...(await context.getSimulatorImages())], [local], 'manifest failure must preserve the fallback');
+  context.siteImageManifest[section] = [local];
   let child;
   const element = {querySelector:()=>child,prepend:image=>{child=image;image.remove=()=>{child=undefined;};}};
   context.applyHotspotToggleImage(hotspot,element,true);

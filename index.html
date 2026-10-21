@@ -2103,6 +2103,7 @@ async function loadSiteImageManifest() {
   if(siteImageManifest) return siteImageManifest;
   try {
     const r = await fetch('image-manifest.json?_=' + Date.now());
+    if(!r.ok) throw new Error(`Image manifest request failed: ${r.status}`);
     siteImageManifest = await r.json();
   } catch(e) {
     siteImageManifest = {};
@@ -2128,11 +2129,16 @@ function localizeLegacyAssetReferences(value) {
   }
   return localizeLegacyAssetString(value);
 }
+function currentSimulatorImages(sectionName, flow=cache[sectionName]?.flow) {
+  // The deployed list is authoritative, including an empty section.
+  // Preserve saved entries only when the deployment manifest is unavailable.
+  const deployed = siteImageManifest?.[sectionName];
+  return Array.isArray(deployed) ? deployed : (flow?.imageManifest || []);
+}
 function mergeImageManifest(sectionName, flow) {
   const fromSite = siteImageManifest?.[sectionName] || [];
   localizeFlowImages(sectionName,flow,fromSite);
-  const merged = new Set([...(flow.imageManifest||[]), ...fromSite]);
-  flow.imageManifest = Array.from(merged);
+  flow.imageManifest = Array.from(new Set(currentSimulatorImages(sectionName, flow)));
 }
 function localImageMatchKey(value) {
   const name=assetDisplayName(value).replace(/\.(jpg|jpeg|png|gif|webp|avif)$/i,'').toLocaleLowerCase('ko-KR');
@@ -4753,10 +4759,7 @@ function getAssetGroupPath(flow,image) {
 async function getSimulatorImages(sectionName=activeSec) {
   await loadSiteImageManifest();
   const flow = cache[sectionName]?.flow;
-  const candidates = [
-    ...((siteImageManifest?.[sectionName])||[]),
-    ...((flow?.imageManifest)||[])
-  ];
+  const candidates = currentSimulatorImages(sectionName, flow);
   const byPath = new Map();
   candidates.filter(Boolean).forEach(image => byPath.set(assetIdentity(image), image));
   const images = Array.from(byPath.values()).sort((a,b) => assetDisplayName(a).localeCompare(assetDisplayName(b),'ko'));
@@ -6639,7 +6642,7 @@ function renderExceptionTargetOptions(query='') {
   const used=new Set(Object.values(st.flow.screens).map(screen=>assetIdentity(screen.image)));
   const matches=screens.filter(([id,screen])=>!keyword||[id,screen.label,assetDisplayName(screen.image)].join(' ').toLocaleLowerCase().includes(keyword));
   const images=new Map();
-  [...(siteImageManifest?.[activeSec]||[]),...(st.flow.imageManifest||[])].filter(Boolean).forEach(image=>images.set(assetIdentity(image),image));
+  currentSimulatorImages(activeSec,st.flow).filter(Boolean).forEach(image=>images.set(assetIdentity(image),image));
   const unused=[...images.values()].filter(image=>!used.has(assetIdentity(image))&&(!keyword||assetDisplayName(image).toLocaleLowerCase().includes(keyword))).sort((a,b)=>assetDisplayName(a).localeCompare(assetDisplayName(b),'ko'));
   sel.innerHTML='<option value="">이동할 화면 또는 이미지 선택</option>'
     +(matches.length?'<optgroup label="등록된 화면">'+matches.map(([id,screen])=>'<option value="'+esc(id)+'">'+esc(screen.label||id)+' · '+esc(assetDisplayName(screen.image))+'</option>').join('')+'</optgroup>':'')
