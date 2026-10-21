@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "node scripts/generate-image-manifest.js && node scripts/build-announcement-app.js",
+    "build": "node scripts/generate-image-manifest.js && node scripts/build-announcement-app.js && node scripts/prepare-deployment.js",
     "serve": "node scripts/static-server.js"
   },
   "dependencies": {
