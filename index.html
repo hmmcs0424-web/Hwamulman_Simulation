@@ -4683,6 +4683,16 @@ function simulatorDocId(name) {
   return ({'차주앱':'driverApp','빽통앱':'backtongApp','빽통PC':'backtongPC','채널톡':'channelTalk'})[name] || name;
 }
 
+function simulatorFlowForSave(value) {
+  if(Array.isArray(value))return Array.from(value,item=>item===undefined?null:simulatorFlowForSave(item));
+  if(value && Object.getPrototypeOf(value)===Object.prototype){
+    return Object.fromEntries(Object.entries(value)
+      .filter(([,item])=>item!==undefined)
+      .map(([key,item])=>[key,simulatorFlowForSave(item)]));
+  }
+  return value;
+}
+
 async function saveSimulatorFlow(sectionName=activeSec) {
   if(!adminMode || !firebaseReady || !firebaseAuth.currentUser) { alert('관리자 로그인이 필요합니다.'); return false; }
   const status = document.getElementById('flowSaveStatus');
@@ -4700,7 +4710,7 @@ async function saveSimulatorFlow(sectionName=activeSec) {
       return false;
     }
     await firebaseFns.setDoc(ref, {
-      flow: cache[sectionName].flow,
+      flow: simulatorFlowForSave(cache[sectionName].flow),
       updatedAt: firebaseFns.serverTimestamp(),
       updatedBy: firebaseAuth.currentUser.email || firebaseAuth.currentUser.uid
     }, {merge:true});
