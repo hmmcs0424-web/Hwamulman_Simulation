@@ -8,7 +8,14 @@
   const data = () => {
     const f = st()?.flow;
     if (!f) return null;
-    return f.iconStudio || (f.iconStudio = {assets: [], menus: []});
+    const studio = f.iconStudio || (f.iconStudio = {assets: [], menus: []});
+    // Recover labels flattened by the former single-line hotspot input bridge.
+    for (const m of studio.menus) for (const b of m.buttons) {
+      const a = studio.assets.find(a => a.id === b.assetId);
+      const label = a?.displayName ?? a?.name;
+      if (label?.includes('\n') && b.label === label.replace(/[\r\n]/g, '')) b.label = label;
+    }
+    return studio;
   };
   const menu = () => data()?.menus.find(m => m.id === selectedMenu);
   const key = (sec, origin, group, button) => JSON.stringify([sec, origin, group, button]);
@@ -206,8 +213,6 @@
     const b=window.iconHotspotEditor?.button;
     if(!b)return originalConfirm(...args);
     const off=document.getElementById('iconOffAsset').value,on=document.getElementById('iconOnAsset').value,done=document.getElementById('iconDoneAsset').value;
-    const previous=b.label;
-    document.getElementById('hsLabelInput').value=document.getElementById('iconDisplayLabel').value.trim()||previous;
     for(const [id,assetId] of [['hsToggleOffImage',off],['hsToggleOnImage',on]]){
       const a=data().assets.find(a=>a.id===assetId);if(!a)continue;
       const select=document.getElementById(id),option=document.createElement('option');option.value=a.image;option.textContent=a.name;select.append(option);select.value=a.image;

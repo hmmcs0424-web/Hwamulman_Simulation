@@ -5990,7 +5990,7 @@ function confirmHs() {
   const textDefaultSize=Number(document.getElementById('hsTextColorSize').value);
   const textMaxSize=Number(document.getElementById('hsTextColorMaxSize').value);
   if(actionType==='text_color_target'&&(!(textMinSize>0)||!(textDefaultSize>0)||!(textMaxSize>0)||textMinSize>textDefaultSize||textDefaultSize>textMaxSize)) { alert('글자 크기는 최소 ≤ 기본 ≤ 최대 순서로 입력해 주세요.'); return; }
-  const label = document.getElementById('hsLabelInput').value.trim()
+  const label = (iconEdit ? document.getElementById('iconDisplayLabel').value.trim() || iconEdit.button.label : document.getElementById('hsLabelInput').value.trim())
     || (actionType==='link'?linkUrl:actionType==='complete_navigate'?`${completionKey} 완료 후 이동`:actionType==='completion_image'?`${completionKey} 완료 이미지`:hasNavigation ? (goto===HOTSPOT_GO_BACK ? '직전 화면으로 돌아가기' : st.flow.screens[goto]?.label)||goto : actionType==='toggle'?'토글 영역':actionType==='toast'?'토스트 알림':actionType==='text_color_target'?textColorText:actionType==='color_picker'?'색상 선택기':actionType==='font_size_slider'?'글자 크기 슬라이더':actionType==='font_size_value'?'현재 글자 크기':actionType==='group_toggle'?`${stateGroup} 토글`:actionType==='conditional_image'?`${stateGroup} 조건부 이미지`:actionType==='radio_select'?`${radioGroup} · ${radioValue}`:'토글 및 토스트 알림');
   const preserveScroll=document.getElementById('hsPreserveScroll').checked;
   const hotspot={id:`hs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`,label,...pendingHs,actionType};
@@ -7785,6 +7785,6 @@ window.addEventListener('beforeunload', e => {
 
 boot();
 </script>
-<script src="./vendor/icon-menu-studio.js?v=16"></script>
+<script src="./vendor/icon-menu-studio.js?v=17"></script>
 </body>
 </html>
