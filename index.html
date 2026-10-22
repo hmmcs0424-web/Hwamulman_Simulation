@@ -3324,7 +3324,16 @@ async function renderPhoneAccordions(scr) {
     else button.onclick=()=>togglePhoneAccordion(item,scr);
     layer.appendChild(button);
   });
-  const viewport=document.getElementById('phoneScrollViewport');if(expanded.length)viewport.classList.add('scroll-mode');
+  const viewport=document.getElementById('phoneScrollViewport');
+  if(viewport){
+    const renderedHeight=(expanded.length?canvas:base).getBoundingClientRect().height;
+    const minScroll=Number(viewport.dataset.minScroll)||0;
+    const bottomHeight=parseFloat(viewport.style.bottom)||0;
+    const maxScroll=Math.max(minScroll,renderedHeight-bottomHeight-viewport.clientHeight);
+    viewport.dataset.maxScroll=String(maxScroll);
+    viewport.classList.toggle('scroll-mode',scr.type==='scroll'||maxScroll>minScroll||minScroll>0||bottomHeight>0);
+    viewport.scrollTop=Math.min(maxScroll,Math.max(minScroll,viewport.scrollTop));
+  }
 }
 
 async function togglePhoneAccordion(item,scr) {
