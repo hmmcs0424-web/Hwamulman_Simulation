@@ -721,6 +721,7 @@ textarea.form-input{resize:vertical;}
           <div class="layout-draw-overlay" id="phoneLayoutDrawOverlay"><div class="layout-draw-help" id="phoneLayoutDrawHelp"></div><div class="layout-draw-rect"></div></div>
         </div>
       </div>
+      <div id="phoneBottomAccordionLayer" style="position:absolute;inset:0;z-index:20;pointer-events:none"></div>
       <div class="phone-fixed-icon-layer" id="phoneFixedIconLayer"></div>
       <div class="sim-toast" id="simToast" role="status" aria-live="polite"><span class="sim-toast-message"></span><button type="button" class="sim-toast-close">확인</button></div>
       <div class="popup-overlay" id="popupOverlay">
@@ -1443,8 +1444,9 @@ textarea.form-input{resize:vertical;}
   <div class="modal" style="max-width:520px">
     <div class="modal-title">↕ 부분 펼치기 설정</div>
     <div class="form-row"><div class="form-label">이름</div><input class="form-input" id="phoneAccordionLabel" placeholder="예: 발급 이력"></div>
-    <div class="form-row"><div class="form-label">펼쳤을 때 버튼 부분 이미지 (선택)</div><select class="form-input" id="phoneAccordionTriggerImage"></select></div>
-    <div class="form-row"><div class="form-label">아래에 삽입할 상세 조각 이미지</div><select class="form-input" id="phoneAccordionDetailImage" onchange="previewPhoneAccordionImage()"></select></div>
+    <div class="form-row"><div class="form-label">펼치기 방식</div><select class="form-input" id="phoneAccordionMode"><option value="inline">본문에서 아래로 펼치기</option><option value="bottom">하단 고정 · 위로 펼치기</option></select><div style="font-size:12px;color:#777;margin-top:6px">하단 고정 방식: 접힌 패널 전체를 드래그하고, 펼친 패널 전체 조각 이미지를 선택하세요. 펼친 패널 상단을 누르면 접힙니다.</div></div>
+    <div class="form-row"><div class="form-label">펼쳤을 때 버튼 부분 이미지 (선택 · 본문 방식)</div><select class="form-input" id="phoneAccordionTriggerImage"></select></div>
+    <div class="form-row"><div class="form-label">펼쳤을 때 표시할 상세 조각 이미지</div><select class="form-input" id="phoneAccordionDetailImage" onchange="previewPhoneAccordionImage()"></select></div>
     <label style="display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:12px"><input id="phoneAccordionReplaceTrigger" type="checkbox" checked> 펼친 조각 이미지로 클릭 영역을 덮어쓰기</label>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label class="form-label">상세 이미지 왼쪽(%)<input class="form-input" id="phoneAccordionDetailLeft" type="number" min="0" max="100" step="0.1" value="0"></label><label class="form-label">상세 이미지 너비(%)<input class="form-input" id="phoneAccordionDetailWidth" type="number" min="1" max="100" step="0.1" value="100"></label></div>
     <div style="text-align:center"><img id="phoneAccordionPreview" alt="상세 이미지 미리보기" style="max-width:100%;height:220px;object-fit:contain;border:1px solid #e2e2e2;border-radius:8px;background:#f5f5f5"></div>
@@ -2923,6 +2925,7 @@ function renderPhoneScreen(scr) {
   document.getElementById('phoneFixedFooter').classList.remove('active');
   clearPhoneAdCarousel();
   clearPhoneHorizontalMenu();
+  document.getElementById('phoneBottomAccordionLayer').innerHTML='';
   document.getElementById('phoneFixedIconLayer').innerHTML='';
   document.getElementById('phoneScrollRegionLayer').innerHTML='';
   document.getElementById('phoneAccordionLayer').innerHTML='';
@@ -3332,13 +3335,43 @@ function mapPhoneOverlayRect(item) {
   return {...item,top:mappedTop/total*100,height:(mappedBottom-mappedTop)/total*100};
 }
 
+function renderPhoneBottomAccordions(scr){
+  const layer=document.getElementById('phoneBottomAccordionLayer'),base=document.getElementById('screenImg');
+  if(!layer||!base)return;
+  layer.innerHTML='';
+  if(adminMode&&!counselorPreviewMode)return;
+  const items=APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)?(scr.accordions||[]).filter(item=>item.mode==='bottom'):[];
+  items.forEach(item=>{
+    const open=phoneAccordionExpanded.has(phoneAccordionKey(item));
+    const panel=document.createElement('div');
+    const left=Number(open?item.detailLeft:item.left)||0,width=Number(open?item.detailWidth:item.width)||100;
+    panel.style.cssText=`position:absolute;bottom:0;left:${left}%;width:${width}%;max-height:100%;overflow:auto;pointer-events:auto;background:white;box-shadow:0 -2px 8px #0002;`;
+    panel.onpointerdown=event=>event.stopPropagation();
+    if(open){
+      const image=document.createElement('img');image.src=item.detailImage;image.alt=item.label||'펼친 패널';image.style.cssText='display:block;width:100%;height:auto';panel.appendChild(image);
+      const close=document.createElement('button');close.type='button';close.title='접기';close.setAttribute('aria-label','접기');
+      const triggerHeight=base.getBoundingClientRect().height*(Number(item.height)||0)/100;
+      close.style.cssText=`position:absolute;top:0;left:0;width:100%;height:${Math.max(28,Math.min(56,triggerHeight))}px;border:0;background:transparent;cursor:pointer`;
+      close.onclick=()=>togglePhoneAccordion(item,scr);panel.appendChild(close);
+    }else{
+      const canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(base.naturalWidth*width/100));canvas.height=Math.max(1,Math.round(base.naturalHeight*(Number(item.height)||0)/100));
+      canvas.getContext('2d').drawImage(base,base.naturalWidth*left/100,base.naturalHeight*(Number(item.top)||0)/100,canvas.width,canvas.height,0,0,canvas.width,canvas.height);
+      canvas.style.cssText='display:block;width:100%;height:auto';
+      const button=document.createElement('button');button.type='button';button.title='펼치기';button.setAttribute('aria-label',item.label||'펼치기');button.style.cssText='display:block;width:100%;border:0;padding:0;background:transparent;cursor:pointer';button.onclick=()=>togglePhoneAccordion(item,scr);button.appendChild(canvas);panel.appendChild(button);
+    }
+    layer.appendChild(panel);
+  });
+}
+
 async function renderPhoneAccordions(scr) {
   const layer=document.getElementById('phoneAccordionLayer'),canvas=document.getElementById('phoneAccordionCanvas'),base=document.getElementById('screenImg');
   if(!layer||!canvas||!base)return;
   layer.innerHTML='';phoneAccordionLayout=null;
+  renderPhoneBottomAccordions(scr);
   const items=APP_PARTIAL_SCROLL_SECTIONS.has(activeSec)&&Array.isArray(scr.accordions)?scr.accordions:[],editing=adminMode&&!counselorPreviewMode;
   const expanded=[];
-  for(const item of items.filter(value=>!editing&&phoneAccordionExpanded.has(phoneAccordionKey(value)))){
+  for(const item of items.filter(value=>value.mode!=='bottom'&&!editing&&phoneAccordionExpanded.has(phoneAccordionKey(value)))){
     try{const detail=await loadImageElement(item.detailImage),replaceTrigger=item.replaceTrigger!==false,width=(Number(item.detailWidth)||100)*base.naturalWidth/100,top=(Number(item.top)||0)*base.naturalHeight/100,bottom=((Number(item.top)||0)+(Number(item.height)||0))*base.naturalHeight/100,height=detail.naturalHeight*(width/detail.naturalWidth);expanded.push({item,detail,replaceTrigger,at:replaceTrigger?top:bottom,resumeAt:bottom,height,width,delta:height-(replaceTrigger?bottom-top:0)});}catch(error){console.warn('부분 펼침 이미지 로드 실패:',item.detailImage,error);}
   }
   expanded.sort((a,b)=>a.at-b.at);
@@ -3352,7 +3385,7 @@ async function renderPhoneAccordions(scr) {
     for(const value of expanded.filter(value=>value.item.triggerImage)){try{const trigger=await loadImageElement(value.item.triggerImage),rect=mapPhoneOverlayRect(value.item);context.drawImage(trigger,(Number(rect.left)||0)*base.naturalWidth/100,(Number(rect.top)||0)*displayHeight/100,(Number(rect.width)||0)*base.naturalWidth/100,(Number(rect.height)||0)*displayHeight/100);}catch(error){console.warn('펼침 버튼 이미지 로드 실패:',error);}}
     base.style.display='none';canvas.style.display='block';
   }else{base.style.display='block';canvas.style.display='none';}
-  items.forEach((item,index)=>{const rect=mapPhoneOverlayRect(item),button=document.createElement('div');button.className='phone-accordion-trigger'+(editing?' admin':showHotspots?' show-mode':'');button.style.cssText=`top:${rect.top}%;left:${rect.left}%;width:${rect.width}%;height:${rect.height}%;`;
+  items.forEach((item,index)=>{if(item.mode==='bottom'&&!editing)return;const rect=mapPhoneOverlayRect(item),button=document.createElement('div');button.className='phone-accordion-trigger'+(editing?' admin':showHotspots?' show-mode':'');button.style.cssText=`top:${rect.top}%;left:${rect.left}%;width:${rect.width}%;height:${rect.height}%;`;
     button.onpointerdown=event=>event.stopPropagation();
     if(editing){const label=document.createElement('span');label.className='phone-accordion-trigger-label';label.textContent=item.label||`펼침 영역 ${index+1}`;button.appendChild(label);const remove=document.createElement('button');remove.type='button';remove.className='phone-accordion-trigger-delete';remove.textContent='×';remove.onclick=event=>{event.preventDefault();event.stopPropagation();deletePhoneAccordion(index)};button.appendChild(remove);}
     else button.onclick=()=>togglePhoneAccordion(item,scr);
@@ -3377,7 +3410,7 @@ async function togglePhoneAccordion(item,scr) {
 
 function renderPhoneAccordionList() {
   const el=document.getElementById('phoneAccordionList');if(!el)return;const items=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur]?.accordions||[];
-  el.innerHTML=items.length?items.map((item,index)=>`<div class="hs-item"><span>↕ ${esc(item.label||`펼침 영역 ${index+1}`)}</span><button class="btn btn-danger btn-sm" onclick="deletePhoneAccordion(${index})">삭제</button></div>`).join(''):'<div style="color:#aaa;font-size:13px">등록된 펼침 영역 없음</div>';
+  el.innerHTML=items.length?items.map((item,index)=>`<div class="hs-item"><span>↕ ${esc(item.label||`펼침 영역 ${index+1}`)}${item.mode==='bottom'?' · 하단 고정 ↑':''}</span><button class="btn btn-danger btn-sm" onclick="deletePhoneAccordion(${index})">삭제</button></div>`).join(''):'<div style="color:#aaa;font-size:13px">등록된 펼침 영역 없음</div>';
 }
 function deletePhoneAccordion(index) { const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];if(!scr||!Array.isArray(scr.accordions))return;phoneAccordionExpanded.delete(phoneAccordionKey(scr.accordions[index]));scr.accordions.splice(index,1);renderPhoneAccordions(scr);renderPhoneAccordionList(); }
 
@@ -5957,6 +5990,7 @@ async function openPhoneAccordionPicker() {
   document.getElementById('phoneAccordionTriggerImage').innerHTML='<option value="">기본 이미지 그대로</option>'+options;
   document.getElementById('phoneAccordionDetailImage').innerHTML='<option value="">상세 조각 이미지 선택</option>'+options;
   document.getElementById('phoneAccordionDetailLeft').value='0';document.getElementById('phoneAccordionDetailWidth').value='100';
+  document.getElementById('phoneAccordionMode').value='inline';
   document.getElementById('phoneAccordionReplaceTrigger').checked=true;
   previewPhoneAccordionImage();openModal('phoneAccordionModal');
 }
@@ -5966,7 +6000,7 @@ function confirmPhoneAccordion(){
   const detailImage=document.getElementById('phoneAccordionDetailImage').value;if(!detailImage)return alert('아래에 삽입할 상세 조각 이미지를 선택해 주세요.');
   const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];if(!scr)return;if(!Array.isArray(scr.accordions))scr.accordions=[];
   const detailLeft=Math.max(0,Math.min(100,Number(document.getElementById('phoneAccordionDetailLeft').value)||0)),detailWidth=Math.max(1,Math.min(100-detailLeft,Number(document.getElementById('phoneAccordionDetailWidth').value)||100));
-  scr.accordions.push({id:`accordion_${Date.now().toString(36)}`,label:document.getElementById('phoneAccordionLabel').value.trim()||`펼침 영역 ${scr.accordions.length+1}`,triggerImage:document.getElementById('phoneAccordionTriggerImage').value,detailImage,detailLeft,detailWidth,replaceTrigger:document.getElementById('phoneAccordionReplaceTrigger').checked,...pendingHs});
+  scr.accordions.push({id:`accordion_${Date.now().toString(36)}`,label:document.getElementById('phoneAccordionLabel').value.trim()||`펼침 영역 ${scr.accordions.length+1}`,mode:document.getElementById('phoneAccordionMode').value,triggerImage:document.getElementById('phoneAccordionTriggerImage').value,detailImage,detailLeft,detailWidth,replaceTrigger:document.getElementById('phoneAccordionReplaceTrigger').checked,...pendingHs});
   pendingHs=null;cancelDraw();renderPhoneAccordions(scr);renderPhoneAccordionList();
 }
 
