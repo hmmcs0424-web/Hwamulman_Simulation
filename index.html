@@ -4416,7 +4416,8 @@ async function refreshPhoneFixedIconEditor(){
   imagePicker.innerHTML='<option value="">이미지 목록을 불러오는 중...</option>';
   const images=await getSimulatorImages(activeSec);
   imagePicker.innerHTML='<option value="">아이콘 이미지 선택</option>'+images.map(url=>`<option value="${esc(url)}">${esc(assetDisplayName(url))}</option>`).join('');
-  const screens=Object.entries(cache[activeSec]?.flow?.screens||{});
+  const screens=Object.entries(cache[activeSec]?.flow?.screens||{}).sort(([aId,a],[bId,b])=>
+    String(a.label||aId).localeCompare(String(b.label||bId),'ko',{numeric:true,sensitivity:'base'}));
   gotoPicker.innerHTML='<option value="">이동할 화면 선택</option>'+screens.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)}</option>`).join('');
   renderPhoneFixedIconList();
 }
