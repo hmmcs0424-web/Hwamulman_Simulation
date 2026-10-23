@@ -164,7 +164,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .phone-scroll-region.horizontal{overflow-x:auto;overflow-y:hidden;touch-action:pan-x}.phone-scroll-region.horizontal::-webkit-scrollbar{height:2px;width:auto}.phone-scroll-region-track{position:relative;min-width:100%}.phone-scroll-region.vertical .phone-scroll-region-track{width:100%;height:auto}.phone-scroll-region.horizontal .phone-scroll-region-track{height:auto;min-height:100%}.phone-scroll-region-track>img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none}.phone-scroll-region.horizontal .phone-scroll-region-track>img{height:auto;object-fit:contain}.scroll-region-hotspot-layer{position:absolute;inset:0;z-index:4;pointer-events:none}.scroll-region-hotspot-draw{display:none;position:absolute;inset:0;z-index:8;cursor:crosshair;background:rgba(37,99,235,.05);touch-action:none}.scroll-region-hotspot-draw.active{display:block}.scroll-region-hotspot-draw-rect{display:none;position:absolute;border:2px solid #2563eb;background:rgba(37,99,235,.18);pointer-events:none}.legacy-horizontal-menu-editor,#btnHorizontalAreaDraw,#btnClearHorizontal{display:none!important}
 .phone-accordion-canvas{display:none;width:100%;height:auto}.phone-accordion-layer{position:absolute;inset:0;z-index:20;pointer-events:none}.phone-accordion-trigger{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto}.phone-accordion-trigger:hover{background:rgba(30,100,255,.08)}.phone-accordion-trigger.show-mode{background:rgba(30,100,255,.08);outline:2px solid rgba(30,100,255,.65);outline-offset:-2px;border-radius:4px}.phone-accordion-trigger.admin{outline:2px dashed #8b5cf6;outline-offset:-2px}.phone-accordion-trigger>img{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}.phone-accordion-trigger-label{display:none;position:absolute;left:3px;top:3px;padding:2px 5px;border-radius:4px;background:#7c3aed;color:#fff;font-size:9px;font-weight:800;white-space:nowrap}.phone-accordion-trigger.admin .phone-accordion-trigger-label{display:block}.phone-accordion-trigger-delete{display:none;position:absolute;right:-8px;top:-8px;width:18px;height:18px;border:0;border-radius:50%;padding:0;background:#ef4444;color:#fff;font-size:14px;font-weight:900;line-height:18px}.phone-accordion-trigger.admin .phone-accordion-trigger-delete{display:block}
 .inline-help{position:relative;display:inline-flex;vertical-align:middle}.inline-help-button{width:18px;height:18px;border:0;border-radius:50%;padding:0;background:#2563eb;color:#fff;font-size:12px;font-weight:900;line-height:18px;cursor:pointer}.inline-help-panel{display:none;position:absolute;z-index:50;top:24px;left:0;width:270px;padding:12px;border:1px solid #bfdbfe;border-radius:9px;background:#fff;color:#334155;box-shadow:0 8px 24px rgba(15,23,42,.18);font-size:11px;line-height:1.6}.inline-help.open .inline-help-panel{display:block}.inline-help-panel b{display:block;margin-bottom:5px;color:#1d4ed8;font-size:12px}.inline-help-panel .help-note{display:block;margin-top:7px;padding:6px 7px;border-radius:5px;background:#eff6ff;color:#1e40af}
-.phone-fixed-icon-layer{position:absolute;inset:0;z-index:19;pointer-events:none}.phone-fixed-icon{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}.phone-fixed-icon img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}.phone-fixed-icon.admin{outline:2px dashed #8b5cf6;outline-offset:2px;border-radius:5px}
+.phone-fixed-icon-layer{position:absolute;inset:0;z-index:19;pointer-events:none}.phone-fixed-icon{position:absolute;border:0;padding:0;background:transparent;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}.phone-fixed-icon img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}.phone-fixed-icon-resize{position:absolute;left:-6px;top:-6px;width:14px;height:14px;background:#7c3aed;border:2px solid white;border-radius:3px;cursor:nwse-resize;touch-action:none}.phone-fixed-icon.admin{touch-action:none;cursor:move;outline:2px dashed #8b5cf6;outline-offset:2px;border-radius:5px}
 .mask-layer{position:absolute;inset:0;z-index:18;pointer-events:none}
 .screen-mask{position:absolute;background:rgba(203,213,225,.58);-webkit-backdrop-filter:blur(14px) saturate(0);backdrop-filter:blur(14px) saturate(0);box-shadow:0 0 10px 5px rgba(203,213,225,.5) inset}
 .screen-mask.admin-mask{pointer-events:auto;outline:2px dashed #f43f5e;outline-offset:-2px}
@@ -921,7 +921,7 @@ textarea.form-input{resize:vertical;}
           <textarea id="phonePopupImages" style="display:none"></textarea>
         </div>
         <div class="fixed-icon-editor">
-          <div class="form-label">📌 별도 고정 아이콘</div>
+          <div class="form-label">📌 별도 고정 아이콘</div><div style="font-size:11px;color:#777;margin:5px 0">휴대폰의 아이콘을 드래그해 이동하고, 왼쪽 위 보라색 손잡이로 크기를 조절하세요. 조절 후 레이아웃 저장을 눌러주세요.</div>
           <div class="fixed-icon-fields">
             <select class="form-input wide" id="phoneFixedIconImage"><option value="">아이콘 이미지 선택</option></select>
             <select class="form-input wide" id="phoneFixedIconGoto"><option value="">이동할 화면 선택</option></select>
@@ -2986,7 +2986,7 @@ function renderPhoneFixedIcons(scr) {
   layer.innerHTML='';
   const layout=phoneLayoutForScreen(scr);
   const icons=Array.isArray(layout.fixedIcons)?layout.fixedIcons:[];
-  icons.forEach(icon=>{
+  icons.forEach((icon,index)=>{
     if(!icon?.image)return;
     const button=document.createElement('button');
     button.type='button';
@@ -2998,7 +2998,41 @@ function renderPhoneFixedIcons(scr) {
     image.alt=icon.label||'고정 아이콘';
     image.draggable=false;
     button.appendChild(image);
-    button.addEventListener('click',()=>navigateHotspotTarget(icon.goto));
+    const editing=adminMode&&!counselorPreviewMode;
+    if(editing){
+      const handle=document.createElement('span');handle.className='phone-fixed-icon-resize';handle.title='드래그하여 크기 조절';button.appendChild(handle);
+      button.title+=' · 드래그: 이동 / 왼쪽 위 손잡이: 크기';
+      let drag=null;
+      button.addEventListener('pointerdown',event=>{
+        if(event.button!==0)return;
+        event.preventDefault();event.stopPropagation();
+        const bounds=layer.getBoundingClientRect(),rect=button.getBoundingClientRect();
+        if(!bounds.width||!bounds.height)return;
+        drag={id:event.pointerId,x:event.clientX,y:event.clientY,resize:event.target===handle,width:rect.width/bounds.width*100,right:(bounds.right-rect.right)/bounds.width*100,bottom:(bounds.bottom-rect.bottom)/bounds.height*100,bounds,ratio:rect.height/rect.width};
+        button.setPointerCapture(event.pointerId);
+      });
+      button.addEventListener('pointermove',event=>{
+        if(!drag||event.pointerId!==drag.id)return;
+        event.preventDefault();event.stopPropagation();
+        const dx=(event.clientX-drag.x)/drag.bounds.width*100,dy=(event.clientY-drag.y)/drag.bounds.height*100;
+        const width=drag.resize?Math.max(3,Math.min(50,100-drag.right,(100-drag.bottom)*drag.bounds.height/(drag.bounds.width*drag.ratio),drag.width-dx)):drag.width;
+        const height=width*drag.bounds.width*drag.ratio/drag.bounds.height;
+        const right=drag.resize?drag.right:Math.max(0,Math.min(90,100-width,drag.right-dx));
+        const bottom=drag.resize?drag.bottom:Math.max(0,Math.min(90,100-height,drag.bottom-dy));
+        Object.assign(icon,{width,right,bottom});
+        button.style.width=width+'%';button.style.right=right+'%';button.style.bottom=bottom+'%';
+      });
+      const finish=event=>{
+        if(!drag||event.pointerId!==drag.id)return;
+        drag=null;event.stopPropagation();
+        if(button.hasPointerCapture(event.pointerId))button.releasePointerCapture(event.pointerId);
+        const draft=phoneFixedIconValues();draft[index]={...draft[index],...icon};
+        document.getElementById('phoneFixedIcons').value=JSON.stringify(draft);
+        renderPhoneFixedIconList();
+      };
+      button.addEventListener('pointerup',finish);button.addEventListener('pointercancel',finish);button.addEventListener('lostpointercapture',finish);
+    }
+    button.addEventListener('click',event=>{if(editing){event.preventDefault();event.stopPropagation();return}navigateHotspotTarget(icon.goto)});
     layer.appendChild(button);
   });
 }
