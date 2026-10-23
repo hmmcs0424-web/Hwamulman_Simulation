@@ -4413,12 +4413,18 @@ function phoneFixedIconValues(){try{return JSON.parse(document.getElementById('p
 async function refreshPhoneFixedIconEditor(){
   const imagePicker=document.getElementById('phoneFixedIconImage'),gotoPicker=document.getElementById('phoneFixedIconGoto');
   if(!imagePicker||!gotoPicker)return;
+  const selectedGoto=gotoPicker.value;
   imagePicker.innerHTML='<option value="">이미지 목록을 불러오는 중...</option>';
   const images=await getSimulatorImages(activeSec);
   imagePicker.innerHTML='<option value="">아이콘 이미지 선택</option>'+images.map(url=>`<option value="${esc(url)}">${esc(assetDisplayName(url))}</option>`).join('');
   const screens=Object.entries(cache[activeSec]?.flow?.screens||{}).sort(([aId,a],[bId,b])=>
     String(a.label||aId).localeCompare(String(b.label||bId),'ko',{numeric:true,sensitivity:'base'}));
-  gotoPicker.innerHTML='<option value="">이동할 화면 선택</option>'+screens.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)}</option>`).join('');
+  const used=new Set(screens.map(([,screen])=>assetIdentity(screen.image)));
+  const unused=images.filter(image=>!used.has(assetIdentity(image))).sort((a,b)=>assetDisplayName(a).localeCompare(assetDisplayName(b),'ko',{numeric:true,sensitivity:'base'}));
+  gotoPicker.innerHTML='<option value="">이동할 화면 선택</option>'
+    +'<optgroup label="등록된 화면">'+screens.map(([id,screen])=>`<option value="${esc(id)}">${esc(screen.label||id)} · ${esc(assetDisplayName(screen.image))}</option>`).join('')+'</optgroup>'
+    +(unused.length?'<optgroup label="추가 가능한 이미지">'+unused.map(image=>`<option value="${esc('__image__:'+image)}">${esc(assetDisplayName(image))}</option>`).join('')+'</optgroup>':'');
+  if([...gotoPicker.options].some(option=>option.value===selectedGoto))gotoPicker.value=selectedGoto;
   renderPhoneFixedIconList();
 }
 function renderPhoneFixedIconList(){
@@ -4427,9 +4433,22 @@ function renderPhoneFixedIconList(){
   list.innerHTML=icons.length?icons.map((icon,index)=>`<div class="fixed-icon-item"><img src="${esc(icon.image)}" alt=""><span><b>${esc(icon.label||assetDisplayName(icon.image))}</b><br>→ ${esc(cache[activeSec]?.flow?.screens?.[icon.goto]?.label||icon.goto||'화면 미지정')}</span><button type="button" onclick="removePhoneFixedIcon(${index})">삭제</button></div>`).join(''):'<div style="color:#999;font-size:11px">추가된 고정 아이콘이 없습니다.</div>';
 }
 function addPhoneFixedIcon(){
-  const image=document.getElementById('phoneFixedIconImage').value,goto=document.getElementById('phoneFixedIconGoto').value;
+  const image=document.getElementById('phoneFixedIconImage').value;
+  let goto=document.getElementById('phoneFixedIconGoto').value;
   if(!image)return alert('고정할 아이콘 이미지를 선택해 주세요.');
   if(!goto)return alert('아이콘을 클릭했을 때 이동할 화면을 선택해 주세요.');
+  if(goto.startsWith('__image__:')){
+    const targetImage=goto.slice('__image__:'.length),st=cache[activeSec];
+    const existing=Object.entries(st.flow.screens).find(([,screen])=>assetIdentity(screen.image)===assetIdentity(targetImage));
+    if(existing)goto=existing[0];
+    else {
+      const base='fixed_icon_'+Date.now().toString(36);goto=base;
+      let suffix=2;while(st.flow.screens[goto])goto=base+'_'+suffix++;
+      st.flow.screens[goto]={label:assetDisplayName(targetImage).replace(/\.[^.]+$/,''),image:targetImage,type:'normal',show_navbar:true,hotspots:[],guide:{points:[],caution:'',kms_link:''}};
+      renderList();detectUnreg();
+    }
+    refreshPhoneFixedIconEditor();
+  }
   const icons=phoneFixedIconValues();
   icons.push({image,goto,label:assetDisplayName(image),width:phoneLayoutNumber('phoneFixedIconWidth',3,50),right:phoneLayoutNumber('phoneFixedIconRight',0,90),bottom:phoneLayoutNumber('phoneFixedIconBottom',0,90)});
   document.getElementById('phoneFixedIcons').value=JSON.stringify(icons);
