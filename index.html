@@ -89,6 +89,11 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .side-menu[data-page="contacts"],.side-menu[data-page="contacts"]:hover{color:#34d399}
 .side-menu[data-page="contacts"].active{color:#6ee7b7;background:#123c32}
 .admin-only-menu{display:none}.admin-only-menu.visible{display:flex}
+.sidebar-nav .menu-hidden{display:none!important}
+.menu-visibility-button{margin:10px;padding:10px;border:1px solid #45454d;border-radius:8px;background:#29292e;color:#fff;cursor:pointer;font:inherit;font-size:12px}
+.menu-visibility-list{display:grid;gap:6px;max-height:55vh;overflow:auto;padding:4px}
+.menu-visibility-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:6px;background:#f4f4f6;color:#222;font-size:13px}
+.menu-visibility-row.child{margin-left:24px}.menu-visibility-row input{width:18px;height:18px;accent-color:#d99800}
 .sidebar.collapsed .sidebar-title,.sidebar.collapsed .side-label,.sidebar.collapsed .side-arrow,.sidebar.collapsed .side-submenus{display:none}
 .sidebar.collapsed .sidebar-head{justify-content:center;padding:0}.sidebar.collapsed .side-menu{justify-content:center;padding:0}
 .sidebar.collapsed .sidebar-nav{padding-left:10px;padding-right:10px}
@@ -637,6 +642,7 @@ textarea.form-input{resize:vertical;}
 <div class="main-layout">
 
   <aside class="sidebar" id="sidebar">
+    <button class="menu-visibility-button" id="menuVisibilityButton" type="button" hidden onclick="openMenuVisibilitySettings()">⚙ 메뉴 표시 설정</button>
     <div class="sidebar-head">
       <span class="sidebar-title">WORK GUIDE</span>
       <button class="sidebar-toggle" id="sidebarToggle" type="button" title="사이드바 접기" aria-label="사이드바 접기">«</button>
@@ -1188,6 +1194,20 @@ textarea.form-input{resize:vertical;}
 
 </div><!-- /main-layout -->
 
+<div class="modal-bg" id="menuVisibilityModal">
+  <div class="modal" style="max-width:520px" role="dialog" aria-modal="true" aria-labelledby="menuVisibilityTitle">
+    <div class="modal-title" id="menuVisibilityTitle">상담사 메뉴 표시 설정</div>
+    <p style="font-size:13px;line-height:1.6;color:#666">체크한 메뉴만 상담사에게 표시됩니다. 상위 메뉴를 숨기면 하위 메뉴도 숨겨집니다. 관리자는 숨긴 메뉴도 편집할 수 있습니다.</p>
+    <div class="menu-visibility-list" id="menuVisibilityList"></div>
+    <p style="font-size:12px;color:#777">FAQ와 업무 연락처는 기존과 같이 관리자 전용입니다.</p>
+    <p id="menuVisibilityStatus" role="status" style="font-size:13px;color:#b42318"></p>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" type="button" onclick="closeModal('menuVisibilityModal')">닫기</button>
+      <button class="btn btn-primary" id="saveMenuVisibilityButton" type="button" onclick="saveMenuVisibilitySettings()">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- 필수 통합 로그인 -->
 <div class="login-gate" id="loginGate">
   <div class="login-card">
@@ -1623,6 +1643,110 @@ const guidePages = {
 let businessContacts = [];
 let editingContactId = '';
 let unsubscribeBusinessContacts = null;
+let sidebarHiddenMenus = new Set();
+let sidebarVisibilityLoaded = false;
+let sidebarWorkspaceReady = false;
+
+function sidebarMenuEntries() {
+  return Array.from(document.querySelectorAll('.sidebar-nav button[data-page],.sidebar-nav button[data-sim],.sidebar-nav button[data-signup-page]')).map(button => ({
+    button,
+    key:button.dataset.sim ? 'sim:'+button.dataset.sim : button.dataset.signupPage ? 'signup:'+button.dataset.signupPage : 'page:'+button.dataset.page,
+    label:button.querySelector('.side-label')?.textContent||button.textContent,
+    parent:button.dataset.sim ? 'page:simulator' : button.dataset.signupPage ? 'page:signup' : null,
+    adminOnly:button.classList.contains('admin-only-menu')
+  }));
+}
+function sidebarMenuAllowed(key) {
+  if(adminMode && !counselorPreviewMode) return true;
+  const entry=sidebarMenuEntries().find(item=>item.key===key);
+  return sidebarVisibilityLoaded && !!entry && !entry.adminOnly && !sidebarHiddenMenus.has(key) && (!entry.parent || !sidebarHiddenMenus.has(entry.parent));
+}
+function sidebarDestination(page, section=activeSec) {
+  if(adminMode && !counselorPreviewMode) return {page,section:page==='simulator'?section:undefined};
+  const entries=sidebarMenuEntries();
+  if(page==='simulator') {
+    const sim=entries.find(item=>item.key==='sim:'+section && sidebarMenuAllowed(item.key)) || entries.find(item=>item.parent==='page:simulator' && sidebarMenuAllowed(item.key));
+    if(sim) return {page:'simulator',section:sim.button.dataset.sim};
+  } else {
+    const entry=entries.find(item=>item.button.dataset.signupPage===page) || entries.find(item=>item.button.dataset.page===page);
+    if(entry && sidebarMenuAllowed(entry.key)) return {page};
+    if(page==='signup') {
+      const child=entries.find(item=>item.parent==='page:signup' && sidebarMenuAllowed(item.key));
+      if(child) return {page:child.button.dataset.signupPage};
+    }
+  }
+  for(const entry of entries) {
+    if(entry.key==='page:simulator' || entry.key==='page:signup' || !sidebarMenuAllowed(entry.key)) continue;
+    return entry.button.dataset.sim ? {page:'simulator',section:entry.button.dataset.sim} : {page:entry.button.dataset.signupPage||entry.button.dataset.page};
+  }
+  return {page:'menuUnavailable'};
+}
+function syncSidebarVisibility() {
+  const editing=adminMode && !counselorPreviewMode;
+  document.getElementById('menuVisibilityButton').hidden=!editing;
+  const entries=sidebarMenuEntries();
+  entries.forEach(entry=>{
+    const group=entry.button.closest('.side-group');
+    const element=entry.parent ? entry.button : group||entry.button;
+    const emptyGroup=!editing && group && !entry.parent && !entries.some(child=>child.parent===entry.key && sidebarMenuAllowed(child.key));
+    element.classList.toggle('menu-hidden',!sidebarMenuAllowed(entry.key)||!!emptyGroup);
+  });
+  if(!editing) closeModal('menuVisibilityModal');
+}
+async function ensureVisibleWorkspace() {
+  if(!sidebarWorkspaceReady) return;
+  const next=sidebarDestination(activePage);
+  if(next.page!==activePage || (next.section && next.section!==activeSec)) await setWorkspacePage(next.page);
+}
+async function loadSidebarVisibility() {
+  const reference=firebaseFns.doc(firestoreDb,'guides','sidebarVisibility');
+  const apply=snapshot=>{
+    const values=snapshot.exists() ? snapshot.data().hiddenMenus : [];
+    sidebarHiddenMenus=new Set(Array.isArray(values) ? values.filter(value=>typeof value==='string') : []);
+    sidebarVisibilityLoaded=true;
+    syncSidebarVisibility();
+    ensureVisibleWorkspace().catch(console.error);
+  };
+  try {
+    apply(await firebaseFns.getDoc(reference));
+    firebaseFns.onSnapshot(reference,apply,error=>console.error('메뉴 표시 설정 동기화 실패:',error));
+  } catch(error) {
+    console.error('메뉴 표시 설정 로드 실패:',error);
+    syncSidebarVisibility();
+  }
+}
+function openMenuVisibilitySettings() {
+  if(!adminMode || counselorPreviewMode) return;
+  const list=document.getElementById('menuVisibilityList');
+  list.replaceChildren();
+  sidebarMenuEntries().filter(entry=>!entry.adminOnly).forEach(entry=>{
+    const row=document.createElement('label');
+    row.className='menu-visibility-row'+(entry.parent?' child':'');
+    const input=document.createElement('input');
+    input.type='checkbox'; input.dataset.menuKey=entry.key; input.checked=!sidebarHiddenMenus.has(entry.key);
+    row.append(input,document.createTextNode(entry.label.trim()));
+    list.append(row);
+  });
+  document.getElementById('menuVisibilityStatus').textContent=sidebarVisibilityLoaded ? '' : '메뉴 설정을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.';
+  document.getElementById('saveMenuVisibilityButton').disabled=!sidebarVisibilityLoaded;
+  document.getElementById('menuVisibilityModal').classList.add('active');
+}
+async function saveMenuVisibilitySettings() {
+  if(!adminMode || counselorPreviewMode || !sidebarVisibilityLoaded || !firebaseAuth?.currentUser) return;
+  const button=document.getElementById('saveMenuVisibilityButton');
+  const hiddenMenus=Array.from(document.querySelectorAll('#menuVisibilityList input')).filter(input=>!input.checked).map(input=>input.dataset.menuKey);
+  button.disabled=true; button.textContent='저장 중...';
+  try {
+    await firebaseFns.setDoc(firebaseFns.doc(firestoreDb,'guides','sidebarVisibility'),{
+      hiddenMenus, updatedAt:firebaseFns.serverTimestamp(), updatedBy:firebaseAuth.currentUser.uid
+    });
+    sidebarHiddenMenus=new Set(hiddenMenus);
+    syncSidebarVisibility();
+    closeModal('menuVisibilityModal');
+  } catch(error) {
+    document.getElementById('menuVisibilityStatus').textContent='저장하지 못했습니다. 다시 시도해 주세요: '+(error.message||error);
+  } finally { button.disabled=false; button.textContent='저장'; }
+}
 
 function loadGuidePages() {
   try {
@@ -1656,6 +1780,7 @@ async function initFirebase() {
     firestoreDb = firestoreSdk.getFirestore(app);
     firebaseFns = { ...authSdk, ...firestoreSdk };
     firebaseReady = true;
+    await loadSidebarVisibility();
     window.signupGuideBridge?.connect?.();
     window.signupChecklistBridge?.connect?.();
     window.membershipGuideBridge?.connect?.();
@@ -1711,7 +1836,10 @@ async function saveGuidePageToFirestore(key) {
 }
 
 async function setWorkspacePage(page) {
+  const destination=sidebarDestination(page);
+  page=destination.page;
   if(activePage==='simulator' && page!=='simulator' && !(await confirmFlowSavedBeforeLeave(activeSec))) return false;
+  if(destination.section && destination.section!==activeSec && !(await switchSec(destination.section))) return false;
   activePage = page;
   window.scrollTo({top:0,left:0,behavior:'auto'});
   document.getElementById('guidePage').scrollTo({top:0,left:0,behavior:'auto'});
@@ -1735,6 +1863,15 @@ async function setWorkspacePage(page) {
 }
 
 function renderGuidePage() {
+  if(activePage==='menuUnavailable') {
+    document.getElementById('guidePageTitle').textContent='안내';
+    document.getElementById('guidePageDesc').textContent='';
+    document.getElementById('guideEditBtn').style.display='none';
+    document.getElementById('guideEditorBox').style.display='none';
+    document.getElementById('guideContent').style.display='';
+    document.getElementById('guideContent').textContent=sidebarVisibilityLoaded ? '현재 공개된 메뉴가 없습니다. 관리자에게 문의해 주세요.' : '메뉴 설정을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.';
+    return;
+  }
   const page = guidePages[activePage];
   if(!page) return;
   if(activePage === 'messageTemplates') {
@@ -2327,6 +2464,9 @@ async function boot() {
   document.querySelectorAll('.nav-menu').forEach(b => b.classList.toggle('active', b.dataset.sim===initialSection));
   document.querySelectorAll('.side-submenu[data-sim]').forEach(b => b.classList.toggle('active', b.dataset.sim===initialSection));
   applySec(initialSection);
+  sidebarWorkspaceReady=true;
+  syncSidebarVisibility();
+  await ensureVisibleWorkspace();
 }
 
 // ═══════════════════════════════════════════
@@ -2408,14 +2548,15 @@ async function confirmFlowSavedBeforeLeave(sectionName) {
 }
 
 async function switchSec(name) {
+  if(!sidebarMenuAllowed('sim:'+name)) return false;
   if(name === activeSec) return true;
   if(!(await confirmFlowSavedBeforeLeave(activeSec))) return false;
-  counselorPreviewMode=false;
   if(drawing) cancelDraw();
   clearTransientScreenState();
 
   activeSec = name;
   document.querySelectorAll('.nav-menu').forEach(b => b.classList.toggle('active', b.dataset.sim===name));
+  document.querySelectorAll('.side-submenu[data-sim]').forEach(b => b.classList.toggle('active', b.dataset.sim===name));
 
   await loadSec(name);
   applySec(name);
@@ -4120,6 +4261,7 @@ function exitAdmin() {
   counselorPreviewMode = false;
   currentAdminProfile=null;
   syncAdminUI();
+  ensureVisibleWorkspace().catch(console.error);
   document.querySelectorAll('.layout-saved-region').forEach(el=>el.classList.remove('visible'));
   syncAccessGate();
 }
@@ -4144,7 +4286,8 @@ async function startCounselorPreview() {
   st.cur=null;
   loginPopupState={armed:previewScreen===start,shown:false,images:[],index:0};
   syncAdminUI();
-  if(previewScreen) goTo(previewScreen,true);
+  await ensureVisibleWorkspace();
+  if(activePage==='simulator' && sidebarMenuAllowed('sim:'+activeSec) && cache[activeSec]===st && previewScreen) goTo(previewScreen,true);
 }
 
 function stopCounselorPreview() {
@@ -4163,6 +4306,7 @@ function syncAdminUI() {
   const faqMenu = document.getElementById('faqMenu');
   const contactsMenu = document.getElementById('contactsMenu');
   const adminEditing = adminMode && !counselorPreviewMode;
+  syncSidebarVisibility();
   syncMessageTemplateAdminMode();
   if(!adminEditing) {
     cancelLayoutDraw();
@@ -4174,14 +4318,6 @@ function syncAdminUI() {
     unsubscribeBusinessContacts();
     unsubscribeBusinessContacts=null;
     businessContacts=[];
-  }
-  if(!adminMode && activePage==='contacts') {
-    setWorkspacePage('simulator');
-    return;
-  }
-  if(!adminEditing && activePage==='faq') {
-    setWorkspacePage('simulator');
-    return;
   }
   btn.classList.toggle('on', adminMode);
   btn.textContent = counselorPreviewMode
