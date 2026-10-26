@@ -251,16 +251,30 @@
     }
   }
   const oldAction=handleHotspotAction;
-  handleHotspotAction=function(h,e){if(h.actionType!=='origin_complete')return oldAction(h,e);const c=contexts.get(activeSec);if(!c||!st().flow.screens[c.origin]){showSimulatorToast('출발한 아이콘이 없습니다. 배차 상세에서 인수증 등록을 먼저 눌러 주세요.');return;}completed.add(key(activeSec,c.origin,c.menu,c.button));contexts.delete(activeSec);goTo(c.origin);st().hist=st().hist.slice(0,c.history);renderBreadcrumb();};
+  handleHotspotAction=function(h,e){
+    if(h.actionType==='origin_return'||h.actionType==='origin_complete'){
+      const c=contexts.get(activeSec);
+      if(!c||!st().flow.screens[c.origin]){showSimulatorToast('기억된 출발 화면이 없습니다. 출발 화면 기억을 설정한 영역에서 먼저 시작해 주세요.');return;}
+      if(h.actionType==='origin_complete'&&c.menu&&c.button)completed.add(key(activeSec,c.origin,c.menu,c.button));
+      if(c.parent)contexts.set(activeSec,c.parent);else contexts.delete(activeSec);
+      goTo(c.origin);st().hist=st().hist.slice(0,c.history);renderBreadcrumb();return;
+    }
+    // Keep an enclosing icon flow when opening a shared bank-change flow.
+    if(!h.assetId&&h.rememberOrigin&&['navigate','navigate_toast'].includes(h.actionType)&&h.goto!==HOTSPOT_GO_BACK&&h.goto!==st().cur&&st().flow.screens[h.goto]){
+      contexts.set(activeSec,{origin:st().cur,history:st().hist.length,parent:contexts.get(activeSec)});
+    }
+    return oldAction(h,e);
+  };
   const originalRender=renderScreen;
   renderScreen=function(...args){const result=originalRender(...args);refresh();render();return result;};
   const oldRegions=renderPhoneScrollRegions;
   renderPhoneScrollRegions=function(s){oldRegions(s);(s?.iconMenus||[]).forEach(p=>{if(p.replacesRegion!==undefined){const el=document.querySelector(`.phone-scroll-region[data-scroll-region-index="${p.replacesRegion}"]`);if(el)el.style.display='none';}});render();};
   const oldList=renderHsList;renderHsList=function(...args){const r=oldList(...args);refresh();render();return r;};
   const oldHome=goHome;goHome=function(...args){completed.clear();contexts.clear();toggles.clear();return oldHome(...args);};
-  const oldBack=goBack;goBack=function(...args){const result=oldBack(...args),c=contexts.get(activeSec);if(st()?.cur===st()?.flow?.start){completed.clear();contexts.clear();toggles.clear();render();}if(c&&st()?.cur===c.origin)contexts.delete(activeSec);return result;};
+  const oldBack=goBack;goBack=function(...args){const result=oldBack(...args),c=contexts.get(activeSec);if(st()?.cur===st()?.flow?.start){completed.clear();contexts.clear();toggles.clear();render();}if(c&&st()?.cur===c.origin){if(c.parent)contexts.set(activeSec,c.parent);else contexts.delete(activeSec);}return result;};
   const oldGo=goTo;goTo=function(id,...args){if(id===st()?.flow?.start){completed.clear();contexts.delete(activeSec);toggles.clear();}return oldGo(id,...args);};
   const option=document.createElement('option');option.value='origin_complete';option.textContent='등록 완료 후 원래 화면으로 복귀';document.getElementById('hsActionType').append(option);
+  const returnOption=document.createElement('option');returnOption.value='origin_return';returnOption.textContent='기억한 출발 화면으로 복귀';document.getElementById('hsActionType').append(returnOption);
   const row=document.createElement('label');row.id='iconOriginRow';row.hidden=true;row.innerHTML='<input type="checkbox" id="iconRememberOrigin"> 출발 화면과 아이콘 기억 (공통 등록 화면 열기)';
   document.getElementById('hsActionType').closest('.form-row').after(row);
   const oldClose=closeModal;closeModal=function(id,...args){if(id==='hsModal'){window.iconHotspotEditor=null;row.hidden=true;iconFields.hidden=true;}return oldClose(id,...args);};

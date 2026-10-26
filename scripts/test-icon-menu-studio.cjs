@@ -173,6 +173,39 @@ const click=()=>currentButton().onclick({stopPropagation(){}});
   const studioSource=fs.readFileSync('vendor/icon-menu-studio.js','utf8');
   for(const id of ['isAssetLabel','isAssetDoneLabel','iconDisplayLabel','iconDoneLabel'])assert.ok(studioSource.includes('<textarea id="'+id+'"'));
   assert.ok(studioSource.includes('white-space:pre-wrap'));
+  // Shared three-step hotspots return to the exact source, even inside an icon flow.
+  c.adminMode=false;
+  for(const source of ['type1','type2']){
+    c.goHome();c.goTo(source);const history=state.hist.length;
+    c.handleHotspotAction({actionType:'navigate',goto:'r1',rememberOrigin:true});
+    c.handleHotspotAction({actionType:'navigate',goto:'r2'});
+    c.handleHotspotAction({actionType:'navigate',goto:'r3'});
+    c.handleHotspotAction({actionType:'origin_return'});
+    assert.equal(state.cur,source);assert.equal(state.hist.length,history);
+  }
+  c.goHome();c.goTo('type1');click();assert.equal(state.cur,'r1');
+  c.handleHotspotAction({actionType:'navigate',goto:'r2',rememberOrigin:true});c.goTo('r3');
+  c.handleHotspotAction({actionType:'origin_return'});assert.equal(state.cur,'r1');
+  c.handleHotspotAction({actionType:'origin_complete'});assert.equal(state.cur,'type1');
+  // Cancelling a nested flow preserves the surrounding icon return.
+  c.goHome();c.goTo('type2');click();
+  c.handleHotspotAction({actionType:'navigate',goto:'r2',rememberOrigin:true});c.goBack();
+  c.handleHotspotAction({actionType:'origin_complete'});assert.equal(state.cur,'type2');
+  // Save ordinary hotspot options through the same editor used by scrolling/fixed regions.
+  c.renderHotspots=()=>{};c.renderHsList=()=>{};
+  document.getElementById('hsActionType').value='navigate';
+  document.getElementById('hsGoto').value='r1';
+  document.getElementById('hsRememberOrigin').checked=true;
+  document.getElementById('hsLabelInput').value='Bank change';
+  c.pendingHs={top:10,left:10,width:20,height:10};c.confirmHs();
+  assert.equal(flow.screens.type2.hotspots.at(-1).rememberOrigin,true);
+  document.getElementById('hsActionType').value='origin_return';
+  document.getElementById('hsLabelInput').value='';
+  c.pendingHs={top:10,left:10,width:20,height:10};c.confirmHs();
+  assert.equal(flow.screens.type2.hotspots.at(-1).actionType,'origin_return');
+  assert.equal(flow.screens.type2.hotspots.at(-1).goto,undefined);
   assert.equal(alerts.length,0);
+  c.goHome();const before=state.cur;c.handleHotspotAction({actionType:'origin_return'});
+  assert.equal(state.cur,before);assert.equal(alerts.length,1);
   console.log('PASS: shared receipt routing, per-screen completion, reset, menu drag, shared hotspot modal, back target save, no duplicate hotspots, automatic placement in scrolling image');
 })().catch(error=>{console.error(error);process.exitCode=1;});
