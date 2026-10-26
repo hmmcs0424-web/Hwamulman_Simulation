@@ -173,6 +173,19 @@ const click=()=>currentButton().onclick({stopPropagation(){}});
   const studioSource=fs.readFileSync('vendor/icon-menu-studio.js','utf8');
   for(const id of ['isAssetLabel','isAssetDoneLabel','iconDisplayLabel','iconDoneLabel'])assert.ok(studioSource.includes('<textarea id="'+id+'"'));
   assert.ok(studioSource.includes('white-space:pre-wrap'));
+  // Hiding text applies to normal, completed and toggled labels without losing names.
+  c.adminMode=false;c.goHome();c.goTo('type1');
+  const savedLabel=button.label;button.hideText=true;c.renderScreen();
+  assert.equal(currentButton().children[1].style.display,'none');
+  assert.equal(currentButton().children[1].textContent,savedLabel);
+  click();c.handleHotspotAction({actionType:'origin_complete'});
+  assert.equal(currentButton().children[1].style.display,'none');
+  button.actionType='toggle';c.renderScreen();click();
+  assert.equal(currentButton().children[1].style.display,'none');
+  assert.equal(JSON.parse(JSON.stringify(flow)).iconStudio.menus[0].buttons[0].hideText,true);
+  button.hideText=false;button.actionType='navigate';c.renderScreen();
+  assert.notEqual(currentButton().children[1].style.display,'none');
+  assert.equal(button.label,savedLabel);
   // Shared three-step hotspots return to the exact source, even inside an icon flow.
   c.adminMode=false;
   for(const source of ['type1','type2']){
