@@ -733,8 +733,10 @@ textarea.form-input{resize:vertical;}
       <div class="sim-toast" id="simToast" role="status" aria-live="polite"><span class="sim-toast-message"></span><button type="button" class="sim-toast-close">확인</button></div>
       <div class="popup-overlay" id="popupOverlay">
         <div class="popup-image-wrap" id="popupWrap">
-          <img id="popupImg" alt="팝업">
-          <div class="hotspot-layer" id="popupHsLayer"></div>
+          <div id="popupInnerWrap" style="position:relative;width:100%">
+            <img id="popupImg" alt="팝업">
+            <div class="hotspot-layer" id="popupHsLayer"></div>
+          </div>
         </div>
       </div>
       <div class="phone-promo-overlay" id="phonePromoOverlay" role="dialog" aria-modal="true" aria-label="팝업 광고">
