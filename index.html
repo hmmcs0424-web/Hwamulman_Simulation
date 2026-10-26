@@ -2946,13 +2946,23 @@ function goTo(id, init=false) {
   const st = cache[activeSec];
   const scr = st.flow.screens[id];
   if(!scr) return;
-  if(id===st.cur && scr.type!=='popup') { closePopup(); return; }
+  if(id===st.cur && scr.type!=='popup') {
+    closePopup();
+    // 팝업이 다른 배경(previewBase)으로 렌더링했을 수 있으므로 현재 화면을 재렌더링
+    renderScreen(activeSec, id);
+    return;
+  }
 
   if(scr.type==='popup' && !init && !(adminMode && !counselorPreviewMode)) { showPopup(id); return; }
   closePopup();
   // The start screen begins a fresh training path; completed actions from a previous path must not leak in.
   if(!init && id===st.flow.start) hotspotCompletionStates.clear();
-  if(!init && st.cur) st.hist.push(st.cur);
+  // 직전 히스토리로 되돌아가는 경우(설정선택→설정추가 등 순환) push 대신 pop으로 처리해 루프 방지
+  if(!init && st.cur && st.hist.length > 0 && st.hist[st.hist.length - 1] === id) {
+    st.hist.pop();
+  } else if(!init && st.cur) {
+    st.hist.push(st.cur);
+  }
   st.cur = id;
 
   renderScreen(activeSec, id);
