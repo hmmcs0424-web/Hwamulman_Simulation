@@ -3032,7 +3032,11 @@ function renderScreen(secName, id) {
   if(!scr) return;
 
   if(sec.type === 'app') {
-    renderPhoneScreen(scr);
+    if(scr.type==='popup') {
+      const base=popupBackgroundScreen(scr);
+      if(base){renderPhoneScreen(base);showPopup(id);}
+      else renderPhoneScreen({...scr,image:scr.popupLayout?.image||scr.image});
+    } else renderPhoneScreen(scr);
   } else {
     renderPcScreen(scr);
   }
@@ -4831,7 +4835,7 @@ async function savePhoneLayout() {
     horizontalMenu:horizontalMenu.image&&horizontalMenu.width&&horizontalMenu.height?horizontalMenu:null,
     fixedIcons,
   };
-  if(scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel || scr.phoneLayout.horizontalMenu || fixedIcons.length) scr.type = 'scroll';
+  if(scr.type!=='popup' && (scr.phoneLayout.fixedTopPercent || scr.phoneLayout.fixedBottomPercent || scr.phoneLayout.adCarousel || scr.phoneLayout.horizontalMenu || fixedIcons.length)) scr.type = 'scroll';
   if(APP_PARTIAL_SCROLL_SECTIONS.has(sectionName)){
     const imageIdentity=assetIdentity(scr.image);
     Object.values(st.flow.screens||{}).forEach(alias=>{
@@ -4885,15 +4889,15 @@ async function refreshPopupPreviewBases() {
   select.disabled=true;
   const images=await getSimulatorImages(section,true);
   if(select!==document.getElementById('popupPreviewBase')||section!==activeSec||screenId!==st.cur)return;
-  const screens=Object.entries(st.flow.screens).filter(([,screen])=>screen.type!=='popup');
-  const used=new Set(screens.map(([,screen])=>assetIdentity(screen.image)));
-  const options=[
-    ...screens.map(([id,screen])=>({value:id,label:screen.label||assetDisplayName(screen.image)||id})),
-    ...images.filter(image=>!used.has(assetIdentity(image))).map(image=>({value:`__image__:${image}`,label:assetDisplayName(image)}))
-  ].sort((a,b)=>a.label.localeCompare(b.label,'ko',{numeric:true,sensitivity:'base'}));
+  const scr=st.flow.screens[screenId];
+  const savedBase=current.startsWith('__image__:')?current.slice('__image__:'.length):st.flow.screens[current]?.image;
+  const backgroundImages=Array.from(new Set([...images,...Object.values(st.flow.screens).map(screen=>screen.image),savedBase].filter(Boolean)));
+  const options=backgroundImages.map(url=>({value:`__image__:${url}`,label:assetDisplayName(url)}))
+    .sort((a,b)=>a.label.localeCompare(b.label,'ko',{numeric:true,sensitivity:'base'}));
+  const selectedBase=savedBase?`__image__:${savedBase}`:'';
   select.innerHTML=options.length?options.map(option=>`<option value="${esc(option.value)}">${esc(option.label)}</option>`).join(''):'<option value="">등록된 이미지가 없습니다</option>';
   select.disabled=false;
-  if(options.some(option=>option.value===current))select.value=current;
+  if(options.some(option=>option.value===selectedBase))select.value=selectedBase;
   else select.insertAdjacentHTML('afterbegin','<option value="" selected>배경 화면 · 이미지 선택</option>');
   const foreground=document.getElementById('popupForegroundImage');
   if(foreground){
@@ -4918,7 +4922,8 @@ async function savePopupPosition() {
   const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec].cur];
   if(!adminMode||scr?.type!=='popup')return;
   scr.popupLayout=readPopupPosition();
-  await saveSimulatorFlow(activeSec);
+  const saved=await saveSimulatorFlow(activeSec);
+  if(saved)renderScreen(activeSec,cache[activeSec].cur);
 }
 function swapPopupPreviewImages() {
   const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
@@ -4932,6 +4937,13 @@ function swapPopupPreviewImages() {
   foreground.value=background;base.value=newBase;
   previewPopupPosition();
 }
+function popupBackgroundScreen(scr) {
+  const base=scr?.popupLayout?.previewBase;
+  if(!base)return null;
+  if(base.startsWith('__image__:'))return {image:base.slice('__image__:'.length),type:'normal',show_navbar:true,hotspots:[]};
+  const screen=cache[activeSec]?.flow?.screens?.[base];
+  return screen&&screen!==scr?{...screen,type:screen.type==='popup'?'normal':screen.type}:null;
+}
 function previewPopupPosition() {
   const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
   if(!adminMode||scr?.type!=='popup')return;
@@ -4939,13 +4951,12 @@ function previewPopupPosition() {
   if(!base)return alert('미리보기 배경으로 사용할 화면 또는 이미지를 선택해 주세요.');
   scr.popupLayout=readPopupPosition();
   cancelDraw();
-  if(base.startsWith('__image__:'))renderPhoneScreen({image:base.slice('__image__:'.length),type:'normal',show_navbar:true,hotspots:[]});
-  else renderScreen(activeSec,base);
-  showPopup(st.cur);
+  renderScreen(activeSec,st.cur);
 }
 function returnToPopupEditor() {
   closePopup();cancelDraw();
-  const st=cache[activeSec];renderScreen(activeSec,st.cur);renderHsList();
+  const st=cache[activeSec],scr=st.flow.screens[st.cur];
+  renderPhoneScreen({...scr,image:scr.popupLayout?.image||scr.image});renderHsList();
 }
 function addScreen() {
   const id = document.getElementById('newId').value.trim();
