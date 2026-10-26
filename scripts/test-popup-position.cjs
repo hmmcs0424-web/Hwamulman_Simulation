@@ -13,6 +13,10 @@ vm.runInContext(`
  renderScreen('app','settings1');
  assert.equal(fields.background,'other-background.png');
  assert.equal(fields.popupImg.src,'freight-info-settings1.png');
+ fields.background='previous-screen.png';
+ showPopup('settings1');
+ assert.equal(fields.background,'other-background.png');
+ assert.equal(fields.popupImg.src,'freight-info-settings1.png');
  delete cache.app.flow.screens.settings1.popupLayout.previewBase;
  renderScreen('app','settings1');
  assert.equal(fields.background,'freight-info-settings1.png');

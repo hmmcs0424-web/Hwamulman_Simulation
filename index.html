@@ -3034,7 +3034,7 @@ function renderScreen(secName, id) {
   if(sec.type === 'app') {
     if(scr.type==='popup') {
       const base=popupBackgroundScreen(scr);
-      if(base){renderPhoneScreen(base);showPopup(id);}
+      if(base){showPopup(id);}
       else renderPhoneScreen({...scr,image:scr.popupLayout?.image||scr.image});
     } else renderPhoneScreen(scr);
   } else {
@@ -3916,6 +3916,8 @@ function refreshHotspotLayer() {
 function showPopup(id) {
   const scr = cache[activeSec].flow.screens[id];
   if(!scr)return;
+  const background=popupBackgroundScreen(scr);
+  if(background)renderPhoneScreen(background);
   const overlay=document.getElementById('popupOverlay');
   const wrap=document.getElementById('popupWrap');
   overlay.dataset.screenId=id;
@@ -4275,7 +4277,7 @@ function exitAdmin() {
 
 async function startCounselorPreview() {
   if(!adminMode || activeSec==='채널톡') return;
-  if(SECS[activeSec]?.type==='app')syncPhoneLayoutDraftToScreen();
+  if(SECS[activeSec]?.type==='app'){syncPopupPositionDraft();syncPhoneLayoutDraftToScreen();}
   if(!(await saveSimulatorFlow(activeSec))) return;
   if(drawing) cancelDraw();
   cancelLayoutDraw();
@@ -4876,9 +4878,9 @@ function renderPopupPositionEditor() {
     <label class="form-label">표시 방식</label><select class="form-input" id="popupPositionMode"><option value="bottom" ${p.mode!=='positioned'?'selected':''}>하단 전체 너비</option><option value="positioned" ${p.mode==='positioned'?'selected':''}>위치 직접 지정 (작은 메뉴)</option></select>
     <div style="display:flex;gap:6px;margin:8px 0">${[['Top','위',p.top??8],['Left','왼쪽',p.left??55],['Width','너비',p.width??40]].map(([id,label,value])=>`<label style="flex:1;min-width:0">${label}(%)<input class="form-input" id="popupPosition${id}" type="number" min="0" max="100" step="0.5" value="${esc(String(value))}"></label>`).join('')}</div>
     <label style="font-size:12px"><input type="checkbox" id="popupPositionDim" ${p.dim!==false?'checked':''}> 배경 어둡게</label>
-    <div class="form-row"><label class="form-label">팝업으로 위에 표시할 이미지</label><select class="form-input" id="popupForegroundImage"><option value="${esc(p.image||scr.image)}">${esc(assetDisplayName(p.image||scr.image))}</option></select></div>
+    <div class="form-row"><label class="form-label">팝업으로 위에 표시할 이미지</label><select class="form-input" id="popupForegroundImage" onchange="syncPopupPositionDraft()"><option value="${esc(p.image||scr.image)}">${esc(assetDisplayName(p.image||scr.image))}</option></select></div>
     <div style="font-size:11px;color:#64748b;margin:4px 0 8px">위에는 팝업 이미지, 아래에는 팝업 뒤에 깔릴 원래 화면을 선택하세요.</div>
-    <div class="form-row"><label class="form-label">팝업 뒤에 표시할 배경 화면 · 이미지</label><select class="form-input" id="popupPreviewBase"><option value="">이미지 목록을 불러오는 중...</option></select><button class="btn btn-secondary btn-sm" type="button" onclick="refreshPopupPreviewBases()">목록 새로고침</button></div>
+    <div class="form-row"><label class="form-label">팝업 뒤에 표시할 배경 화면 · 이미지</label><select class="form-input" id="popupPreviewBase" onchange="syncPopupPositionDraft()"><option value="">이미지 목록을 불러오는 중...</option></select><button class="btn btn-secondary btn-sm" type="button" onclick="refreshPopupPreviewBases()">목록 새로고침</button></div>
     <div class="btn-row"><button class="btn btn-primary btn-sm" type="button" onclick="savePopupPosition()">팝업 설정 저장</button><button class="btn btn-secondary btn-sm" type="button" onclick="previewPopupPosition()">위치 미리보기</button><button class="btn btn-secondary btn-sm" type="button" onclick="swapPopupPreviewImages()">팝업 ↔ 배경 맞바꾸기</button><button class="btn btn-secondary btn-sm" type="button" onclick="returnToPopupEditor()">내부 핫스팟 편집</button></div>`:''}<hr style="margin:14px 0;border:0;border-top:1px solid #ddd">`;
   if(scr.type==='popup') refreshPopupPreviewBases();
 }
@@ -4912,6 +4914,13 @@ function changePopupScreenType(type) {
   if(!adminMode||!scr)return;
   scr.type=type;
   renderScreen(activeSec,st.cur);renderPopupPositionEditor();renderList();
+}
+function syncPopupPositionDraft() {
+  const scr=cache[activeSec]?.flow?.screens?.[cache[activeSec]?.cur];
+  if(!adminMode||counselorPreviewMode||scr?.type!=='popup')return;
+  if(document.getElementById('popupPreviewBase')?.disabled)return;
+  if(!document.getElementById('popupForegroundImage'))return;
+  scr.popupLayout=readPopupPosition();
 }
 function readPopupPosition() {
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
