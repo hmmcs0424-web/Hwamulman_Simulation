@@ -2242,14 +2242,14 @@ async function deleteNoticePost(id) {
   }
 }
 
-async function loadSiteImageManifest() {
-  if(siteImageManifest) return siteImageManifest;
+async function loadSiteImageManifest(forceRefresh=false) {
+  if(siteImageManifest && !forceRefresh) return siteImageManifest;
   try {
-    const r = await fetch('image-manifest.json?_=' + Date.now());
+    const r = await fetch('image-manifest.json?_=' + Date.now(), {cache:'no-store'});
     if(!r.ok) throw new Error(`Image manifest request failed: ${r.status}`);
     siteImageManifest = await r.json();
   } catch(e) {
-    siteImageManifest = {};
+    if(!siteImageManifest) siteImageManifest = {};
     console.warn('image-manifest.json 로드 실패:', e);
   }
   return siteImageManifest;
@@ -4867,8 +4867,26 @@ function renderPopupPositionEditor() {
     <label class="form-label">표시 방식</label><select class="form-input" id="popupPositionMode"><option value="bottom" ${p.mode!=='positioned'?'selected':''}>하단 전체 너비</option><option value="positioned" ${p.mode==='positioned'?'selected':''}>위치 직접 지정 (작은 메뉴)</option></select>
     <div style="display:flex;gap:6px;margin:8px 0">${[['Top','위',p.top??8],['Left','왼쪽',p.left??55],['Width','너비',p.width??40]].map(([id,label,value])=>`<label style="flex:1;min-width:0">${label}(%)<input class="form-input" id="popupPosition${id}" type="number" min="0" max="100" step="0.5" value="${esc(String(value))}"></label>`).join('')}</div>
     <label style="font-size:12px"><input type="checkbox" id="popupPositionDim" ${p.dim!==false?'checked':''}> 배경 어둡게</label>
-    <div class="form-row"><label class="form-label">미리보기 배경 화면</label><select class="form-input" id="popupPreviewBase">${Object.entries(st.flow.screens).filter(([,s])=>s.type!=='popup').sort(([idA,a],[idB,b])=>String(a.label||idA).localeCompare(String(b.label||idB),'ko',{numeric:true,sensitivity:'base'})).map(([id,s])=>`<option value="${esc(id)}">${esc(s.label||id)}</option>`).join('')}</select></div>
+    <div class="form-row"><label class="form-label">미리보기 배경 화면 · 이미지</label><select class="form-input" id="popupPreviewBase"><option value="">이미지 목록을 불러오는 중...</option></select><button class="btn btn-secondary btn-sm" type="button" onclick="refreshPopupPreviewBases()">목록 새로고침</button></div>
     <div class="btn-row"><button class="btn btn-primary btn-sm" type="button" onclick="savePopupPosition()">팝업 설정 저장</button><button class="btn btn-secondary btn-sm" type="button" onclick="previewPopupPosition()">위치 미리보기</button><button class="btn btn-secondary btn-sm" type="button" onclick="returnToPopupEditor()">내부 핫스팟 편집</button></div>`:''}<hr style="margin:14px 0;border:0;border-top:1px solid #ddd">`;
+  if(scr.type==='popup') refreshPopupPreviewBases();
+}
+async function refreshPopupPreviewBases() {
+  const select=document.getElementById('popupPreviewBase');
+  if(!select)return;
+  const section=activeSec,st=cache[section],screenId=st.cur,current=select.value;
+  select.disabled=true;
+  const images=await getSimulatorImages(section,true);
+  if(select!==document.getElementById('popupPreviewBase')||section!==activeSec||screenId!==st.cur)return;
+  const screens=Object.entries(st.flow.screens).filter(([,screen])=>screen.type!=='popup');
+  const used=new Set(screens.map(([,screen])=>assetIdentity(screen.image)));
+  const options=[
+    ...screens.map(([id,screen])=>({value:id,label:screen.label||assetDisplayName(screen.image)||id})),
+    ...images.filter(image=>!used.has(assetIdentity(image))).map(image=>({value:`__image__:${image}`,label:assetDisplayName(image)}))
+  ].sort((a,b)=>a.label.localeCompare(b.label,'ko',{numeric:true,sensitivity:'base'}));
+  select.innerHTML=options.length?options.map(option=>`<option value="${esc(option.value)}">${esc(option.label)}</option>`).join(''):'<option value="">등록된 이미지가 없습니다</option>';
+  select.disabled=false;
+  if(options.some(option=>option.value===current))select.value=current;
 }
 function changePopupScreenType(type) {
   const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
@@ -4891,9 +4909,12 @@ function previewPopupPosition() {
   const st=cache[activeSec],scr=st?.flow?.screens?.[st.cur];
   if(!adminMode||scr?.type!=='popup')return;
   const base=document.getElementById('popupPreviewBase').value;
-  if(!base)return alert('미리보기 배경으로 사용할 일반 화면을 먼저 추가해 주세요.');
+  if(!base)return alert('미리보기 배경으로 사용할 화면 또는 이미지를 선택해 주세요.');
   scr.popupLayout=readPopupPosition();
-  cancelDraw();renderScreen(activeSec,base);showPopup(st.cur);
+  cancelDraw();
+  if(base.startsWith('__image__:'))renderPhoneScreen({image:base.slice('__image__:'.length),type:'normal',show_navbar:true,hotspots:[]});
+  else renderScreen(activeSec,base);
+  showPopup(st.cur);
 }
 function returnToPopupEditor() {
   closePopup();cancelDraw();
@@ -4992,8 +5013,8 @@ function getAssetGroupPath(flow,image) {
   if(assigned===ASSET_GROUP_UNGROUPED) return '';
   return normalizeAssetGroupPath(assigned||inferAssetGroupFromName(image));
 }
-async function getSimulatorImages(sectionName=activeSec) {
-  await loadSiteImageManifest();
+async function getSimulatorImages(sectionName=activeSec,forceRefresh=false) {
+  await loadSiteImageManifest(forceRefresh);
   const flow = cache[sectionName]?.flow;
   const candidates = currentSimulatorImages(sectionName, flow);
   const byPath = new Map();
