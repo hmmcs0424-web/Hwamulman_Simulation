@@ -194,6 +194,22 @@ const click=()=>currentButton().onclick({stopPropagation(){}});
   button.hideText=false;button.actionType='navigate';c.renderScreen();
   assert.notEqual(currentButton().children[1].style.display,'none');
   assert.equal(button.label,savedLabel);
+  // Resize handles alter placement and button width; image fill remains proportional to the menu box.
+  c.adminMode=true;c.goHome();c.goTo('type1');c.renderScreen();
+  document.getElementById('isFitImages').onchange({target:{checked:true}});
+  assert.equal(sharedMenu.fitImages,true);
+  assert.equal(currentButton().children[0].style.width,'100%');
+  assert.equal(currentButton().children[0].style.objectFit,'fill');
+  assert.equal(currentButton().style.padding,'0');
+  const placed=flow.screens.type1.iconMenus[0],oldWidth=placed.width,oldHeight=placed.height;
+  const resizeGrip=surface().children.find(e=>e.className==='icon-menu-resize se');
+  const ev=(x,y)=>({pointerId:77,clientX:x,clientY:y,button:0,preventDefault(){},stopPropagation(){}});
+  resizeGrip.onpointerdown(ev(0,0));resizeGrip.onpointermove(ev(-90,30));resizeGrip.onpointerup(ev(-90,30));
+  assert.ok(placed.width<oldWidth);assert.ok(placed.height>oldHeight);assert.ok(placed.buttonWidth>0);
+  assert.equal(currentButton().children[0].style.width,'100%');
+  document.getElementById('isFitImages').onchange({target:{checked:false}});
+  assert.equal(sharedMenu.fitImages,false);assert.notEqual(currentButton().children[0].style.objectFit,'fill');
+  c.adminMode=false;
   // Shared three-step hotspots return to the exact source, even inside an icon flow.
   c.adminMode=false;
   for(const source of ['type1','type2']){
