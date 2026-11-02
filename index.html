@@ -359,28 +359,7 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .gtb-sep{width:1px;height:20px;background:#374151;margin:0 4px;}
 .gtb-dirty-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;display:none;}
 .gtb-dirty-dot.visible{display:block;}
-.pc-guide-scroll{flex:1;overflow-y:auto;padding:28px 40px;max-width:860px;width:100%;margin:0 auto;}
-.pc-guide-content{font:14px/1.75 "Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:#1a1a1a;min-height:200px;}
-.pc-guide-content[contenteditable=true]{outline:none;}
-.pc-guide-content[contenteditable=true]:focus{outline:none;}
-.pc-guide-content h2{font-size:18px;font-weight:700;margin:32px 0 12px;padding-bottom:7px;border-bottom:2px solid #2563eb;color:#1e3a8a;}
-.pc-guide-content h3{font-size:14px;font-weight:700;margin:20px 0 7px;color:#1e40af;}
-.pc-guide-content p{margin:0 0 9px;}
-.pc-guide-content hr{border:none;border-top:1px solid #e5e7eb;margin:24px 0;}
-.pc-guide-content ol,.pc-guide-content ul{margin:0 0 10px;padding-left:22px;}
-.pc-guide-content table{border-collapse:collapse;width:100%;margin:8px 0 14px;font-size:13px;}
-.pc-guide-content th,.pc-guide-content td{border:1px solid #d1d5db;padding:6px 10px;}
-.pc-guide-content th{background:#f0f4ff;font-weight:700;text-align:left;}
-.pc-guide-content tr:nth-child(even) td{background:#f9fafb;}
-.pc-guide-content .box-info,.pc-guide-content .box-warn,.pc-guide-content .box-tip{border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13px;line-height:1.6;}
-.pc-guide-content .box-info{background:#eff6ff;border-left:4px solid #2563eb;color:#1e3a8a;}
-.pc-guide-content .box-warn{background:#fffbeb;border-left:4px solid #f59e0b;color:#78350f;}
-.pc-guide-content .box-tip{background:#f0fdf4;border-left:4px solid #16a34a;color:#14532d;}
-.pc-guide-content .hl-blue{background:#dbeafe;color:#1e40af;padding:1px 4px;border-radius:3px;font-weight:600;}
-.pc-guide-content .hl-yellow{background:#fef9c3;color:#713f12;padding:1px 4px;border-radius:3px;}
-.pc-guide-content .hl-red{background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-weight:600;}
-.pc-guide-content .row-color-swatch{display:inline-block;width:14px;height:14px;border:1px solid #ccc;border-radius:2px;vertical-align:middle;margin-right:4px;}
-.pc-guide-content[contenteditable=true] .box-info:empty::before,.pc-guide-content[contenteditable=true] .box-warn:empty::before,.pc-guide-content[contenteditable=true] .box-tip:empty::before{content:attr(data-placeholder);color:#9ca3af;pointer-events:none;}
+.pc-guide-frame{flex:1;border:none;width:100%;background:#fff;}
 .guide-edit-hint{flex-shrink:0;background:#fef3c7;border-top:1px solid #fde68a;padding:7px 16px;font-size:12px;color:#78350f;display:none;}
 .guide-edit-hint.visible{display:block;}
 
@@ -1261,12 +1240,8 @@ textarea.form-input{resize:vertical;}
     <div class="guide-edit-hint" id="guideEditHint">
       ✏️ 편집 모드입니다. 내용을 수정한 뒤 <strong>저장</strong>을 누르면 content.html 파일에 반영됩니다.
     </div>
-    <!-- 본문 스크롤 영역 -->
-    <div class="pc-guide-scroll">
-      <div class="pc-guide-content" id="pcGuideContent">
-        <div style="color:#999;font-size:14px;padding:40px 0;text-align:center">빽통 PC 가이드를 불러오는 중…</div>
-      </div>
-    </div>
+    <!-- 시뮬레이션 iframe -->
+    <iframe id="pcGuideFrame" class="pc-guide-frame" src="about:blank" allowfullscreen></iframe>
   </div>
 
 </div><!-- /main-layout -->
@@ -2632,47 +2607,42 @@ function discardUnsavedFlow(sectionName) {
 let pcGuideDirty = false;
 let pcGuideFileHandle = null; // File System Access API handle
 
-async function loadPcGuide() {
-  const container = document.getElementById('pcGuideContent');
-  try {
-    const res = await fetch(SECS['빽통PC'].contentUrl + '?_=' + Date.now());
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const html = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const inner = doc.getElementById('guide-content');
-    container.innerHTML = inner ? inner.innerHTML : html;
-  } catch(e) {
-    container.innerHTML = '<div style="color:#999;padding:40px 0;text-align:center">가이드를 불러오지 못했습니다.<br><small>' + e.message + '</small></div>';
-  }
-  setGuideDirty(false);
-  // Show/hide toolbar based on admin mode
-  syncGuideToolbar();
+function _guideFrame() { return document.getElementById('pcGuideFrame'); }
+function _guideDoc() { return _guideFrame()?.contentDocument; }
+function _guideWin() { return _guideFrame()?.contentWindow; }
+
+function loadPcGuide() {
+  const frame = _guideFrame();
+  frame.onload = () => { setGuideDirty(false); syncGuideToolbar(); };
+  frame.src = SECS['빽통PC'].contentUrl + '?_=' + Date.now();
 }
 
 function syncGuideToolbar() {
   const isAdmin = adminMode && !counselorPreviewMode;
   document.getElementById('guideDocToolbar').style.display = isAdmin ? 'flex' : 'none';
   document.getElementById('guideEditHint').classList.toggle('visible', false);
-  const content = document.getElementById('pcGuideContent');
   if(isAdmin) {
     enterGuideEditMode();
   } else {
-    content.removeAttribute('contenteditable');
+    const body = _guideDoc()?.body;
+    if(body) body.removeAttribute('contenteditable');
   }
 }
 
 function enterGuideEditMode() {
-  const content = document.getElementById('pcGuideContent');
-  content.setAttribute('contenteditable', 'true');
-  content.addEventListener('input', onGuideInput);
+  const body = _guideDoc()?.body;
+  if(!body) return;
+  body.contentEditable = 'true';
+  body.addEventListener('input', onGuideInput);
   document.getElementById('guideEditHint').classList.add('visible');
 }
 
 function exitGuideEditMode() {
-  const content = document.getElementById('pcGuideContent');
-  content.removeAttribute('contenteditable');
-  content.removeEventListener('input', onGuideInput);
+  const body = _guideDoc()?.body;
+  if(body) {
+    body.removeAttribute('contenteditable');
+    body.removeEventListener('input', onGuideInput);
+  }
   document.getElementById('guideEditHint').classList.remove('visible');
   setGuideDirty(false);
 }
@@ -2688,10 +2658,9 @@ function setGuideDirty(dirty) {
 }
 
 async function savePcGuideContent() {
-  const content = document.getElementById('pcGuideContent');
-  const innerHtml = content.innerHTML;
-  const fullHtml = `<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<title>빽통 PC 가이드</title>\n<style>\n/* ── 단독 열람용 기본 스타일 (사이트 삽입 시에는 index.html 스타일이 우선) ── */\nbody{font:14px/1.7 "Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:#1a1a1a;background:#fff;padding:24px 32px;max-width:820px;margin:0 auto;}\nh2{font-size:19px;font-weight:700;margin:32px 0 12px;padding-bottom:6px;border-bottom:2px solid #2563eb;color:#1e3a8a;}\nh3{font-size:15px;font-weight:700;margin:22px 0 8px;color:#1e40af;}\np{margin:0 0 10px;}\ntable{border-collapse:collapse;width:100%;margin:10px 0 16px;}\nth,td{border:1px solid #d1d5db;padding:6px 10px;font-size:13px;}\nth{background:#f0f4ff;font-weight:700;text-align:left;}\ntr:nth-child(even) td{background:#f9fafb;}\n.box-info,.box-warn,.box-tip{border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13px;line-height:1.6;}\n.box-info{background:#eff6ff;border-left:4px solid #2563eb;color:#1e3a8a;}\n.box-warn{background:#fffbeb;border-left:4px solid #f59e0b;color:#78350f;}\n.box-tip{background:#f0fdf4;border-left:4px solid #16a34a;color:#14532d;}\n.box-info::before{content:"ℹ️  ";font-weight:700;}\n.box-warn::before{content:"⚠️  ";font-weight:700;}\n.box-tip::before{content:"💡  ";font-weight:700;}\n.hl-blue{background:#dbeafe;color:#1e40af;padding:1px 4px;border-radius:3px;font-weight:600;}\n.hl-yellow{background:#fef9c3;color:#713f12;padding:1px 4px;border-radius:3px;}\n.hl-red{background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-weight:600;}\n.row-color-swatch{display:inline-block;width:14px;height:14px;border:1px solid #ccc;border-radius:2px;vertical-align:middle;margin-right:4px;}\n</style>\n</head>\n<body>\n<div id="guide-content">\n${innerHtml}\n</div>\n</body>\n</html>\n`;
-
+  const doc = _guideDoc();
+  if(!doc) return;
+  const fullHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML + '\n';
   try {
     if(!pcGuideFileHandle && window.showSaveFilePicker) {
       pcGuideFileHandle = await window.showSaveFilePicker({
@@ -2704,7 +2673,7 @@ async function savePcGuideContent() {
       await writable.write(fullHtml);
       await writable.close();
       setGuideDirty(false);
-      showSimToast('가이드가 저장되었습니다.');
+      showSimToast('시뮬레이션이 저장되었습니다.');
     } else {
       // Fallback: download
       const blob = new Blob([fullHtml], { type: 'text/html' });
@@ -2717,48 +2686,47 @@ async function savePcGuideContent() {
       showSimToast('content.html 파일을 다운로드했습니다. 빽통PC 폴더에 덮어써 주세요.');
     }
   } catch(e) {
-    if(e.name !== 'AbortError') console.error('가이드 저장 실패:', e);
+    if(e.name !== 'AbortError') console.error('시뮬레이션 저장 실패:', e);
   }
 }
 
 function guideExecCmd(cmd, value) {
-  document.getElementById('pcGuideContent').focus();
-  document.execCommand(cmd, false, value || null);
+  _guideDoc()?.execCommand(cmd, false, value || null);
 }
 
 function guideWrapSelection(className) {
-  const sel = window.getSelection();
+  const sel = _guideWin()?.getSelection();
   if(!sel || sel.isCollapsed) return;
   const range = sel.getRangeAt(0);
-  const span = document.createElement('span');
+  const span = _guideDoc().createElement('span');
   span.className = className;
-  range.surroundContents(span);
+  try { range.surroundContents(span); } catch(e) { return; }
   setGuideDirty(true);
 }
 
 function guideInsertBox(boxClass) {
-  const box = document.createElement('div');
+  const doc = _guideDoc();
+  if(!doc) return;
+  const box = doc.createElement('div');
   box.className = boxClass;
   box.textContent = '내용을 입력하세요.';
-  const sel = window.getSelection();
+  const sel = _guideWin()?.getSelection();
   if(sel && sel.rangeCount > 0) {
     const range = sel.getRangeAt(0);
     range.collapse(false);
     range.insertNode(box);
-    // place cursor inside box
     range.selectNodeContents(box);
     range.collapse(false);
     sel.removeAllRanges();
     sel.addRange(range);
   } else {
-    document.getElementById('pcGuideContent').appendChild(box);
+    doc.body.appendChild(box);
   }
   setGuideDirty(true);
 }
 
 function guideInsertHr() {
-  document.getElementById('pcGuideContent').focus();
-  document.execCommand('insertHTML', false, '<hr>');
+  _guideDoc()?.execCommand('insertHTML', false, '<hr>');
   setGuideDirty(true);
 }
 
