@@ -18,11 +18,11 @@ b.req{color:var(--red);font-weight:400}
 #sim-bar button{border:1px solid #c9a227;background:#fff;border-radius:3px;padding:3px 10px}
 #titlebar{background:#7f7f7f;color:#fff;padding:5px 10px;font-size:14px}
 #nav{display:flex;align-items:center;gap:22px;padding:0 14px;height:46px;border-bottom:1px solid #ddd}
-#nav .f1{border:2px solid #222;border-radius:5px;background:#fff;font-weight:700;padding:6px 8px;font-size:13px}
+#nav .f1{border:2px solid #222;border-radius:5px;background:#fff;font-weight:700;padding:6px 8px;font-size:13px;white-space:nowrap}
 #nav a{padding:13px 2px;cursor:pointer;font-size:15px;border-bottom:3px solid transparent;white-space:nowrap}
 #nav a.on{color:var(--blue);border-color:var(--blue)}
 #nav .sp{flex:1}
-#nav .badge{border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:12px;background:#fff}
+#nav .badge{border:1px solid #ccc;border-radius:4px;padding:4px 8px;font-size:12px;background:#fff;white-space:nowrap}
 #nav .badge.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
 /* 폼 */
 #reg{padding:14px 28px 0}
@@ -1305,7 +1305,8 @@ main=new CargoForm($('#fm'),'main');activeForm=main;clientInit();refreshPay();ap
 setPeriod(0);$('#p0').classList.add('on');syncSt();refresh();
 </script>
 <style>
-#hp-btn{position:fixed;left:14px;bottom:14px;z-index:1500;background:#1890ff;color:#fff;border:0;border-radius:20px;padding:8px 14px;font:13px "Malgun Gothic",sans-serif;cursor:pointer;box-shadow:0 2px 8px #0004}
+#hp-btn{position:fixed;left:14px;bottom:14px;z-index:1500;background:#f97316;color:#fff;border:0;border-radius:20px;padding:8px 14px;font:13px "Malgun Gothic",sans-serif;cursor:pointer;box-shadow:0 2px 12px #f9731666;animation:hp-pulse 2s ease-in-out infinite}
+@keyframes hp-pulse{0%,100%{box-shadow:0 2px 12px #f9731666}50%{box-shadow:0 2px 20px #f97316cc}}
 #hp{position:fixed;top:0;right:0;bottom:0;width:340px;z-index:1400;background:#fbfdff;border-left:2px solid #1890ff;box-shadow:-3px 0 10px #0002;display:none;flex-direction:column;font:13px/1.6 "Malgun Gothic",sans-serif;color:#222}
 #hp .hh{background:#1890ff;color:#fff;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
 #hp .hh b{font-size:14px}#hp .hh button{background:none;border:0;color:#fff;font-size:18px;cursor:pointer}
