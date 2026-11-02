@@ -53,6 +53,14 @@ table.ft{border-collapse:collapse;width:100%;table-layout:fixed}
 .sug div{padding:4px 8px;cursor:pointer}
 .sug div:hover{background:#e8f0fe}
 .sug .none{color:#888;cursor:default}
+.sug{max-height:320px}
+.sug-empty{padding:14px 16px;min-width:360px}
+.sug-empty-msg{font-size:13px;color:#333;font-weight:700;margin-bottom:8px}
+.sug-empty-hint{color:#1d5fb8;font-size:12px;line-height:1.7;margin-bottom:12px}
+.sug-tip-box{background:#fffbeb;border:1px solid #fbbf24;border-radius:4px;padding:10px 12px;font-size:12px;line-height:1.6;color:#444;margin-bottom:10px}
+.sug-tip-box b{display:block;margin-bottom:2px;color:#92400e;font-size:13px}
+.sug-list-btn{background:#f0f9ff;border:1px solid #bae0ff;border-radius:4px;padding:7px 12px;font-size:12px;color:#0070cc;cursor:pointer;text-align:center;font-weight:700}
+.sug-list-btn:hover{background:#e0f2fe}
 .wp{display:flex;gap:4px;margin-top:3px}
 .q{display:inline-block;width:14px;height:14px;border:1px solid #999;border-radius:50%;font-size:10px;text-align:center;line-height:12px;color:#777;cursor:help;margin-left:3px}
 .plus{position:absolute;right:6px;top:4px;width:22px;height:24px;border:0;background:var(--blue);color:#fff;border-radius:3px;font-size:16px;line-height:1}
@@ -554,6 +562,21 @@ class CargoForm{
 function bizOk(n){if(n.length!==10)return false;const k=[1,3,7,1,3,7,1,3,5];let s=0;for(let i=0;i<9;i++)s+=+n[i]*k[i];s+=Math.floor(+n[8]*5/10);return (10-s%10)%10===+n[9]}
 function toastFlash(root){root.style.outline='2px solid #1890ff';setTimeout(()=>root.style.outline='',500)}
 
+/* ================= 검색 가능한 주소 목록 모달 ================= */
+function showAddrList(){
+  const bySido={};
+  REG.forEach(([s,g,,,ds])=>{if(!bySido[s])bySido[s]=[];bySido[s].push({g,ds})});
+  let html='<div style="font-size:12px;line-height:1.8;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px;padding:4px 0">';
+  Object.entries(bySido).forEach(([s,gs])=>{
+    html+=`<div><b style="color:#1d4ed8;font-size:13px;display:block;border-bottom:1px solid #dbeafe;margin-bottom:4px;padding-bottom:2px">${s}</b>`;
+    gs.forEach(({g,ds})=>{html+=`<div style="padding-left:6px"><span style="color:#333">▸ ${g}</span><br><span style="color:#999;font-size:11px;padding-left:8px">${ds.join(', ')}</span></div>`});
+    html+='</div>';
+  });
+  html+='</div><p style="font-size:11px;color:#999;margin-top:10px;padding-top:8px;border-top:1px solid #eee">※ 시도·시군구·읍면동 단위로 검색 가능합니다. 예) "서울 중" 또는 "부산 해운" 입력 후 엔터</p>';
+  const root=document.createElement('div');root.innerHTML=html;root.style.cssText='max-height:420px;overflow:auto;width:620px';
+  openModal('검색 가능한 주소 목록',root);
+}
+
 /* ================= 주소 자동완성 ================= */
 function attachAddr(inp,onPick,sidoEl){
   const td=inp.parentNode;if(getComputedStyle(td).position==='static')td.style.position='relative';
@@ -562,8 +585,9 @@ function attachAddr(inp,onPick,sidoEl){
   const show=()=>{close();const list=match(inp.value);
     box=document.createElement('div');box.className='sug';
     box.innerHTML='<div class="sh">주소 검색<a class="sx">×</a></div>'+(list.length?list.slice(0,150).map(a=>{const f=a[0].split(' ');const g=ADDRS.find(x=>x[0]===f.slice(0,f.length-1).join(' '));const hasDong=!!g&&f.length>2||(f.length===3&&REG.some(r=>r[0]===f[0]&&r[1]===f[1]+' '+f[2]));const sido=f[0];let rest=f.slice(1),dong='';
-      const isRegion=REG.some(r=>r[0]===f[0]&&r[1]===rest.join(' '));if(!isRegion){dong=rest.pop()}return `<div class="sr" data-a="${esc(a[0])}"><span>${sido}</span><span>${esc(rest.join(' '))}</span><span>${esc(dong)}</span></div>`}).join(''):'<div class="none">검색결과가 없습니다.</div>');
+      const isRegion=REG.some(r=>r[0]===f[0]&&r[1]===rest.join(' '));if(!isRegion){dong=rest.pop()}return `<div class="sr" data-a="${esc(a[0])}"><span>${sido}</span><span>${esc(rest.join(' '))}</span><span>${esc(dong)}</span></div>`}).join('')+'<div class="sug-list-btn">📋 검색 가능한 주소 목록 보기</div>':`<div class="sug-empty"><div class="sug-empty-msg">검색결과가 없습니다.</div><div class="sug-empty-hint">혹시 '<b>${esc(inp.value.trim())}</b>' (으)로 검색하려고 하셨나요?<br>검색어에 잘못된 철자가 없는지, 정확한 주소인지 다시 한번 확인해 주세요.</div><div class="sug-tip-box"><b>tip</b><br>카카오맵에서 '여기 주소 보기'를 선택하시면, 지도 위에서 마우스 오른쪽 버튼 클릭 시 정확한 주소를 확인하실 수 있습니다.</div><div class="sug-list-btn">📋 검색 가능한 주소 목록 보기</div></div>`);
     td.appendChild(box);$('.sx',box).onclick=close;
+    const _lb=$('.sug-list-btn',box);if(_lb)_lb.onclick=e=>{e.stopPropagation();close();showAddrList()};
     box.addEventListener('mousedown',e=>e.preventDefault());
     box.addEventListener('click',e=>{const r=e.target.closest('.sr');if(r){$$('.sr',box).forEach(x=>x.classList.remove('hl'));r.classList.add('hl')}});
     box.addEventListener('dblclick',e=>{const r=e.target.closest('.sr');if(!r)return;const full=r.dataset.a;
