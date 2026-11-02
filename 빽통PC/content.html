@@ -332,7 +332,7 @@ function geo(a){const x=ADDRS.find(r=>r[0]===a)||ADDRS.find(r=>a&&a.startsWith(r
 function distance(a,b){const p=geo(a),q=geo(b);if(!p||!q)return null;const R=6371,r=Math.PI/180;
   const dl=(q.lat-p.lat)*r,dn=(q.lng-p.lng)*r,h=Math.sin(dl/2)**2+Math.cos(p.lat*r)*Math.cos(q.lat*r)*Math.sin(dn/2)**2;
   const km=Math.round(2*R*Math.asin(Math.sqrt(h))*1.3*100)/100;const m=Math.round(km);return {km,h:Math.floor(m/60),m:m%60}}
-function calcWci(t){return t?Math.round(t*1.1*0.004/10)*10:0}
+function calcWci(t){return t?Math.floor(t*1.1*0.004/10)*10:0}
 function aiRec(km){return Math.round(km*960/10000)*10000}
 const distText=d=>d?`거리 : 약 ${d.km}km / 시간 : 약 ${d.h}시간 ${d.m}분`:'';
 function timeOpts(){let s='<option value="">시간</option>';for(let h=0;h<24;h++)for(const m of[0,30])s+=`<option>${pad(h)}:${pad(m)}</option>`;return s}
