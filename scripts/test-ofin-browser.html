@@ -24,7 +24,7 @@ frame.onload=async()=>{try{
  flow('next').click();flow('next').click();flow('identity-complete').click();flow('next').click();
  check(doc.querySelector('[aria-label="사업자등록증 예시"]'),'business certificate is reconstructed locally from example');
  input(win,'reg-businessNumber','123');check(flow('next').disabled,'business number validation blocks incomplete verification');input(win,'reg-businessNumber','1234567890');flow('next').click();
- doc.querySelector('[data-bank="카카오뱅크"]').click();check(flow('next').disabled,'account step requires account number');flow('sample-account').click();flow('next').click();
+ doc.querySelector('[data-bank="카카오뱅크"]').click();check(flow('next').disabled,'account step requires account number');input(win,'reg-account','123-45');check(flow('next').disabled && doc.getElementById('reg-account').value==='12345','short account remains disabled and separators are normalized');input(win,'reg-account','12345678');check(!flow('next').disabled && doc.getElementById('account-help').textContent.includes('입력이 완료'),'valid manual account enables next with feedback');flow('sample-account').click();flow('next').click();
  check(flow('next').disabled,'fee selection is required');
  change(win,doc.querySelector('[name="feeDays"][value="30"]'),true);flow('next').click();
  check(flow('next').disabled,'all four documents must be completed');
