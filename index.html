@@ -1218,6 +1218,8 @@ textarea.form-input{resize:vertical;}
     <!-- 관리자 편집 툴바 -->
     <div class="guide-doc-toolbar" id="guideDocToolbar" style="display:none">
       <span class="gtb-label">편집 도구</span>
+      <button class="gtb-btn" id="guideUndoButton" type="button" title="되돌리기 (Ctrl+Z)" onclick="guideUndo()" disabled>↶ 되돌리기</button>
+      <button class="gtb-btn" id="guideRedoButton" type="button" title="다시 실행 (Ctrl+Y / Ctrl+Shift+Z)" onclick="guideRedo()" disabled>↷ 다시 실행</button>
       <button class="gtb-btn" type="button" id="gtbBold" title="굵게 (Ctrl+B)" onclick="guideExecCmd('bold')"><b>B</b></button>
       <div class="gtb-sep"></div>
       <label class="gtb-label">크기 <select class="gtb-btn" aria-label="텍스트 크기" onchange="if(this.value) guideTextStyle('fontSize',this.value+'px')"><option value="">선택</option><option value="10">10px</option><option value="12">12px</option><option value="13">13px</option><option value="14">14px</option><option value="16">16px</option><option value="18">18px</option><option value="20">20px</option><option value="24">24px</option><option value="28">28px</option><option value="32">32px</option><option value="40">40px</option><option value="48">48px</option></select></label>
@@ -2622,6 +2624,14 @@ function discardUnsavedFlow(sectionName) {
 let pcGuideDirty = false;
 let pcGuideSelection = null;
 let pcGuideLayoutEditing = false;
+let pcGuideHistory = [];
+let pcGuideHistoryIndex = 0;
+let pcGuideRevision = 0;
+let pcGuideSavedRevision = 0;
+let pcGuideNextRevision = 0;
+let pcGuideTransaction = null;
+let pcGuideInputTransaction = false;
+let pcGuideComposing = false;
 let pcGuideFileHandle = null; // File System Access API handle
 
 function _guideFrame() { return document.getElementById('pcGuideFrame'); }
@@ -2630,7 +2640,7 @@ function _guideWin() { return _guideFrame()?.contentWindow; }
 
 function loadPcGuide() {
   const frame = _guideFrame();
-  frame.onload = () => { pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); };
+  frame.onload = () => { guideResetHistory(); pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); };
   frame.src = SECS['빽통PC'].contentUrl + '?_=' + Date.now();
 }
 
@@ -2653,6 +2663,10 @@ function enterGuideEditMode() {
   body.contentEditable = 'true';
   document.getElementById('guideEditToggle').textContent = '편집 종료';
   body.addEventListener('input', onGuideInput);
+  body.addEventListener('beforeinput', guideBeforeInput);
+  body.addEventListener('compositionstart', guideCompositionStart);
+  body.addEventListener('compositionend', guideCompositionEnd);
+  _guideDoc().addEventListener('keydown', guideOnHistoryKey, true);
   _guideDoc().addEventListener('selectionchange', guideRememberSelection);
   const toolbar = document.getElementById('guideDocToolbar');
   toolbar.onmousedown = e => { if(e.target.closest('button')) e.preventDefault(); };
@@ -2664,7 +2678,12 @@ function exitGuideEditMode() {
   const body = _guideDoc()?.body;
   if(body) {
     body.removeAttribute('contenteditable');
+    guideHistoryEnd();
     body.removeEventListener('input', onGuideInput);
+    body.removeEventListener('beforeinput', guideBeforeInput);
+    body.removeEventListener('compositionstart', guideCompositionStart);
+    body.removeEventListener('compositionend', guideCompositionEnd);
+    _guideDoc().removeEventListener('keydown', guideOnHistoryKey, true);
     _guideDoc().removeEventListener('selectionchange', guideRememberSelection);
   }
   document.getElementById('guideEditHint').classList.remove('visible');
@@ -2675,12 +2694,16 @@ function exitGuideEditMode() {
   document.getElementById('guideLayoutToggle').setAttribute('aria-pressed', 'false');
 }
 
-function onGuideInput() {
+function onGuideInput(e) {
+  if(pcGuideInputTransaction && !pcGuideComposing) {
+    guideHistoryEnd(); pcGuideInputTransaction = false;
+  }
   setGuideDirty(true);
 }
 
 function setGuideDirty(dirty) {
   pcGuideDirty = dirty;
+  if(!dirty) pcGuideSavedRevision = pcGuideRevision;
   document.getElementById('guideDirtyDot').classList.toggle('visible', dirty);
   document.getElementById('gtbSave').disabled = !dirty;
 }
@@ -2722,6 +2745,120 @@ async function savePcGuideContent() {
   }
 }
 
+// 편집 내역은 기존 DOM 노드를 보존하여 시뮬레이션의 이벤트 연결을 유지합니다.
+function guideHistoryButtons() {
+  document.getElementById('guideUndoButton').disabled = pcGuideHistoryIndex === 0;
+  document.getElementById('guideRedoButton').disabled = pcGuideHistoryIndex === pcGuideHistory.length;
+}
+function guideResetHistory() {
+  pcGuideTransaction?.observer.disconnect(); pcGuideTransaction = null;
+  pcGuideHistory = []; pcGuideHistoryIndex = 0;
+  pcGuideRevision = pcGuideSavedRevision = pcGuideNextRevision = 0;
+  pcGuideInputTransaction = pcGuideComposing = false;
+  guideHistoryButtons();
+}
+function guideHistorySelection() {
+  const sel = _guideWin()?.getSelection(); if(!sel?.rangeCount) return null;
+  const r = sel.getRangeAt(0);
+  return {start:r.startContainer,startOffset:r.startOffset,end:r.endContainer,endOffset:r.endOffset};
+}
+function guideRestoreHistorySelection(saved) {
+  const doc = _guideDoc(), sel = _guideWin()?.getSelection();
+  if(!sel) return;
+  if(!saved || !doc.body.contains(saved.start) || !doc.body.contains(saved.end)) return;
+  const limit = node => node.nodeType === 3 ? node.length : node.childNodes.length;
+  const r = doc.createRange();
+  r.setStart(saved.start,Math.min(saved.startOffset,limit(saved.start)));
+  r.setEnd(saved.end,Math.min(saved.endOffset,limit(saved.end)));
+  _guideWin().focus(); sel.removeAllRanges(); sel.addRange(r);
+  pcGuideSelection = r.cloneRange();
+}
+function guideHistoryBegin() {
+  if(pcGuideTransaction || _guideDoc()?.body.contentEditable !== 'true') return false;
+  const transaction = {records:[],observer:null,selection:guideHistorySelection()};
+  transaction.observer = new (_guideWin().MutationObserver)(records => transaction.records.push(...records));
+  transaction.observer.observe(_guideDoc().body, {subtree:true,childList:true,characterData:true,characterDataOldValue:true,attributes:true,attributeOldValue:true,attributeFilter:['style','class','color','size','face']});
+  pcGuideTransaction = transaction; return true;
+}
+function guideHistoryEnd() {
+  const t = pcGuideTransaction; if(!t) return;
+  pcGuideTransaction = null;
+  t.records.push(...t.observer.takeRecords()); t.observer.disconnect();
+  const changes = t.records.filter(r => r.target !== _guideDoc().body || r.type === 'childList').map(r => ({
+    type:r.type,target:r.target,name:r.attributeName,oldValue:r.oldValue,
+    newValue:r.type === 'attributes' ? r.target.getAttribute(r.attributeName) : r.target.data,
+    added:Array.from(r.addedNodes || []),removed:Array.from(r.removedNodes || []),next:r.nextSibling
+  }));
+  if(!changes.length) return;
+  pcGuideHistory.splice(pcGuideHistoryIndex);
+  pcGuideHistory.push({changes,before:pcGuideRevision,after:++pcGuideNextRevision,selectionBefore:t.selection,selectionAfter:guideHistorySelection()});
+  pcGuideRevision = pcGuideNextRevision;
+  if(pcGuideHistory.length > 100) pcGuideHistory.shift();
+  pcGuideHistoryIndex = pcGuideHistory.length;
+  guideHistoryButtons(); setGuideDirty(true);
+}
+function guideHistoryChange(change) {
+  const owned = guideHistoryBegin();
+  try { return change(); } finally { if(owned) guideHistoryEnd(); }
+}
+function guideApplyHistory(entry, redo) {
+  const changes = redo ? entry.changes : [...entry.changes].reverse();
+  for(const r of changes) {
+    if(r.type === 'attributes') {
+      const value = redo ? r.newValue : r.oldValue;
+      if(value === null) r.target.removeAttribute(r.name); else r.target.setAttribute(r.name,value);
+    } else if(r.type === 'characterData') r.target.data = redo ? r.newValue : r.oldValue;
+    else {
+      for(const node of (redo ? r.removed : r.added)) if(node.parentNode === r.target) r.target.removeChild(node);
+      const anchor = r.next?.parentNode === r.target ? r.next : null;
+      for(const node of (redo ? r.added : r.removed)) r.target.insertBefore(node,anchor);
+    }
+  }
+  pcGuideRevision = redo ? entry.after : entry.before;
+  pcGuideSelection = null;
+  guideRestoreHistorySelection(redo ? entry.selectionAfter : entry.selectionBefore);
+  guideSelectIcon(); guideHistoryButtons();
+  setGuideDirty(pcGuideRevision !== pcGuideSavedRevision);
+}
+function guideUndo() {
+  if(_guideDoc()?.body.contentEditable !== 'true') return;
+  guideHistoryEnd();
+  if(pcGuideHistoryIndex) guideApplyHistory(pcGuideHistory[--pcGuideHistoryIndex],false);
+}
+function guideRedo() {
+  if(_guideDoc()?.body.contentEditable !== 'true') return;
+  guideHistoryEnd();
+  if(pcGuideHistoryIndex < pcGuideHistory.length) guideApplyHistory(pcGuideHistory[pcGuideHistoryIndex++],true);
+}
+function guideOnHistoryKey(e) {
+  if(e.isComposing || !(e.ctrlKey || e.metaKey) || e.altKey || _guideDoc()?.body.contentEditable !== 'true') return;
+  if(e.target.ownerDocument !== _guideDoc() && !e.target.closest('#guideDocToolbar')) return;
+  if(e.target.closest('input,textarea,select')) return;
+  const key = e.key.toLowerCase();
+  if(key !== 'z' && key !== 'y') return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  if(key === 'y' || e.shiftKey) guideRedo(); else guideUndo();
+}
+function guideBeforeInput(e) {
+  if(e.target.closest('input,textarea,select')) return;
+  if(e.inputType === 'historyUndo' || e.inputType === 'historyRedo') {
+    e.preventDefault(); e.stopImmediatePropagation();
+    if(e.inputType === 'historyUndo') guideUndo(); else guideRedo();
+    return;
+  }
+  if(guideHistoryBegin()) pcGuideInputTransaction = true;
+}
+function guideCompositionStart(e) {
+  if(e.target.closest('input,textarea,select')) return;
+  pcGuideComposing = true;
+  if(guideHistoryBegin()) pcGuideInputTransaction = true;
+}
+function guideCompositionEnd() {
+  pcGuideComposing = false;
+  if(pcGuideInputTransaction) { guideHistoryEnd(); pcGuideInputTransaction = false; }
+}
+document.addEventListener('keydown',guideOnHistoryKey,true);
+
 function guideRememberSelection() {
   const sel = _guideWin()?.getSelection();
   if(sel?.rangeCount && _guideDoc().body.contains(sel.anchorNode)) pcGuideSelection = sel.getRangeAt(0).cloneRange();
@@ -2738,13 +2875,15 @@ function guideRestoreSelection() {
 }
 function guideExecCmd(cmd, value) {
   if(!guideRestoreSelection()) return;
-  _guideDoc().execCommand(cmd, false, value ?? null);
+  guideHistoryChange(() => _guideDoc().execCommand(cmd, false, value ?? null));
   guideRememberSelection(); setGuideDirty(true);
 }
 function guideTextStyle(property, value) {
   if(!value) return;
   const sel = guideRestoreSelection();
   if(!sel?.rangeCount || sel.isCollapsed) return showSimToast('먼저 편집할 텍스트를 드래그해 선택해 주세요.');
+  const owned = guideHistoryBegin();
+  try {
   const range = sel.getRangeAt(0), span = _guideDoc().createElement('span');
   span.style[property] = value;
   span.appendChild(range.extractContents());
@@ -2755,15 +2894,20 @@ function guideTextStyle(property, value) {
   range.insertNode(span);
   range.selectNodeContents(span); sel.removeAllRanges(); sel.addRange(range);
   guideRememberSelection(); setGuideDirty(true);
+  } finally { if(owned) guideHistoryEnd(); }
 }
 function guideWrapSelection(className) {
   const colors = {'hl-blue':['#dbeafe','#1e40af'],'hl-yellow':['#fef9c3','#713f12'],'hl-red':['#fee2e2','#991b1b'],'hl-green':['#dcfce7','#166534'],'hl-purple':['#f3e8ff','#6b21a8'],'hl-orange':['#ffedd5','#9a3412']};
-  guideTextStyle('backgroundColor', colors[className][0]);
-  guideTextStyle('color', colors[className][1]);
+  guideHistoryChange(() => {
+    guideTextStyle('backgroundColor', colors[className][0]);
+    guideTextStyle('color', colors[className][1]);
+  });
 }
 function guideInsertBox(boxClass) {
   const sel = guideRestoreSelection(), doc = _guideDoc();
   if(!sel || !doc) return;
+  const owned = guideHistoryBegin();
+  try {
   const box = doc.createElement('div'); box.className = boxClass;
   box.textContent = sel.toString() || '내용을 입력하세요.';
   const node = sel.rangeCount ? sel.getRangeAt(0).endContainer : null;
@@ -2774,15 +2918,19 @@ function guideInsertBox(boxClass) {
   const range = doc.createRange(); range.selectNodeContents(box);
   sel.removeAllRanges(); sel.addRange(range); guideRememberSelection();
   box.scrollIntoView({block:'nearest'}); setGuideDirty(true);
+  } finally { if(owned) guideHistoryEnd(); }
 }
 function guideInsertHr() {
   const doc = _guideDoc(); if(!guideRestoreSelection()) return;
+  const owned = guideHistoryBegin();
+  try {
   const hr = doc.createElement('hr');
   const node = pcGuideSelection?.endContainer;
   const el = node?.nodeType === 1 ? node : node?.parentElement;
   const section = el?.closest('.box-info,.box-warn,.box-tip,#reg,#sbar,#gridwrap,#sum');
   if(section) section.after(hr); else doc.getElementById('reg').before(hr);
   setGuideDirty(true);
+  } finally { if(owned) guideHistoryEnd(); }
 }
 function guideToggleLayout() {
   pcGuideLayoutEditing = !pcGuideLayoutEditing;

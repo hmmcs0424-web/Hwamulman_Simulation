@@ -1520,8 +1520,9 @@ let guideLayoutEditing = false;
 function guideNotifyChange(){try{if(parent!==window)parent.setGuideDirty(true)}catch(e){}}
 function setGuideLayoutEditing(on){guideLayoutEditing=!!on;document.body.classList.toggle('guide-layout-editing',guideLayoutEditing);Object.values(guideIcons).forEach(el=>{el.contentEditable='false';if(!on)el.removeAttribute('data-guide-selected')})}
 function guideIconPosition(key){const el=guideIcons[key];if(!el)return null;const r=el.getBoundingClientRect();return {x:Math.round(r.left),y:Math.round(r.top)}}
-function positionGuideIcon(key,x,y){const el=guideIcons[key];if(!el)return;const r=el.getBoundingClientRect();const px=Math.max(0,Math.min(Number.isFinite(x)?x:0,innerWidth-r.width));const py=Math.max(0,Math.min(Number.isFinite(y)?y:0,innerHeight-r.height));Object.assign(el.style,{left:px+'px',top:py+'px',right:'auto',bottom:'auto'});guideNotifyChange()}
-function resetGuideIcons(){Object.values(guideIcons).forEach(el=>{['left','top','right','bottom'].forEach(p=>el.style.removeProperty(p));el.removeAttribute('data-guide-selected')});guideNotifyChange()}
+function guideLayoutChange(change){let owned=false;try{if(parent!==window)owned=parent.guideHistoryBegin()}catch(e){}try{return change()}finally{if(owned)parent.guideHistoryEnd()}}
+function positionGuideIcon(key,x,y){return guideLayoutChange(()=>{const el=guideIcons[key];if(!el)return;const r=el.getBoundingClientRect();const px=Math.max(0,Math.min(Number.isFinite(x)?x:0,innerWidth-r.width));const py=Math.max(0,Math.min(Number.isFinite(y)?y:0,innerHeight-r.height));Object.assign(el.style,{left:px+'px',top:py+'px',right:'auto',bottom:'auto'});guideNotifyChange()})}
+function resetGuideIcons(){return guideLayoutChange(()=>{Object.values(guideIcons).forEach(el=>{['left','top','right','bottom'].forEach(p=>el.style.removeProperty(p));el.removeAttribute('data-guide-selected')});guideNotifyChange()})}
 Object.entries(guideIcons).forEach(([key,el])=>{
  el.addEventListener('pointerdown',e=>{
   if(!guideLayoutEditing||e.button!==0)return;
@@ -1529,9 +1530,10 @@ Object.entries(guideIcons).forEach(([key,el])=>{
   Object.values(guideIcons).forEach(icon=>icon.removeAttribute('data-guide-selected'));el.setAttribute('data-guide-selected','');
   const r=el.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top;
   el.setPointerCapture(e.pointerId);
+  let historyOwned=false;try{historyOwned=parent.guideHistoryBegin()}catch(e){}
   try{parent.document.getElementById('guideIconTarget').value=key;parent.guideSelectIcon()}catch(e){}
   const move=ev=>{positionGuideIcon(key,ev.clientX-dx,ev.clientY-dy);try{parent.guideSelectIcon()}catch(e){}};
-  const end=()=>{el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',end);el.removeEventListener('pointercancel',end);};
+  const end=()=>{if(historyOwned){parent.guideHistoryEnd();historyOwned=false}el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',end);el.removeEventListener('pointercancel',end);};
   el.addEventListener('pointermove',move);el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
  });
  el.addEventListener('click',e=>{if(guideLayoutEditing){e.preventDefault();e.stopImmediatePropagation()}},true);
