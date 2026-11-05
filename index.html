@@ -1251,6 +1251,9 @@ textarea.form-input{resize:vertical;}
       <button class="gtb-btn" type="button" onclick="_guideWin()?.resetGuideIcons();guideSelectIcon()">아이콘 위치 초기화</button>
       <div class="gtb-dirty-dot" id="guideDirtyDot"></div>
       <button class="gtb-btn save-btn" type="button" id="gtbSave" onclick="savePcGuideContent()" disabled>💾 저장</button>
+      <button class="gtb-btn" type="button" onclick="pcGuideStore.backup()">PC 백업</button>
+      <button class="gtb-btn" type="button" onclick="pcGuideStore.restore()">이전 저장본 복원</button>
+      <span id="pcGuideSaveStatus" role="status" style="font-size:12px"></span>
       <button class="gtb-btn" type="button" id="guideEditToggle" onclick="_guideDoc()?.body.contentEditable==='true'?exitGuideEditMode():enterGuideEditMode()">편집 종료</button>
     </div>
     <!-- 편집 중 힌트 바 -->
@@ -2640,7 +2643,7 @@ function _guideWin() { return _guideFrame()?.contentWindow; }
 
 function loadPcGuide() {
   const frame = _guideFrame();
-  frame.onload = () => { guideResetHistory(); pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); };
+  frame.onload = () => { guideResetHistory(); pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); window.pcGuideStore?.connect(); };
   frame.src = SECS['빽통PC'].contentUrl + '?_=' + Date.now();
 }
 
@@ -2706,47 +2709,11 @@ function setGuideDirty(dirty) {
   pcGuideDirty = dirty;
   if(!dirty) pcGuideSavedRevision = pcGuideRevision;
   document.getElementById('guideDirtyDot').classList.toggle('visible', dirty);
-  document.getElementById('gtbSave').disabled = !dirty;
+  document.getElementById('gtbSave').disabled = !dirty || !!window.pcGuideStore?.busy;
 }
 
 async function savePcGuideContent() {
-  const doc = _guideDoc();
-  if(!doc) return;
-  const copy = doc.documentElement.cloneNode(true);
-  copy.querySelector('body').removeAttribute('contenteditable');
-  copy.querySelector('body').classList.remove('guide-layout-editing', 'btchat-open');
-  copy.querySelector('#btchat')?.remove();
-  copy.querySelectorAll('#guide-warning-editor,#guide-warning-layer').forEach(el => el.remove());
-  copy.querySelector('#ct .ch')?.setAttribute('aria-expanded', 'false');
-  copy.querySelectorAll('[data-guide-selected]').forEach(el => el.removeAttribute('data-guide-selected'));
-  const fullHtml = '<!DOCTYPE html>\n' + copy.outerHTML + '\n';
-  try {
-    if(!pcGuideFileHandle && window.showSaveFilePicker) {
-      pcGuideFileHandle = await window.showSaveFilePicker({
-        suggestedName: 'content.html',
-        types: [{ description: 'HTML 파일', accept: { 'text/html': ['.html'] } }],
-      });
-    }
-    if(pcGuideFileHandle) {
-      const writable = await pcGuideFileHandle.createWritable();
-      await writable.write(fullHtml);
-      await writable.close();
-      setGuideDirty(false);
-      showSimToast('시뮬레이션이 저장되었습니다.');
-    } else {
-      // Fallback: download
-      const blob = new Blob([fullHtml], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'content.html';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      setGuideDirty(false);
-      showSimToast('content.html 파일을 다운로드했습니다. 빽통PC 폴더에 덮어써 주세요.');
-    }
-  } catch(e) {
-    if(e.name !== 'AbortError') console.error('시뮬레이션 저장 실패:', e);
-  }
+  return window.pcGuideStore.save();
 }
 
 // 편집 내역은 기존 DOM 노드를 보존하여 시뮬레이션의 이벤트 연결을 유지합니다.
@@ -2779,7 +2746,8 @@ function guideRestoreHistorySelection(saved) {
 }
 function guideHistoryBegin() {
   if(pcGuideTransaction || _guideDoc()?.body.contentEditable !== 'true') return false;
-  const transaction = {records:[],observer:null,selection:guideHistorySelection()};
+  _guideWin()?.guideEdits?.suspend(true);
+  const transaction = {records:[],observer:null,selection:guideHistorySelection(),overlay:_guideWin()?.guideEdits?.capture()};
   transaction.observer = new (_guideWin().MutationObserver)(records => transaction.records.push(...records));
   transaction.observer.observe(_guideDoc().body, {subtree:true,childList:true,characterData:true,characterDataOldValue:true,attributes:true,attributeOldValue:true,attributeFilter:['style','class','color','size','face']});
   pcGuideTransaction = transaction; return true;
@@ -2788,6 +2756,8 @@ function guideHistoryEnd() {
   const t = pcGuideTransaction; if(!t) return;
   pcGuideTransaction = null;
   t.records.push(...t.observer.takeRecords()); t.observer.disconnect();
+  _guideWin()?.guideEdits?.record(t.overlay,t.records);
+  _guideWin()?.guideEdits?.suspend(false);
   const changes = t.records.filter(r => r.target !== _guideDoc().body || r.type === 'childList').map(r => ({
     type:r.type,target:r.target,name:r.attributeName,oldValue:r.oldValue,
     newValue:r.type === 'attributes' ? r.target.getAttribute(r.attributeName) : r.target.data,
@@ -2806,6 +2776,9 @@ function guideHistoryChange(change) {
   try { return change(); } finally { if(owned) guideHistoryEnd(); }
 }
 function guideApplyHistory(entry, redo) {
+  const overlay = _guideWin()?.guideEdits;
+  overlay?.suspend(true);
+  const before = overlay?.capture();
   const changes = redo ? entry.changes : [...entry.changes].reverse();
   for(const r of changes) {
     if(r.type === 'attributes') {
@@ -2818,6 +2791,8 @@ function guideApplyHistory(entry, redo) {
       for(const node of (redo ? r.added : r.removed)) r.target.insertBefore(node,anchor);
     }
   }
+  overlay?.record(before,entry.changes);
+  overlay?.suspend(false);
   pcGuideRevision = redo ? entry.after : entry.before;
   pcGuideSelection = null;
   guideRestoreHistorySelection(redo ? entry.selectionAfter : entry.selectionBefore);
@@ -2913,7 +2888,7 @@ function guideInsertBox(boxClass) {
   if(!sel || !doc) return;
   const owned = guideHistoryBegin();
   try {
-  const box = doc.createElement('div'); box.className = boxClass;
+  const box = doc.createElement('div'); box.id = 'guide-added-' + crypto.randomUUID(); box.className = boxClass;
   box.textContent = sel.toString() || '내용을 입력하세요.';
   const node = sel.rangeCount ? sel.getRangeAt(0).endContainer : null;
   const el = node?.nodeType === 1 ? node : node?.parentElement;
@@ -2929,7 +2904,7 @@ function guideInsertHr() {
   const doc = _guideDoc(); if(!guideRestoreSelection()) return;
   const owned = guideHistoryBegin();
   try {
-  const hr = doc.createElement('hr');
+  const hr = doc.createElement('hr'); hr.id = 'guide-added-' + crypto.randomUUID();
   const node = pcGuideSelection?.endContainer;
   const el = node?.nodeType === 1 ? node : node?.parentElement;
   const section = el?.closest('.box-info,.box-warn,.box-tip,#reg,#sbar,#gridwrap,#sum');
@@ -2995,8 +2970,7 @@ async function confirmGuideSavedBeforeLeave() {
     return true;
   }
   // save
-  await savePcGuideContent();
-  return true;
+  return await savePcGuideContent();
 }
 
 async function confirmFlowSavedBeforeLeave(sectionName) {
@@ -8606,7 +8580,7 @@ function cteExportConfig() {
 }
 
 window.addEventListener('beforeunload', e => {
-  if(!shouldProtectFlowLeave(activeSec)) return;
+  if(!pcGuideDirty && !window.pcGuideStore?.busy && !shouldProtectFlowLeave(activeSec)) return;
   e.preventDefault();
   e.returnValue = true;
   return true;
@@ -8614,6 +8588,7 @@ window.addEventListener('beforeunload', e => {
 
 boot();
 </script>
+<script src="./vendor/pc-guide-store.js"></script>
 <script src="./vendor/icon-menu-studio.js?v=22"></script>
 </body>
 </html>

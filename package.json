@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "deploy:firebase": "npx --yes firebase-tools deploy --only hosting --project hmm-work-guide",
     "build": "node scripts/generate-image-manifest.js && node scripts/build-announcement-app.js && node scripts/prepare-deployment.js",
     "serve": "node scripts/static-server.js"
   },
