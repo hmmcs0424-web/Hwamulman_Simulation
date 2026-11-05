@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>빽통PC 화물정보 시뮬레이션</title>
@@ -62,6 +61,8 @@ table.ft{border-collapse:collapse;width:100%;table-layout:fixed}
 .sug-list-btn{background:#f0f9ff;border:1px solid #bae0ff;border-radius:4px;padding:7px 12px;font-size:12px;color:#0070cc;cursor:pointer;text-align:center;font-weight:700}
 .sug-list-btn:hover{background:#e0f2fe}
 .wp{display:flex;gap:4px;margin-top:3px}
+.ft tr.wp{display:table-row}
+.ft .via-remove{background:#bfc3c7;color:#fff}
 .q{display:inline-block;width:14px;height:14px;border:1px solid #999;border-radius:50%;font-size:10px;text-align:center;line-height:12px;color:#777;cursor:help;margin-left:3px}
 .plus{position:absolute;right:6px;top:4px;width:22px;height:24px;border:0;background:var(--blue);color:#fff;border-radius:3px;font-size:16px;line-height:1}
 /* 검색바 */
@@ -156,7 +157,7 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
 <link rel="stylesheet" href="channel-widget.css">
 <link rel="stylesheet" href="warning-popup.css">
 </head>
-<body spellcheck="false">
+<body spellcheck="false" class="hp-open">
 <div id="sim-bar">
   <span class="grow">⚠ 빽통PC(분석 대상 설치본 1.1.76 / 테스트판 1.3.32) 화면을 분석해 만든 <b>시뮬레이션</b>입니다. 서버 연동 없이 브라우저에서만 동작하며, 계산식·색상 일부는 추정입니다.</span>
   <button id="b-guide">▶ 예시 케이스 따라하기</button>
@@ -173,18 +174,66 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
   <span class="badge">미확인 쪽지(3)</span><span class="badge blue" data-ext="manual" style="cursor:pointer">이용매뉴얼</span>
 </div>
 
-<div id="reg"><div id="fm" class="cf cols2"></div></div>
+<div id="reg"><div id="fm" class="cf cols2">
+<div><table class="ft">
+<tbody><tr><th>상차지<b class="req">*</b></th><td class="sido" data-f="upSido" style="width:150px"></td><td colspan="4"><input class="in addr" data-f="up" placeholder="상차지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px)" data-sido="" data-disp="수원시 영통구 원천동"><span class="dbox" data-f="distbox"></span></td></tr>
+<tr><th>하차지<b class="req">*</b></th><td class="sido" data-f="dwSido">인천</td><td colspan="4"><input class="in addr" data-f="dw" placeholder="하차지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px);padding-right:30px" data-sido="인천" data-disp="남동구 고잔동"><button class="plus" data-f="addvia" title="경유지 추가" style="right:auto;left:calc(100% - 245px)">+</button><span class="aibox" data-f="aibox"></span></td></tr>
+<tr data-f="wprow" style=""><th>경유지</th><td colspan="5" data-f="wps"><div class="wp" style="position: relative;"><input class="in addr" data-w="" placeholder="경유지 입력 후 엔터" autocomplete="off"><button class="sbtn" type="button">삭제</button></div></td></tr>
+<tr style="display:none"><th>실거리(Km)</th><td colspan="5">약 <span data-f="km">-</span> km <span class="dist" data-f="dist2"></span></td></tr>
+<tr><th>톤수<b class="req">*</b></th><td style="width:200px"><select data-f="size"><option value="">선택</option><option value="2500">25톤</option><option value="2200">22톤</option><option value="1801">18톤축</option><option value="1800">18톤</option><option value="1601">16톤축</option><option value="1600">16톤</option><option value="1401">14톤축</option><option value="1400">14톤</option><option value="1101">11톤축</option><option value="1100">11톤</option><option value="950">9.5톤</option><option value="800">8톤</option><option value="501">5톤축</option><option value="502">5톤플러스</option><option value="500">5톤</option><option value="351">3.5톤광폭</option><option value="350">3.5톤</option><option value="250">2.5톤</option><option value="140">1.4톤</option><option value="100">1톤</option><option value="103">1톤미만</option><option value="9999">기타</option></select></td>
+ <th class="s">차종<b class="req">*</b></th><td style="width:200px"><select data-f="type"><option value="">선택</option><option value="1">카고</option><option value="2">윙바디</option><option value="3">카고/윙바디</option><option value="16">추레라</option><option value="22">탑</option><option value="19">다마스</option><option value="20">라보</option><option value="21">밴</option><option value="7">냉탑</option><option value="17">방통차</option><option value="24">리프트카고</option><option value="25">리프트윙</option><option value="26">초장축카고</option><option value="27">초장축윙</option><option value="28">냉장윙</option><option value="29">무진동</option><option value="30">호로</option></select></td>
+ <th class="s">화물중량<b class="req">*</b></th><td><input class="in" data-f="weight" placeholder="110% 이하만" autocomplete="off"></td></tr>
+<tr><th>지불방식<b class="req">*</b></th><td><select data-f="pay"><option value="">선택</option><option value="1">인수증</option><option value="3">선불</option><option value="4">착불</option><option value="2">인수증+카드</option><option value="5">카드</option><option value="6">별도협의</option></select></td>
+ <th class="s">차주운임<b class="req">*</b></th><td><input class="in num" data-f="priceUser" autocomplete="off"></td>
+ <th class="s">수수료</th><td><input class="in num" data-f="fee" autocomplete="off" readonly=""></td></tr>
+<tr><th>총운임</th><td><input class="in num" data-f="total" readonly=""></td><th class="s">지급예정일</th><td><input type="date" class="in" data-f="payPlan"></td><td colspan="2"></td></tr>
+<tr><th>상차일<b class="req">*</b></th><td colspan="5" style="white-space:nowrap">
+ <input type="date" class="in" data-f="upDate" style="width:138px"> <select data-f="upTm" style="width:78px"><option value="">시간</option><option>00:00</option><option>00:30</option><option>01:00</option><option>01:30</option><option>02:00</option><option>02:30</option><option>03:00</option><option>03:30</option><option>04:00</option><option>04:30</option><option>05:00</option><option>05:30</option><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option><option>21:30</option><option>22:00</option><option>22:30</option><option>23:00</option><option>23:30</option></select>
+ <label class="qk"><input type="radio" name="qup-main1081" data-q="up0"><span>당상<br>(F9)</span></label><label class="qk"><input type="radio" name="qup-main1081" data-q="up1"><span>낼상<br>(F10)</span></label><label class="qk"><input type="radio" name="qup-main1081" data-q="up2"><span>월상<br>(F11)</span></label><label class="qk"><input type="radio" name="qup-main1081" data-q="up3"><span>지금<br>(F12)</span></label></td></tr>
+<tr><th>하차일<b class="req">*</b></th><td colspan="5" style="white-space:nowrap">
+ <input type="date" class="in" data-f="dwDate" style="width:138px"> <select data-f="dwTm" style="width:78px"><option value="">시간</option><option>00:00</option><option>00:30</option><option>01:00</option><option>01:30</option><option>02:00</option><option>02:30</option><option>03:00</option><option>03:30</option><option>04:00</option><option>04:30</option><option>05:00</option><option>05:30</option><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option><option>21:30</option><option>22:00</option><option>22:30</option><option>23:00</option><option>23:30</option></select>
+ <label class="qk"><input type="radio" name="qdw-main1081" data-q="dw0"><span>당착<br>(Ctrl+F9)</span></label><label class="qk"><input type="radio" name="qdw-main1081" data-q="dw1"><span>낼착<br>(Ctrl+F10)</span></label><label class="qk"><input type="radio" name="qdw-main1081" data-q="dw2"><span>월착<br>(Ctrl+F11)</span></label><label class="qk"><input type="radio" name="qdw-main1081" data-q="dw3"><span>당착/낼착<br>(Ctrl+F12)</span></label></td></tr>
+<tr><th>화물정보<b class="req">*</b></th><td colspan="5" style="white-space:nowrap"><input class="in addr" data-f="info" placeholder="톤,중량 입력 불가" style="width:calc(100% - 130px)" autocomplete="off">
+ <label class="chk" style="margin-left:8px"><input type="checkbox" data-f="goReturn">왕복</label><label class="chk"><input type="checkbox" data-f="via">경유</label><span class="hint" data-f="hint">금칙어(톤, T, 중량 등)를 사용하여 자동 삭제 됩니다.</span></td></tr>
+<tr><th>적요</th><td colspan="5"><input class="in addr" data-f="memo" autocomplete="off"></td></tr>
+</tbody></table>
+<div class="fnote">* <span data-f="wciLabel">산재보험료 부담분</span> <span data-f="wci">0</span>원<br>* 차주지급운임(부가세포함) <span data-f="payout">0</span>원</div>
+</div>
+<div><table class="ft">
+<tbody><tr><th style="width:80px">대수</th><td style="width:100px"><select data-f="count"><option value="1">1대</option><option value="2">2대</option><option value="3">3대</option><option value="4">4대</option><option value="5">5대</option></select></td>
+ <td colspan="2"><label class="chk"><input type="radio" name="ut-main1081" value="독차" checked="" data-f="ut">독차</label><label class="chk"><input type="radio" name="ut-main1081" value="혼적" data-f="ut">혼적</label></td></tr>
+<tr data-f="mixrow" style="display:none"><th>혼적</th><td colspan="3" style="white-space:nowrap">길이 <select data-f="mixLen" style="width:90px"><option value="">선택</option><option value="0.5">0.5M</option><option value="1">1M</option><option value="1.5">1.5M</option><option value="2">2M</option><option value="2.5">2.5M</option><option value="3">3M</option><option value="3.5">3.5M</option><option value="4">4M</option><option value="4.5">4.5M</option><option value="5">5M</option><option value="5.5">5.5M</option><option value="6">6M</option><option value="6.5">6.5M</option><option value="7">7M</option><option value="7.5">7.5M</option><option value="8">8M</option><option value="8.5">8.5M</option><option value="9">9M</option><option value="9.5">9.5M</option><option value="10">10M</option><option value="10.5">10.5M</option><option value="11">11M</option><option value="11.5">11.5M</option><option value="12">12M</option><option value="12.5">12.5M</option><option value="13">13M</option><option value="13.5">13.5M</option><option value="14">14M</option><option value="14.5">14.5M</option><option value="15">15M</option></select>
+ 중량 <select data-f="mixWt" style="width:90px"><option value="">선택</option><option value="0.5">약0.5톤</option><option value="1">약1톤</option><option value="1.5">약1.5톤</option><option value="2">약2톤</option><option value="2.5">약2.5톤</option><option value="3">약3톤</option><option value="3.5">약3.5톤</option><option value="4">약4톤</option><option value="4.5">약4.5톤</option><option value="5">약5톤</option><option value="5.5">약5.5톤</option><option value="6">약6톤</option><option value="6.5">약6.5톤</option><option value="7">약7톤</option><option value="7.5">약7.5톤</option><option value="8">약8톤</option><option value="8.5">약8.5톤</option><option value="9">약9톤</option><option value="9.5">약9.5톤</option><option value="10">약10톤</option></select></td></tr>
+<tr><th>상차방법</th><td colspan="1"><select data-f="upMethod"><option>수작업</option><option>수해줌</option><option selected="">일반</option><option>크레인</option><option>컨베이어</option><option>호이스트</option><option>지게차</option></select></td><th style="width:76px">하차방법</th><td><select data-f="dwMethod"><option>수작업</option><option>수해줌</option><option selected="">일반</option><option>크레인</option><option>컨베이어</option><option>호이스트</option><option>지게차</option></select></td></tr>
+<tr><th>거래처명<b class="req">*</b></th><td><input class="in" data-f="client"></td><th>연락처<b class="req">*</b></th><td><input class="in" data-f="tel"></td></tr>
+<tr><th style="line-height:1.2;font-size:12px">의뢰자명<br>(거래처명)</th><td><input class="in" data-f="reqName" placeholder="거래처조회시 Enter"></td><th style="line-height:1.2;font-size:12px">의뢰자<br>사업자번호<span class="q" title="입력한 의뢰자명(거래처명), 의뢰자 사업자등록번호는 실적신고 시 운송의뢰자 정보로 구분되어 반영됩니다. 변경은 [고객센터 &gt; 운송실적 신고내역]에서 가능합니다.">?</span></th><td><input class="in" data-f="reqCorp" placeholder="“-” 빼고 입력" maxlength="12"></td></tr>
+</tbody></table>
+<div style="margin:6px 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+ <label class="chk"><input type="checkbox" data-f="proposal">차주운임 제안 허용<span class="q" data-help="proposal">?</span></label>
+ <span style="flex:1"></span>
+ <label class="chk"><input type="checkbox" data-f="shareChk" checked="">공유배차</label><label class="chk" style="margin:0"><input type="checkbox" data-f="ownChk">자차배차</label>
+</div>
+<div data-f="ownrow" style="display:none;margin:2px 4px"><button class="sbtn" data-f="pickOwner">지정배차 차주 불러오기</button> <span data-f="ownerTxt" class="mini">선택된 차주 없음</span></div>
+
+</div>
+<div style="grid-column:1/-1"><div class="btns">
+ <button data-f="b-reset">초기화(F2)</button><button class="pri" data-f="b-submit">등록(F3)</button>
+ <button data-f="b-fav" class="" style="color:#1668c7;border-color:#1890ff">즐겨찾기 화물</button>
+ <button data-f="b-add">오더 추가(F6)</button>
+ <button data-f="b-copy" class="hid">복사(F7)</button>
+ <button data-f="b-resv">예약등록</button>
+</div></div></div></div>
 
 <div id="sbar">
   <div class="toggle" id="b-fold">▲</div>
   <div class="sb">
-    <div class="tabs"><div class="on" id="tab-my">화물정보(<span id="cnt-my">0</span>)</div><div id="tab-sh">공유화물정보 (<span id="cnt-sh">0</span>)</div></div>
+    <div class="tabs"><div class="on" id="tab-my">화물정보(<span id="cnt-my">4</span>)</div><div id="tab-sh">공유화물정보 (<span id="cnt-sh">6</span>)</div></div>
     <button class="big" id="st-all">전체</button>
     <div style="display:grid;grid-template-columns:auto auto;gap:4px">
       <button class="sbtn" data-st="1">배차전</button><button class="sbtn" data-st="6">배차취소</button>
       <button class="sbtn y" data-st="3">배차완료</button><button class="sbtn" data-st="7">배차실패</button>
     </div>
-    <button class="sbtn y" data-p="0" id="p0">당일</button><button class="sbtn o" data-p="2">3일</button><button class="sbtn y" data-p="6">7일</button><button class="sbtn o" data-p="14">15일</button><button class="sbtn y" data-p="30">한달</button>
+    <button class="sbtn y on" data-p="0" id="p0">당일</button><button class="sbtn o" data-p="2">3일</button><button class="sbtn y" data-p="6">7일</button><button class="sbtn o" data-p="14">15일</button><button class="sbtn y" data-p="30">한달</button>
     <span style="margin-left:50px;font-size:13px">담당 아이디</span>
     <select class="sin" id="s-id"><option value="">전체</option><option>user01</option><option>user02</option></select>
     <span style="flex:1"></span>
@@ -201,32 +250,32 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
     <button class="sbtn" id="b-bulk" style="background:#aaa;color:#fff;border-color:#aaa">일괄 배차취소</button>
   </div>
 </div>
-<div id="gridwrap"><table class="g" id="grid"></table><div class="empty" id="empty">검색결과가 없습니다.</div></div>
-<div id="sum"></div>
+<div id="gridwrap"><table class="g" id="grid" style="width: 2826px; font-size: 12px;"><colgroup><col style="width:43px"><col style="width:33px"><col style="width:90px"><col style="width:85px"><col style="width:100px"><col style="width:100px"><col style="width:60px"><col style="width:47px"><col style="width:47px"><col style="width:80px"><col style="width:95px"><col style="width:95px"><col style="width:95px"><col style="width:60px"><col style="width:70px"><col style="width:84px"><col style="width:67px"><col style="width:57px"><col style="width:57px"><col style="width:92px"><col style="width:80px"><col style="width:57px"><col style="width:88px"><col style="width:92px"><col style="width:45px"><col style="width:70px"><col style="width:70px"><col style="width:105px"><col style="width:65px"><col style="width:105px"><col style="width:70px"><col style="width:90px"><col style="width:92px"><col style="width:110px"><col style="width:110px"><col style="width:120px"></colgroup><thead><tr><th class="" data-k="no">No.</th><th><input type="checkbox" id="chk-all"></th><th class="" data-k="uid">담당아이디</th><th class="sort" data-k="status">상태 ▾</th><th class="" data-k="oa">안심결제</th><th class="" data-k="prop">운임 제안</th><th class="sort" data-k="share">구분 ▾</th><th class="" data-k="day">일자</th><th class="" data-k="time">시간</th><th class="sort" data-k="client">거래처명 ▾</th><th class="" data-k="up">상차지</th><th class="" data-k="dw">하차지</th><th class="" data-k="info">화물정보</th><th class="sort" data-k="size">톤수 ▾</th><th class="sort" data-k="type">차종 ▾</th><th class="sort" data-k="pay">지불방식 ▾</th><th class="" data-k="priceUser">차주운임</th><th class="" data-k="fee">수수료</th><th class="" data-k="total">총운임</th><th class="" data-k="payPlan">지급 예정일</th><th class="" data-k="wci">산재보험료</th><th class="" data-k="ow">차주명</th><th class="" data-k="car">차량번호</th><th class="" data-k="mob">연락처</th><th class="" data-k="trs">TRS</th><th class="" data-k="ct">배차차종</th><th class="" data-k="cs">배차톤수</th><th class="" data-k="cn">차주사업자번호</th><th class="" data-k="cname">차주상호</th><th class="" data-k="tc">1대 운송사업자</th><th class="" data-k="wa">산재적용</th><th class="" data-k="rc">인수증발행</th><th class="" data-k="tx">계산서작성일</th><th class="" data-k="upt">상차일시</th><th class="" data-k="dwt">하차일시</th><th class="" data-k="on">오더번호</th></tr></thead><tbody><tr data-id="1003" class="row-before " style="height:28px"><td style="text-align:center">1</td><td style="text-align:center"><input type="checkbox" data-sel="1003"></td><td style="text-align:center">user01</td><td style="text-align:left">배차전</td><td style="text-align:center"></td><td style="text-align:center">제안허용 (2건)</td><td style="text-align:center">공유</td><td style="text-align:center">11/05</td><td style="text-align:center">09:10</td><td style="text-align:left">샘플물류</td><td style="text-align:left">서울 중구 무교동</td><td style="text-align:left">부산 해운대구 재송동</td><td style="text-align:left">운임제안) 파렛트 10개</td><td style="text-align:left">5톤</td><td style="text-align:left">카고</td><td style="text-align:left">선불</td><td style="text-align:right">450,000</td><td style="text-align:right">50,000</td><td style="text-align:right">500,000</td><td style="text-align:left"></td><td style="text-align:right">0</td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left">2026-11-05 14:00</td><td style="text-align:left">2026-11-06</td><td style="text-align:left">ORD202611059642</td></tr><tr data-id="1004" class="row-before " style="height:28px"><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" data-sel="1004"></td><td style="text-align:center">user02</td><td style="text-align:left">배차전</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">공유</td><td style="text-align:center">11/05</td><td style="text-align:center">10:10</td><td style="text-align:left">샘플물류</td><td style="text-align:left">경기 수원시 영통구 원천동</td><td style="text-align:left">대전 유성구 대정동</td><td style="text-align:left">전선드럼 3개</td><td style="text-align:left">11톤</td><td style="text-align:left">윙바디</td><td style="text-align:left">인수증</td><td style="text-align:right">380,000</td><td style="text-align:right">0</td><td style="text-align:right">380,000</td><td style="text-align:left"></td><td style="text-align:right">0</td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left">2026-11-05</td><td style="text-align:left">2026-11-06</td><td style="text-align:left">ORD202611053690</td></tr><tr data-id="1005" class="row-done " style="height:28px"><td style="text-align:center">3</td><td style="text-align:center"></td><td style="text-align:center">user01</td><td style="text-align:left">배차완료</td><td style="text-align:center">안심결제</td><td style="text-align:center"></td><td style="text-align:center">공유</td><td style="text-align:center">11/05</td><td style="text-align:center">11:10</td><td style="text-align:left">샘플물류</td><td style="text-align:left">인천 남동구 논현동</td><td style="text-align:left">충북 청주시 흥덕구 오송읍</td><td style="text-align:left">박스 20개</td><td style="text-align:left">1톤</td><td style="text-align:left">라보</td><td style="text-align:left">안심결제(인수증)</td><td style="text-align:right">90,000</td><td style="text-align:right">0</td><td style="text-align:right">90,000</td><td style="text-align:left"></td><td style="text-align:right">390</td><td style="text-align:left" title="박기사 010-5555-6666">박기사</td><td style="text-align:left">56다7890</td><td style="text-align:left">010-5555-6666</td><td style="text-align:left"></td><td style="text-align:center">카고</td><td style="text-align:center">1톤</td><td style="text-align:left">345-67-89012</td><td style="text-align:left">박기사상운</td><td style="text-align:left"></td><td style="text-align:center">Y</td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left">2026-11-05</td><td style="text-align:left">2026-11-06</td><td style="text-align:left">ORD202611051038</td></tr><tr data-id="1008" class="row-cancel " style="height:28px"><td style="text-align:center">4</td><td style="text-align:center"></td><td style="text-align:center">user01</td><td style="text-align:left">배차취소</td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:center">공유</td><td style="text-align:center">11/05</td><td style="text-align:center">08:10</td><td style="text-align:left">샘플물류</td><td style="text-align:left">전북 전주시 덕진구 팔복동</td><td style="text-align:left">전남 순천시 해룡면</td><td style="text-align:left">핑크폼 2팔레트</td><td style="text-align:left">3.5톤</td><td style="text-align:left">윙바디</td><td style="text-align:left">선불</td><td style="text-align:right">210,000</td><td style="text-align:right">20,000</td><td style="text-align:right">230,000</td><td style="text-align:left"></td><td style="text-align:right">0</td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:center"></td><td style="text-align:left"></td><td style="text-align:left"></td><td style="text-align:left">2026-11-05</td><td style="text-align:left">2026-11-06</td><td style="text-align:left">ORD202611051031</td></tr></tbody></table><div class="empty" id="empty" style="display: none;">검색결과가 없습니다.</div></div>
+<div id="sum"><div class="date">📅<br>2026.11.05</div><div class="c"><b>예치금</b><span>1,500,000원</span></div><div class="c"><b>총운임비</b><span>590,000원</span></div><div class="c"><b>차주운임비</b><span>540,000원</span></div><div class="c"><b>수수료</b><span>50,000원</span></div><div class="c"><b>등록건수</b><span style="color:#e8710a">3건</span></div><div class="c"><b>배차전</b><span style="color:#e8710a">1건</span></div><div class="c"><b>배차완료</b><span style="color:#e8710a">1건</span></div><div class="c"><b>배차취소</b><span style="color:#e8710a">1건</span></div><div class="c"><b>배차실패</b><span style="color:#e8710a">0건</span></div><div class="c"><b>지원 예정 금액</b><span>0원</span></div></div>
 
 <div id="client-view" style="display:none;padding:0 28px 8px">
  <div style="display:flex;align-items:center;margin:14px 0 18px"><h2 style="margin:0;font-weight:400;font-size:20px;border:0;padding:0">거래처 관리</h2><span style="flex:1"></span>
   <input class="sin" id="cl-kw" style="width:280px;height:30px" placeholder="거래처명, 사업자번호, 담당자, 전화번호, 주소"><button class="sbtn dk" id="cl-search" style="height:30px;margin-left:8px">검색</button></div>
  <div class="cf cols2" style="gap:0 56px;grid-template-columns:1fr 1fr">
   <table class="ft">
-   <tr><th>구분</th><td colspan="1"><select data-c="type"><option value="1">화주</option><option value="2">주선사</option><option value="3">운송사</option><option value="4">운송+주선사</option><option value="5">위탁사</option><option value="6">기타</option></select></td><th style="width:90px">거래처명<b class="req">*</b></th><td><input class="in addr" data-c="name" autocomplete="off"></td></tr>
+   <tbody><tr><th>구분</th><td colspan="1"><select data-c="type"><option value="1">화주</option><option value="2">주선사</option><option value="3">운송사</option><option value="4">운송+주선사</option><option value="5">위탁사</option><option value="6">기타</option></select></td><th style="width:90px">거래처명<b class="req">*</b></th><td><input class="in addr" data-c="name" autocomplete="off"></td></tr>
    <tr><th>대표번호<b class="req">*</b></th><td><input class="in addr" data-c="tel" placeholder="“-“ 빼고 입력" autocomplete="off"></td><th>팩스번호</th><td><input class="in" data-c="fax" placeholder="“-“ 빼고 입력"></td></tr>
    <tr><th>담당자</th><td><input class="in" data-c="mgr" placeholder="담당자 이름"></td><td colspan="2" style="white-space:nowrap"><input class="in" data-c="mgrTel" placeholder="담당자 대표전화" style="width:48%"> <input class="in" data-c="mgrMobile" placeholder="담당자 핸드폰" style="width:48%"></td></tr>
    <tr><th>이메일1</th><td><input class="in" data-c="email1" placeholder="대표"></td><th>이메일2</th><td><input class="in" data-c="email2" placeholder="세금계산서용"></td></tr>
-   <tr><th>주소</th><td colspan="3" style="white-space:nowrap"><input class="in" data-c="addr" readonly style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-addr="addr" style="height:26px">검색</button></td></tr>
+   <tr><th>주소</th><td colspan="3" style="white-space:nowrap"><input class="in" data-c="addr" readonly="" style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-addr="addr" style="height:26px">검색</button></td></tr>
    <tr><th></th><td colspan="3"><input class="in" data-c="addr2"></td></tr>
    <tr><th>비고</th><td colspan="3"><input class="in" data-c="memo"></td></tr>
    <tr><th style="line-height:1.2">주 화물명</th><td><input class="in" data-c="mainCargo"></td><th>주 상차지</th><td><input class="in" data-c="mainUp" placeholder="상차지 입력 후 엔터" autocomplete="off"></td></tr>
-  </table>
+  </tbody></table>
   <table class="ft">
-   <tr><th colspan="2" style="text-align:left;font-weight:400;border:0"><label class="chk"><input type="checkbox" data-c="same">사업자명, 주소 동일</label></th><th style="width:90px">사업자명</th><td><input class="in" data-c="corpName"></td></tr>
-   <tr><th colspan="2" style="width:150px">사업자번호<b class="req">*</b></th><td colspan="2" style="white-space:nowrap"><input class="in addr" data-c="corpNum" placeholder="“-“ 빼고 입력" style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-cert style="height:26px">인증</button></td></tr>
+   <tbody><tr><th colspan="2" style="text-align:left;font-weight:400;border:0"><label class="chk"><input type="checkbox" data-c="same">사업자명, 주소 동일</label></th><th style="width:90px">사업자명</th><td><input class="in" data-c="corpName"></td></tr>
+   <tr><th colspan="2" style="width:150px">사업자번호<b class="req">*</b></th><td colspan="2" style="white-space:nowrap"><input class="in addr" data-c="corpNum" placeholder="“-“ 빼고 입력" style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-cert="" style="height:26px">인증</button></td></tr>
    <tr><th colspan="2">법인번호</th><td><input class="in" data-c="corpRnum" placeholder="“-“ 빼고 입력"></td><td><b style="margin-right:8px">대표자</b><input class="in" data-c="ceo" style="width:calc(100% - 64px)"></td></tr>
    <tr><th colspan="2">업태</th><td><input class="in" data-c="bizType"></td><td><b style="margin-right:22px">업종</b><input class="in" data-c="bizCate" style="width:calc(100% - 64px)"></td></tr>
-   <tr><th colspan="2">사업자주소</th><td colspan="2" style="white-space:nowrap"><input class="in" data-c="corpAddr" readonly style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-addr="corpAddr" style="height:26px">검색</button></td></tr>
+   <tr><th colspan="2">사업자주소</th><td colspan="2" style="white-space:nowrap"><input class="in" data-c="corpAddr" readonly="" style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-addr="corpAddr" style="height:26px">검색</button></td></tr>
    <tr><th colspan="2"></th><td colspan="2"><input class="in" data-c="corpAddr2"></td></tr>
-   <tr><th colspan="2">사업자등록증</th><td colspan="2" style="white-space:nowrap"><input class="in" data-c="file" readonly placeholder="사업자등록증사본을 등록해 주세요." style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-file style="height:26px">파일찾기</button><input type="file" id="cl-file" accept=".jpg,.jpeg,.png,.gif" style="display:none"></td></tr>
-  </table>
+   <tr><th colspan="2">사업자등록증</th><td colspan="2" style="white-space:nowrap"><input class="in" data-c="file" readonly="" placeholder="사업자등록증사본을 등록해 주세요." style="width:calc(100% - 72px)"> <button class="sbtn dk" data-c-file="" style="height:26px">파일찾기</button><input type="file" id="cl-file" accept=".jpg,.jpeg,.png,.gif" style="display:none"></td></tr>
+  </tbody></table>
  </div>
  <div class="btns" style="margin-top:12px"><button id="cl-reset">초기화</button><button class="pri" id="cl-submit">등록</button></div>
  <div style="border:1px solid #ccc;margin-top:10px"><div style="display:flex;align-items:center;padding:10px 20px;background:#fafafa;border-bottom:1px solid #ccc"><b id="cl-sum">거래처(0)</b><span style="flex:1"></span><button class="sbtn" id="cl-del">거래처 삭제</button> <button class="sbtn" id="cl-xls" style="margin-left:6px">엑셀다운</button></div>
@@ -239,7 +288,7 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
 <div id="cs-view" style="display:none;padding:20px 28px"></div>
 <div id="set-view" style="display:none;padding:20px 28px"></div>
 <div id="submenu" style="display:none;position:fixed;z-index:900;background:#fff;border:1px solid #ccc;box-shadow:0 3px 8px #0003;font-size:13px"></div>
-<div id="ctx"></div>
+<div id="ctx" style="display: none;"></div>
 <div id="gh"></div><div id="gt"></div>
 
 <script>
@@ -347,8 +396,8 @@ function formHTML(kind,uidk){
   return `
 <div><table class="ft">
 <tr><th>상차지<b class="req">*</b></th><td class="sido" data-f="upSido" style="width:150px"></td><td colspan="4"><input class="in addr" data-f="up" placeholder="상차지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px)"><span class="dbox" data-f="distbox"></span></td></tr>
-<tr><th>하차지<b class="req">*</b></th><td class="sido" data-f="dwSido"></td><td colspan="4"><input class="in addr" data-f="dw" placeholder="하차지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px);padding-right:30px"><button class="plus" data-f="addvia" title="경유지 추가" style="right:auto;left:calc(100% - 245px)">+</button><span class="aibox" data-f="aibox"></span></td></tr>
 <tr data-f="wprow" style="display:none"><th>경유지</th><td colspan="5" data-f="wps"></td></tr>
+<tr><th>하차지<b class="req">*</b></th><td class="sido" data-f="dwSido"></td><td colspan="4"><input class="in addr" data-f="dw" placeholder="하차지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px);padding-right:30px"><button class="plus" data-f="addvia" title="경유지 추가" style="right:auto;left:calc(100% - 245px)">+</button><span class="aibox" data-f="aibox"></span></td></tr>
 <tr${modal?'':' style="display:none"'}><th>실거리(Km)</th><td colspan="5">약 <span data-f="km">-</span> km <span class="dist" data-f="dist2"></span></td></tr>
 <tr><th>톤수<b class="req">*</b></th><td style="width:200px"><select data-f="size">${sel(SIZES.map(s=>[s[0],s[1]]))}</select></td>
  <th class="s">차종<b class="req">*</b></th><td style="width:200px"><select data-f="type">${sel(TYPES)}</select></td>
@@ -413,7 +462,7 @@ class CargoForm{
     if(full.includes(' ')&&ADDRS.find(x=>x[0]===full)){const sp=full.indexOf(' ');i.dataset.sido=full.slice(0,sp);i.value=full.slice(sp+1)}else{i.dataset.sido='';i.value=full}
     i.dataset.disp=i.value;c.textContent=i.dataset.sido}
   get mix(){return this.root.querySelector('[data-f="ut"]:checked').value==='혼적'}
-  waypoints(){return $$('[data-w]',this.root).map(i=>i.value.trim()).filter(Boolean)}
+  waypoints(){return $$('[data-w]',this.root).map(i=>((i.dataset.sido?i.dataset.sido+' ':'')+i.value.trim()).trim()).filter(Boolean)}
   reset(){const t=new Date();
     this.mode='add';this.editId=null;this.owner=null;this.setAddr('up','');this.setAddr('dw','');
     ['weight','priceUser','fee','total','payPlan','info','memo','reqName','reqCorp'].forEach(n=>this.f(n).value='');
@@ -448,6 +497,11 @@ class CargoForm{
     if(o.share!==undefined){this.f('ownChk').checked=o.share===2;this.f('shareChk').checked=o.share!==2;this.f('ownrow').style.display=o.share===2?'':'none'}
     if(o.pay!==undefined)this.applyPay(true);
     if(o.proposal&&o.info&&!this.f('info').value.startsWith('운임제안)'))this.f('info').value='운임제안)'+this.f('info').value;
+    if(Array.isArray(o.waypoints)){
+      $$('[data-w]',this.root).forEach(input=>input.closest('.wp').remove());
+      o.waypoints.slice(0,3).forEach(value=>this.addVia(value,false));
+      if(o.via!==undefined)this.f('via').checked=!!o.via;
+    }
     $$('[data-q]',this.root).forEach(c=>c.checked=false);
     this.recalc();this.showDist();}
   applyPay(keep){const p=+this.f('pay').value, can=p===3||p===4;
@@ -474,11 +528,21 @@ class CargoForm{
     if(group==='up'){this.f('upDate').value=[dt(0),dt(1),nextMon(),dt(0)][i];
       if(i===3){const m=new Date(t);m.setMinutes(m.getMinutes()<30?30:60,0,0);const s=hm(m);this.f('upTm').value=[...this.f('upTm').options].map(o=>o.value).find(x=>x>=s)||'23:30'}else this.f('upTm').value=''}
     else{this.f('dwDate').value=[dt(0),dt(1),nextMon(),dt(1)][i];this.f('dwTm').value=''}}
-  addVia(){const rows=$$('[data-w]',this.root);if(rows.length>=3){alertBox('경유지는 최대 3개까지 추가할 수 있습니다.');return}
-    this.f('wprow').style.display='';const d=document.createElement('div');d.className='wp';d.style.position='relative';
-    d.innerHTML='<input class="in addr" data-w placeholder="경유지 입력 후 엔터" autocomplete="off"><button class="sbtn" type="button">삭제</button>';
-    this.f('wps').appendChild(d);attachAddr($('[data-w]',d),()=>{});$('button',d).onclick=()=>{d.remove();if(!$$('[data-w]',this.root).length)this.f('wprow').style.display='none'};
-    this.f('via').checked=true;$('[data-w]',d).focus()}
+  addVia(value='',focus=true){
+    const rows=$$('[data-w]',this.root);
+    if(rows.length>=3){alertBox('경유지는 최대 3개까지 추가할 수 있습니다.');return}
+    const row=document.createElement('tr');row.className='wp';
+    row.innerHTML='<th>경유지</th><td class="sido" data-w-sido></td><td colspan="4"><input class="in addr" data-w aria-label="경유지 입력 후 엔터" autocomplete="off" style="width:calc(100% - 215px);padding-right:30px"><button class="plus via-remove" type="button" title="경유지 삭제" aria-label="경유지 삭제" style="right:auto;left:calc(100% - 245px)">−</button></td>';
+    const destination=this.f('dw').closest('tr');
+    destination.parentNode.insertBefore(row,destination);
+    const input=$('[data-w]',row),sido=$('[data-w-sido]',row);
+    attachAddr(input,()=>{},sido);
+    input.addEventListener('input',()=>{if(input.value!==input.dataset.disp){input.dataset.sido='';sido.textContent=''}});
+    $('button',row).onclick=()=>row.remove();
+    if(value){const split=value.indexOf(' ');if(split>0&&ADDRS.some(address=>address[0]===value)){input.dataset.sido=value.slice(0,split);input.value=value.slice(split+1);sido.textContent=input.dataset.sido}else input.value=value;input.dataset.disp=input.value}
+    this.f('via').checked=true;
+    if(focus)input.focus();
+  }
   bind(){
     const R=this.root;
     attachAddr(this.f('up'),()=>this.showDist(),this.f('upSido'));attachAddr(this.f('dw'),()=>this.showDist(),this.f('dwSido'));
@@ -1369,7 +1433,7 @@ body.hp-open{padding-right:340px}
 #ext .btn{border:0;border-radius:4px;padding:8px 18px;cursor:pointer;font:inherit}
 #ext .btn.p{background:#2563eb;color:#fff}#ext .btn.s{background:#e5e7eb}
 </style>
-<div id="ext"><div class="win"><div class="bar"><span class="tagv">가상 화면</span><span class="url" id="ext-url"></span><button type="button" id="ext-x">닫기 ×</button></div><div class="page" id="ext-page"></div><div class="exp" id="ext-exp"></div></div></div>
+<div id="ext" style="display: none;"><div class="win"><div class="bar"><span class="tagv">가상 화면</span><span class="url" id="ext-url">(엑셀 등록)</span><button type="button" id="ext-x">닫기 ×</button></div><div class="page" id="ext-page"><h2>엑셀 등록</h2><p class="lead">예시 화면 · 실제 양식 미확인</p><ol><li>양식 파일을 내려받습니다.</li><li>상차지, 하차지, 톤수, 차종, 운임 등을 채웁니다.</li><li>파일을 선택해 업로드하면 화물이 등록됩니다.</li></ol><button class="btn s" onclick="extAlert('양식 다운로드')">양식 다운로드</button> <button class="btn p" onclick="extAlert('엑셀 업로드')">파일 선택·업로드</button></div><div class="exp" id="ext-exp"><h4>💡 오른쪽 위 엑셀 아이콘을 누르면</h4><ul><li>화물을 엑셀 파일로 한꺼번에 등록하는 기능으로 보입니다 (아이콘만 확인, 실제 화면은 <b>미확인</b>)</li><li>아래 화면은 흐름을 설명하기 위한 예시입니다. 실제 양식·컬럼은 실제 앱에서 확인 후 채워 주세요 (EXT.excel)</li></ul></div></div></div>
 <style>
 #fl{position:fixed;right:10px;top:96px;z-index:1300;display:flex;flex-direction:column;gap:8px;align-items:center}
 body.hp-open #fl,body.hp-open #ct{right:350px}
@@ -1383,10 +1447,10 @@ body.hp-open #fl,body.hp-open #ct{right:350px}
 #ct .ch{width:56px;height:56px;border-radius:50%;background:#0a3fc0;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0005}
 #ct .ch span{width:26px;height:20px;border:3px solid #fff;border-radius:50%;display:block}
 </style>
-<div id="fl"><div class="fi xl" data-ext="excel" title="엑셀 등록" role="button" tabindex="0" aria-label="엑셀 등록"><svg viewBox="0 0 32 36" width="30" height="34" aria-hidden="true"><path d="M11 2h13l6 6v25H11z" fill="white" stroke="#187c47" stroke-width="2"/><path d="M24 2v7h6M15 14h11M15 19h11M15 24h11M15 29h11" fill="none" stroke="#187c47"/><path d="M2 8l17-3v28L2 30z" fill="#187c47"/><path d="M6 14l8 12m0-13L6 27" stroke="white" stroke-width="2.5"/></svg></div><div class="fi ai" data-ext="ai" title="AI" role="button" tabindex="0" aria-label="AI"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M6 6h20v18H16l-6 5v-5H6z" fill="white"/><text x="16" y="20" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#1890ff">AI</text></svg><em>Beta</em></div><div class="fi sf" id="fl-sf" data-ext="safe" title="안심결제" role="button" tabindex="0" aria-label="안심결제">안심<br>결제</div></div>
-<div id="ct"><div class="bub" id="ct-b"><span>궁금한 건 채팅으로 문의하세요<small style="display:block;margin-top:4px;color:#999;font-size:12px;font-weight:400">💬 대화 시작하기</small></span><i id="ct-x">×</i></div><div class="ch" data-ext="chat" title="채널톡" role="button" tabindex="0" aria-label="채널톡 연결"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><path d="M20 5C11 5 5 11 5 20s6 15 15 15c3 0 6-.8 8-2.4l7 2-2.1-7C34.3 25.4 35 23 35 20 35 11 29 5 20 5z" fill="white"/><path d="M13 21q7 8 14 0" stroke="#0849be" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div></div>
-<button id="hp-btn" type="button">ⓘ 화면 설명</button>
-<div id="hp"><div class="hh"><b id="hp-t">화면 설명</b><button id="hp-x" type="button" title="닫기">×</button></div><div class="hb" id="hp-b"></div></div>
+<div id="fl"><div class="fi xl" data-ext="excel" title="엑셀 등록" role="button" tabindex="0" aria-label="엑셀 등록" contenteditable="false"><svg viewBox="0 0 32 36" width="30" height="34" aria-hidden="true"><path d="M11 2h13l6 6v25H11z" fill="white" stroke="#187c47" stroke-width="2"></path><path d="M24 2v7h6M15 14h11M15 19h11M15 24h11M15 29h11" fill="none" stroke="#187c47"></path><path d="M2 8l17-3v28L2 30z" fill="#187c47"></path><path d="M6 14l8 12m0-13L6 27" stroke="white" stroke-width="2.5"></path></svg></div><div class="fi ai" data-ext="ai" title="AI" role="button" tabindex="0" aria-label="AI" contenteditable="false"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M6 6h20v18H16l-6 5v-5H6z" fill="white"></path><text x="16" y="20" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#1890ff">AI</text></svg><em>Beta</em></div><div class="fi sf" id="fl-sf" data-ext="safe" title="안심결제" role="button" tabindex="0" aria-label="안심결제" contenteditable="false">안심<br>결제</div></div>
+<div id="ct"><div class="bub" id="ct-b" contenteditable="false"><span>궁금한 건 채팅으로 문의하세요<small style="display:block;margin-top:4px;color:#999;font-size:12px;font-weight:400">💬 대화 시작하기</small></span><i id="ct-x">×</i></div><div class="ch" data-ext="chat" title="채널톡" role="button" tabindex="0" aria-label="채널톡 연결" aria-controls="btchat" aria-expanded="false" contenteditable="false"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><path d="M20 5C11 5 5 11 5 20s6 15 15 15c3 0 6-.8 8-2.4l7 2-2.1-7C34.3 25.4 35 23 35 20 35 11 29 5 20 5z" fill="white"></path><path d="M13 21q7 8 14 0" stroke="#0849be" stroke-width="4" fill="none" stroke-linecap="round"></path></svg></div></div>
+<button id="hp-btn" type="button" style="display: none;">ⓘ 화면 설명</button>
+<div id="hp" style="display: flex;"><div class="hh"><b id="hp-t">화물정보</b><button id="hp-x" type="button" title="닫기">×</button></div><div class="hb" id="hp-b"><div class="path">경로: 상단 첫 메뉴 (화물정보)</div><div>화물(오더)을 등록하고, 등록한 오더의 배차 상태를 확인·관리하는 메인 화면입니다. 위에서부터 등록 폼 → 검색·필터 → 목록 → 하단 요약 순서입니다.</div><h4>사용 순서</h4><ol><li>상차지·하차지 칸에 "수원" 처럼 입력하고 엔터 → "주소 검색" 목록에서 행을 더블클릭 (<span style="color: rgb(253, 13, 13);">도로명이 아닌 시도/시군구/읍면동 검색</span>)</li><li>톤수 → 차종 → 화물중량 순으로 선택 (중량은 톤수 기준 110% 이하)</li><li>지불방식 선택. <b>선불·착불일 때만 수수료</b> 입력 가능</li><li>차주운임·수수료 입력 → 총운임, 산재보험료, 차주지급운임 안내가 자동 계산</li><li>상차일/하차일 선택 (라디오 또는 F9~F12) 후 <b>등록(F3)</b></li></ol><h4>알아둘 규칙</h4><ul><li>총운임 = 차주운임 + 수수료, 최대 300만원</li><li>산재보험료 = 총운임×1.1×0.4% (10원 단위 반올림)</li><li>화물정보에 무게·중량·t·ton·kg·톤 등은 금칙어 → 칸을 벗어나면 알림 후 삭제</li><li>하차일시는 상차일시보다 빠를 수 없음</li><li>F1 화물등록(팝업), F2 초기화, F3 등록/수정, F4 접수시간변경(1분 이내 재변경 불가), F5 검색, F6 오더 추가, F7 복사</li></ul><div class="tip">💡 목록 행을 <b>우클릭</b>하면 상태별 메뉴(배차완료·배차취소·화물정보 이력 등)가 나옵니다. 선불·착불 오더를 배차완료로 바꾸면 수수료가 예치금에 입금됩니다. 행 <b>더블클릭</b>은 수정 모드입니다.</div></div></div>
 <script>
 /* ===== 화면별 기능 설명 패널 ===== */
 const HELP={
@@ -1561,5 +1625,6 @@ function guideWarningContext(){
 }
 </script>
 <script src="warning-popup.js"></script>
-</body>
-</html>
+
+
+</body></html>
