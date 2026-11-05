@@ -1253,7 +1253,7 @@ textarea.form-input{resize:vertical;}
       <button class="gtb-btn save-btn" type="button" id="gtbSave" onclick="savePcGuideContent()" disabled>💾 저장</button>
       <button class="gtb-btn" type="button" onclick="pcGuideStore.backup()">PC 백업</button>
       <button class="gtb-btn" type="button" onclick="pcGuideStore.restore()">이전 저장본 복원</button>
-      <span id="pcGuideSaveStatus" role="status" style="font-size:12px"></span>
+      <span id="pcGuideSaveStatus" role="status" style="font-size:12px;color:#a7f3d0"></span>
       <button class="gtb-btn" type="button" id="guideEditToggle" onclick="_guideDoc()?.body.contentEditable==='true'?exitGuideEditMode():enterGuideEditMode()">편집 종료</button>
     </div>
     <!-- 편집 중 힌트 바 -->
@@ -2643,7 +2643,18 @@ function _guideWin() { return _guideFrame()?.contentWindow; }
 
 function loadPcGuide() {
   const frame = _guideFrame();
-  frame.onload = () => { guideResetHistory(); pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); window.pcGuideStore?.connect(); };
+  frame.onload = async () => {
+    if(activeSec !== '빽통PC') return;
+    try {
+      await window.pcGuideStore.prepareFrame(frame);
+      guideResetHistory(); pcGuideSelection = null; pcGuideLayoutEditing = false;
+      setGuideDirty(false); syncGuideToolbar(); guideSelectIcon();
+      window.pcGuideStore.connect();
+    } catch(error) {
+      document.getElementById('pcGuideSaveStatus').textContent = '사이트 저장 준비 실패 · ' + error.message;
+      console.error('빽통 PC 저장 준비 실패:',error);
+    }
+  };
   frame.src = SECS['빽통PC'].contentUrl + '?_=' + Date.now();
 }
 
@@ -3069,6 +3080,8 @@ function applySec(name) {
     syncAdminUI();
     return;
   }
+
+  window.pcGuideStore?.disconnect();
 
   // 채널톡: 교육 전용 레이아웃
   const isCtEdu = (name === '채널톡');
@@ -8588,7 +8601,7 @@ window.addEventListener('beforeunload', e => {
 
 boot();
 </script>
-<script src="./vendor/pc-guide-store.js"></script>
+<script src="./vendor/pc-guide-store.js?v=20261105-pc-save-2"></script>
 <script src="./vendor/icon-menu-studio.js?v=22"></script>
 </body>
 </html>

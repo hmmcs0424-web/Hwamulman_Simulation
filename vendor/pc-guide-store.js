@@ -10,11 +10,34 @@ window.pcGuideStore = (() => {
     document.getElementById('gtbSave').disabled = value || !pcGuideDirty;
     document.getElementById('gtbSave').textContent = value ? '저장 중…' : '💾 저장';
   }
+  async function prepareFrame(frame) {
+    const doc = frame?.contentDocument, win = frame?.contentWindow;
+    if (!doc?.body) throw Error('빽통 PC 화면을 불러오지 못했습니다.');
+    const base = new URL(SECS['빽통PC'].contentUrl,location.href);
+    async function script(path) {
+      await new Promise((resolve,reject) => {
+        const el = doc.createElement('script');
+        el.src = new URL(path,base).href + '?v=20261105-pc-save-2';
+        const timer = setTimeout(() => { el.remove(); reject(Error('빽통 PC 저장 모듈 연결 시간이 초과되었습니다.')); },15000);
+        el.onload = () => { clearTimeout(timer); resolve(); };
+        el.onerror = () => { clearTimeout(timer); reject(Error('빽통 PC 저장 모듈을 불러오지 못했습니다.')); };
+        doc.body.append(el);
+      });
+    }
+    if (!win.DOMPurify) await script('../vendor/purify.min.js');
+    if (!win.guideEdits) await script('guide-edits.js');
+    if (!win.guideEdits?.export) throw Error('빽통 PC 저장 모듈이 초기화되지 않았습니다.');
+  }
+  function disconnect() {
+    unsubscribe?.(); unsubscribe = null; loaded = false;
+  }
   function connect() {
-    unsubscribe?.(); loaded = false;
+    disconnect();
+    if (activeSec !== '빽통PC' || activePage !== 'simulator') return;
     if (!firebaseReady) { status('서버 연결 준비 중'); return; }
     status('저장 내용 불러오는 중…');
     unsubscribe = firebaseFns.onSnapshot(ref(), {includeMetadataChanges:true}, snapshot => {
+      if (activeSec !== '빽통PC' || activePage !== 'simulator') return;
       // An offline cache is useful for viewing, but never treated as a confirmed server revision.
       if (snapshot.metadata.hasPendingWrites) return;
       const value = snapshot.data() || {revision:0,data:_guideWin()?.guideEdits?.export(),versions:[]};
@@ -50,6 +73,10 @@ window.pcGuideStore = (() => {
     const response = await fetch(SECS['빽통PC'].contentUrl + '?backup=' + Date.now(),{cache:'no-store'});
     if (!response.ok) throw Error('백업 원본을 불러오지 못했습니다.');
     let html = await response.text();
+    if (!html.includes('id="reg"') && !html.includes("id='reg'")) throw Error('빽통 PC 원본 화면이 비어 있거나 잘못되었습니다.');
+    // Older PC HTML exports may not include the editor modules. Keep those backups usable too.
+    if (!/src=["'][^"']*purify\.min\.js/.test(html)) html = html.replace(/<\/body>/i,'<script src="../vendor/purify.min.js"></script>\n</body>');
+    if (!html.includes('<script src="guide-edits.js"></script>')) html = html.replace(/<\/body>/i,'<script src="guide-edits.js"></script>\n</body>');
     const base = new URL(SECS['빽통PC'].contentUrl,location.href).href;
     const encoded = JSON.stringify(data).replace(/</g,'\\u003c');
     html = html.replace(/<head>/i,'<head><base href="' + base.replace(/&/g,'&amp;').replace(/"/g,'&quot;') + '">');
@@ -66,6 +93,7 @@ window.pcGuideStore = (() => {
     return 'PC 백업 다운로드 요청됨';
   }
   async function backup() {
+    if (activeSec !== '빽통PC' || activePage !== 'simulator') return false;
     if (!_guideWin()?.guideEdits) return false;
     const picker = pickFile(); guideHistoryEnd();
     const data = _guideWin().guideEdits.export();
@@ -79,12 +107,21 @@ window.pcGuideStore = (() => {
   }
   async function save() {
     if (busy) return false;
+    if (activeSec !== '빽통PC' || activePage !== 'simulator') return false;
     if (!adminMode || counselorPreviewMode || !firebaseReady || !firebaseAuth.currentUser) {
       alert('관리자 로그인이 필요합니다.'); return false;
     }
     if (!loaded) { alert('서버 저장본을 확인하지 못했습니다. 연결 후 다시 시도해 주세요.'); return false; }
-    const picker = pickFile(); guideHistoryEnd();
-    const data = _guideWin()?.guideEdits?.export(); if (!data) return false;
+    if (!_guideWin()?.guideEdits?.export) {
+      status('사이트 저장 실패 · 빽통 PC 저장 모듈 연결 필요');
+      alert('빽통 PC 저장 모듈이 연결되지 않았습니다. 빽통 PC 메뉴를 다시 열어 주세요.');
+      return false;
+    }
+    guideHistoryEnd();
+    let data;
+    try { data = _guideWin().guideEdits.export(); }
+    catch(e) { status('사이트 저장 실패 · ' + e.message); alert('편집 내용을 수집하지 못했습니다: ' + e.message); return false; }
+    const picker = pickFile();
     const savedEditorRevision = pcGuideRevision, expected = revision;
     setBusy(true); status('사이트 저장 중…');
     let websiteSaved = false, serverError = '';
@@ -113,6 +150,7 @@ window.pcGuideStore = (() => {
     return websiteSaved && !pcGuideDirty;
   }
   async function restore() {
+    if (activeSec !== '빽통PC' || activePage !== 'simulator') return;
     if (!adminMode || counselorPreviewMode || busy || !loaded) return;
     if (pcGuideDirty && !confirm('저장하지 않은 수정이 있습니다. 이전 저장본으로 교체할까요? PC 백업을 먼저 권장합니다.')) return;
     try {
@@ -133,5 +171,5 @@ window.pcGuideStore = (() => {
     } catch(e) { status('이전 저장본 조회 실패 · ' + e.message); }
   }
   window.addEventListener('online',() => { if (_guideWin()?.guideEdits && !loaded) connect(); });
-  return {connect,save,backup,restore,get busy(){return busy;}};
+  return {prepareFrame,connect,disconnect,save,backup,restore,get busy(){return busy;}};
 })();
