@@ -75,6 +75,16 @@ function type(label,text){const w=_guideWin(),doc=w.document;const el=doc.queryS
  const w=_guideWin(),doc=_guideDoc(),el=doc.querySelector('#nav a');
  const previousCloud=JSON.stringify(cloud.data);
  const range=doc.createRange();range.selectNodeContents(el);w.getSelection().removeAllRanges();w.getSelection().addRange(range);guideRememberSelection();
+ for(const [key,dark,light] of [['blue','rgb(30, 64, 175)','rgb(219, 234, 254)'],['yellow','rgb(133, 77, 14)','rgb(254, 249, 195)'],['red','rgb(153, 27, 27)','rgb(254, 226, 226)'],['green','rgb(22, 101, 52)','rgb(220, 252, 231)'],['purple','rgb(107, 33, 168)','rgb(243, 232, 255)'],['orange','rgb(154, 52, 18)','rgb(255, 237, 213)']]){
+   guideSetColorMode('color');guideWrapSelection('hl-'+key);
+   check(w.getComputedStyle([...el.querySelectorAll('span')].at(-1)).color===dark,key+' palette applies dark text');
+   guideSetColorMode('backgroundColor');guideWrapSelection('hl-'+key);
+   const selected=w.getSelection().getRangeAt(0).commonAncestorContainer;
+   check(w.getComputedStyle(selected).backgroundColor===light,key+' palette applies light background');
+   check(w.getComputedStyle([...el.querySelectorAll('span')].at(-1)).color===dark,key+' highlight preserves text color');
+   guideUndo();guideUndo();range.selectNodeContents(el);w.getSelection().removeAllRanges();w.getSelection().addRange(range);guideRememberSelection();
+ }
+ range.selectNodeContents(el);w.getSelection().removeAllRanges();w.getSelection().addRange(range);guideRememberSelection();
  guideTextStyle('color','#ff0000');
  check(pcGuideDirty,'actual toolbar formatting is tracked');
  doc.body.dispatchEvent(new w.CompositionEvent('compositionstart',{bubbles:true}));

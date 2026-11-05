@@ -349,6 +349,9 @@ body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;colo
 .pc-guide-area{display:none;flex:1;flex-direction:column;overflow:hidden;background:#f5f5f7;}
 .pc-guide-area.visible{display:flex;}
 .guide-doc-toolbar{flex-shrink:0;background:#1e1e2e;padding:8px 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.guide-doc-toolbar .gtb-color-control{display:inline-flex;align-items:center;gap:3px;}
+.guide-doc-toolbar .gtb-color-control input[type=color]{width:46px;height:27px;padding:1px;cursor:pointer;}
+.guide-doc-toolbar [data-guide-color-mode][aria-pressed=true]{border-color:#60a5fa;background:#243c61;color:#fff;box-shadow:0 0 0 1px #60a5fa;}
 .guide-doc-toolbar .gtb-label{color:#9ca3af;font-size:11px;font-weight:700;letter-spacing:.06em;margin-right:4px;white-space:nowrap;}
 .gtb-btn{border:1px solid #374151;border-radius:5px;padding:4px 10px;font:12px/1 inherit;cursor:pointer;background:#1f2937;color:#d1d5db;white-space:nowrap;transition:background .12s,color .12s;}
 .gtb-btn:hover{background:#374151;color:#f9fafb;}
@@ -1223,15 +1226,15 @@ textarea.form-input{resize:vertical;}
       <button class="gtb-btn" type="button" id="gtbBold" title="굵게 (Ctrl+B)" onclick="guideExecCmd('bold')"><b>B</b></button>
       <div class="gtb-sep"></div>
       <label class="gtb-label">크기 <select class="gtb-btn" aria-label="텍스트 크기" onchange="if(this.value) guideTextStyle('fontSize',this.value+'px')"><option value="">선택</option><option value="10">10px</option><option value="12">12px</option><option value="13">13px</option><option value="14">14px</option><option value="16">16px</option><option value="18">18px</option><option value="20">20px</option><option value="24">24px</option><option value="28">28px</option><option value="32">32px</option><option value="40">40px</option><option value="48">48px</option></select></label>
-      <label class="gtb-label">글자색 <input type="color" value="#111111" aria-label="글자색" onchange="guideTextStyle('color',this.value)"></label>
-      <label class="gtb-label">강조색 <input type="color" value="#fff176" aria-label="강조색" onchange="guideTextStyle('backgroundColor',this.value)"></label>
-      <span class="gtb-label">강조</span>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-blue')" title="파랑 강조">파랑</button>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-yellow')" title="노랑 강조">노랑</button>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-red')" title="빨강 강조">빨강</button>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-green')" title="초록 강조">초록</button>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-purple')" title="보라 강조">보라</button>
-      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-orange')" title="주황 강조">주황</button>
+      <span class="gtb-color-control"><button class="gtb-btn" type="button" data-guide-color-mode="color" aria-pressed="true" onclick="guideSetColorMode('color')">글자색</button><input id="guideTextColor" type="color" value="#111111" aria-label="글자색 RGB 선택" onfocus="guideSetColorMode('color')" onchange="guideSetColorMode('color');guideTextStyle('color',this.value)"></span>
+      <span class="gtb-color-control"><button class="gtb-btn" type="button" data-guide-color-mode="backgroundColor" aria-pressed="false" onclick="guideSetColorMode('backgroundColor')">강조색</button><input id="guideHighlightColor" type="color" value="#fff176" aria-label="강조색 RGB 선택" onfocus="guideSetColorMode('backgroundColor')" onchange="guideSetColorMode('backgroundColor');guideTextStyle('backgroundColor',this.value)"></span>
+      <span class="gtb-label" id="guideColorModeHint" role="status">글자색 적용</span>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-blue')" title="선택한 글자색 또는 강조색에 파랑 적용">파랑</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-yellow')" title="선택한 글자색 또는 강조색에 노랑 적용">노랑</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-red')" title="선택한 글자색 또는 강조색에 빨강 적용">빨강</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-green')" title="선택한 글자색 또는 강조색에 초록 적용">초록</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-purple')" title="선택한 글자색 또는 강조색에 보라 적용">보라</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-orange')" title="선택한 글자색 또는 강조색에 주황 적용">주황</button>
       <div class="gtb-sep"></div>
       <span class="gtb-label">박스 삽입</span>
       <button class="gtb-btn" type="button" onclick="guideInsertBox('box-info')" title="정보 박스">ℹ 정보</button>
@@ -2886,13 +2889,24 @@ function guideTextStyle(property, value) {
   guideRememberSelection(); setGuideDirty(true);
   } finally { if(owned) guideHistoryEnd(); }
 }
-function guideWrapSelection(className) {
-  const colors = {'hl-blue':['#dbeafe','#1e40af'],'hl-yellow':['#fef9c3','#713f12'],'hl-red':['#fee2e2','#991b1b'],'hl-green':['#dcfce7','#166534'],'hl-purple':['#f3e8ff','#6b21a8'],'hl-orange':['#ffedd5','#9a3412']};
-  guideHistoryChange(() => {
-    guideTextStyle('backgroundColor', colors[className][0]);
-    guideTextStyle('color', colors[className][1]);
-  });
+let pcGuideColorMode = 'color';
+function guideSetColorMode(property) {
+  if(!['color','backgroundColor'].includes(property)) return;
+  guideRememberSelection();
+  pcGuideColorMode = property;
+  document.querySelectorAll('[data-guide-color-mode]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.guideColorMode === property)));
+  const hint = document.getElementById('guideColorModeHint');
+  if(hint) hint.textContent = property === 'color' ? '글자색 적용' : '강조색 적용';
 }
+function guideWrapSelection(className) {
+  const colors = {'hl-blue':['#dbeafe','#1e40af'],'hl-yellow':['#fef9c3','#854d0e'],'hl-red':['#fee2e2','#991b1b'],'hl-green':['#dcfce7','#166534'],'hl-purple':['#f3e8ff','#6b21a8'],'hl-orange':['#ffedd5','#9a3412']};
+  if(!colors[className]) return;
+  const value = colors[className][pcGuideColorMode === 'color' ? 1 : 0];
+  const picker = document.getElementById(pcGuideColorMode === 'color' ? 'guideTextColor' : 'guideHighlightColor');
+  if(picker) picker.value = value;
+  guideTextStyle(pcGuideColorMode, value);
+}
+
 function guideInsertBox(boxClass) {
   if(boxClass === 'box-warn') { _guideWin()?.openGuideWarningEditor?.(); return; }
   const sel = guideRestoreSelection(), doc = _guideDoc();
