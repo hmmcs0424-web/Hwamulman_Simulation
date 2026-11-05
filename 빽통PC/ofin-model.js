@@ -5,7 +5,7 @@
     const old=date(new Date(now.getFullYear(),now.getMonth()-1,26));
     const item=(id,amount,fare,insurance,up,down,cargo,status='pending',processedAt='')=>({id,orderNumber:`${today.replaceAll('-','')}1786${id}`,name:'홍길동1',car:'제주90바1417',
       applied:today,settlement:due,upDate:today,downDate:today,up,down,cargo,amount,fare,insurance,status,processedAt});
-    return {schema:1,loggedIn:false,availableLimit:299485070,business:{name:'교육용 화물',representative:'홍길동',number:'123-45-67890',phone:'010-0000-0000'},items:[
+    return {schema:1,loggedIn:false,contractComplete:false,availableLimit:299485070,business:{name:'화물맨/홍길동',representative:'홍길동',number:'123-45-67890',phone:'010-0000-0000'},items:[
       item('05',339640,341000,1360,'경북 경산시 진량읍','경북 안동시','오후상/자재/비무관'),
       item('03',514930,517000,2070,'전남광주 장흥군 장흥읍','인천 남동구 논현동','폐차2대'),
       item('02',339640,341000,1360,'경북 경산시 진량읍','경북 안동시','오후상/자재/비무관','rejected',today+'T09:00:00'),
@@ -30,5 +30,6 @@
       .filter(x=>status==='all'||(x.status==='approved'&&x.settlementStatus===status))
       .sort((a,b)=>new Date(b.processedAt)-new Date(a.processedAt));
   }
-  return {date,seed,decide,summary,filter};
+  function exampleSettlementDate(applied,days){const [y,m,d]=applied.split('-').map(Number);return date(days===30?new Date(y,m,d<=15?7:22):d<=15?new Date(y,m,15):new Date(y,m+1,0));}
+  return {date,seed,decide,summary,filter,exampleSettlementDate};
 });

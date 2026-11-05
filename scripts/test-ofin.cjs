@@ -7,6 +7,10 @@ assert.equal(M.summary(s,now).pendingCount,0);assert.equal(M.summary(s,now).mont
 assert.equal(M.filter(s,{approved:true,rejected:false}).length,1);
 assert.equal(M.filter(s,{from:'2026-11-05',to:'2026-11-05'}).length,0);
 assert.equal(M.filter(s,{from:'2027-01-07',to:'2027-01-07',approved:true,rejected:false}).length,1);
+assert.equal(M.exampleSettlementDate('2026-11-05',30),'2026-12-07');
+assert.equal(M.exampleSettlementDate('2026-11-20',30),'2026-12-22');
+assert.equal(M.exampleSettlementDate('2026-11-05',45),'2026-12-15');
+assert.equal(M.exampleSettlementDate('2026-11-20',45),'2026-12-31');
 assert.throws(()=>M.decide(s,['03'],'rejected',now));
 assert.throws(()=>M.decide(s,['missing'],'approved',now));
 const original=M.seed(now);assert.throws(()=>M.decide(original,['05','missing'],'approved',now));assert.equal(original.items[0].status,'pending');

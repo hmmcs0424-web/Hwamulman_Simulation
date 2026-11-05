@@ -3,7 +3,7 @@
 const checks=[],frame=document.getElementById('host');
 const check=(value,label)=>{if(!value)throw Error(label);checks.push(label);};
 const byAction=(doc,name)=>doc.querySelector('[data-action="'+name+'"]');
-const change=(w,el,value)=>{if(el.type==='checkbox')el.checked=value;else el.value=value;el.dispatchEvent(new w.Event('change',{bubbles:true}));};
+const change=(w,el,value)=>{if(el.type==='checkbox'||el.type==='radio')el.checked=value;else el.value=value;el.dispatchEvent(new w.Event('change',{bubbles:true}));};
 const input=(w,id,value)=>{const el=w.document.getElementById(id);el.value=value;el.dispatchEvent(new w.Event('input',{bubbles:true}));};
 frame.onload=async()=>{try{
  const parent=frame.contentWindow;parent.extOpen('safe');
@@ -12,11 +12,28 @@ frame.onload=async()=>{try{
  w.localStorage.removeItem('hmm-ofin-practice-v1');
  const load=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=1';await load;
  const win=embed.contentWindow,doc=win.document;
+ check(doc.body.textContent.includes('차주의 선정산 서비스 이용을 위해'),'first visit opens the contract entry screen from the reference image');
+ doc.getElementById('practice').click();
  check(byAction(doc,'send-code').disabled,'login submit disabled for blank identity');
  input(win,'business','1234567890');input(win,'birthday','20000230');check(byAction(doc,'send-code').disabled,'invalid calendar birthday rejected');
  input(win,'birthday','20000101');check(!byAction(doc,'send-code').disabled,'valid example identity enables auth');byAction(doc,'send-code').click();
  input(win,'otp','000000');byAction(doc,'verify').click();check(!!doc.getElementById('otp'),'wrong OTP stays on auth screen');
- input(win,'otp','123456');byAction(doc,'verify').click();check(doc.body.textContent.includes('854,570'),'login shows pending total');
+ input(win,'otp','123456');byAction(doc,'verify').click();
+ check(doc.body.textContent.includes('차주의 선정산 서비스 이용을 위해'),'first member login requires contract before approval list');
+ const flow=name=>doc.querySelector('[data-flow="'+name+'"]');
+ flow('next').click();flow('next').click();flow('identity-complete').click();flow('next').click();
+ check(doc.querySelector('[aria-label="사업자등록증 예시"]'),'business certificate is reconstructed locally from example');
+ input(win,'reg-businessNumber','123');check(flow('next').disabled,'business number validation blocks incomplete verification');input(win,'reg-businessNumber','1234567890');flow('next').click();
+ doc.querySelector('[data-bank="카카오뱅크"]').click();check(flow('next').disabled,'account step requires account number');flow('sample-account').click();flow('next').click();
+ check(flow('next').disabled,'fee selection is required');
+ change(win,doc.querySelector('[name="feeDays"][value="30"]'),true);flow('next').click();
+ check(flow('next').disabled,'all four documents must be completed');
+ flow('document').click();flow('signature').click();check(doc.getElementById('flow-sign-done').disabled,'blank signature cannot complete contract');flow('sample-signature').click();flow('sign-complete').click();
+ for(let i=1;i<4;i++){doc.querySelector('[data-doc="'+i+'"][data-flow="document"]').click();flow('agree').click();}
+ check(!flow('next').disabled,'four completed documents enable contract completion');flow('next').click();check(doc.body.textContent.includes('160,000,000원'),'contract result matches example credit limit');flow('next').click();
+ check(doc.body.textContent.includes('854,570'),'completed first contract opens pending list');
+ check(byAction(doc,'profile').textContent.includes('화물맨/홍길동'),'member display uses realistic company/representative format');
+ check(doc.getElementById('practice').textContent==='로그인 화면 보기','training shortcut is renamed to login screen');
  byAction(doc,'approve').click();check(doc.getElementById('confirm-button').disabled,'approval requires mandatory consent');
  byAction(doc,'terms').click();check(doc.getElementById('modal').textContent.includes('교육용 예시'),'consent full text is explicitly a training example');byAction(doc,'terms-back').click();
  change(win,doc.getElementById('consent'),true);doc.getElementById('confirm-button').click();
@@ -24,6 +41,7 @@ frame.onload=async()=>{try{
  change(win,doc.querySelector('[data-select="all"]'),true);byAction(doc,'reject-selected').click();doc.getElementById('confirm-button').click();
  check(doc.body.textContent.includes('승인 대기건이 없어요'),'bulk rejection reaches empty pending state');
  byAction(doc,'history').click();check(doc.querySelectorAll('.cards article').length===4,'history contains both decisions and previous examples');
+ check(doc.body.textContent.includes('30일 정산(납부) · 1.2%'),'contract fee choice carries through to processing history');
  change(win,doc.querySelector('[data-filter="rejected"]'),false);check(doc.querySelectorAll('.cards article').length===1,'approved filter excludes rejected records');
  change(win,doc.getElementById('from'),'2099-01-01');check(doc.body.textContent.includes('처리내역이 없어요'),'settlement date filtering reaches empty state');byAction(doc,'clear-dates').click();
  let blobs=[],names=[];const originalURL=win.URL.createObjectURL.bind(win.URL);win.URL.createObjectURL=b=>{blobs.push(b);return originalURL(b);};
@@ -35,6 +53,14 @@ frame.onload=async()=>{try{
  const reload=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=2';await reload;const restored=embed.contentDocument;
  check(restored.body.textContent.includes('승인 대기건이 없어요'),'decisions survive reopening the simulator');
  restored.getElementById('reset').click();byAction(restored,'reset-confirm').click();check(restored.body.textContent.includes('854,570'),'reset restores two pending examples');
+ restored.getElementById('practice').click();check(!!restored.getElementById('business'),'login-view shortcut opens login instead of skipping it');
+ restored.getElementById('firstContract').click();restored.querySelector('[data-flow="failure"]').click();
+ check(restored.body.textContent.includes('사용이 불가합니다.')&&restored.body.textContent.includes('0원'),'application-unavailable example is reachable');
+ const legacy=embed.contentWindow.OfinModel.seed();legacy.loggedIn=true;legacy.business.name='교육용 화물';delete legacy.contractComplete;
+ embed.contentWindow.localStorage.setItem('hmm-ofin-practice-v1',JSON.stringify(legacy));
+ const legacyReload=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=3';await legacyReload;
+ check(byAction(embed.contentDocument,'profile').textContent.includes('화물맨/홍길동'),'previously saved demo profiles also use the new member label');
+ check(embed.contentDocument.body.textContent.includes('854,570'),'previous training data opens without forcing a new contract');
  document.getElementById('result').textContent='PASS\n'+checks.join('\n');
 }catch(e){document.getElementById('result').textContent='FAIL '+e.stack;}};
 </script>
