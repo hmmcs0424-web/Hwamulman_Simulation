@@ -65,3 +65,50 @@ body.btchat-open #ct .bub{display:none}
 #ct .ch[aria-expanded=true] svg{visibility:hidden}
 #ct .ch[aria-expanded=true]::before,#ct .ch[aria-expanded=true]::after{content:'';position:absolute;left:27px;top:17px;width:3px;height:22px;background:#666;border-radius:2px;transform:rotate(45deg)}
 #ct .ch[aria-expanded=true]::after{transform:rotate(-45deg)}
+/* 실제 테스트 빽통의 문의 입력 전·후 화면 */
+#btchat[data-page=chat]{background:#fff}
+#btchat .btc-chat-header{height:58px;min-height:58px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #f1f1f2;flex-shrink:0}
+#btchat .btc-chat-header>button{display:grid;place-items:center;width:32px;height:32px;padding:5px;color:#247baf;flex-shrink:0}
+#btchat .btc-chat-header svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6}
+#btchat .btc-chat-header .btc-logo.small{width:28px;height:28px;background-position:-10.5px -7px;background-size:187.25px 358.75px}
+#btchat .btc-chat-header .btc-small-brand{font-size:14px;font-weight:500;line-height:1.4}
+#btchat .btc-chat-header .btc-subtitle{font-size:12px;margin-top:2px;color:#aaa}
+#btchat .btc-chat-header .btc-more{margin-left:auto;font-size:25px;color:#0756ad}
+#btchat #btc-message-list{padding:0 14px 16px;font-size:15px}
+#btchat #btc-message-list .btc-notice{display:flex;align-items:center;gap:10px;padding:12px;margin:12px 0 14px;height:44px;color:#888;font-size:13px}
+#btchat .btc-notice svg{width:16px;height:16px;color:#999;flex-shrink:0}
+#btchat #btc-message-list .btc-message{font-size:15px;line-height:24px;margin:0 6px 6px}
+#btchat .btc-agent-mark{display:flex;align-items:center;gap:5px;font-size:11px;color:#aaa;margin:6px 6px 18px}
+#btchat .btc-agent-mark .btc-logo.small{width:16px;height:16px;background-position:-6px -4px;background-size:107px 205px}
+#btchat .btc-own-row{display:flex;flex-direction:column;align-items:flex-end;margin:18px 0 12px}
+#btchat #btc-message-list .btc-own-row .btc-message.mine{background:#f2f2f3;color:#333;border-radius:18px;padding:10px 14px;margin:0;width:fit-content;max-width:90%;white-space:pre-wrap;overflow-wrap:anywhere}
+#btchat .btc-own-row time{font-size:10px;color:#aaa;visibility:hidden;height:14px;margin:3px 5px 0}
+#btchat .btc-own-row:hover time{visibility:visible}
+#btchat .btc-message.mine img{max-width:100%;max-height:200px;display:block;border-radius:8px;margin-bottom:5px}
+#btchat .btc-contact-check{font-size:15px;line-height:24px;margin:0 6px}
+#btchat .btc-contact-check p{margin:0 0 10px;overflow-wrap:anywhere}
+#btchat .btc-contact-info-card{border:1px solid #e8e8eb;border-radius:20px;padding:12px 18px;width:calc(100% - 44px);min-width:210px;font-size:14px;margin:4px 0 6px}
+#btchat .btc-contact-info-card dl{margin:0}
+#btchat .btc-contact-info-card dt{margin:0 0 4px}
+#btchat .btc-contact-info-card dd{margin:0 0 12px;color:#666;overflow-wrap:anywhere}
+#btchat .btc-contact-info-card button{font-size:13px;color:#888;padding:0}
+#btchat[data-page=chat] .btc-composer{display:block;position:relative;margin:0 14px 14px;padding:10px 12px 8px;background:#f2f2f3;border-radius:20px;min-height:84px}
+#btchat .btc-composer textarea{display:block;width:100%;min-height:32px;height:32px;line-height:22px;max-height:140px;padding:2px 3px;font-size:15px;overflow:auto}
+#btchat .btc-composer textarea::placeholder{color:#aaa}
+#btchat .btc-input-actions{display:flex;align-items:center;gap:6px;min-height:32px}
+#btchat .btc-input-actions>button{display:grid;place-items:center;width:26px;height:30px;padding:2px;color:#aaa}
+#btchat .btc-input-actions>button[hidden]{display:none}
+#btchat .btc-input-actions svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#btchat .btc-input-actions .btc-send{margin-left:auto;width:36px;height:36px;border-radius:12px;background:#0053bd;color:white}
+#btchat .btc-input-actions .btc-send:disabled{background:#c5d8eb;color:#e7f0f8;cursor:default}
+#btchat .btc-attachments{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;font-size:12px}
+#btchat .btc-attachments>span{background:#fff;border:1px solid #ddd;border-radius:8px;padding:4px 6px;overflow-wrap:anywhere}
+#btchat .btc-attachments button{font-size:15px;padding:0 2px}
+#btchat .btc-emoji-picker{position:absolute;bottom:100%;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:4px;padding:10px;background:#fff;border:1px solid #ddd;border-radius:14px;box-shadow:0 5px 20px #0002}
+#btchat .btc-emoji-picker button{font-size:23px;padding:6px}
+#btchat .btc-bottom-sheet{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end}
+#btchat .btc-sheet-shade{position:absolute;inset:0;width:100%;height:100%;background:#0003}
+#btchat .btc-bottom-sheet section{position:relative;width:100%;background:#fff;border-radius:22px 22px 0 0;padding:18px}
+#btchat .btc-bottom-sheet header{display:flex;justify-content:space-between;font-weight:700;margin-bottom:20px}
+#btchat .btc-bottom-sheet header button{font-size:20px}
+#btchat .btc-bottom-sheet section>button{width:100%;text-align:left;padding:14px;background:#f7f7f8;border-radius:10px}
