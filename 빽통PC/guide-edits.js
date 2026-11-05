@@ -37,9 +37,13 @@
   }
   function capture() {
     const nodes = new Map();
-    for (const el of document.body.querySelectorAll('*')) {
+    // Clone once. Serializing every ancestor subtree for every keystroke was quadratic.
+    const original = document.body.querySelectorAll('*');
+    const snapshot = document.body.cloneNode(true).querySelectorAll('*');
+    for (let i=0;i<original.length;i++) {
+      const el = original[i], copy = snapshot[i];
       if (!editable(el)) continue;
-      nodes.set(el, {loc:locator(el), html:cleanHtml(el), style:el.getAttribute('style'),
+      nodes.set(el, {loc:locator(el), get html(){return cleanHtml(copy);}, style:el.getAttribute('style'),
         className:el.getAttribute('class'), scope:el.closest(dynamic) ? scope() : '*'});
     }
     return nodes;
@@ -142,7 +146,8 @@
     suspend(value) { suspended = value; if(!value) observer.takeRecords(); },
     export() { return {schema:1,edits:JSON.parse(JSON.stringify(edits)),warnings:JSON.parse(document.getElementById('guide-warning-data').textContent)}; },
     load(data) {
-      edits = Array.isArray(data?.edits) ? data.edits : [];
+      // Editing must not mutate the Firestore snapshot / previous saved version by reference.
+      edits = Array.isArray(data?.edits) ? JSON.parse(JSON.stringify(data.edits)) : [];
       if (Array.isArray(data?.warnings)) document.getElementById('guide-warning-data').textContent = JSON.stringify(data.warnings).replace(/</g,'\\u003c');
       apply();
     }

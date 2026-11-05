@@ -2709,7 +2709,7 @@ function exitGuideEditMode() {
 }
 
 function onGuideInput(e) {
-  if(e?.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer')) return;
+  if(e?.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer,input,textarea,select')) return;
   if(pcGuideInputTransaction && !pcGuideComposing) {
     guideHistoryEnd(); pcGuideInputTransaction = false;
   }
@@ -2758,7 +2758,7 @@ function guideRestoreHistorySelection(saved) {
 function guideHistoryBegin() {
   if(pcGuideTransaction || _guideDoc()?.body.contentEditable !== 'true') return false;
   _guideWin()?.guideEdits?.suspend(true);
-  const transaction = {records:[],observer:null,selection:guideHistorySelection(),overlay:_guideWin()?.guideEdits?.capture()};
+  const transaction = {records:[],observer:null,selection:guideHistorySelection(),overlay:_guideWin()?.guideEdits?.capture(),dirtyBefore:pcGuideDirty};
   transaction.observer = new (_guideWin().MutationObserver)(records => transaction.records.push(...records));
   transaction.observer.observe(_guideDoc().body, {subtree:true,childList:true,characterData:true,characterDataOldValue:true,attributes:true,attributeOldValue:true,attributeFilter:['style','class','color','size','face']});
   pcGuideTransaction = transaction; return true;
@@ -2774,7 +2774,7 @@ function guideHistoryEnd() {
     newValue:r.type === 'attributes' ? r.target.getAttribute(r.attributeName) : r.target.data,
     added:Array.from(r.addedNodes || []),removed:Array.from(r.removedNodes || []),next:r.nextSibling
   }));
-  if(!changes.length) return;
+  if(!changes.length) { setGuideDirty(t.dirtyBefore); return; }
   pcGuideHistory.splice(pcGuideHistoryIndex);
   pcGuideHistory.push({changes,before:pcGuideRevision,after:++pcGuideNextRevision,selectionBefore:t.selection,selectionAfter:guideHistorySelection()});
   pcGuideRevision = pcGuideNextRevision;
@@ -8593,7 +8593,7 @@ function cteExportConfig() {
 }
 
 window.addEventListener('beforeunload', e => {
-  if(!pcGuideDirty && !window.pcGuideStore?.busy && !shouldProtectFlowLeave(activeSec)) return;
+  if(!pcGuideDirty && !window.pcGuideStore?.savingSite && !shouldProtectFlowLeave(activeSec)) return;
   e.preventDefault();
   e.returnValue = true;
   return true;
@@ -8601,7 +8601,7 @@ window.addEventListener('beforeunload', e => {
 
 boot();
 </script>
-<script src="./vendor/pc-guide-store.js?v=20261105-pc-save-2"></script>
+<script src="./vendor/pc-guide-store.js?v=20261105-pc-save-3"></script>
 <script src="./vendor/icon-menu-studio.js?v=22"></script>
 </body>
 </html>

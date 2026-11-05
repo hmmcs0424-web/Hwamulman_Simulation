@@ -1,7 +1,7 @@
 /* Shared Firestore persistence, bounded versions, and an independent PC backup. */
 window.pcGuideStore = (() => {
   const documentId = 'backtongPcEdits';
-  let unsubscribe, revision = 0, latest = null, loaded = false, busy = false, draft = null;
+  let unsubscribe, revision = 0, latest = null, loaded = false, busy = false, savingSite = false, draft = null;
   const status = message => { document.getElementById('pcGuideSaveStatus').textContent = message; };
   const ref = () => firebaseFns.doc(firestoreDb,'simulatorFlows',documentId);
   const clone = value => JSON.parse(JSON.stringify(value));
@@ -12,12 +12,12 @@ window.pcGuideStore = (() => {
   }
   async function prepareFrame(frame) {
     const doc = frame?.contentDocument, win = frame?.contentWindow;
-    if (!doc?.body) throw Error('빽통 PC 화면을 불러오지 못했습니다.');
+    if (!doc?.body || !doc.getElementById('reg')) throw Error('빽통 PC 원본 화면이 비어 있거나 올바르지 않습니다.');
     const base = new URL(SECS['빽통PC'].contentUrl,location.href);
     async function script(path) {
       await new Promise((resolve,reject) => {
         const el = doc.createElement('script');
-        el.src = new URL(path,base).href + '?v=20261105-pc-save-2';
+        el.src = new URL(path,base).href + '?v=20261105-pc-save-3';
         const timer = setTimeout(() => { el.remove(); reject(Error('빽통 PC 저장 모듈 연결 시간이 초과되었습니다.')); },15000);
         el.onload = () => { clearTimeout(timer); resolve(); };
         el.onerror = () => { clearTimeout(timer); reject(Error('빽통 PC 저장 모듈을 불러오지 못했습니다.')); };
@@ -70,6 +70,10 @@ window.pcGuideStore = (() => {
   async function writeBackup(data, picker) {
     const selected = await picker;
     if (selected?.error) throw selected.error;
+    if (selected?.name?.toLowerCase() === 'content.html') {
+      pcGuideFileHandle = null;
+      throw Error('프로젝트 원본 content.html에는 백업하지 않습니다. PC 백업에서 다른 파일명을 선택해 주세요.');
+    }
     const response = await fetch(SECS['빽통PC'].contentUrl + '?backup=' + Date.now(),{cache:'no-store'});
     if (!response.ok) throw Error('백업 원본을 불러오지 못했습니다.');
     let html = await response.text();
@@ -96,7 +100,7 @@ window.pcGuideStore = (() => {
     if (activeSec !== '빽통PC' || activePage !== 'simulator') return false;
     if (!_guideWin()?.guideEdits) return false;
     const picker = pickFile(); guideHistoryEnd();
-    const data = _guideWin().guideEdits.export();
+    const data = clone(_guideWin().guideEdits.export());
     try { status(await writeBackup(data,picker)); return true; }
     catch(e) { status(e.name === 'AbortError' ? 'PC 백업 취소됨' : 'PC 백업 실패 · ' + e.message); return false; }
   }
@@ -119,11 +123,12 @@ window.pcGuideStore = (() => {
     }
     guideHistoryEnd();
     let data;
-    try { data = _guideWin().guideEdits.export(); }
+    // The editor lives in an iframe. Firestore requires plain objects from this realm.
+    try { data = clone(_guideWin().guideEdits.export()); }
     catch(e) { status('사이트 저장 실패 · ' + e.message); alert('편집 내용을 수집하지 못했습니다: ' + e.message); return false; }
     const picker = pickFile();
     const savedEditorRevision = pcGuideRevision, expected = revision;
-    setBusy(true); status('사이트 저장 중…');
+    setBusy(true); savingSite = true; status('사이트 저장 중…');
     let websiteSaved = false, serverError = '';
     try {
       if (new Blob([JSON.stringify(data)]).size > 600000) throw Error('편집 데이터가 큽니다. PC 백업 후 관리자에게 문의해 주세요.');
@@ -141,6 +146,8 @@ window.pcGuideStore = (() => {
       pcGuideSavedRevision = savedEditorRevision;
       if (pcGuideRevision === savedEditorRevision) setGuideDirty(false);
     } catch(e) { serverError = e.message; }
+    finally { savingSite = false; }
+    status(websiteSaved ? '✓ 사이트 저장 완료 · PC 백업 진행 중…' : '사이트 저장 실패 · ' + serverError);
     let pcResult;
     try { pcResult = await writeBackup(data,picker); }
     catch(e) { pcResult = e.name === 'AbortError' ? 'PC 백업 취소됨' : 'PC 백업 실패: ' + e.message; }
@@ -171,5 +178,5 @@ window.pcGuideStore = (() => {
     } catch(e) { status('이전 저장본 조회 실패 · ' + e.message); }
   }
   window.addEventListener('online',() => { if (_guideWin()?.guideEdits && !loaded) connect(); });
-  return {prepareFrame,connect,disconnect,save,backup,restore,get busy(){return busy;}};
+  return {prepareFrame,connect,disconnect,save,backup,restore,get busy(){return busy;},get savingSite(){return savingSite;}};
 })();
