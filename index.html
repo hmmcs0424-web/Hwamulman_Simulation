@@ -1220,10 +1220,16 @@ textarea.form-input{resize:vertical;}
       <span class="gtb-label">편집 도구</span>
       <button class="gtb-btn" type="button" id="gtbBold" title="굵게 (Ctrl+B)" onclick="guideExecCmd('bold')"><b>B</b></button>
       <div class="gtb-sep"></div>
+      <label class="gtb-label">크기 <select class="gtb-btn" aria-label="텍스트 크기" onchange="if(this.value) guideTextStyle('fontSize',this.value+'px')"><option value="">선택</option><option value="10">10px</option><option value="12">12px</option><option value="13">13px</option><option value="14">14px</option><option value="16">16px</option><option value="18">18px</option><option value="20">20px</option><option value="24">24px</option><option value="28">28px</option><option value="32">32px</option><option value="40">40px</option><option value="48">48px</option></select></label>
+      <label class="gtb-label">글자색 <input type="color" value="#111111" aria-label="글자색" onchange="guideTextStyle('color',this.value)"></label>
+      <label class="gtb-label">강조색 <input type="color" value="#fff176" aria-label="강조색" onchange="guideTextStyle('backgroundColor',this.value)"></label>
       <span class="gtb-label">강조</span>
       <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-blue')" title="파랑 강조">파랑</button>
       <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-yellow')" title="노랑 강조">노랑</button>
       <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-red')" title="빨강 강조">빨강</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-green')" title="초록 강조">초록</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-purple')" title="보라 강조">보라</button>
+      <button class="gtb-btn" type="button" onclick="guideWrapSelection('hl-orange')" title="주황 강조">주황</button>
       <div class="gtb-sep"></div>
       <span class="gtb-label">박스 삽입</span>
       <button class="gtb-btn" type="button" onclick="guideInsertBox('box-info')" title="정보 박스">ℹ 정보</button>
@@ -1232,13 +1238,22 @@ textarea.form-input{resize:vertical;}
       <div class="gtb-sep"></div>
       <button class="gtb-btn" type="button" onclick="guideInsertHr()" title="구분선 삽입">— 구분선</button>
       <div class="gtb-sep"></div>
+      <button class="gtb-btn" type="button" onclick="guideExecCmd('italic')"><i>I</i></button>
+      <button class="gtb-btn" type="button" onclick="guideExecCmd('underline')"><u>U</u></button>
+      <button class="gtb-btn" type="button" onclick="guideExecCmd('removeFormat')">서식 지우기</button>
+      <div class="gtb-sep"></div>
+      <button class="gtb-btn" id="guideLayoutToggle" type="button" aria-pressed="false" onclick="guideToggleLayout()">아이콘 위치 편집</button>
+      <select class="gtb-btn" id="guideIconTarget" aria-label="위치 조정 아이콘" onchange="guideSelectIcon()"><option value="excel">엑셀</option><option value="ai">AI</option><option value="safe">안심결제</option><option value="chat">채널톡</option><option value="bubble">채팅 안내</option></select>
+      <label class="gtb-label">X <input id="guideIconX" type="number" min="0" style="width:65px" aria-label="아이콘 X 좌표" onchange="guideApplyIconPosition()"></label>
+      <label class="gtb-label">Y <input id="guideIconY" type="number" min="0" style="width:65px" aria-label="아이콘 Y 좌표" onchange="guideApplyIconPosition()"></label>
+      <button class="gtb-btn" type="button" onclick="_guideWin()?.resetGuideIcons();guideSelectIcon()">아이콘 위치 초기화</button>
       <div class="gtb-dirty-dot" id="guideDirtyDot"></div>
       <button class="gtb-btn save-btn" type="button" id="gtbSave" onclick="savePcGuideContent()" disabled>💾 저장</button>
-      <button class="gtb-btn" type="button" onclick="exitGuideEditMode()">편집 종료</button>
+      <button class="gtb-btn" type="button" id="guideEditToggle" onclick="_guideDoc()?.body.contentEditable==='true'?exitGuideEditMode():enterGuideEditMode()">편집 종료</button>
     </div>
     <!-- 편집 중 힌트 바 -->
     <div class="guide-edit-hint" id="guideEditHint">
-      ✏️ 편집 모드입니다. 내용을 수정한 뒤 <strong>저장</strong>을 누르면 content.html 파일에 반영됩니다.
+      ✏️ 텍스트를 드래그한 뒤 크기·색상을 선택하세요. 박스는 선택한 영역 아래에 삽입됩니다. <strong>아이콘 위치 편집</strong>을 켜면 아이콘을 드래그할 수 있습니다. 수정 후 <strong>저장</strong>해 주세요.
     </div>
     <!-- 시뮬레이션 iframe -->
     <iframe id="pcGuideFrame" class="pc-guide-frame" src="about:blank" allowfullscreen></iframe>
@@ -2605,6 +2620,8 @@ function discardUnsavedFlow(sectionName) {
 // 빽통 PC 가이드 (content.html 기반)
 // ═══════════════════════════════════════════
 let pcGuideDirty = false;
+let pcGuideSelection = null;
+let pcGuideLayoutEditing = false;
 let pcGuideFileHandle = null; // File System Access API handle
 
 function _guideFrame() { return document.getElementById('pcGuideFrame'); }
@@ -2613,7 +2630,7 @@ function _guideWin() { return _guideFrame()?.contentWindow; }
 
 function loadPcGuide() {
   const frame = _guideFrame();
-  frame.onload = () => { setGuideDirty(false); syncGuideToolbar(); };
+  frame.onload = () => { pcGuideSelection = null; pcGuideLayoutEditing = false; setGuideDirty(false); syncGuideToolbar(); guideSelectIcon(); };
   frame.src = SECS['빽통PC'].contentUrl + '?_=' + Date.now();
 }
 
@@ -2626,6 +2643,7 @@ function syncGuideToolbar() {
   } else {
     const body = _guideDoc()?.body;
     if(body) body.removeAttribute('contenteditable');
+    _guideWin()?.setGuideLayoutEditing?.(false);
   }
 }
 
@@ -2633,7 +2651,12 @@ function enterGuideEditMode() {
   const body = _guideDoc()?.body;
   if(!body) return;
   body.contentEditable = 'true';
+  document.getElementById('guideEditToggle').textContent = '편집 종료';
   body.addEventListener('input', onGuideInput);
+  _guideDoc().addEventListener('selectionchange', guideRememberSelection);
+  const toolbar = document.getElementById('guideDocToolbar');
+  toolbar.onmousedown = e => { if(e.target.closest('button')) e.preventDefault(); };
+  _guideWin()?.setGuideLayoutEditing?.(pcGuideLayoutEditing);
   document.getElementById('guideEditHint').classList.add('visible');
 }
 
@@ -2642,9 +2665,14 @@ function exitGuideEditMode() {
   if(body) {
     body.removeAttribute('contenteditable');
     body.removeEventListener('input', onGuideInput);
+    _guideDoc().removeEventListener('selectionchange', guideRememberSelection);
   }
   document.getElementById('guideEditHint').classList.remove('visible');
-  setGuideDirty(false);
+  document.getElementById('guideEditToggle').textContent = '편집 시작';
+  pcGuideLayoutEditing = false;
+  _guideWin()?.setGuideLayoutEditing?.(false);
+  document.getElementById('guideLayoutToggle').classList.remove('active');
+  document.getElementById('guideLayoutToggle').setAttribute('aria-pressed', 'false');
 }
 
 function onGuideInput() {
@@ -2660,7 +2688,11 @@ function setGuideDirty(dirty) {
 async function savePcGuideContent() {
   const doc = _guideDoc();
   if(!doc) return;
-  const fullHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML + '\n';
+  const copy = doc.documentElement.cloneNode(true);
+  copy.querySelector('body').removeAttribute('contenteditable');
+  copy.querySelector('body').classList.remove('guide-layout-editing');
+  copy.querySelectorAll('[data-guide-selected]').forEach(el => el.removeAttribute('data-guide-selected'));
+  const fullHtml = '<!DOCTYPE html>\n' + copy.outerHTML + '\n';
   try {
     if(!pcGuideFileHandle && window.showSaveFilePicker) {
       pcGuideFileHandle = await window.showSaveFilePicker({
@@ -2690,44 +2722,87 @@ async function savePcGuideContent() {
   }
 }
 
-function guideExecCmd(cmd, value) {
-  _guideDoc()?.execCommand(cmd, false, value || null);
-}
-
-function guideWrapSelection(className) {
+function guideRememberSelection() {
   const sel = _guideWin()?.getSelection();
-  if(!sel || sel.isCollapsed) return;
-  const range = sel.getRangeAt(0);
-  const span = _guideDoc().createElement('span');
-  span.className = className;
-  try { range.surroundContents(span); } catch(e) { return; }
-  setGuideDirty(true);
+  if(sel?.rangeCount && _guideDoc().body.contains(sel.anchorNode)) pcGuideSelection = sel.getRangeAt(0).cloneRange();
 }
-
-function guideInsertBox(boxClass) {
-  const doc = _guideDoc();
-  if(!doc) return;
-  const box = doc.createElement('div');
-  box.className = boxClass;
-  box.textContent = '내용을 입력하세요.';
-  const sel = _guideWin()?.getSelection();
-  if(sel && sel.rangeCount > 0) {
-    const range = sel.getRangeAt(0);
-    range.collapse(false);
-    range.insertNode(box);
-    range.selectNodeContents(box);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  } else {
-    doc.body.appendChild(box);
+function guideRestoreSelection() {
+  const doc = _guideDoc(), win = _guideWin();
+  if(!doc || doc.body.contentEditable !== 'true') return null;
+  const sel = win.getSelection();
+  win.focus();
+  if(pcGuideSelection && doc.body.contains(pcGuideSelection.commonAncestorContainer)) {
+    sel.removeAllRanges(); sel.addRange(pcGuideSelection.cloneRange());
   }
+  return sel;
+}
+function guideExecCmd(cmd, value) {
+  if(!guideRestoreSelection()) return;
+  _guideDoc().execCommand(cmd, false, value ?? null);
+  guideRememberSelection(); setGuideDirty(true);
+}
+function guideTextStyle(property, value) {
+  if(!value) return;
+  const sel = guideRestoreSelection();
+  if(!sel?.rangeCount || sel.isCollapsed) return showSimToast('먼저 편집할 텍스트를 드래그해 선택해 주세요.');
+  const range = sel.getRangeAt(0), span = _guideDoc().createElement('span');
+  span.style[property] = value;
+  span.appendChild(range.extractContents());
+  span.querySelectorAll('*').forEach(el => {
+    el.style[property] = 'inherit';
+    if(property === 'backgroundColor') el.style.backgroundColor = 'transparent';
+  });
+  range.insertNode(span);
+  range.selectNodeContents(span); sel.removeAllRanges(); sel.addRange(range);
+  guideRememberSelection(); setGuideDirty(true);
+}
+function guideWrapSelection(className) {
+  const colors = {'hl-blue':['#dbeafe','#1e40af'],'hl-yellow':['#fef9c3','#713f12'],'hl-red':['#fee2e2','#991b1b'],'hl-green':['#dcfce7','#166534'],'hl-purple':['#f3e8ff','#6b21a8'],'hl-orange':['#ffedd5','#9a3412']};
+  guideTextStyle('backgroundColor', colors[className][0]);
+  guideTextStyle('color', colors[className][1]);
+}
+function guideInsertBox(boxClass) {
+  const sel = guideRestoreSelection(), doc = _guideDoc();
+  if(!sel || !doc) return;
+  const box = doc.createElement('div'); box.className = boxClass;
+  box.textContent = sel.toString() || '내용을 입력하세요.';
+  const node = sel.rangeCount ? sel.getRangeAt(0).endContainer : null;
+  const el = node?.nodeType === 1 ? node : node?.parentElement;
+  const section = el?.closest('.box-info,.box-warn,.box-tip,#sim-bar,#titlebar,#nav,#reg,#sbar,#gridwrap,#sum');
+  if(section) section.after(box);
+  else doc.getElementById('reg').before(box);
+  const range = doc.createRange(); range.selectNodeContents(box);
+  sel.removeAllRanges(); sel.addRange(range); guideRememberSelection();
+  box.scrollIntoView({block:'nearest'}); setGuideDirty(true);
+}
+function guideInsertHr() {
+  const doc = _guideDoc(); if(!guideRestoreSelection()) return;
+  const hr = doc.createElement('hr');
+  const node = pcGuideSelection?.endContainer;
+  const el = node?.nodeType === 1 ? node : node?.parentElement;
+  const section = el?.closest('.box-info,.box-warn,.box-tip,#reg,#sbar,#gridwrap,#sum');
+  if(section) section.after(hr); else doc.getElementById('reg').before(hr);
   setGuideDirty(true);
 }
-
-function guideInsertHr() {
-  _guideDoc()?.execCommand('insertHTML', false, '<hr>');
-  setGuideDirty(true);
+function guideToggleLayout() {
+  pcGuideLayoutEditing = !pcGuideLayoutEditing;
+  _guideWin()?.setGuideLayoutEditing?.(pcGuideLayoutEditing);
+  document.getElementById('guideLayoutToggle').classList.toggle('active', pcGuideLayoutEditing);
+  document.getElementById('guideLayoutToggle').setAttribute('aria-pressed', String(pcGuideLayoutEditing));
+  guideSelectIcon();
+}
+function guideSelectIcon() {
+  const key = document.getElementById('guideIconTarget').value;
+  const pos = _guideWin()?.guideIconPosition?.(key); if(!pos) return;
+  document.getElementById('guideIconX').value = pos.x;
+  document.getElementById('guideIconY').value = pos.y;
+}
+function guideApplyIconPosition() {
+  const key = document.getElementById('guideIconTarget').value;
+  const x = Number(document.getElementById('guideIconX').value), y = Number(document.getElementById('guideIconY').value);
+  if(!pcGuideLayoutEditing) guideToggleLayout();
+  _guideWin()?.positionGuideIcon?.(key, x, y);
+  guideSelectIcon();
 }
 
 let pendingGuideLeaveDialog = null;

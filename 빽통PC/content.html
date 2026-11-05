@@ -1381,8 +1381,8 @@ body.hp-open #fl,body.hp-open #ct{right:350px}
 #ct .ch{width:56px;height:56px;border-radius:50%;background:#0a3fc0;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0005}
 #ct .ch span{width:26px;height:20px;border:3px solid #fff;border-radius:50%;display:block}
 </style>
-<div id="fl"><div class="fi xl" data-ext="excel" title="엑셀 등록">📗</div><div class="fi ai" data-ext="ai" title="AI">AI<em>Beta</em></div><div class="fi sf" id="fl-sf" data-ext="safe" title="안심결제">안심<br>결제</div></div>
-<div id="ct"><div class="bub" id="ct-b"><span>채널톡으로 문의하세요</span><i id="ct-x">×</i></div><div class="ch" data-ext="chat" title="채널톡"><span></span></div></div>
+<div id="fl"><div class="fi xl" data-ext="excel" title="엑셀 등록" role="button" tabindex="0" aria-label="엑셀 등록"><svg viewBox="0 0 32 36" width="30" height="34" aria-hidden="true"><path d="M11 2h13l6 6v25H11z" fill="white" stroke="#187c47" stroke-width="2"/><path d="M24 2v7h6M15 14h11M15 19h11M15 24h11M15 29h11" fill="none" stroke="#187c47"/><path d="M2 8l17-3v28L2 30z" fill="#187c47"/><path d="M6 14l8 12m0-13L6 27" stroke="white" stroke-width="2.5"/></svg></div><div class="fi ai" data-ext="ai" title="AI" role="button" tabindex="0" aria-label="AI"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M6 6h20v18H16l-6 5v-5H6z" fill="white"/><text x="16" y="20" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#1890ff">AI</text></svg><em>Beta</em></div><div class="fi sf" id="fl-sf" data-ext="safe" title="안심결제" role="button" tabindex="0" aria-label="안심결제">안심<br>결제</div></div>
+<div id="ct"><div class="bub" id="ct-b"><span>궁금한 건 채팅으로 문의하세요<small style="display:block;margin-top:4px;color:#999;font-size:12px;font-weight:400">💬 대화 시작하기</small></span><i id="ct-x">×</i></div><div class="ch" data-ext="chat" title="채널톡" role="button" tabindex="0" aria-label="채널톡 연결"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><path d="M20 5C11 5 5 11 5 20s6 15 15 15c3 0 6-.8 8-2.4l7 2-2.1-7C34.3 25.4 35 23 35 20 35 11 29 5 20 5z" fill="white"/><path d="M13 21q7 8 14 0" stroke="#0849be" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div></div>
 <button id="hp-btn" type="button">ⓘ 화면 설명</button>
 <div id="hp"><div class="hh"><b id="hp-t">화면 설명</b><button id="hp-x" type="button" title="닫기">×</button></div><div class="hb" id="hp-b"></div></div>
 <script>
@@ -1477,7 +1477,7 @@ ai:{url:'(AI Beta)',title:'AI',
  exp:{h:'오른쪽 위 AI(Beta) 아이콘을 누르면',li:['베타 AI 기능 아이콘입니다. 실제 동작은 <b>미확인</b>','실제 앱에서 확인한 내용을 EXT.ai 에 적어 주세요']},
  page:()=>`<h2>AI (Beta)</h2><p class="lead">예시 화면 · 실제 동작 미확인</p><p>이 자리에 AI 기능 설명을 넣어 주세요.</p>`},
 safe:{url:'(안심결제)',title:'안심결제',
- exp:{h:'안심결제 아이콘을 누르면',li:['설정 > 내정보에서 안심결제를 <b>사용</b>으로 한 계정에 표시됩니다 (이 시뮬레이션은 같은 조건으로 표시)','사용 시 화물정보 지불방식에 "안심결제(인수증)"가 추가됩니다','아이콘을 눌렀을 때의 실제 화면은 <b>미확인</b>']},
+ exp:{h:'안심결제 아이콘을 누르면',li:['설정 > 내정보에서 안심결제를 <b>사용</b>으로 한 계정에 표시됩니다 (교육용 화면에서는 바로가기를 항상 표시)','사용 시 화물정보 지불방식에 "안심결제(인수증)"가 추가됩니다','아이콘을 눌렀을 때의 실제 화면은 <b>미확인</b>']},
  page:()=>`<h2>안심결제</h2><p class="lead">예시 화면 · 실제 화면 미확인</p><p>운송료를 안전하게 결제·정산하는 서비스입니다. 이 자리에 실제 안내를 넣어 주세요.</p>`},
 chat:{url:'(채널톡 상담)',title:'채널톡',
  exp:{h:'오른쪽 아래 채널톡 버튼을 누르면',li:['상담 채팅창이 열립니다. 말풍선의 × 로 안내를 닫을 수 있습니다','아래는 예시 채팅입니다 (실제로 전송되지 않습니다)']},
@@ -1496,8 +1496,48 @@ function extOrder(){const g=i=>document.getElementById(i).value.trim();
 document.querySelectorAll('[data-ext]').forEach(el=>el.onclick=()=>extOpen(el.dataset.ext));
 document.getElementById('ext-x').onclick=extClose;
 document.getElementById('ct-x').onclick=()=>document.getElementById('ct-b').style.display='none';
-setInterval(()=>{let on=false;try{on=!!cfg().oaUse}catch(e){}document.getElementById('fl-sf').style.display=on?'':'none'},500);
+// 안심결제 바로가기는 항상 표시합니다. 사용 설정은 지불방식 목록에만 적용됩니다.
 document.getElementById('ext').addEventListener('mousedown',e=>{if(e.target.id==='ext')extClose()});
+</script>
+
+<style id="guide-icon-styles">
+#titlebar{background:#e6801e}
+#fl{position:static;display:contents}
+#fl .fi{position:fixed;right:8px;z-index:1300;touch-action:none;user-select:none}
+#fl .xl{top:35%;width:44px;height:44px}
+#fl .ai{top:calc(35% + 52px)}
+#fl .sf{top:calc(35% + 104px);background:#2c4c87}
+#ct{position:static;display:contents}
+#ct .ch{position:fixed;right:24px;bottom:42px;z-index:1300;touch-action:none;user-select:none}
+#ct .bub{position:fixed;right:24px;bottom:108px;z-index:1300;touch-action:none;user-select:none}
+body.guide-layout-editing #fl .fi,body.guide-layout-editing #ct .ch,body.guide-layout-editing #ct .bub{outline:2px dashed #f59e0b;outline-offset:3px;cursor:move}
+body.guide-layout-editing [data-guide-selected]{outline:3px solid #2563eb!important}
+</style>
+<script>
+// 아이콘 좌표는 요소의 style에 보관하여 HTML 저장 후에도 유지합니다.
+const guideIcons = {excel:document.querySelector('#fl .xl'),ai:document.querySelector('#fl .ai'),safe:document.getElementById('fl-sf'),chat:document.querySelector('#ct .ch'),bubble:document.getElementById('ct-b')};
+let guideLayoutEditing = false;
+function guideNotifyChange(){try{if(parent!==window)parent.setGuideDirty(true)}catch(e){}}
+function setGuideLayoutEditing(on){guideLayoutEditing=!!on;document.body.classList.toggle('guide-layout-editing',guideLayoutEditing);Object.values(guideIcons).forEach(el=>{el.contentEditable='false';if(!on)el.removeAttribute('data-guide-selected')})}
+function guideIconPosition(key){const el=guideIcons[key];if(!el)return null;const r=el.getBoundingClientRect();return {x:Math.round(r.left),y:Math.round(r.top)}}
+function positionGuideIcon(key,x,y){const el=guideIcons[key];if(!el)return;const r=el.getBoundingClientRect();const px=Math.max(0,Math.min(Number.isFinite(x)?x:0,innerWidth-r.width));const py=Math.max(0,Math.min(Number.isFinite(y)?y:0,innerHeight-r.height));Object.assign(el.style,{left:px+'px',top:py+'px',right:'auto',bottom:'auto'});guideNotifyChange()}
+function resetGuideIcons(){Object.values(guideIcons).forEach(el=>{['left','top','right','bottom'].forEach(p=>el.style.removeProperty(p));el.removeAttribute('data-guide-selected')});guideNotifyChange()}
+Object.entries(guideIcons).forEach(([key,el])=>{
+ el.addEventListener('pointerdown',e=>{
+  if(!guideLayoutEditing||e.button!==0)return;
+  e.preventDefault();e.stopPropagation();
+  Object.values(guideIcons).forEach(icon=>icon.removeAttribute('data-guide-selected'));el.setAttribute('data-guide-selected','');
+  const r=el.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top;
+  el.setPointerCapture(e.pointerId);
+  try{parent.document.getElementById('guideIconTarget').value=key;parent.guideSelectIcon()}catch(e){}
+  const move=ev=>{positionGuideIcon(key,ev.clientX-dx,ev.clientY-dy);try{parent.guideSelectIcon()}catch(e){}};
+  const end=()=>{el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',end);el.removeEventListener('pointercancel',end);};
+  el.addEventListener('pointermove',move);el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+ });
+ el.addEventListener('click',e=>{if(guideLayoutEditing){e.preventDefault();e.stopImmediatePropagation()}},true);
+ el.addEventListener('keydown',e=>{if(!guideLayoutEditing&&['Enter',' '].includes(e.key)){e.preventDefault();el.click()}});
+});
+window.addEventListener('resize',()=>{Object.entries(guideIcons).forEach(([key,el])=>{if(el.style.left&&el.style.left!=='auto'){const p=guideIconPosition(key);positionGuideIcon(key,p.x,p.y)}})});
 </script>
 </body>
 </html>
