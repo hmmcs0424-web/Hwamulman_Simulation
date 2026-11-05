@@ -1,0 +1,40 @@
+<!doctype html><meta charset="utf-8"><pre id="result">RUNNING</pre><iframe id="host" src="../빽통PC/content.html"></iframe>
+<script>
+const checks=[],frame=document.getElementById('host');
+const check=(value,label)=>{if(!value)throw Error(label);checks.push(label);};
+const byAction=(doc,name)=>doc.querySelector('[data-action="'+name+'"]');
+const change=(w,el,value)=>{if(el.type==='checkbox')el.checked=value;else el.value=value;el.dispatchEvent(new w.Event('change',{bubbles:true}));};
+const input=(w,id,value)=>{const el=w.document.getElementById(id);el.value=value;el.dispatchEvent(new w.Event('input',{bubbles:true}));};
+frame.onload=async()=>{try{
+ const parent=frame.contentWindow;parent.extOpen('safe');
+ const embed=parent.document.querySelector('#ext-page iframe');check(!!embed,'PC safe-payment button opens embedded Ofin simulator');
+ await new Promise(resolve=>embed.onload=resolve);const w=embed.contentWindow,d=w.document;
+ w.localStorage.removeItem('hmm-ofin-practice-v1');
+ const load=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=1';await load;
+ const win=embed.contentWindow,doc=win.document;
+ check(byAction(doc,'send-code').disabled,'login submit disabled for blank identity');
+ input(win,'business','1234567890');input(win,'birthday','20000230');check(byAction(doc,'send-code').disabled,'invalid calendar birthday rejected');
+ input(win,'birthday','20000101');check(!byAction(doc,'send-code').disabled,'valid example identity enables auth');byAction(doc,'send-code').click();
+ input(win,'otp','000000');byAction(doc,'verify').click();check(!!doc.getElementById('otp'),'wrong OTP stays on auth screen');
+ input(win,'otp','123456');byAction(doc,'verify').click();check(doc.body.textContent.includes('854,570'),'login shows pending total');
+ byAction(doc,'approve').click();check(doc.getElementById('confirm-button').disabled,'approval requires mandatory consent');
+ byAction(doc,'terms').click();check(doc.getElementById('modal').textContent.includes('교육용 예시'),'consent full text is explicitly a training example');byAction(doc,'terms-back').click();
+ change(win,doc.getElementById('consent'),true);doc.getElementById('confirm-button').click();
+ check(doc.body.textContent.includes('514,930'),'individual approval removes correct pending request');
+ change(win,doc.querySelector('[data-select="all"]'),true);byAction(doc,'reject-selected').click();doc.getElementById('confirm-button').click();
+ check(doc.body.textContent.includes('승인 대기건이 없어요'),'bulk rejection reaches empty pending state');
+ byAction(doc,'history').click();check(doc.querySelectorAll('.cards article').length===4,'history contains both decisions and previous examples');
+ change(win,doc.querySelector('[data-filter="rejected"]'),false);check(doc.querySelectorAll('.cards article').length===1,'approved filter excludes rejected records');
+ change(win,doc.getElementById('from'),'2099-01-01');check(doc.body.textContent.includes('처리내역이 없어요'),'settlement date filtering reaches empty state');byAction(doc,'clear-dates').click();
+ let blobs=[],names=[];const originalURL=win.URL.createObjectURL.bind(win.URL);win.URL.createObjectURL=b=>{blobs.push(b);return originalURL(b);};
+ win.HTMLAnchorElement.prototype.click=function(){names.push(this.download);};
+ byAction(doc,'excel').click();check(names.at(-1).endsWith('.xlsx')&&blobs.at(-1).type.includes('spreadsheetml'),'history exports genuine XLSX MIME and extension');
+ byAction(doc,'detail').click();check(doc.body.textContent.includes('운송료 (VAT포함)'),'processed detail shows VAT fare and insurance breakdown');
+ byAction(doc,'preview').click();check(doc.getElementById('modal').textContent.includes('교육용 예시'),'receipt opens a clearly labelled sample preview');byAction(doc,'cancel').click();
+ byAction(doc,'pdf').click();check(names.at(-1).endsWith('.pdf')&&blobs.at(-1).type==='application/pdf','documents export PDF');
+ const reload=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=2';await reload;const restored=embed.contentDocument;
+ check(restored.body.textContent.includes('승인 대기건이 없어요'),'decisions survive reopening the simulator');
+ restored.getElementById('reset').click();byAction(restored,'reset-confirm').click();check(restored.body.textContent.includes('854,570'),'reset restores two pending examples');
+ document.getElementById('result').textContent='PASS\n'+checks.join('\n');
+}catch(e){document.getElementById('result').textContent='FAIL '+e.stack;}};
+</script>

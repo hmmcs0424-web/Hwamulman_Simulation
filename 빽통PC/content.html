@@ -1423,6 +1423,10 @@ body.hp-open{padding-right:340px}
 #ext .tagv{background:#f59e0b;color:#fff;font-size:11px;border-radius:3px;padding:1px 6px}
 #ext .bar button{border:0;background:#cfd6e2;border-radius:4px;padding:3px 10px;cursor:pointer;font-size:13px}
 #ext .page{flex:1;overflow:auto;padding:22px 30px}
+#ext.ofin-mode .win{width:min(1220px,98vw);height:96vh}
+#ext.ofin-mode .page{padding:0;display:flex;min-height:0;overflow:hidden}
+#ext.ofin-mode .page iframe{width:100%;height:100%;border:0;flex:1;min-height:0}
+#ext.ofin-mode .exp{display:none}
 #ext .exp{border-top:3px solid #1890ff;background:#f4f9ff;padding:10px 16px 12px;max-height:34%;overflow:auto}
 #ext .exp h4{margin:0 0 4px;color:#0b5cad;font-size:13px}#ext .exp ul{margin:2px 0;padding-left:18px}
 #ext h2{margin:0 0 4px;font-size:22px}#ext .lead{color:#667085;margin:0 0 16px}
@@ -1542,14 +1546,14 @@ excel:{url:'(엑셀 등록)',title:'엑셀 등록',
 ai:{url:'(AI Beta)',title:'AI',
  exp:{h:'오른쪽 위 AI(Beta) 아이콘을 누르면',li:['베타 AI 기능 아이콘입니다. 실제 동작은 <b>미확인</b>','실제 앱에서 확인한 내용을 EXT.ai 에 적어 주세요']},
  page:()=>`<h2>AI (Beta)</h2><p class="lead">예시 화면 · 실제 동작 미확인</p><p>이 자리에 AI 기능 설명을 넣어 주세요.</p>`},
-safe:{url:'(안심결제)',title:'안심결제',
- exp:{h:'안심결제 아이콘을 누르면',li:['설정 > 내정보에서 안심결제를 <b>사용</b>으로 한 계정에 표시됩니다 (교육용 화면에서는 바로가기를 항상 표시)','사용 시 화물정보 지불방식에 "안심결제(인수증)"가 추가됩니다','아이콘을 눌렀을 때의 실제 화면은 <b>미확인</b>']},
- page:()=>`<h2>안심결제</h2><p class="lead">예시 화면 · 실제 화면 미확인</p><p>운송료를 안전하게 결제·정산하는 서비스입니다. 이 자리에 실제 안내를 넣어 주세요.</p>`},
+safe:{url:'https://dev.ofin.co.kr/hwamulman-broker-approval-wait · 교육용 실습',title:'안심결제',
+ exp:{h:'오핀 안심결제 실습',li:['로그인 연습 또는 승인대기 바로 체험으로 시작합니다.','개별·선택 승인/거절, 처리내역, 정산예정일 조회, 서류 미리보기와 다운로드를 연습합니다.','예시 초기화를 누르면 승인대기 2건으로 돌아갑니다.']},
+ page:()=>`<iframe src="ofin.html" title="오핀 안심결제 실습" contenteditable="false"></iframe>`},
 manual:{url:'(이용매뉴얼)',title:'이용매뉴얼',
  exp:{h:'빽통에서 이용매뉴얼을 누르면',li:['빽통 사용 방법을 안내하는 매뉴얼로 연결됩니다 (실제 연결 대상은 미확인)','이 시뮬레이션에서는 오른쪽 아래 "ⓘ 화면 설명"과 "▶ 예시 케이스 따라하기"가 같은 역할을 합니다']},
  page:()=>`<h2>이용매뉴얼</h2><p class="lead">예시 화면</p><div class="cards"><div class="card"><b>화물 등록</b>화물정보 화면에서 상·하차지, 톤수, 운임을 입력하고 등록(F3)</div><div class="card"><b>정산</b>정산 메뉴에서 운송현황·명세서·세금계산서 확인</div></div>`}
 };
-function extOpen(k){if(k==='chat'){window.toggleBacktongChat?.();return}const e=EXT[k];if(!e)return;document.getElementById('ext-url').textContent=e.url;document.getElementById('ext-page').innerHTML=e.page();
+function extOpen(k){if(k==='chat'){window.toggleBacktongChat?.();return}const e=EXT[k];if(!e)return;document.getElementById('ext').classList.toggle('ofin-mode',k==='safe');document.getElementById('ext-url').textContent=e.url;document.getElementById('ext-page').innerHTML=e.page();
  document.getElementById('ext-exp').innerHTML=`<h4>💡 ${e.exp.h}</h4><ul>${e.exp.li.map(x=>`<li>${x}</li>`).join('')}</ul>`;document.getElementById('ext').style.display='flex'}
 function extClose(){document.getElementById('ext').style.display='none'}
 function extAlert(m){alertBox('[시뮬레이션] '+m+' 요청이 접수되었습니다. (실제로 전송되지 않습니다)')}
