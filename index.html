@@ -1235,7 +1235,7 @@ textarea.form-input{resize:vertical;}
       <div class="gtb-sep"></div>
       <span class="gtb-label">박스 삽입</span>
       <button class="gtb-btn" type="button" onclick="guideInsertBox('box-info')" title="정보 박스">ℹ 정보</button>
-      <button class="gtb-btn" type="button" onclick="guideInsertBox('box-warn')" title="주의 박스">⚠ 주의</button>
+      <button class="gtb-btn" type="button" onclick="guideInsertBox('box-warn')" title="화면별 주의사항 팝업 설정">⚠ 주의사항 설정</button>
       <button class="gtb-btn" type="button" onclick="guideInsertBox('box-tip')" title="팁 박스">💡 팁</button>
       <div class="gtb-sep"></div>
       <button class="gtb-btn" type="button" onclick="guideInsertHr()" title="구분선 삽입">— 구분선</button>
@@ -2695,7 +2695,7 @@ function exitGuideEditMode() {
 }
 
 function onGuideInput(e) {
-  if(e?.target.closest('#btchat')) return;
+  if(e?.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer')) return;
   if(pcGuideInputTransaction && !pcGuideComposing) {
     guideHistoryEnd(); pcGuideInputTransaction = false;
   }
@@ -2716,6 +2716,7 @@ async function savePcGuideContent() {
   copy.querySelector('body').removeAttribute('contenteditable');
   copy.querySelector('body').classList.remove('guide-layout-editing', 'btchat-open');
   copy.querySelector('#btchat')?.remove();
+  copy.querySelectorAll('#guide-warning-editor,#guide-warning-layer').forEach(el => el.remove());
   copy.querySelector('#ct .ch')?.setAttribute('aria-expanded', 'false');
   copy.querySelectorAll('[data-guide-selected]').forEach(el => el.removeAttribute('data-guide-selected'));
   const fullHtml = '<!DOCTYPE html>\n' + copy.outerHTML + '\n';
@@ -2836,14 +2837,14 @@ function guideRedo() {
 function guideOnHistoryKey(e) {
   if(e.isComposing || !(e.ctrlKey || e.metaKey) || e.altKey || _guideDoc()?.body.contentEditable !== 'true') return;
   if(e.target.ownerDocument !== _guideDoc() && !e.target.closest('#guideDocToolbar')) return;
-  if(e.target.closest('#btchat,input,textarea,select')) return;
+  if(e.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer,input,textarea,select')) return;
   const key = e.key.toLowerCase();
   if(key !== 'z' && key !== 'y') return;
   e.preventDefault(); e.stopImmediatePropagation();
   if(key === 'y' || e.shiftKey) guideRedo(); else guideUndo();
 }
 function guideBeforeInput(e) {
-  if(e.target.closest('#btchat,input,textarea,select')) return;
+  if(e.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer,input,textarea,select')) return;
   if(e.inputType === 'historyUndo' || e.inputType === 'historyRedo') {
     e.preventDefault(); e.stopImmediatePropagation();
     if(e.inputType === 'historyUndo') guideUndo(); else guideRedo();
@@ -2852,7 +2853,7 @@ function guideBeforeInput(e) {
   if(guideHistoryBegin()) pcGuideInputTransaction = true;
 }
 function guideCompositionStart(e) {
-  if(e.target.closest('#btchat,input,textarea,select')) return;
+  if(e.target.closest('#btchat,#guide-warning-editor,#guide-warning-layer,input,textarea,select')) return;
   pcGuideComposing = true;
   if(guideHistoryBegin()) pcGuideInputTransaction = true;
 }
@@ -2907,6 +2908,7 @@ function guideWrapSelection(className) {
   });
 }
 function guideInsertBox(boxClass) {
+  if(boxClass === 'box-warn') { _guideWin()?.openGuideWarningEditor?.(); return; }
   const sel = guideRestoreSelection(), doc = _guideDoc();
   if(!sel || !doc) return;
   const owned = guideHistoryBegin();

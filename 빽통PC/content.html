@@ -154,6 +154,7 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
 .hl-yellow{background:#fef9c3;color:#713f12;padding:1px 4px;border-radius:3px;}
 .hl-red{background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-weight:600;}</style>
 <link rel="stylesheet" href="channel-widget.css">
+<link rel="stylesheet" href="warning-popup.css">
 </head>
 <body spellcheck="false">
 <div id="sim-bar">
@@ -1547,5 +1548,18 @@ window.addEventListener('backtong-help-change',()=>{try{if(parent!==window)paren
 window.addEventListener('resize',()=>{Object.entries(guideIcons).forEach(([key,el])=>{if(el.style.left&&el.style.left!=='auto'){const p=guideIconPosition(key);positionGuideIcon(key,p.x,p.y)}})});
 </script>
 <script src="channel-widget.js"></script>
+<script id="guide-warning-data" type="application/json">[]</script>
+<script>
+function guideWarningContext(){
+ const current={deposit:DEP.sub,calc:CAL.sub,car:CARV.sub,set:SET.sub};
+ const screens=[['cargo','화물정보'],['client','거래처'],['stat','통계'],['cs','고객센터']];
+ DEP_MENU.filter(x=>!['req','send','pw'].includes(x[0])).forEach(x=>screens.push(['deposit:'+x[0],'예치금 > '+x[1]]));
+ let group='';CALC_MENU.forEach(x=>{if(x[0]==='h')group=x[1];else screens.push(['calc:'+x[0],'정산 > '+group+' > '+x[1]])});
+ CAR_MENU.forEach(x=>screens.push(['car:'+x[0],'차량 > '+x[1]]));
+ SET_MENU.filter(x=>!['scr','sys','logout'].includes(x[2])).forEach(x=>screens.push(['set:'+x[2],'설정 > '+x[1]]));
+ return {key:VIEW+(current[VIEW]?':'+current[VIEW]:''),screens};
+}
+</script>
+<script src="warning-popup.js"></script>
 </body>
 </html>
