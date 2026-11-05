@@ -8,13 +8,17 @@
   if(state.contractComplete===undefined)state.contractComplete=true;
   if(state.business.name==='교육용 화물')state.business.name='화물맨/홍길동';
   if(!state.contractComplete&&!state.registration)state.registration=OfinOnboarding.fresh();
-  onboarding=!!state.registration?.active;
+  // Persist practice results, but never restore the previous login or screen.
+  state.loggedIn=false;
+  if(state.registration)state.registration.active=false;
+  onboarding=false;
   function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{toast('연습 상태를 보관하지 못했습니다. 현재 화면에서는 계속 연습할 수 있습니다.');}}
   const button=(text,action,extra='')=>`<button type="button" data-action="${action}" ${extra}>${text}</button>`;
   const brand=()=>'<div class="brand"><span>화물맨</span> × Ofin</div>';
   const footer=()=>'<footer class="footer"><b>Ofin</b>(주)올라핀테크 · 교육용 예시 화면<br>고객센터 070-7174-3650 / 평일 10:00 ~ 17:00 (점심시간 11:30 ~ 13:00)<br>© 2025 allra fintech Corp. All Rights Reserved.</footer>';
   function toast(text){const el=document.getElementById('toast');el.textContent=text;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,3500);}
   function render(){
+    document.getElementById('practice').textContent=state.loggedIn||onboarding?'로그인 화면 보기':'로그인된 화면 보기';
     if(onboarding){OfinOnboarding.render({app,state,persist,onExit:exitContract,onComplete:completeContract});return;}
     if(!state.loggedIn){renderLogin();return;}
     const s=M.summary(state);
@@ -26,7 +30,7 @@
   function exitContract(){state.registration.active=false;onboarding=false;state.loggedIn=!!state.contractComplete;persist();render();}
   function completeContract(r){
     state.contractComplete=true;state.loggedIn=true;r.active=false;onboarding=false;
-    state.availableLimit=160000000;state.feeDays=r.feeDays;state.feeRate=r.feeDays===30?'1.2':'1.8';
+    state.availableLimit=160000000;state.feeDays=r.feeDays;state.feeRate=M.feePlan(r.feeDays).rate;
     state.business={...state.business,name:r.company+'/'+r.name,representative:r.name,number:r.businessNumber.replace(/(\d{3})(\d{2})(\d{5})/,'$1-$2-$3')};
     state.items=state.items.map(x=>x.status==='pending'?{...x,settlement:M.exampleSettlementDate(x.applied,r.feeDays)}:x);
     tab='wait';detail=null;persist();render();toast('계약 실습을 완료했습니다. 승인대기 내역을 확인해 주세요.');
@@ -96,7 +100,7 @@
   });
   document.addEventListener('input',e=>{if(e.target.id==='business')authBusiness=e.target.value.replace(/\D/g,'');if(e.target.id==='birthday')authBirthday=e.target.value.replace(/\D/g,'');const b=app.querySelector('.submit');if(b)b.disabled=authStage?!/^\d{6}$/.test(document.getElementById('otp').value):!validLogin();});
   function showLogin(){modal.close();modal.className='';if(state.registration)state.registration.active=false;state.loggedIn=false;onboarding=false;authStage=0;authBusiness='';authBirthday='';profile=false;detail=null;persist();render();}
-  document.getElementById('practice').onclick=showLogin;
+  document.getElementById('practice').onclick=()=>{if(state.loggedIn||onboarding){showLogin();return;}modal.close();if(state.registration)state.registration.active=false;state.loggedIn=true;onboarding=false;tab='wait';detail=null;profile=false;selected.clear();persist();render();};
   document.getElementById('firstContract').onclick=()=>openContract(true);
   document.getElementById('reset').onclick=()=>show('<h2>예시 초기화</h2><p>승인·거절한 연습 결과를 지우고 승인대기 2건으로 되돌릴까요?</p><div class="actions">'+button('취소','cancel')+button('초기화','reset-confirm')+'</div>');
   document.addEventListener('click',e=>{if(e.target.closest('[data-action="reset-confirm"]')){if(state.registration)state.registration.active=false;state=M.seed();state.loggedIn=true;state.contractComplete=true;onboarding=false;tab='wait';detail=null;profile=false;selected.clear();Object.assign(filters,{approved:true,rejected:true,from:'',to:'',status:'all'});persist();modal.close();render();toast('승인대기 2건으로 초기화했습니다.');}});

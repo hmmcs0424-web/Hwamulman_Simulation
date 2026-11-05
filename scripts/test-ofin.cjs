@@ -9,8 +9,8 @@ assert.equal(M.filter(s,{from:'2026-11-05',to:'2026-11-05'}).length,0);
 assert.equal(M.filter(s,{from:'2027-01-07',to:'2027-01-07',approved:true,rejected:false}).length,1);
 assert.equal(M.exampleSettlementDate('2026-11-05',30),'2026-12-07');
 assert.equal(M.exampleSettlementDate('2026-11-20',30),'2026-12-22');
-assert.equal(M.exampleSettlementDate('2026-11-05',45),'2026-12-15');
-assert.equal(M.exampleSettlementDate('2026-11-20',45),'2026-12-31');
+assert.equal(M.exampleSettlementDate('2026-11-05',45),'2026-12-22');
+assert.equal(M.exampleSettlementDate('2026-11-20',45),'2027-01-07');
 assert.throws(()=>M.decide(s,['03'],'rejected',now));
 assert.throws(()=>M.decide(s,['missing'],'approved',now));
 const original=M.seed(now);assert.throws(()=>M.decide(original,['05','missing'],'approved',now));assert.equal(original.items[0].status,'pending');
@@ -31,3 +31,7 @@ print('PASS: genuine XLSX ZIP/XML, Unicode cells, formula-safe text, PDF cross-r
 const run=require('node:child_process').spawnSync('python',['-c',python,workbook,pdf],{encoding:'utf8'});
 if(run.status!==0)throw Error(run.stderr||run.error?.message);console.log(run.stdout.trim());
 console.log('PASS: approve/reject, pending totals, monthly totals including rejects, settlement date filters, duplicate prevention, atomic bulk decisions');
+
+assert.equal(M.exampleSettlementDate('2026-11-05',60),'2027-01-07');
+assert.equal(M.exampleSettlementDate('2026-11-20',60),'2027-01-22');
+assert.equal(M.feePlan(60).rate,'2.4');

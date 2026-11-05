@@ -30,6 +30,13 @@
       .filter(x=>status==='all'||(x.status==='approved'&&x.settlementStatus===status))
       .sort((a,b)=>new Date(b.processedAt)-new Date(a.processedAt));
   }
-  function exampleSettlementDate(applied,days){const [y,m,d]=applied.split('-').map(Number);return date(days===30?new Date(y,m,d<=15?7:22):d<=15?new Date(y,m,15):new Date(y,m+1,0));}
-  return {date,seed,decide,summary,filter,exampleSettlementDate};
+  const feePlans=[
+    {days:30,rate:'1.2',first:'익월 7일',second:'익월 22일'},
+    {days:45,rate:'1.8',first:'익월 22일',second:'익익월 7일'},
+    {days:60,rate:'2.4',first:'익익월 7일',second:'익익월 22일'}
+  ];
+  function feePlan(days){return feePlans.find(p=>p.days===Number(days))||feePlans[0];}
+  function exampleSettlementDate(applied,days){const [y,m,d]=applied.split('-').map(Number),type=feePlan(days).days;
+    return date(type===30?new Date(y,m,d<=15?7:22):type===45?(d<=15?new Date(y,m,22):new Date(y,m+1,7)):new Date(y,m+1,d<=15?7:22));}
+  return {date,seed,decide,summary,filter,exampleSettlementDate,feePlans,feePlan};
 });

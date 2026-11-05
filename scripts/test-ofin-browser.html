@@ -12,8 +12,8 @@ frame.onload=async()=>{try{
  w.localStorage.removeItem('hmm-ofin-practice-v1');
  const load=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=1';await load;
  const win=embed.contentWindow,doc=win.document;
- check(doc.body.textContent.includes('차주의 선정산 서비스 이용을 위해'),'first visit opens the contract entry screen from the reference image');
- doc.getElementById('practice').click();
+ check(!!doc.getElementById('business'),'first visit starts at login');
+ doc.getElementById('practice').click();check(!!byAction(doc,'profile'),'login preview button opens logged-in screen');doc.getElementById('practice').click();
  check(byAction(doc,'send-code').disabled,'login submit disabled for blank identity');
  input(win,'business','1234567890');input(win,'birthday','20000230');check(byAction(doc,'send-code').disabled,'invalid calendar birthday rejected');
  input(win,'birthday','20000101');check(!byAction(doc,'send-code').disabled,'valid example identity enables auth');byAction(doc,'send-code').click();
@@ -25,8 +25,8 @@ frame.onload=async()=>{try{
  check(doc.querySelector('[aria-label="사업자등록증 예시"]'),'business certificate is reconstructed locally from example');
  input(win,'reg-businessNumber','123');check(flow('next').disabled,'business number validation blocks incomplete verification');input(win,'reg-businessNumber','1234567890');flow('next').click();
  doc.querySelector('[data-bank="카카오뱅크"]').click();check(flow('next').disabled,'account step requires account number');input(win,'reg-account','123-45');check(flow('next').disabled && doc.getElementById('reg-account').value==='12345','short account remains disabled and separators are normalized');input(win,'reg-account','12345678');check(!flow('next').disabled && doc.getElementById('account-help').textContent.includes('입력이 완료'),'valid manual account enables next with feedback');flow('sample-account').click();flow('next').click();
- check(flow('next').disabled,'fee selection is required');
- change(win,doc.querySelector('[name="feeDays"][value="30"]'),true);flow('next').click();
+ check(flow('next').disabled,'fee selection is required');check(doc.querySelectorAll('[name=feeDays]').length===3,'three fee plans are selectable');check(doc.querySelector('[name="feeDays"][value="45"]').closest('label').textContent.includes('익익월 7일'),'45-day plan uses updated collection dates');
+ change(win,doc.querySelector('[name="feeDays"][value="60"]'),true);flow('next').click();
  check(flow('next').disabled,'all four documents must be completed');
  flow('document').click();flow('signature').click();check(doc.getElementById('flow-sign-done').disabled,'blank signature cannot complete contract');flow('sample-signature').click();flow('sign-complete').click();
  for(let i=1;i<4;i++){doc.querySelector('[data-doc="'+i+'"][data-flow="document"]').click();flow('agree').click();}
@@ -41,7 +41,7 @@ frame.onload=async()=>{try{
  change(win,doc.querySelector('[data-select="all"]'),true);byAction(doc,'reject-selected').click();doc.getElementById('confirm-button').click();
  check(doc.body.textContent.includes('승인 대기건이 없어요'),'bulk rejection reaches empty pending state');
  byAction(doc,'history').click();check(doc.querySelectorAll('.cards article').length===4,'history contains both decisions and previous examples');
- check(doc.body.textContent.includes('30일 정산(납부) · 1.2%'),'contract fee choice carries through to processing history');
+ check(doc.body.textContent.includes('60일 정산(납부) · 2.4%'),'contract fee choice carries through to processing history');
  change(win,doc.querySelector('[data-filter="rejected"]'),false);check(doc.querySelectorAll('.cards article').length===1,'approved filter excludes rejected records');
  change(win,doc.getElementById('from'),'2099-01-01');check(doc.body.textContent.includes('처리내역이 없어요'),'settlement date filtering reaches empty state');byAction(doc,'clear-dates').click();
  let blobs=[],names=[];const originalURL=win.URL.createObjectURL.bind(win.URL);win.URL.createObjectURL=b=>{blobs.push(b);return originalURL(b);};
@@ -51,7 +51,7 @@ frame.onload=async()=>{try{
  byAction(doc,'preview').click();check(doc.getElementById('modal').textContent.includes('교육용 예시'),'receipt opens a clearly labelled sample preview');byAction(doc,'cancel').click();
  byAction(doc,'pdf').click();check(names.at(-1).endsWith('.pdf')&&blobs.at(-1).type==='application/pdf','documents export PDF');
  const reload=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=2';await reload;const restored=embed.contentDocument;
- check(restored.body.textContent.includes('승인 대기건이 없어요'),'decisions survive reopening the simulator');
+ check(!!restored.getElementById('business'),'reload always starts at login');restored.getElementById('practice').click();check(restored.body.textContent.includes('승인 대기건이 없어요'),'decisions survive reopening after login preview');
  restored.getElementById('reset').click();byAction(restored,'reset-confirm').click();check(restored.body.textContent.includes('854,570'),'reset restores two pending examples');
  restored.getElementById('practice').click();check(!!restored.getElementById('business'),'login-view shortcut opens login instead of skipping it');
  restored.getElementById('firstContract').click();restored.querySelector('[data-flow="failure"]').click();
@@ -59,6 +59,7 @@ frame.onload=async()=>{try{
  const legacy=embed.contentWindow.OfinModel.seed();legacy.loggedIn=true;legacy.business.name='교육용 화물';delete legacy.contractComplete;
  embed.contentWindow.localStorage.setItem('hmm-ofin-practice-v1',JSON.stringify(legacy));
  const legacyReload=new Promise(resolve=>embed.onload=resolve);embed.src='../빽통PC/ofin.html?test=3';await legacyReload;
+ check(!!embed.contentDocument.getElementById('business'),'legacy logged-in state also starts at login');embed.contentDocument.getElementById('practice').click();
  check(byAction(embed.contentDocument,'profile').textContent.includes('화물맨/홍길동'),'previously saved demo profiles also use the new member label');
  check(embed.contentDocument.body.textContent.includes('854,570'),'previous training data opens without forcing a new contract');
  document.getElementById('result').textContent='PASS\n'+checks.join('\n');
