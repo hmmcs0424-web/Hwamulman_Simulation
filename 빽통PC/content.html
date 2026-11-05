@@ -153,6 +153,7 @@ table.pl td{border-bottom:1px solid #e4e6ea;padding:5px 6px}
 .hl-blue{background:#dbeafe;color:#1e40af;padding:1px 4px;border-radius:3px;font-weight:600;}
 .hl-yellow{background:#fef9c3;color:#713f12;padding:1px 4px;border-radius:3px;}
 .hl-red{background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-weight:600;}</style>
+<link rel="stylesheet" href="channel-widget.css">
 </head>
 <body spellcheck="false">
 <div id="sim-bar">
@@ -1442,7 +1443,7 @@ let hpLast='';
 function hpRender(){const k=hpKey();hpLast=k;const h=HELP[k]||{t:'화면 설명',path:'',what:'이 화면에 대한 설명은 아직 준비되지 않았습니다.',steps:[],rules:[],tip:''};
  document.getElementById('hp-t').textContent=h.t;
  document.getElementById('hp-b').innerHTML=(h.path?`<div class="path">경로: ${h.path}</div>`:'')+`<div>${h.what}</div>`+(h.steps.length?`<h4>사용 순서</h4><ol>${h.steps.map(s=>`<li>${s}</li>`).join('')}</ol>`:'')+(h.rules.length?`<h4>알아둘 규칙</h4><ul>${h.rules.map(s=>`<li>${s}</li>`).join('')}</ul>`:'')+(h.tip?`<div class="tip">💡 ${h.tip}</div>`:'')}
-function hpSet(on){document.getElementById('hp').style.display=on?'flex':'none';document.body.classList.toggle('hp-open',on);document.getElementById('hp-btn').style.display=on?'none':'';try{localStorage.setItem('btsim_help',on?'1':'0')}catch(e){}if(on)hpRender()}
+function hpSet(on){document.getElementById('hp').style.display=on?'flex':'none';document.body.classList.toggle('hp-open',on);window.dispatchEvent(new CustomEvent('backtong-help-change'));document.getElementById('hp-btn').style.display=on?'none':'';try{localStorage.setItem('btsim_help',on?'1':'0')}catch(e){}if(on)hpRender()}
 document.getElementById('hp-btn').onclick=()=>hpSet(true);
 document.getElementById('hp-x').onclick=()=>hpSet(false);
 setInterval(()=>{if(document.getElementById('hp').style.display==='flex'&&hpKey()!==hpLast)hpRender()},400);
@@ -1479,14 +1480,11 @@ ai:{url:'(AI Beta)',title:'AI',
 safe:{url:'(안심결제)',title:'안심결제',
  exp:{h:'안심결제 아이콘을 누르면',li:['설정 > 내정보에서 안심결제를 <b>사용</b>으로 한 계정에 표시됩니다 (교육용 화면에서는 바로가기를 항상 표시)','사용 시 화물정보 지불방식에 "안심결제(인수증)"가 추가됩니다','아이콘을 눌렀을 때의 실제 화면은 <b>미확인</b>']},
  page:()=>`<h2>안심결제</h2><p class="lead">예시 화면 · 실제 화면 미확인</p><p>운송료를 안전하게 결제·정산하는 서비스입니다. 이 자리에 실제 안내를 넣어 주세요.</p>`},
-chat:{url:'(채널톡 상담)',title:'채널톡',
- exp:{h:'오른쪽 아래 채널톡 버튼을 누르면',li:['상담 채팅창이 열립니다. 말풍선의 × 로 안내를 닫을 수 있습니다','아래는 예시 채팅입니다 (실제로 전송되지 않습니다)']},
- page:()=>`<h2>채널톡 문의</h2><p class="lead">예시 화면</p><div style="max-width:420px;border:1px solid #dbe3ef;border-radius:10px;padding:12px;background:#f8fafc"><p style="background:#fff;border-radius:8px;padding:8px 10px;display:inline-block">안녕하세요, 무엇을 도와드릴까요?</p><div style="display:flex;gap:6px;margin-top:10px"><input style="flex:1;border:1px solid #bbb;border-radius:4px;padding:6px 8px" placeholder="메시지를 입력하세요"><button class="btn p" onclick="extAlert('문의')">전송</button></div></div>`},
 manual:{url:'(이용매뉴얼)',title:'이용매뉴얼',
  exp:{h:'빽통에서 이용매뉴얼을 누르면',li:['빽통 사용 방법을 안내하는 매뉴얼로 연결됩니다 (실제 연결 대상은 미확인)','이 시뮬레이션에서는 오른쪽 아래 "ⓘ 화면 설명"과 "▶ 예시 케이스 따라하기"가 같은 역할을 합니다']},
  page:()=>`<h2>이용매뉴얼</h2><p class="lead">예시 화면</p><div class="cards"><div class="card"><b>화물 등록</b>화물정보 화면에서 상·하차지, 톤수, 운임을 입력하고 등록(F3)</div><div class="card"><b>정산</b>정산 메뉴에서 운송현황·명세서·세금계산서 확인</div></div>`}
 };
-function extOpen(k){const e=EXT[k];if(!e)return;document.getElementById('ext-url').textContent=e.url;document.getElementById('ext-page').innerHTML=e.page();
+function extOpen(k){if(k==='chat'){window.toggleBacktongChat?.();return}const e=EXT[k];if(!e)return;document.getElementById('ext-url').textContent=e.url;document.getElementById('ext-page').innerHTML=e.page();
  document.getElementById('ext-exp').innerHTML=`<h4>💡 ${e.exp.h}</h4><ul>${e.exp.li.map(x=>`<li>${x}</li>`).join('')}</ul>`;document.getElementById('ext').style.display='flex'}
 function extClose(){document.getElementById('ext').style.display='none'}
 function extAlert(m){alertBox('[시뮬레이션] '+m+' 요청이 접수되었습니다. (실제로 전송되지 않습니다)')}
@@ -1502,6 +1500,10 @@ document.getElementById('ext').addEventListener('mousedown',e=>{if(e.target.id==
 
 <style id="guide-icon-styles">
 #titlebar{background:#e6801e}
+body{--guide-help-width:0px}
+body.hp-open{--guide-help-width:340px}
+#fl .fi,#ct .ch,#ct .bub{translate:clamp(calc(-1 * var(--guide-base-x,100vw)),calc(-1 * var(--guide-help-width)),0px) 0}
+#ct .bub{max-width:calc(100vw - var(--guide-help-width) - 24px)}
 #fl{position:static;display:contents}
 #fl .fi{position:fixed;right:8px;z-index:1300;touch-action:none;user-select:none}
 #fl .xl{top:35%;width:44px;height:44px}
@@ -1521,9 +1523,11 @@ function guideNotifyChange(){try{if(parent!==window)parent.setGuideDirty(true)}c
 function setGuideLayoutEditing(on){guideLayoutEditing=!!on;document.body.classList.toggle('guide-layout-editing',guideLayoutEditing);Object.values(guideIcons).forEach(el=>{el.contentEditable='false';if(!on)el.removeAttribute('data-guide-selected')})}
 function guideIconPosition(key){const el=guideIcons[key];if(!el)return null;const r=el.getBoundingClientRect();return {x:Math.round(r.left),y:Math.round(r.top)}}
 function guideLayoutChange(change){let owned=false;try{if(parent!==window)owned=parent.guideHistoryBegin()}catch(e){}try{return change()}finally{if(owned)parent.guideHistoryEnd()}}
-function positionGuideIcon(key,x,y){return guideLayoutChange(()=>{const el=guideIcons[key];if(!el)return;const r=el.getBoundingClientRect();const px=Math.max(0,Math.min(Number.isFinite(x)?x:0,innerWidth-r.width));const py=Math.max(0,Math.min(Number.isFinite(y)?y:0,innerHeight-r.height));Object.assign(el.style,{left:px+'px',top:py+'px',right:'auto',bottom:'auto'});guideNotifyChange()})}
-function resetGuideIcons(){return guideLayoutChange(()=>{Object.values(guideIcons).forEach(el=>{['left','top','right','bottom'].forEach(p=>el.style.removeProperty(p));el.removeAttribute('data-guide-selected')});guideNotifyChange()})}
+function guideHelpOffset(){return document.body.classList.contains('hp-open')?340:0}
+function positionGuideIcon(key,x,y){return guideLayoutChange(()=>{const el=guideIcons[key];if(!el)return;const r=el.getBoundingClientRect();const offset=guideHelpOffset();const px=Math.max(0,Math.min(Number.isFinite(x)?x:0,innerWidth-offset-r.width));const py=Math.max(0,Math.min(Number.isFinite(y)?y:0,innerHeight-r.height));const baseX=px+offset;Object.assign(el.style,{left:baseX+'px',top:py+'px',right:'auto',bottom:'auto'});el.style.setProperty('--guide-base-x',baseX+'px');guideNotifyChange()})}
+function resetGuideIcons(){return guideLayoutChange(()=>{Object.values(guideIcons).forEach(el=>{['left','top','right','bottom','--guide-base-x'].forEach(p=>el.style.removeProperty(p));el.removeAttribute('data-guide-selected')});guideNotifyChange()})}
 Object.entries(guideIcons).forEach(([key,el])=>{
+ if(el.style.left&&el.style.left!=='auto')el.style.setProperty('--guide-base-x',el.style.left);
  el.addEventListener('pointerdown',e=>{
   if(!guideLayoutEditing||e.button!==0)return;
   e.preventDefault();e.stopPropagation();
@@ -1539,7 +1543,9 @@ Object.entries(guideIcons).forEach(([key,el])=>{
  el.addEventListener('click',e=>{if(guideLayoutEditing){e.preventDefault();e.stopImmediatePropagation()}},true);
  el.addEventListener('keydown',e=>{if(!guideLayoutEditing&&['Enter',' '].includes(e.key)){e.preventDefault();el.click()}});
 });
+window.addEventListener('backtong-help-change',()=>{try{if(parent!==window)parent.guideSelectIcon()}catch(e){}});
 window.addEventListener('resize',()=>{Object.entries(guideIcons).forEach(([key,el])=>{if(el.style.left&&el.style.left!=='auto'){const p=guideIconPosition(key);positionGuideIcon(key,p.x,p.y)}})});
 </script>
+<script src="channel-widget.js"></script>
 </body>
 </html>

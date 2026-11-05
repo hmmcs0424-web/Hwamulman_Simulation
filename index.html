@@ -2695,6 +2695,7 @@ function exitGuideEditMode() {
 }
 
 function onGuideInput(e) {
+  if(e?.target.closest('#btchat')) return;
   if(pcGuideInputTransaction && !pcGuideComposing) {
     guideHistoryEnd(); pcGuideInputTransaction = false;
   }
@@ -2713,7 +2714,9 @@ async function savePcGuideContent() {
   if(!doc) return;
   const copy = doc.documentElement.cloneNode(true);
   copy.querySelector('body').removeAttribute('contenteditable');
-  copy.querySelector('body').classList.remove('guide-layout-editing');
+  copy.querySelector('body').classList.remove('guide-layout-editing', 'btchat-open');
+  copy.querySelector('#btchat')?.remove();
+  copy.querySelector('#ct .ch')?.setAttribute('aria-expanded', 'false');
   copy.querySelectorAll('[data-guide-selected]').forEach(el => el.removeAttribute('data-guide-selected'));
   const fullHtml = '<!DOCTYPE html>\n' + copy.outerHTML + '\n';
   try {
@@ -2833,14 +2836,14 @@ function guideRedo() {
 function guideOnHistoryKey(e) {
   if(e.isComposing || !(e.ctrlKey || e.metaKey) || e.altKey || _guideDoc()?.body.contentEditable !== 'true') return;
   if(e.target.ownerDocument !== _guideDoc() && !e.target.closest('#guideDocToolbar')) return;
-  if(e.target.closest('input,textarea,select')) return;
+  if(e.target.closest('#btchat,input,textarea,select')) return;
   const key = e.key.toLowerCase();
   if(key !== 'z' && key !== 'y') return;
   e.preventDefault(); e.stopImmediatePropagation();
   if(key === 'y' || e.shiftKey) guideRedo(); else guideUndo();
 }
 function guideBeforeInput(e) {
-  if(e.target.closest('input,textarea,select')) return;
+  if(e.target.closest('#btchat,input,textarea,select')) return;
   if(e.inputType === 'historyUndo' || e.inputType === 'historyRedo') {
     e.preventDefault(); e.stopImmediatePropagation();
     if(e.inputType === 'historyUndo') guideUndo(); else guideRedo();
@@ -2849,7 +2852,7 @@ function guideBeforeInput(e) {
   if(guideHistoryBegin()) pcGuideInputTransaction = true;
 }
 function guideCompositionStart(e) {
-  if(e.target.closest('input,textarea,select')) return;
+  if(e.target.closest('#btchat,input,textarea,select')) return;
   pcGuideComposing = true;
   if(guideHistoryBegin()) pcGuideInputTransaction = true;
 }
